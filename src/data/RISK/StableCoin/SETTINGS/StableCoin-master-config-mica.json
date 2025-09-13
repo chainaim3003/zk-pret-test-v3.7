@@ -1,0 +1,268 @@
+{
+  "configMetadata": {
+    "configId": "RISK_STABLECOIN_MERKLE_MICA_MASTER_CONFIG_V2",
+    "description": "Comprehensive configuration for StableCoin proof of reserves with MiCA Article 36 compliance",
+    "systemScope": "RISK_STABLECOIN_MERKLE_ONLY",
+    "isolation": "COMPLETE_SYSTEM_ISOLATION",
+    "version": "2.0",
+    "created": "2025-06-16T12:00:00Z",
+    "lastUpdated": "2025-06-16T12:00:00Z",
+    "regulatoryBasis": "EU MiCA Regulation (EU) 2023/1114 - Article 36"
+  },
+  "minaO1jsConstraints": {
+    "fieldArithmetic": {
+      "maxSafeValue": "28948022309329048855892746252171976963317496166410141009864396001978282409983",
+      "integerOnly": true,
+      "divisionSafety": "SCALED_MULTIPLICATIVE_INVERSE",
+      "overflowPrevention": true,
+      "boundsChecking": "COMPREHENSIVE"
+    },
+    "circuitOptimization": {
+      "maxCircuitComplexity": 100000,
+      "adaptiveScaling": true,
+      "performanceThresholds": {
+        "small_portfolio": 10,
+        "medium_portfolio": 50,
+        "large_portfolio": 100
+      }
+    },
+    "provableOperations": {
+      "conditionalLogic": "PROVABLE_IF_PATTERNS",
+      "loopUnrolling": "STATIC_BOUNDS",
+      "recursionDepth": "LIMITED_SAFE"
+    }
+  },
+  "zkSecurityGuarantees": {
+    "merkleIntegrity": {
+      "endToEndVerification": true,
+      "witnessValidation": "COMPREHENSIVE",
+      "leafAuthenticity": "CRYPTOGRAPHIC_PROOF",
+      "rootConsistency": "MATHEMATICALLY_PROVEN"
+    },
+    "aggregationSecurity": {
+      "inCircuitProcessing": true,
+      "noTrustedPostProcessing": true,
+      "actusEventVerification": "COMPLETE_CHAIN",
+      "oracleSignatureValidation": true
+    },
+    "cryptographicProofs": {
+      "proofIntegrity": "ZK_SNARK_VERIFIED",
+      "dataAuthenticity": "ORACLE_SIGNED",
+      "computationCorrectness": "MATHEMATICALLY_PROVEN",
+      "privacyPreservation": "ZERO_KNOWLEDGE"
+    }
+  },
+  "stablecoinThresholds": {
+    "jurisdictionSpecificRequirements": {
+      "US": {
+        "frameworks": {
+          "STABLE": {
+            "minimumBackingRatio": 100.0,
+            "maturityLimitDays": 93,
+            "yieldAllowed": false,
+            "corporateBondsAllowed": false,
+            "weight": 0.6
+          },
+          "GENIUS": {
+            "minimumBackingRatio": 100.0,
+            "maturityLimitDays": 93,
+            "yieldAllowed": false,
+            "corporateBondsAllowed": false,
+            "weight": 0.4
+          }
+        },
+        "overallThreshold": 85.0,
+        "optimalBackingRatio": 105.0,
+        "maximumBackingRatio": 150.0,
+        "tolerance": 1.0
+      },
+      "EU": {
+        "frameworks": {
+          "MiCA": {
+            "minimumBackingRatio": 100.0,
+            "maturityLimitDays": 365,
+            "yieldAllowed": false,
+            "corporateBondsAllowed": true,
+            "weight": 1.0,
+            "reserveComposition": {
+              "bankDepositsSmall": 30.0,
+              "bankDepositsSignificant": 60.0,
+              "significantThreshold": 5000000000
+            },
+            "concentrationLimits": {
+              "singleGovernmentIssuer": 35.0,
+              "coveredBonds": 10.0,
+              "otherSecurities": 5.0,
+              "singleCreditInstitution": 20.0
+            },
+            "allowedAssets": [
+              "BankDeposit",
+              "GovernmentBond",
+              "LocalAuthorityDebt", 
+              "QuasiGovernmentDebt",
+              "MoneyMarketInstrument",
+              "CoveredBond"
+            ]
+          }
+        },
+        "overallThreshold": 85.0,
+        "optimalBackingRatio": 105.0,
+        "maximumBackingRatio": 120.0,
+        "tolerance": 1.0
+      }
+    },
+    "globalBackingRequirements": {
+      "minimumBackingRatio": 100.0,
+      "optimalBackingRatio": 105.0,
+      "maximumBackingRatio": 150.0,
+      "tolerance": 1.0
+    },
+    "liquidityRequirements": {
+      "minimumLiquidityRatio": 100.0,
+      "optimalLiquidityRatio": 100.0,
+      "stressLiquidityRatio": 100.0,
+      "tolerance": 1.0
+    },
+    "micaConcentrationLimits": {
+      "singleGovernmentIssuerMax": 35.0,
+      "coveredBondsMax": 10.0,
+      "otherSecuritiesMax": 5.0,
+      "singleCreditInstitutionMax": 20.0,
+      "diversificationMinimum": 3,
+      "tolerance": 1.0
+    },
+    "qualityRequirements": {
+      "minimumAssetQuality": 95.0,
+      "hqlaL1Minimum": 85.0,
+      "averageMaturityMax": 365,
+      "tolerance": 1.0
+    }
+  },
+  "regulatoryCompliance": {
+    "micaRequirements": {
+      "emtCompliance": true,
+      "monthlyDisclosures": true,
+      "segregatedFunds": true,
+      "euBankingCustody": true,
+      "quarterlyAudits": true,
+      "redemptionAtFaceValue": true,
+      "noYieldToHolders": true,
+      "reserveAssetRestrictions": true,
+      "concentrationLimitEnforcement": true,
+      "bankDepositRequirements": true
+    },
+    "geniusActRequirements": {
+      "federalOversight": true,
+      "hqlaL1Backing": true,
+      "realTimeAttestation": true,
+      "usBankingCustody": true
+    },
+    "stressTestRequirements": {
+      "redemption24h30pct": true,
+      "redemption7d50pct": true,
+      "interestRateShock500bp": true,
+      "liquidityStressTest": true,
+      "micaEnhancedStressTesting": true
+    }
+  },
+  "micaValidationRules": {
+    "bankDepositValidation": {
+      "smallStablecoinMinimum": 30.0,
+      "significantStablecoinMinimum": 60.0,
+      "significantThreshold": 5000000000,
+      "enforcementLevel": "STRICT"
+    },
+    "concentrationValidation": {
+      "singleGovernmentIssuer": 35.0,
+      "coveredBonds": 10.0,
+      "otherSecurities": 5.0,
+      "singleCreditInstitution": 20.0,
+      "enforcementLevel": "STRICT"
+    },
+    "assetEligibilityValidation": {
+      "allowedAssetTypes": [
+        "BankDeposit",
+        "GovernmentBond",
+        "LocalAuthorityDebt",
+        "QuasiGovernmentDebt", 
+        "MoneyMarketInstrument",
+        "CoveredBond"
+      ],
+      "prohibitedAssetTypes": [
+        "CorporateBond",
+        "Equity",
+        "Commodity",
+        "Cryptocurrency",
+        "NonEUGovernmentBond"
+      ],
+      "enforcementLevel": "STRICT"
+    },
+    "operationalValidation": {
+      "yieldToHolders": false,
+      "fullRedemptionRights": true,
+      "segregatedReserves": true,
+      "authorizedCustodians": true,
+      "enforcementLevel": "STRICT"
+    }
+  },
+  "businessThresholdVariance": {
+    "dynamicStrategies": {
+      "production": {
+        "baseThreshold": 100.0,
+        "tolerance": 1.0,
+        "stressMultiplier": 1.0,
+        "description": "Standard MiCA-compliant stablecoin operational scenario"
+      },
+      "stress_testing": {
+        "baseThreshold": 100.0,
+        "tolerance": 1.0,
+        "stressMultiplier": 1.15,
+        "description": "MiCA stablecoin stress testing scenarios"
+      },
+      "development": {
+        "baseThreshold": 95.0,
+        "tolerance": 5.0,
+        "stressMultiplier": 0.9,
+        "description": "Development testing with relaxed constraints"
+      },
+      "ultra_strict": {
+        "baseThreshold": 100.0,
+        "tolerance": 0.5,
+        "stressMultiplier": 1.25,
+        "description": "Ultra-strict MiCA compliance testing"
+      },
+      "regulatory_compliance": {
+        "baseThreshold": 100.0,
+        "tolerance": 1.0,
+        "stressMultiplier": 1.2,
+        "description": "MiCA Article 36 regulatory examination"
+      },
+      "edge_case_testing": {
+        "baseThreshold": 100.0,
+        "tolerance": 0.25,
+        "stressMultiplier": 1.0,
+        "description": "High precision MiCA edge case analysis"
+      }
+    }
+  },
+  "systemIsolation": {
+    "fileSystemSeparation": {
+      "dedicatedDirectory": "/src/data/RISK/Stablecoin/",
+      "configSeparation": "/src/data/RISK/Stablecoin/CONFIG/",
+      "settingsSeparation": "/src/data/RISK/Stablecoin/SETTINGS/",
+      "noSharedFiles": true
+    },
+    "executionPathIsolation": {
+      "independentTestFiles": true,
+      "noSharedDependencies": "EXCEPT_CORE_LIBS",
+      "isolatedConfiguration": true,
+      "zeroCrossSystemInterference": true
+    },
+    "impactPrevention": {
+      "advancedSystem": "ZERO_IMPACT",
+      "basel3System": "ZERO_IMPACT",
+      "legacySystem": "ZERO_IMPACT",
+      "generalRiskSystem": "ZERO_IMPACT"
+    }
+  }
+}

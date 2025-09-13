@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_healthcare" targetNamespace="http://bpmn.io/schema/bpmn" exporter="zk-pret-healthcare" exporterVersion="1.0.0">
+  <bpmn:process id="Process_healthcare" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_patient_presentation" name="0">
+      <bpmn:outgoing>Flow_to_consent</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <bpmn:intermediateThrowEvent id="Event_validate_consent" name="1">
+      <bpmn:incoming>Flow_to_consent</bpmn:incoming>
+      <bpmn:outgoing>Flow_consent_to_gateway</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_consent" name="a" sourceRef="StartEvent_patient_presentation" targetRef="Event_validate_consent" />
+    
+    <bpmn:intermediateThrowEvent id="Event_consent_gateway" name="2">
+      <bpmn:incoming>Flow_consent_to_gateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_consent_valid</bpmn:outgoing>
+      <bpmn:outgoing>Flow_consent_invalid</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_consent_to_gateway" name="b" sourceRef="Event_validate_consent" targetRef="Event_consent_gateway" />
+    
+    <bpmn:intermediateThrowEvent id="Event_fhir_validation" name="3">
+      <bpmn:incoming>Flow_consent_valid</bpmn:incoming>
+      <bpmn:outgoing>Flow_fhir_to_risk</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_consent_valid" name="c" sourceRef="Event_consent_gateway" targetRef="Event_fhir_validation" />
+    
+    <bpmn:intermediateThrowEvent id="Event_risk_assessment" name="4">
+      <bpmn:incoming>Flow_fhir_to_risk</bpmn:incoming>
+      <bpmn:outgoing>Flow_risk_to_referral</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_fhir_to_risk" name="d" sourceRef="Event_fhir_validation" targetRef="Event_risk_assessment" />
+    
+    <bpmn:intermediateThrowEvent id="Event_referral_validation" name="5">
+      <bpmn:incoming>Flow_risk_to_referral</bpmn:incoming>
+      <bpmn:outgoing>Flow_referral_to_coordination</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_risk_to_referral" name="e" sourceRef="Event_risk_assessment" targetRef="Event_referral_validation" />
+    
+    <bpmn:intermediateThrowEvent id="Event_specialist_coordination" name="6">
+      <bpmn:incoming>Flow_referral_to_coordination</bpmn:incoming>
+      <bpmn:outgoing>Flow_coord_to_methodist</bpmn:outgoing>
+      <bpmn:outgoing>Flow_coord_to_ut</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_referral_to_coordination" name="f" sourceRef="Event_referral_validation" targetRef="Event_specialist_coordination" />
+    
+    <bpmn:intermediateThrowEvent id="Event_methodist_consultation" name="7">
+      <bpmn:incoming>Flow_coord_to_methodist</bpmn:incoming>
+      <bpmn:outgoing>Flow_methodist_to_synthesis</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_coord_to_methodist" name="g" sourceRef="Event_specialist_coordination" targetRef="Event_methodist_consultation" />
+    
+    <bpmn:intermediateThrowEvent id="Event_ut_imaging" name="8">
+      <bpmn:incoming>Flow_coord_to_ut</bpmn:incoming>
+      <bpmn:outgoing>Flow_ut_to_synthesis</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_coord_to_ut" name="g" sourceRef="Event_specialist_coordination" targetRef="Event_ut_imaging" />
+    
+    <bpmn:intermediateThrowEvent id="Event_clinical_synthesis" name="9">
+      <bpmn:incoming>Flow_methodist_to_synthesis</bpmn:incoming>
+      <bpmn:incoming>Flow_ut_to_synthesis</bpmn:incoming>
+      <bpmn:outgoing>Flow_synthesis_to_gateway</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_methodist_to_synthesis" name="h" sourceRef="Event_methodist_consultation" targetRef="Event_clinical_synthesis" />
+    <bpmn:sequenceFlow id="Flow_ut_to_synthesis" name="h" sourceRef="Event_ut_imaging" targetRef="Event_clinical_synthesis" />
+    
+    <bpmn:intermediateThrowEvent id="Event_treatment_gateway" name="10">
+      <bpmn:incoming>Flow_synthesis_to_gateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_treatment_valid</bpmn:outgoing>
+      <bpmn:outgoing>Flow_treatment_invalid</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_synthesis_to_gateway" name="i" sourceRef="Event_clinical_synthesis" targetRef="Event_treatment_gateway" />
+    
+    <bpmn:intermediateThrowEvent id="Event_treatment_validation" name="11">
+      <bpmn:incoming>Flow_treatment_valid</bpmn:incoming>
+      <bpmn:outgoing>Flow_treatment_to_emergency</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_treatment_valid" name="j" sourceRef="Event_treatment_gateway" targetRef="Event_treatment_validation" />
+    
+    <bpmn:intermediateThrowEvent id="Event_emergency_override" name="12">
+      <bpmn:incoming>Flow_treatment_to_emergency</bpmn:incoming>
+      <bpmn:incoming>Flow_consent_invalid</bpmn:incoming>
+      <bpmn:incoming>Flow_treatment_invalid</bpmn:incoming>
+      <bpmn:outgoing>Flow_emergency_decision</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_treatment_to_emergency" name="k" sourceRef="Event_treatment_validation" targetRef="Event_emergency_override" />
+    <bpmn:sequenceFlow id="Flow_consent_invalid" name="no_consent" sourceRef="Event_consent_gateway" targetRef="Event_emergency_override" />
+    <bpmn:sequenceFlow id="Flow_treatment_invalid" name="no_treatment" sourceRef="Event_treatment_gateway" targetRef="Event_emergency_override" />
+    
+    <bpmn:intermediateThrowEvent id="Event_final_decision" name="13">
+      <bpmn:incoming>Flow_emergency_decision</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_completion</bpmn:outgoing>
+      <bpmn:outgoing>Flow_to_emergency_completion</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_emergency_decision" name="l" sourceRef="Event_emergency_override" targetRef="Event_final_decision" />
+    
+    <bpmn:intermediateThrowEvent id="Event_normal_completion" name="14">
+      <bpmn:incoming>Flow_to_completion</bpmn:incoming>
+      <bpmn:outgoing>Flow_normal_to_end</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_completion" name="m" sourceRef="Event_final_decision" targetRef="Event_normal_completion" />
+    
+    <bpmn:intermediateThrowEvent id="Event_emergency_completion" name="15">
+      <bpmn:incoming>Flow_to_emergency_completion</bpmn:incoming>
+      <bpmn:outgoing>Flow_emergency_to_end</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_emergency_completion" name="n" sourceRef="Event_final_decision" targetRef="Event_emergency_completion" />
+    
+    <bpmn:endEvent id="EndEvent_consultation_complete" name="16">
+      <bpmn:incoming>Flow_normal_to_end</bpmn:incoming>
+      <bpmn:incoming>Flow_emergency_to_end</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_normal_to_end" name="o" sourceRef="Event_normal_completion" targetRef="EndEvent_consultation_complete" />
+    <bpmn:sequenceFlow id="Flow_emergency_to_end" name="p" sourceRef="Event_emergency_completion" targetRef="EndEvent_consultation_complete" />
+    
+    <!-- Text Annotations for Documentation -->
+    <bpmn:textAnnotation id="TextAnnotation_start">
+      <bpmn:text>Patient Chest Pain Presentation</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_start" associationDirection="None" sourceRef="StartEvent_patient_presentation" targetRef="TextAnnotation_start" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_consent">
+      <bpmn:text>Validate Explicit Patient Consent</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_consent" associationDirection="None" sourceRef="Event_validate_consent" targetRef="TextAnnotation_consent" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_fhir">
+      <bpmn:text>Verify FHIR R4 Standards</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_fhir" associationDirection="None" sourceRef="Event_fhir_validation" targetRef="TextAnnotation_fhir" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_risk">
+      <bpmn:text>Conduct Risk Assessment</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_risk" associationDirection="None" sourceRef="Event_risk_assessment" targetRef="TextAnnotation_risk" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_referral">
+      <bpmn:text>Validate Referral Necessity</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_referral" associationDirection="None" sourceRef="Event_referral_validation" targetRef="TextAnnotation_referral" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_methodist">
+      <bpmn:text>Houston Methodist Cardiology AI</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_methodist" associationDirection="None" sourceRef="Event_methodist_consultation" targetRef="TextAnnotation_methodist" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_ut">
+      <bpmn:text>UT Southwestern Imaging AI</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_ut" associationDirection="None" sourceRef="Event_ut_imaging" targetRef="TextAnnotation_ut" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_synthesis">
+      <bpmn:text>Multi-Institutional Clinical Synthesis</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_synthesis" associationDirection="None" sourceRef="Event_clinical_synthesis" targetRef="TextAnnotation_synthesis" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_emergency">
+      <bpmn:text>Emergency Override Protocol</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_emergency" associationDirection="None" sourceRef="Event_emergency_override" targetRef="TextAnnotation_emergency" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_end">
+      <bpmn:text>Consultation Complete</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_end" associationDirection="None" sourceRef="EndEvent_consultation_complete" targetRef="TextAnnotation_end" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_consent_yes">
+      <bpmn:text>Consent Valid</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_consent_yes" associationDirection="None" sourceRef="Flow_consent_valid" targetRef="TextAnnotation_consent_yes" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_consent_no">
+      <bpmn:text>Consent Invalid</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_consent_no" associationDirection="None" sourceRef="Flow_consent_invalid" targetRef="TextAnnotation_consent_no" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_treatment_yes">
+      <bpmn:text>Treatment Plan Valid</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_treatment_yes" associationDirection="None" sourceRef="Flow_treatment_valid" targetRef="TextAnnotation_treatment_yes" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_treatment_no">
+      <bpmn:text>Treatment Plan Invalid</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_treatment_no" associationDirection="None" sourceRef="Flow_treatment_invalid" targetRef="TextAnnotation_treatment_no" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_normal">
+      <bpmn:text>Normal Completion</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_normal" associationDirection="None" sourceRef="Flow_to_completion" targetRef="TextAnnotation_normal" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_emergency_path">
+      <bpmn:text>Emergency Path</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_emergency_path" associationDirection="None" sourceRef="Flow_to_emergency_completion" targetRef="TextAnnotation_emergency_path" />
+  </bpmn:process>
+  
+  <bpmndi:BPMNDiagram id="BPMNDiagram_healthcare">
+    <bpmndi:BPMNPlane id="BPMNPlane_healthcare" bpmnElement="Process_healthcare">
+      <bpmndi:BPMNShape id="StartEvent_patient_presentation_di" bpmnElement="StartEvent_patient_presentation">
+        <dc:Bounds x="162" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="176" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_validate_consent_di" bpmnElement="Event_validate_consent">
+        <dc:Bounds x="302" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="317" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_consent_gateway_di" bpmnElement="Event_consent_gateway">
+        <dc:Bounds x="452" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="467" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_fhir_validation_di" bpmnElement="Event_fhir_validation">
+        <dc:Bounds x="582" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="597" y="225" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_risk_assessment_di" bpmnElement="Event_risk_assessment">
+        <dc:Bounds x="722" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="737" y="225" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_referral_validation_di" bpmnElement="Event_referral_validation">
+        <dc:Bounds x="862" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="877" y="225" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_specialist_coordination_di" bpmnElement="Event_specialist_coordination">
+        <dc:Bounds x="1002" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1017" y="225" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_methodist_consultation_di" bpmnElement="Event_methodist_consultation">
+        <dc:Bounds x="1142" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1157" y="125" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_ut_imaging_di" bpmnElement="Event_ut_imaging">
+        <dc:Bounds x="1142" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1157" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_clinical_synthesis_di" bpmnElement="Event_clinical_synthesis">
+        <dc:Bounds x="1282" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1297" y="225" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_treatment_gateway_di" bpmnElement="Event_treatment_gateway">
+        <dc:Bounds x="1422" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1433" y="225" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_treatment_validation_di" bpmnElement="Event_treatment_validation">
+        <dc:Bounds x="1562" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1573" y="125" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_emergency_override_di" bpmnElement="Event_emergency_override">
+        <dc:Bounds x="1702" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1713" y="225" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_final_decision_di" bpmnElement="Event_final_decision">
+        <dc:Bounds x="1842" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1853" y="225" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_normal_completion_di" bpmnElement="Event_normal_completion">
+        <dc:Bounds x="1982" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1993" y="125" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_emergency_completion_di" bpmnElement="Event_emergency_completion">
+        <dc:Bounds x="1982" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1993" y="325" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="EndEvent_consultation_complete_di" bpmnElement="EndEvent_consultation_complete">
+        <dc:Bounds x="2122" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2133" y="225" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge id="Flow_to_consent_di" bpmnElement="Flow_to_consent">
+        <di:waypoint x="198" y="300" />
+        <di:waypoint x="302" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="247" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_consent_to_gateway_di" bpmnElement="Flow_consent_to_gateway">
+        <di:waypoint x="338" y="300" />
+        <di:waypoint x="452" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="392" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_consent_valid_di" bpmnElement="Flow_consent_valid">
+        <di:waypoint x="488" y="300" />
+        <di:waypoint x="535" y="300" />
+        <di:waypoint x="535" y="200" />
+        <di:waypoint x="582" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="527" y="247" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_consent_invalid_di" bpmnElement="Flow_consent_invalid">
+        <di:waypoint x="470" y="318" />
+        <di:waypoint x="470" y="400" />
+        <di:waypoint x="1720" y="400" />
+        <di:waypoint x="1720" y="218" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1090" y="382" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_fhir_to_risk_di" bpmnElement="Flow_fhir_to_risk">
+        <di:waypoint x="618" y="200" />
+        <di:waypoint x="722" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="667" y="182" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_risk_to_referral_di" bpmnElement="Flow_risk_to_referral">
+        <di:waypoint x="758" y="200" />
+        <di:waypoint x="862" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="807" y="182" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_referral_to_coordination_di" bpmnElement="Flow_referral_to_coordination">
+        <di:waypoint x="898" y="200" />
+        <di:waypoint x="1002" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="947" y="182" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_coord_to_methodist_di" bpmnElement="Flow_coord_to_methodist">
+        <di:waypoint x="1038" y="200" />
+        <di:waypoint x="1090" y="200" />
+        <di:waypoint x="1090" y="100" />
+        <di:waypoint x="1142" y="100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1087" y="147" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_coord_to_ut_di" bpmnElement="Flow_coord_to_ut">
+        <di:waypoint x="1038" y="200" />
+        <di:waypoint x="1090" y="200" />
+        <di:waypoint x="1090" y="300" />
+        <di:waypoint x="1142" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1087" y="247" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_methodist_to_synthesis_di" bpmnElement="Flow_methodist_to_synthesis">
+        <di:waypoint x="1178" y="100" />
+        <di:waypoint x="1230" y="100" />
+        <di:waypoint x="1230" y="200" />
+        <di:waypoint x="1282" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1227" y="147" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_ut_to_synthesis_di" bpmnElement="Flow_ut_to_synthesis">
+        <di:waypoint x="1178" y="300" />
+        <di:waypoint x="1230" y="300" />
+        <di:waypoint x="1230" y="200" />
+        <di:waypoint x="1282" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1227" y="247" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_synthesis_to_gateway_di" bpmnElement="Flow_synthesis_to_gateway">
+        <di:waypoint x="1318" y="200" />
+        <di:waypoint x="1422" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1367" y="182" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_treatment_valid_di" bpmnElement="Flow_treatment_valid">
+        <di:waypoint x="1458" y="200" />
+        <di:waypoint x="1510" y="200" />
+        <di:waypoint x="1510" y="100" />
+        <di:waypoint x="1562" y="100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1507" y="147" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_treatment_invalid_di" bpmnElement="Flow_treatment_invalid">
+        <di:waypoint x="1440" y="218" />
+        <di:waypoint x="1440" y="350" />
+        <di:waypoint x="1720" y="350" />
+        <di:waypoint x="1720" y="218" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1570" y="332" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_treatment_to_emergency_di" bpmnElement="Flow_treatment_to_emergency">
+        <di:waypoint x="1598" y="100" />
+        <di:waypoint x="1650" y="100" />
+        <di:waypoint x="1650" y="200" />
+        <di:waypoint x="1702" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1647" y="147" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_emergency_decision_di" bpmnElement="Flow_emergency_decision">
+        <di:waypoint x="1738" y="200" />
+        <di:waypoint x="1842" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1787" y="182" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_completion_di" bpmnElement="Flow_to_completion">
+        <di:waypoint x="1878" y="200" />
+        <di:waypoint x="1930" y="200" />
+        <di:waypoint x="1930" y="100" />
+        <di:waypoint x="1982" y="100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1927" y="147" width="10" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_emergency_completion_di" bpmnElement="Flow_to_emergency_completion">
+        <di:waypoint x="1878" y="200" />
+        <di:waypoint x="1930" y="200" />
+        <di:waypoint x="1930" y="300" />
+        <di:waypoint x="1982" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1927" y="247" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_normal_to_end_di" bpmnElement="Flow_normal_to_end">
+        <di:waypoint x="2018" y="100" />
+        <di:waypoint x="2070" y="100" />
+        <di:waypoint x="2070" y="200" />
+        <di:waypoint x="2122" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2067" y="147" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_emergency_to_end_di" bpmnElement="Flow_emergency_to_end">
+        <di:waypoint x="2018" y="300" />
+        <di:waypoint x="2070" y="300" />
+        <di:waypoint x="2070" y="200" />
+        <di:waypoint x="2122" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2067" y="247" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Text Annotations -->
+      <bpmndi:BPMNShape id="TextAnnotation_start_di" bpmnElement="TextAnnotation_start">
+        <dc:Bounds x="130" y="190" width="100" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_consent_di" bpmnElement="TextAnnotation_consent">
+        <dc:Bounds x="270" y="190" width="100" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_fhir_di" bpmnElement="TextAnnotation_fhir">
+        <dc:Bounds x="550" y="90" width="100" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_risk_di" bpmnElement="TextAnnotation_risk">
+        <dc:Bounds x="690" y="90" width="100" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_referral_di" bpmnElement="TextAnnotation_referral">
+        <dc:Bounds x="830" y="90" width="100" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_methodist_di" bpmnElement="TextAnnotation_methodist">
+        <dc:Bounds x="1090" y="30" width="120" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_ut_di" bpmnElement="TextAnnotation_ut">
+        <dc:Bounds x="1090" y="350" width="120" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_synthesis_di" bpmnElement="TextAnnotation_synthesis">
+        <dc:Bounds x="1230" y="90" width="140" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_emergency_di" bpmnElement="TextAnnotation_emergency">
+        <dc:Bounds x="1650" y="90" width="100" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_end_di" bpmnElement="TextAnnotation_end">
+        <dc:Bounds x="2090" y="90" width="100" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_consent_yes_di" bpmnElement="TextAnnotation_consent_yes">
+        <dc:Bounds x="520" y="240" width="80" height="30" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_consent_no_di" bpmnElement="TextAnnotation_consent_no">
+        <dc:Bounds x="1050" y="420" width="80" height="30" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_treatment_yes_di" bpmnElement="TextAnnotation_treatment_yes">
+        <dc:Bounds x="1480" y="140" width="100" height="30" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_treatment_no_di" bpmnElement="TextAnnotation_treatment_no">
+        <dc:Bounds x="1540" y="370" width="100" height="30" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_normal_di" bpmnElement="TextAnnotation_normal">
+        <dc:Bounds x="1900" y="40" width="100" height="30" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_emergency_path_di" bpmnElement="TextAnnotation_emergency_path">
+        <dc:Bounds x="1900" y="340" width="100" height="30" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,143 @@
+{
+  "network": {
+    "environment": "TESTNET",
+    "proofsEnabled": true,
+    "minaEndpoint": "https://api.minascan.io/node/devnet/v1/graphql",
+    "archiveEndpoint": "https://archive.devnet.minaexplorer.com"
+  },
+  "oracles": {
+    "registry": {
+      "MCA": {
+        "role": "MCA_ORACLE",
+        "deployer": {
+          "privateKey": "EKFYwXEokCWYtoLJ21rdCT8AhBcWwibZUZWJUSdzE8Kqbqb17qP3",
+          "publicKey": "B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA",
+          "index": 0
+        },
+        "sender": {
+          "privateKey": "EKEDfeav7x5JNKqcd5EkFEaaU7AwqaaV59t44rAqmgNkZNJKDjP5",
+          "publicKey": "B62qkojT9M5HGT3ydaWVmw3tX6ZeZyd5Nb2ABUY49kGQFgZkcHgkDW1",
+          "index": 1
+        },
+        "publicKey": "B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA",
+        "privateKey": "EKFYwXEokCWYtoLJ21rdCT8AhBcWwibZUZWJUSdzE8Kqbqb17qP3",
+        "deployerAccountIndex": 0,
+        "senderAccountIndex": 1
+      },
+      "GLEIF": {
+        "role": "GLEIF_ORACLE",
+        "deployer": {
+          "privateKey": "EKEHy37taYcCRXgKL3uhycUeniLzhDBS5y4DMN79pNYggsubLjgv",
+          "publicKey": "B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3",
+          "index": 2
+        },
+        "sender": {
+          "privateKey": "EKDtoqAPWNoB7RkVTbP4TkWxDmcPNgCrzvebEdwywi6Ts5JF9zyR",
+          "publicKey": "B62qofi6mojnWf1MQwL94C7Fgy91Hn9zzojbppYmKHdeVYrsHXnJJ5U",
+          "index": 3
+        },
+        "publicKey": "B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3",
+        "privateKey": "EKEHy37taYcCRXgKL3uhycUeniLzhDBS5y4DMN79pNYggsubLjgv",
+        "deployerAccountIndex": 2,
+        "senderAccountIndex": 3
+      },
+      "EXIM": {
+        "role": "EXIM_ORACLE",
+        "deployer": {
+          "privateKey": "EKFN338fEmwWzcFeRXRP4LBwd5dDNYMKLKC61NmtgqvjDhKbySuX",
+          "publicKey": "B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL",
+          "index": 4
+        },
+        "sender": {
+          "privateKey": "EKFB9V8LnaBM8oAReqrzxruh7EmzQUaWcnnP1JygTR41FN6gLvP9",
+          "publicKey": "B62qiux4fhjCR2tQrEo6iLoKVEaFSDoG2uxsj8Z23JfsJA61KENDB55",
+          "index": 5
+        },
+        "publicKey": "B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL",
+        "privateKey": "EKFN338fEmwWzcFeRXRP4LBwd5dDNYMKLKC61NmtgqvjDhKbySuX",
+        "deployerAccountIndex": 4,
+        "senderAccountIndex": 5
+      },
+      "BPMN": {
+        "role": "BPMN_ORACLE",
+        "deployer": {
+          "privateKey": "EKDurec4xzVAJPV2ZqkkzMmCmVxHAxoDGXDGtfvA2wQ1JEV3iMV7",
+          "publicKey": "B62qrpRopAxfDFkAjyHkxTcWysHnv36YKAjh7TK3nirEEvTMhKrfSVx",
+          "index": 6
+        },
+        "sender": {
+          "privateKey": "EKE1UQsE58fR7gqhQuV45k2yBCwm4XAkHgaFr27cxwbAdmvvnqHp",
+          "publicKey": "B62qnpF1AWj3ePCZsXKotRuqbi1Y6Fv69YZ7XJGcq88u7ZGyZbu9Mvm",
+          "index": 7
+        },
+        "publicKey": "B62qrpRopAxfDFkAjyHkxTcWysHnv36YKAjh7TK3nirEEvTMhKrfSVx",
+        "privateKey": "EKDurec4xzVAJPV2ZqkkzMmCmVxHAxoDGXDGtfvA2wQ1JEV3iMV7",
+        "deployerAccountIndex": 6,
+        "senderAccountIndex": 7
+      },
+      "RISK": {
+        "role": "RISK_ORACLE",
+        "deployer": {
+          "privateKey": "EKEaWjgrBqXXY2fExNrStAQaZ1h7d4tHRa2GT5mHeRes7kBknUgG",
+          "publicKey": "B62qiciGYeA6nKQumL45veZ6xeQQQ3p8anUNSEXmU3G8iqL1Pc6DtCE",
+          "index": 8
+        },
+        "sender": {
+          "privateKey": "EKFKoz2agYKSXu3vZE7UqLinYmxq1UFFNtWzcvKHy13EfgSxvdns",
+          "publicKey": "B62qioTkbviE6J4BjQPac9UNcTVkSKzicNGWjynh5jK3fXoymScVRny",
+          "index": 9
+        },
+        "publicKey": "B62qiciGYeA6nKQumL45veZ6xeQQQ3p8anUNSEXmU3G8iqL1Pc6DtCE",
+        "privateKey": "EKEaWjgrBqXXY2fExNrStAQaZ1h7d4tHRa2GT5mHeRes7kBknUgG",
+        "deployerAccountIndex": 8,
+        "senderAccountIndex": 9
+      },
+      "BL_REGISTRY": {
+        "role": "BL_REGISTRY_ORACLE",
+        "deployer": {
+          "privateKey": "EKEwfu89JeerQ1ViP9SNs91GMLHmmKshL2qFBVFYqT61vsy5W1AW",
+          "publicKey": "B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi",
+          "index": 10
+        },
+        "sender": {
+          "privateKey": "EKFEK55p9skt5vECHk4SpnMKYpnuceegAmNhKLjaonLvY4yNE7rm",
+          "publicKey": "B62qrWCSiE9AruxBbxVHKg4z31dDGaCoUXxHVwQ71Uuo1AkkTuLFrYg",
+          "index": 11
+        },
+        "publicKey": "B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi",
+        "privateKey": "EKEwfu89JeerQ1ViP9SNs91GMLHmmKshL2qFBVFYqT61vsy5W1AW",
+        "deployerAccountIndex": 10,
+        "senderAccountIndex": 11
+      }
+    }
+  },
+  "deployments": {
+    "contracts": {
+      "GLEIFOptimMultiCompanySmartContract": {
+        "address": "B62qoMdRZ5G386t3TiV2MKVEpG9jQgbzBHJyybae2PPckctoKndhh8j",
+        "verificationKey": {
+          "data": "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",
+          "hash": "17615180920800718819016658005936989878605778328482529382846996613901624114315"
+        },
+        "deployedAt": "2025-07-02T18:35:29.482Z",
+        "transactionHash": "5JuwBUVTQX3yi5JmjUJWPJmKksB644df3nGkaiMqZcVXPpR3mX8b"
+      }
+    }
+  },
+  "gleifApiConfig": {},
+  "metadata": {
+    "generated": "2025-07-02T13:38:55.087Z",
+    "timestamp": "2025-07-02T13-38-55",
+    "accountCount": 12,
+    "oracleTypes": [
+      "MCA",
+      "GLEIF",
+      "EXIM",
+      "BPMN",
+      "RISK",
+      "BL_REGISTRY"
+    ],
+    "version": "3.6",
+    "separateAccounts": true
+  }
+}

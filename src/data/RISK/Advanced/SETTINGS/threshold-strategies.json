@@ -1,0 +1,194 @@
+{
+  "thresholdStrategies": {
+    "configId": "RISK_ADVANCED_MERKLE_THRESHOLD_STRATEGIES_V1",
+    "description": "Dynamic threshold strategies for comprehensive scenario testing",
+    "version": "1.0",
+    "created": "2024-06-15T00:00:00Z"
+  },
+  "strategies": {
+    "DYNAMIC_BUSINESS_VARIANCE": {
+      "description": "Standard business scenario with enhanced precision tolerance",
+      "baseSettings": {
+        "liquidityThreshold": 100.0,
+        "toleranceRange": 2.0,
+        "stressTestMultiplier": 1.0,
+        "complianceBuffer": 2.0
+      },
+      "adaptiveRules": {
+        "portfolioSizeAdjustment": true,
+        "marketConditionResponse": true,
+        "seasonalityConsideration": false,
+        "regualtoryBufferIncluded": true
+      },
+      "validationCriteria": {
+        "minimumLiquidity": 98.0,
+        "averageCompliance": 100.0,
+        "worstCaseScenario": 95.0,
+        "stressTestPassing": true
+      }
+    },
+    "STRICT_COMPLIANCE_TESTING": {
+      "description": "Rigorous compliance testing with minimal tolerance",
+      "baseSettings": {
+        "liquidityThreshold": 100.0,
+        "toleranceRange": 2.0,
+        "stressTestMultiplier": 1.15,
+        "complianceBuffer": 0.5
+      },
+      "adaptiveRules": {
+        "portfolioSizeAdjustment": false,
+        "marketConditionResponse": false,
+        "seasonalityConsideration": false,
+        "regualtoryBufferIncluded": true
+      },
+      "validationCriteria": {
+        "minimumLiquidity": 98.0,
+        "averageCompliance": 105.0,
+        "worstCaseScenario": 95.0,
+        "stressTestPassing": true
+      }
+    },
+    "HIGH_PRECISION_BOUNDARY": {
+      "description": "Ultra-precision testing for threshold boundary conditions",
+      "baseSettings": {
+        "liquidityThreshold": 100.0,
+        "toleranceRange": 0.5,
+        "stressTestMultiplier": 1.0,
+        "complianceBuffer": 0.1
+      },
+      "adaptiveRules": {
+        "portfolioSizeAdjustment": false,
+        "marketConditionResponse": false,
+        "seasonalityConsideration": false,
+        "regualtoryBufferIncluded": false
+      },
+      "validationCriteria": {
+        "minimumLiquidity": 99.5,
+        "averageCompliance": 100.0,
+        "worstCaseScenario": 99.0,
+        "stressTestPassing": true
+      }
+    },
+    "ULTRA_STRICT_PRECISION": {
+      "description": "Ultra-strict testing with maximum precision requirements",
+      "baseSettings": {
+        "liquidityThreshold": 100.0,
+        "toleranceRange": 1.0,
+        "stressTestMultiplier": 1.25,
+        "complianceBuffer": 0.25
+      },
+      "adaptiveRules": {
+        "portfolioSizeAdjustment": false,
+        "marketConditionResponse": false,
+        "seasonalityConsideration": false,
+        "regualtoryBufferIncluded": true
+      },
+      "validationCriteria": {
+        "minimumLiquidity": 99.0,
+        "averageCompliance": 105.0,
+        "worstCaseScenario": 98.0,
+        "stressTestPassing": true
+      }
+    },
+    "REGULATORY_EXAMINATION": {
+      "description": "Regulatory examination simulation conditions",
+      "baseSettings": {
+        "liquidityThreshold": 100.0,
+        "toleranceRange": 1.5,
+        "stressTestMultiplier": 1.2,
+        "complianceBuffer": 0.75
+      },
+      "adaptiveRules": {
+        "portfolioSizeAdjustment": false,
+        "marketConditionResponse": true,
+        "seasonalityConsideration": false,
+        "regualtoryBufferIncluded": true
+      },
+      "validationCriteria": {
+        "minimumLiquidity": 98.5,
+        "averageCompliance": 102.0,
+        "worstCaseScenario": 96.0,
+        "stressTestPassing": true
+      }
+    },
+    "DEVELOPMENT_FRIENDLY": {
+      "description": "Lenient testing for development and iteration",
+      "baseSettings": {
+        "liquidityThreshold": 95.0,
+        "toleranceRange": 8.0,
+        "stressTestMultiplier": 0.9,
+        "complianceBuffer": 5.0
+      },
+      "adaptiveRules": {
+        "portfolioSizeAdjustment": true,
+        "marketConditionResponse": true,
+        "seasonalityConsideration": true,
+        "regualtoryBufferIncluded": false
+      },
+      "validationCriteria": {
+        "minimumLiquidity": 85.0,
+        "averageCompliance": 95.0,
+        "worstCaseScenario": 80.0,
+        "stressTestPassing": false
+      }
+    }
+  },
+  "scenarioMapping": {
+    "production": "DYNAMIC_BUSINESS_VARIANCE",
+    "stress_testing": "STRICT_COMPLIANCE_TESTING",
+    "development": "DEVELOPMENT_FRIENDLY",
+    "ultra_strict": "ULTRA_STRICT_PRECISION",
+    "regulatory_compliance": "REGULATORY_EXAMINATION",
+    "edge_case_testing": "HIGH_PRECISION_BOUNDARY"
+  },
+  "dynamicAdjustments": {
+    "portfolioSizeFactors": {
+      "small": {
+        "sizeRange": "< 50M",
+        "toleranceMultiplier": 1.2,
+        "stressReduction": 0.05
+      },
+      "medium": {
+        "sizeRange": "50M - 500M",
+        "toleranceMultiplier": 1.0,
+        "stressReduction": 0.0
+      },
+      "large": {
+        "sizeRange": "> 500M",
+        "toleranceMultiplier": 0.9,
+        "stressReduction": -0.05
+      }
+    },
+    "complexityFactors": {
+      "simple": {
+        "contractTypes": "PAM only",
+        "toleranceBonus": 1.0,
+        "optimizationLevel": "standard"
+      },
+      "moderate": {
+        "contractTypes": "PAM + LAM",
+        "toleranceBonus": 0.5,
+        "optimizationLevel": "enhanced"
+      },
+      "complex": {
+        "contractTypes": "Multiple types",
+        "toleranceBonus": 0.0,
+        "optimizationLevel": "maximum"
+      }
+    }
+  },
+  "insightGeneration": {
+    "thresholdSensitivityAnalysis": {
+      "enabled": true,
+      "toleranceTestRange": [0.5, 1.0, 1.5, 2.0, 5.0, 8.0],
+      "stressTestRange": [0.85, 0.9, 1.0, 1.1, 1.15, 1.25],
+      "boundaryAnalysis": true
+    },
+    "businessIntelligence": {
+      "passFailTransitionPoints": true,
+      "optimalThresholdRecommendations": true,
+      "riskProfileCharacterization": true,
+      "scenarioImpactAssessment": true
+    }
+  }
+}

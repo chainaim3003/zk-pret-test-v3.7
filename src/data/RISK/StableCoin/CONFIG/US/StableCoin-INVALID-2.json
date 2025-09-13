@@ -1,0 +1,79 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "US Stablecoin Non-Compliant Portfolio V2",
+    "description": "Portfolio violating US regulatory requirements (for testing)",
+    "currency": "USD",
+    "totalNotional": 22000,
+    "created": "2024-06-16T00:00:00Z",
+    "version": "2.0",
+    "jurisdiction": "US",
+    "complianceTarget": {
+      "backingRatio": 88.0,
+      "maturityLimit": 93,
+      "yieldToHolders": false,
+      "corporateBondsAllowed": false
+    }
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "cash01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "8000",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Cash reserves"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6000",
+      "maturityDate": "2025-01-01T00:00:00",
+      "nominalInterestRate": "0.0200",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "VIOLATION: 365-day Treasury (exceeds 93-day limit) + yield violation"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "corporate01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "8000",
+      "maturityDate": "2024-06-30T00:00:00",
+      "nominalInterestRate": "0.0250",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L2A",
+      "description": "VIOLATION: Corporate bonds prohibited in US + yield violation"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "deposit01",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-25000",
+      "maturityDate": "2025-06-30T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Outstanding stablecoin tokens (under-backed: 88%)"
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "US Short-Term Treasury Bills Stablecoin Reserve Portfolio",
+    "description": "Stablecoin backing portfolio optimized for US short-term Treasury bills compliance with MiCA and GENIUS Act requirements",
+    "currency": "USD",
+    "totalNotional": 65000,
+    "created": "2025-06-16T00:00:00Z",
+    "version": "1.0",
+    "targetLCR": 120,
+    "targetNSFR": 115,
+    "maxAnalysisPeriods": 12,
+    "regulatoryFramework": ["US-GENIUS-Act", "EU-MiCA"],
+    "stablecoinBacking": {
+      "backingRatio": "1:1",
+      "reserveType": "HQLA-L1-Only",
+      "maxMaturity": "26-weeks",
+      "liquidityBuffer": "25%"
+    },
+    "designPrinciples": [
+      "US short-term Treasury bills for maximum HQLA L1 compliance",
+      "Staggered maturity profile (4w, 13w, 26w) for rolling liquidity",
+      "1:1 backing ratio for stablecoin redemption guarantee",
+      "MiCA EMT compliance with monthly reserve disclosures",
+      "GENIUS Act compliance with high-quality liquid assets",
+      "Zero-coupon T-bill modeling with discount purchase prices",
+      "Enhanced liquidity management for immediate redemptions"
+    ]
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "cash_primary",
+      "contractRole": "RPA",
+      "contractDealDate": "2025-06-16T00:00:00",
+      "initialExchangeDate": "2025-06-16T00:00:00",
+      "statusDate": "2025-06-16T00:00:00",
+      "notionalPrincipal": "15000",
+      "maturityDate": "2025-06-17T00:00:00",
+      "nominalInterestRate": "0.001",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Primary cash reserves for immediate stablecoin redemptions and operational liquidity"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "tbill_4w_001",
+      "contractRole": "RPA",
+      "contractDealDate": "2025-06-16T00:00:00",
+      "initialExchangeDate": "2025-06-17T00:00:00",
+      "statusDate": "2025-06-16T00:00:00",
+      "notionalPrincipal": "15000",
+      "maturityDate": "2025-07-15T00:00:00",
+      "nominalInterestRate": "0.0",
+      "currency": "USD",
+      "dayCountConvention": "ACT/360",
+      "hqlaCategory": "L1",
+      "purchasePrice": "14895.83",
+      "discountRate": "0.052",
+      "description": "4-week US Treasury Bill - highest liquidity HQLA L1 asset for near-term redemptions"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "tbill_13w_001",
+      "contractRole": "RPA",
+      "contractDealDate": "2025-06-16T00:00:00",
+      "initialExchangeDate": "2025-06-17T00:00:00",
+      "statusDate": "2025-06-16T00:00:00",
+      "notionalPrincipal": "20000",
+      "maturityDate": "2025-09-16T00:00:00",
+      "nominalInterestRate": "0.0",
+      "currency": "USD",
+      "dayCountConvention": "ACT/360",
+      "hqlaCategory": "L1",
+      "purchasePrice": "19740.28",
+      "discountRate": "0.051",
+      "description": "13-week US Treasury Bill - standard short-term government security for stablecoin backing"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "tbill_26w_001",
+      "contractRole": "RPA",
+      "contractDealDate": "2025-06-16T00:00:00",
+      "initialExchangeDate": "2025-06-17T00:00:00",
+      "statusDate": "2025-06-16T00:00:00",
+      "notionalPrincipal": "15000",
+      "maturityDate": "2025-12-16T00:00:00",
+      "nominalInterestRate": "0.0",
+      "currency": "USD",
+      "dayCountConvention": "ACT/360",
+      "hqlaCategory": "L1",
+      "purchasePrice": "14640.33",
+      "discountRate": "0.049",
+      "description": "26-week US Treasury Bill - maximum maturity short-term Treasury for yield optimization"
+    }
+  ],
+  "stablecoinCompliance": {
+    "micaCompliance": {
+      "tokenType": "EMT",
+      "backingRequirement": "1:1 ratio with liquid reserves",
+      "reserveAssets": ["USD cash", "US Treasury bills ≤26 weeks"],
+      "monthlyDisclosure": true,
+      "auditRequirement": "Monthly examination by registered public accounting firm"
+    },
+    "geniusActCompliance": {
+      "permittedIssuerType": "Federal qualified nonbank payment stablecoin issuer",
+      "reserveStandards": "100% backing with high-quality liquid assets",
+      "approvedAssets": ["US dollars", "Treasury bills", "Reverse repurchase agreements"],
+      "segregationRequirement": "Customer funds separate from issuer liabilities"
+    },
+    "reserveComposition": {
+      "cashComponent": {
+        "amount": 15000,
+        "percentage": 23.08,
+        "purpose": "Immediate redemptions"
+      },
+      "treasuryBills": {
+        "4week": {
+          "amount": 15000,
+          "percentage": 23.08,
+          "maturity": "2025-07-15"
+        },
+        "13week": {
+          "amount": 20000,
+          "percentage": 30.77,
+          "maturity": "2025-09-16"
+        },
+        "26week": {
+          "amount": 15000,
+          "percentage": 23.08,
+          "maturity": "2025-12-16"
+        }
+      },
+      "totalBacking": 65000,
+      "hqlaL1Percentage": 100
+    }
+  }
+}

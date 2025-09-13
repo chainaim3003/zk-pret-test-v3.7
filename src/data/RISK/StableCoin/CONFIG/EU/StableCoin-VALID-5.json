@@ -1,0 +1,151 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "EU MiCA Professional Treasury Portfolio V5",
+    "description": "Professional stablecoin reserve portfolio compliant with EU MiCA regulation for significant stablecoin (≥€5B) featuring diversified allocation across multiple asset categories - optimized for strict compliance",
+    "currency": "EUR",
+    "totalNotional": 30000,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "5.0",
+    "jurisdiction": "EU",
+    "complianceTarget": {
+      "backingRatio": 105,
+      "liquidityRatio": 65,
+      "maturityLimit": 365,
+      "yieldToHolders": false,
+      "corporateBondsAllowed": false,
+      "concentrationLimit": 35,
+      "qualityThreshold": 90
+    },
+    "riskProfile": "Conservative",
+    "regulatoryFramework": ["MiCA"],
+    "stablecoinCategory": "Significant E-Money Token",
+    "assetAllocation": {
+      "cashAndEquivalents": "52.5%",
+      "governmentBonds": "35%",
+      "corporateBonds": "0%",
+      "coveredBonds": "12.5%",
+      "otherAssets": "0%"
+    },
+    "testingPurpose": "EU MiCA compliance validation for significant stablecoin with high liquidity requirements"
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "eu_primary_bank_deposits",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "10500",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Primary EUR bank deposits at authorized credit institutions providing immediate liquidity (35% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "eu_money_market_fund",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5250",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "EU money market fund providing diversified short-term investment exposure (17.5% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "german_treasury_bills",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5250",
+      "maturityDate": "2024-04-01T00:00:00",
+      "nominalInterestRate": "0.0180",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "German treasury bills 90-day maturity - highest quality EU sovereign debt (17.5% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "italian_government_bonds",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5250",
+      "maturityDate": "2024-07-15T00:00:00",
+      "nominalInterestRate": "0.0250",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Italian government bonds 195-day maturity - diversified EU sovereign exposure (17.5% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "eu_covered_bonds",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "3750",
+      "maturityDate": "2024-08-30T00:00:00",
+      "nominalInterestRate": "0.0275",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "EU covered bonds 241-day maturity - MiCA-compliant secured debt instruments (12.5% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "mica_significant_stablecoin_liability",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-30000",
+      "maturityDate": "2024-12-28T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "MiCA-compliant significant stablecoin tokens with no yield (0% APY for significant stablecoins)"
+    }
+  ],
+  "micaCompliance": {
+    "reserveSegregation": "MiCA Article 33 - Asset segregation requirements met",
+    "yieldDistribution": "MiCA Article 36 - No yield payments for significant stablecoins",
+    "assetEligibility": "MiCA Article 34 - Only government bonds, bank deposits, money market funds and covered bonds (all MiCA-approved assets)",
+    "liquidityRequirements": "MiCA Article 35 - 35% bank deposits maintained (>>30% requirement for smaller stablecoins) providing excellent safety margin",
+    "concentrationLimits": "MiCA Article 37 - 35% single issuer limit respected",
+    "custodyRequirements": "MiCA Article 38 - EU-regulated custodian banks",
+    "significantTokenRequirements": "MiCA Article 43 - Enhanced requirements for significant E-Money Tokens"
+  },
+  "professionalThresholds": {
+    "backing": {
+      "minimum": "100%",
+      "target": "105%",
+      "rationale": "MiCA minimum with professional buffer"
+    },
+    "liquidity": {
+      "minimum": "70%",
+      "rationale": "Smaller stablecoins require 30% minimum bank deposits"
+    },
+    "quality": {
+      "minimum": "90%",
+      "rationale": "Higher quality requirements for significant stablecoins"
+    },
+    "concentration": {
+      "maximum": "35%",
+      "rationale": "Lower concentration limits for significant stablecoins"
+    }
+  }
+}

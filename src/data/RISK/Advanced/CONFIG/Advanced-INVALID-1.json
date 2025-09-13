@@ -1,0 +1,98 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "Constrained Liquidity Portfolio",
+    "description": "Liquidity-constrained portfolio with limited cash reserves and higher funding costs",
+    "currency": "USD",
+    "totalNotional": 30000,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "1.0",
+    "targetLCR": 90,
+    "targetNSFR": 95,
+    "maxAnalysisPeriods": 24,
+    "designPrinciples": [
+      "Minimal cash reserves with focus on asset yield",
+      "Concentrated bond positions in shorter maturities",
+      "Higher-cost funding structure with deposit concentration",
+      "Asset-heavy approach with limited liquidity buffers",
+      "Tight margin operations for cost efficiency",
+      "Risk-focused strategy with yield optimization"
+    ]
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "cash01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "15000",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0005",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Limited cash position for operational requirements"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "bond01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5000",
+      "maturityDate": "2024-08-30T00:00:00",
+      "nominalInterestRate": "0.022",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Small government bond holding for minimal liquidity buffer"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "4000",
+      "maturityDate": "2024-11-30T00:00:00",
+      "nominalInterestRate": "0.028",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Limited treasury exposure with longer maturity"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "corporate01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6000",
+      "maturityDate": "2025-01-31T00:00:00",
+      "nominalInterestRate": "0.055",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L2A",
+      "description": "Higher-yield corporate bond with extended maturity"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "deposit01",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-25000",
+      "maturityDate": "2025-06-30T00:00:00",
+      "nominalInterestRate": "0.025",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Large customer deposit requiring significant liquidity coverage"
+    }
+  ]
+}
