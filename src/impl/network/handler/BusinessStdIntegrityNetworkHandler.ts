@@ -16,7 +16,7 @@ import { BusinessStdIntegrityOptimMerkleVerifier, BusinessStdIntegrityOptimMerkl
 import { BusinessStdIntegrityOptimMerkleSmartContract } from '../../../contracts/process/BusinessStdIntegrityMerkleSmartContract.js';
 import { BusinessStdMerkleTree, BusinessStdMerkleUtils } from '../../../utils/optimerkle/domain/process/dataIntegrity/BusinessStdIntegrityOptimMerkleUtils.js';
 import { getPrivateKeyFor } from '../../../core/OracleRegistry.js';
-import { BaseVerificationCore } from '../../verification-base/BaseVerificationCore.js';
+import { BaseVerificationCore } from '../../base/BaseVerificationCore.js';
 import {
   initializeOracleRegistry,
   getDeployerAccount,

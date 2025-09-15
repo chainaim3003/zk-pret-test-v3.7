@@ -8,7 +8,7 @@
  */
 
 import { RiskBasel3NetworkHandler } from '../network/handler/RiskBasel3NetworkHandler.js';
-import { RiskVerificationResult } from '../verification-base/RiskVerificationBase.js';
+import { RiskVerificationResult } from '../base/RiskVerificationBase.js';
 
 // PRESERVE EXACT SAME FUNCTION SIGNATURE for compatibility
 export async function executeRiskLiquidityBasel3OptimMerkleVerification(

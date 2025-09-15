@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // Base classes via composition
-import { ComplianceVerificationBase } from '../../verification-base/ComplianceVerificationBase.js';
+import { ComplianceVerificationBase } from '../../base/ComplianceVerificationBase.js';
 
 // Corporate Registration specific imports
 import { 

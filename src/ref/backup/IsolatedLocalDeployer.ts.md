@@ -71,7 +71,7 @@ export class IsolatedLocalDeployer {
       
       try {
         // Import and compile the ZK program that the contract depends on
-        const { GLEIFOptim } = await import('../zk-programs/compliance/GLEIFZKProgram.js');
+        const { GLEIFOptim } = await import('../../zk-programs/compliance/GLEIFZKProgram.js');
         await GLEIFOptim.compile();
         console.log('✅ GLEIFOptim ZK program compiled');
       } catch (zkError) {

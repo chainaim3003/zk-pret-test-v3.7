@@ -13,7 +13,7 @@ import {
   getBusinessProcessLocalVerifier, 
   getBusinessProcessLocalMultiVerifier 
 } from '../handler/BusinessProcessLocalHandler.js';
-import { ProcessAnalysis } from '../../verification-base/BusinessProcessVerificationBase.js';
+import { ProcessAnalysis } from '../../base/BusinessProcessVerificationBase.js';
 import { Field,CircuitString } from 'o1js';
 
 // Type definitions for better TypeScript support

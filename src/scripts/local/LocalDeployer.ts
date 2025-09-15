@@ -9,8 +9,8 @@
  */
 
 import { PrivateKey, PublicKey, Mina, AccountUpdate } from 'o1js';
-import { BlockchainManager } from '../infrastructure/blockchain/BlockchainManager.js';
-import { getPrivateKeyFor, getPublicKeyFor } from '../core/OracleRegistry.js';
+import { BlockchainManager } from '../../infrastructure/blockchain/BlockchainManager.js';
+import { getPrivateKeyFor, getPublicKeyFor } from '../../core/OracleRegistry.js';
 
 interface LocalDeploymentResult {
   success: boolean;

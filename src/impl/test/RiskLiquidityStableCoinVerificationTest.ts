@@ -8,7 +8,7 @@
  */
 
 import { RiskStableCoinNetworkHandler } from '../network/handler/RiskStableCoinNetworkHandler.js';
-import { RiskVerificationResult } from '../verification-base/RiskVerificationBase.js';
+import { RiskVerificationResult } from '../base/RiskVerificationBase.js';
 
 // PRESERVE EXACT SAME FUNCTION SIGNATURE for compatibility
 export async function executeRiskLiquidityStableCoinOptimMerkleVerification(

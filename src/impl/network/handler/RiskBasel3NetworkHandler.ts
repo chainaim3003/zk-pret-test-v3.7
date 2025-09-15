@@ -7,9 +7,9 @@
  * Following successful GLEIF/BusinessProcess architecture
  */
 
-import { RiskVerificationBase, RiskEnvironment, RiskVerificationResult } from '../../verification-base/RiskVerificationBase.js';
-import { BaseVerificationCore } from '../../verification-base/BaseVerificationCore.js';
-import { ComplianceVerificationBase } from '../../verification-base/ComplianceVerificationBase.js';
+import { RiskVerificationBase, RiskEnvironment, RiskVerificationResult } from '../../base/RiskVerificationBase.js';
+import { BaseVerificationCore } from '../../base/BaseVerificationCore.js';
+import { ComplianceVerificationBase } from '../../base/ComplianceVerificationBase.js';
 
 // PRESERVE EXACT IMPORTS from working implementation
 import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, UInt64 } from 'o1js';

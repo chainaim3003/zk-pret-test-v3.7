@@ -7,8 +7,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // === COMPOSITION: Use base classes ===
-import { BaseVerificationCore } from '../../verification-base/BaseVerificationCore.js';
-import { BusinessProcessVerificationBase } from '../../verification-base/BusinessProcessVerificationBase.js';
+import { BaseVerificationCore } from '../../base/BaseVerificationCore.js';
+import { BusinessProcessVerificationBase } from '../../base/BusinessProcessVerificationBase.js';
 
 // === O1JS IMPORTS ===
 import { 
@@ -34,7 +34,7 @@ import {
 import { getPrivateKeyFor, getPublicKeyFor } from '../../../core/OracleRegistry.js';
 
 // === UTILITY IMPORTS ===
-import { BusinessProcessIntegrityOptimMerkleTestUtils } from '../../verification-test/BusinessProcessIntegrityVerificationFileTestUtils.js';
+import { BusinessProcessIntegrityOptimMerkleTestUtils } from '../../test/BusinessProcessIntegrityVerificationTest.js';
 
 // === TYPES ===
 interface ZKVerificationResult {

@@ -3,7 +3,7 @@
  * Comprehensive monitoring and detailed status reporting
  */
 
-import { PRETDeployer } from '../deployment/pret-deployer.js';
+import { PRETDeployer } from '../../deployment/pret-deployer.js';
 
 async function main(): Promise<void> {
   const aliasName = process.argv[2];

@@ -14,8 +14,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // === COMPOSITION: Use base classes instead of duplicating code ===
-import { BaseVerificationCore } from '../../verification-base/BaseVerificationCore.js';
-import { BusinessProcessVerificationBase } from '../../verification-base/BusinessProcessVerificationBase.js';
+import { BaseVerificationCore } from '../../base/BaseVerificationCore.js';
+import { BusinessProcessVerificationBase } from '../../base/BusinessProcessVerificationBase.js';
 
 // === O1JS IMPORTS ===
 import { 
@@ -63,7 +63,7 @@ import {
 // === API UTILITIES ===
 import { 
   BusinessProcessIntegrityOptimMerkleTestUtils 
-} from '../../verification-test/BusinessProcessIntegrityVerificationFileTestUtils.js';
+} from '../../test/BusinessProcessIntegrityVerificationTest.js';
 
 // === ORACLE KEY MANAGEMENT ===
 import { getPrivateKeyFor, getPublicKeyFor } from '../../../core/OracleRegistry.js';

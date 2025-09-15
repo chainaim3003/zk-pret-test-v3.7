@@ -14,8 +14,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // === COMPOSITION: Use base classes instead of duplicating code ===
-import { BaseVerificationCore } from '../../verification-base/BaseVerificationCore.js';
-import { ComplianceVerificationBase } from '../../verification-base/ComplianceVerificationBase.js';
+import { BaseVerificationCore } from '../../base/BaseVerificationCore.js';
+import { ComplianceVerificationBase } from '../../base/ComplianceVerificationBase.js';
 
 // === O1JS IMPORTS ===
 import { 

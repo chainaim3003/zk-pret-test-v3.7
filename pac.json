@@ -16,7 +16,7 @@
   "scripts": {
 
 
-    "test:local-complete-GLEIF": "npm run build && node build/scripts/local-deploy-verify-GLEIF.js",
+    "test:local-complete-GLEIF": "npm run build && node build/scripts/local/local-deploy-verify-GLEIF.js",
     "deploy:testnet-GLEIF": "npm run deploy testnet-gleif-dev",
     "deploy:testnet-GLEIF-stable": "npm run deploy testnet-gleif",
     "deploy:testnet-GLEIF-force": "npm run deploy testnet-gleif-force",
@@ -24,24 +24,24 @@
 
 
 
-    "test:local-complete-EXIM": "npm run build && node build/scripts/local-deploy-verify-EXIM.js",
-    "test:local-complete-EXIM:company": "npm run build && node build/scripts/local-deploy-verify-EXIM.js",
-    "example-EXIM:local-sree": "npm run build && node build/scripts/local-deploy-verify-EXIM.js \"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED\"",
-    "example-EXIM:local-tata": "npm run build && node build/scripts/local-deploy-verify-EXIM.js \"TATA MOTORS LIMITED\"",
+    "test:local-complete-EXIM": "npm run build && node local/local/local-deploy-verify-EXIM.js",
+    "test:local-complete-EXIM:company": "npm run build && node build/scripts/local/local-deploy-verify-EXIM.js",
+    "example-EXIM:local-sree": "npm run build && node build/scripts/local/local-deploy-verify-EXIM.js \"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED\"",
+    "example-EXIM:local-tata": "npm run build && node build/scripts/local/local-deploy-verify-EXIM.js \"TATA MOTORS LIMITED\"",
     "deploy:testnet-exim": "npm run deploy testnet-exim-dev",
     "deploy:testnet-exim-dev": "npm run deploy testnet-exim-dev",
     "deploy:testnet-exim-force": "npm run deploy testnet-exim-force",
 
 
 
-    "test:local-complete-CorpReg": "npm run build && node build/scripts/local-deploy-verify-CorpReg.js",
-    "test:local-complete-CorpReg:IN": "npm run build && node build/scripts/local-deploy-verify-CorpReg.js --jurisdiction=IN",
-    "test:local-complete-CorpReg:US": "npm run build && node build/scripts/local-deploy-verify-CorpReg.js --jurisdiction=US",
-    "example-CorpReg:local-sree": "npm run build && node build/scripts/local-deploy-verify-CorpReg.js \"U01112TZ2022PTC039493\"",
-    "example-CorpReg:local-us": "npm run build && node build/scripts/local-deploy-verify-CorpReg.js --jurisdiction=US \"Delaware_Corp_123\"",
-    "test:local-single-CorpReg": "npm run build && node build/scripts/local-deploy-verify-single-CorpReg.js",
-    "test:local-single-CorpReg:IN": "npm run build && node build/scripts/local-deploy-verify-single-CorpReg.js --jurisdiction=IN",
-    "example-CorpReg:single-sree": "npm run build && node build/scripts/local-deploy-verify-single-CorpReg.js \"U01112TZ2022PTC039493\"",
+    "test:local-complete-CorpReg": "npm run build && node build/scripts/local/local-deploy-verify-CorpReg.js",
+    "test:local-complete-CorpReg:IN": "npm run build && node build/scripts/local/local-deploy-verify-CorpReg.js --jurisdiction=IN",
+    "test:local-complete-CorpReg:US": "npm run build && node build/scripts/local/local-deploy-verify-CorpReg.js --jurisdiction=US",
+    "example-CorpReg:local-sree": "npm run build && node build/scripts/local/local-deploy-verify-CorpReg.js \"U01112TZ2022PTC039493\"",
+    "example-CorpReg:local-us": "npm run build && node build/scripts/local/local-deploy-verify-CorpReg.js --jurisdiction=US \"Delaware_Corp_123\"",
+    "test:local-single-CorpReg": "npm run build && node build/scripts/local/local-deploy-verify-single-CorpReg.js",
+    "test:local-single-CorpReg:IN": "npm run build && node build/scripts/local/local-deploy-verify-single-CorpReg.js --jurisdiction=IN",
+    "example-CorpReg:single-sree": "npm run build && node build/scripts/local/local-deploy-verify-single-CorpReg.js \"U01112TZ2022PTC039493\"",
     "deploy:testnet-corpreg": "npm run deploy testnet-corpreg-dev",
     "deploy:testnet-corpreg-india": "npm run deploy testnet-corpreg-india",
     "deploy:testnet-corpreg-usa": "npm run deploy testnet-corpreg-usa",
