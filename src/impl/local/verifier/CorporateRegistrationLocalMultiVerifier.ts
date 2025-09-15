@@ -1,4 +1,4 @@
-import { getCorporateRegistrationLocalMultiVerifierUtils } from '../handler/CorporateRegistrationLocalHandler';
+import { getCorporateRegistrationLocalMultiVerifierUtils } from '../handler/CorporateRegistrationLocalHandler.js';
 
 if (process.argv[1] && process.argv[1].includes('CorporateRegistrationLocalMultiVerifier')) {
 	async function main() {

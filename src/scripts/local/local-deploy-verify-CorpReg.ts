@@ -41,7 +41,7 @@ async function main(): Promise<void> {
     
     return new Promise((resolve, reject) => {
       const execArgs = [
-        './build/tests/with-sign/CorporateRegistrationLocalMultiVerifier.js'
+        './build/impl/local/verifier/CorporateRegistrationLocalMultiVerifier.js'
       ];
       if (jurisdiction !== 'IN') {
         execArgs.push(`--jurisdiction=${jurisdiction}`);
