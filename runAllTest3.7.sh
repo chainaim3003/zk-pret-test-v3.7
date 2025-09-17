@@ -14,11 +14,11 @@ npm run test:local-complete-GLEIF "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
 
 #BusinessProcess
 # STABLECOIN
-node ./build/impl/local/verifier/BusinessProcessLocalVerifier.js  bpmngroup1 STABLECOIN ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn
+node ./build/impl/local/verifier/BusinessProcessLocalMultiVerifier.js  bpmngroup1 STABLECOIN ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn
 # SCF
-node ./build/impl/local/verifier/BusinessProcessLocalVerifier.js  bpmngroup1 SCF ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn
+node ./build/impl/local/verifier/BusinessProcessLocalMultiVerifier.js  bpmngroup1 SCF ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn
 # DVP
-node ./build/impl/local/verifier/BusinessProcessLocalVerifier.js  bpmngroup1 DVP ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn
+node ./build/impl/local/verifier/BusinessProcessLocalMultiVerifier.js  bpmngroup1 DVP ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn
 
 
 # Business Standard Data Integrity
@@ -70,3 +70,12 @@ node ./build/impl/network/verifier/RiskBasel3NetworkMultiVerifier.js 80 80 http:
 node ./build/impl/network/verifier/RiskStableCoinNetworkMultiVerifier.js 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/StableCoin/CONFIG/US/StableCoin-VALID-1.json ultra_strict US
 #Advanced
 node ./build/impl/network/verifier/RiskAdvancedNetworkMultiVerifier.js 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json
+
+
+
+#======================
+# Composed
+#======================
+# Composed Recursive 3 Level Verification Test
+
+node ./build/impl/test/ComposedRecursive3LevelVerificationTest.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" "U01112TZ2022PTC039493"
