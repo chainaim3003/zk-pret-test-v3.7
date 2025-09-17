@@ -245,11 +245,11 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
             throw new Error('CIN is required.');
         }
         
-        // const accessToken = await authenticate();
-        // return fetchMasterData(accessToken, BASEURL, cin);
+        const accessToken = await authenticate();
+        return fetchMasterData(accessToken, BASEURL, cin);
 
-        const response =await axios.get(`${BASEURL}/${cin}`);
-        return response.data;
+        // const response =await axios.get(`${BASEURL}/${cin}`);
+        // return response.data;
         
     } else if (typeOfNet === 'LOCAL') {
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++in sandbox++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
@@ -263,11 +263,11 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
         }
         
         console.log('Using sandbox API endpoint for LOCAL:', BASEURL);
-        // const accessToken = await authenticate();
-        // return fetchMasterData(accessToken, BASEURL, cin);
+        const accessToken = await authenticate();
+        return fetchMasterData(accessToken, BASEURL, cin);
 
-        const response =await axios.get(`${BASEURL}/${cin}`);
-        return response.data;
+        // const response =await axios.get(`${BASEURL}/${cin}`);
+        // return response.data;
         
     } else {
         console.log('///////////////////////////////////////////////in prod//////////////////////////////////////////////');
@@ -279,10 +279,10 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
             throw new Error('CIN is required.');
         }
         
-        // const accessToken = await authenticate();
-        // return fetchMasterData(accessToken, BASEURL, cin);
+        const accessToken = await authenticate();
+        return fetchMasterData(accessToken, BASEURL, cin);
 
-        const response =await axios.get(`${BASEURL}/${cin}`);
-        return response.data;
+        // const response =await axios.get(`${BASEURL}/${cin}`);
+        // return response.data;
     }
 }
