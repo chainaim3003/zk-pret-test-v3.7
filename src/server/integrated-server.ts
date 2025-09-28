@@ -346,9 +346,10 @@ app.use(limiter);
 app.options('*', cors());
 
 app.use('/api/*', (req, res, next) => {
-    console.log(`🔍 API Request: ${req.method} ${req.path}`);
-    console.log(`🔍 Headers:`, req.headers);
-    console.log(`🔍 Origin:`, req.get('origin'));
+    // Only log non-health-check requests to reduce noise
+    if (req.path !== '/api/v1/health') {
+        console.log(`🔍 API Request: ${req.method} ${req.path}`);
+    }
     next();
 });
 
@@ -434,8 +435,22 @@ wss.on('connection', (ws: WebSocket) => {
     logger.info('New WebSocket connection established');
 
     ws.on('message', (message: WebSocket.RawData) => {
+        const messageStr = message.toString().trim();
+        
+        // Handle plain text ping/pong messages
+        if (messageStr === 'ping') {
+            ws.send('pong');
+            return;
+        }
+        
+        if (messageStr === 'pong') {
+            // Just acknowledge, no response needed
+            return;
+        }
+        
+        // Handle JSON messages
         try {
-            const data = JSON.parse(message.toString());
+            const data = JSON.parse(messageStr);
             logger.info('WebSocket message received:', data);
 
             if (data.type === 'subscribe_state_monitoring') {
@@ -446,8 +461,16 @@ wss.on('connection', (ws: WebSocket) => {
                     server: 'zk-pret-async-only-server'
                 }));
             }
+            
+            // Handle JSON ping messages
+            if (data.type === 'ping') {
+                ws.send(JSON.stringify({
+                    type: 'pong',
+                    timestamp: new Date().toISOString()
+                }));
+            }
         } catch (error) {
-            logger.error('Invalid WebSocket message:', error);
+            logger.error('Invalid WebSocket message:', { message: messageStr, error: error instanceof Error ? error.message : String(error) });
         }
     });
 

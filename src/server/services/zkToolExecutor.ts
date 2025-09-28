@@ -168,17 +168,14 @@ export class ZKToolExecutor {
 
         for (const buildPath of this.config.stdioBuildPaths) {
             const fullPath = path.join(this.config.stdioPath, buildPath, scriptFile);
-            console.log(`  Checking: ${fullPath}`);
 
             if (existsSync(fullPath)) {
-                console.log(`  Found at: ${fullPath}`);
+                console.log(`  ✓ Found at: ${fullPath}`);
                 return fullPath;
-            } else {
-                console.log(`  Not found at: ${fullPath}`);
             }
         }
 
-        console.log(`Script not found in any build path: ${scriptFile}`);
+        console.log(`  ✗ Not found in any build path`);
         return null;
     }
 
@@ -230,7 +227,11 @@ export class ZKToolExecutor {
 
     async healthCheck(): Promise<{ connected: boolean; status?: any }> {
         try {
-            console.log('=== ZK EXECUTOR HEALTH CHECK (MULTI-PATH MODE) ===');
+            // Get current environment from BUILD_ENV
+            const buildEnv = (process.env.BUILD_ENV || 'LOCAL').toUpperCase();
+            
+            console.log('=== ZK EXECUTOR HEALTH CHECK (ENVIRONMENT-AWARE MODE) ===');
+            console.log('Current Environment:', buildEnv);
             console.log('Checking path:', this.config.stdioPath);
 
             // Use synchronous file access to avoid hanging
@@ -251,16 +252,29 @@ export class ZKToolExecutor {
                 return { path: buildPath, exists, fullPath };
             });
 
-            // Check for key compiled JavaScript files across all paths and environments
-            const keyFiles = [
-                'GLEIFLocalMultiVerifier.js',
-                'GLEIFTestnetMultiVerifier.js',
-                // 'GLEIFMainnetMultiVerifier.js',
-                // 'EXIMLocalMultiVerifier.js',
-                // 'CorporateRegistrationLocalMultiVerifier.js'
-            ];
+            // FIXED: Only check files for current environment
+            const environmentFileMap: Record<string, string[]> = {
+                'LOCAL': [
+                    'GLEIFLocalMultiVerifier.js',
+                    'CorporateRegistrationLocalMultiVerifier.js',
+                    'EXIMLocalMultiVerifier.js'
+                ],
+                'TESTNET': [
+                    'GLEIFNetworkMultiVerifier.js',
+                    'CorporateRegistrationNetworkMultiVerifier.js',
+                    'EXIMNetworkMultiVerifier.js'
+                ],
+                'MAINNET': [
+                    'GLEIFMainnetMultiVerifier.js',
+                    'CorporateRegistrationMainnetMultiVerifier.js',
+                    'EXIMMainnetMultiVerifier.js'
+                ]
+            };
 
-            console.log('Checking for compiled JavaScript files across all paths:');
+            // Get files to check based on current environment
+            const keyFiles = environmentFileMap[buildEnv] || environmentFileMap['LOCAL'];
+
+            console.log(`Checking for ${buildEnv} environment files:`);
             let foundCompiledFiles = 0;
             const fileLocations: Record<string, string> = {};
 
@@ -276,19 +290,20 @@ export class ZKToolExecutor {
             }
 
             console.log('=========================');
-            console.log(`Found ${foundCompiledFiles}/${keyFiles.length} compiled files`);
+            console.log(`Found ${foundCompiledFiles}/${keyFiles.length} ${buildEnv} files`);
 
             return {
                 connected: foundCompiledFiles > 0,
                 status: {
                     mode: 'multi-path-environment-aware-execution',
+                    currentEnvironment: buildEnv,
                     path: this.config.stdioPath,
                     buildPaths: buildPathsStatus,
                     compiledFilesFound: foundCompiledFiles,
                     totalCompiledFiles: keyFiles.length,
                     fileLocations,
                     supportedEnvironments: Object.keys(ENVIRONMENT_SCRIPT_MAP),
-                    totalToolsSupported: Object.keys(ENVIRONMENT_SCRIPT_MAP.LOCAL).length
+                    totalToolsSupported: Object.keys(ENVIRONMENT_SCRIPT_MAP[buildEnv]).length
                 }
             };
         } catch (error) {
