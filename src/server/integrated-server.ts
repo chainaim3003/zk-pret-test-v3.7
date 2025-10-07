@@ -2516,6 +2516,324 @@ app.get('/zkpret/', (req: express.Request, res: express.Response) => {
 
 // ==== END DIRECT EXECUTION ENDPOINTS ====
 
+// ==== ENDORSEMENT API ENDPOINTS ====
+
+// Helper function to read and search endorsement files
+function searchEndorsementByLeiOrName(searchTerm: string): any {
+    try {
+        const endorsementsPath = path.join(process.cwd(), 'src', 'data', 'Endorsements');
+        
+        // Check if directory exists
+        if (!fs.existsSync(endorsementsPath)) {
+            logger.error('Endorsements directory does not exist:', endorsementsPath);
+            return null;
+        }
+
+        // Read all JSON files in the directory
+        const files = fs.readdirSync(endorsementsPath).filter(file => file.endsWith('.json'));
+        
+        logger.info(`🔍 Searching ${files.length} endorsement files for: ${searchTerm}`);
+
+        // Search through each file
+        for (const file of files) {
+            const filePath = path.join(endorsementsPath, file);
+            const fileContent = fs.readFileSync(filePath, 'utf8');
+            const jsonData = JSON.parse(fileContent);
+
+            // Search specifically in the company name field or LEI field
+            try {
+                // Check if data array exists and has at least one element
+                if (jsonData.data && Array.isArray(jsonData.data) && jsonData.data.length > 0) {
+                    const firstRecord = jsonData.data[0];
+                    
+                    // Get company name and LEI
+                    const companyName = firstRecord.attributes?.entity?.legalName?.name || '';
+                    const lei = firstRecord.attributes?.lei || '';
+                    
+                    // Convert to lowercase for case-insensitive comparison
+                    const searchLower = searchTerm.toLowerCase().trim();
+                    const companyNameLower = companyName.toLowerCase().trim();
+                    const leiLower = lei.toLowerCase().trim();
+                    
+                    // Check if search term matches company name or LEI
+                    if (companyNameLower === searchLower || leiLower === searchLower || 
+                        companyNameLower.includes(searchLower) || leiLower.includes(searchLower)) {
+                        logger.info(`✅ Match found in file: ${file} (Company: ${companyName}, LEI: ${lei})`);
+                        return {
+                            found: true,
+                            fileName: file,
+                            data: jsonData,
+                            matchedField: companyNameLower === searchLower || companyNameLower.includes(searchLower) ? 'companyName' : 'lei',
+                            companyName: companyName,
+                            lei: lei
+                        };
+                    }
+                }
+            } catch (parseError) {
+                logger.warn(`⚠️ Error parsing file ${file}:`, parseError);
+                continue;
+            }
+        }
+
+        logger.warn(`❌ No match found for: ${searchTerm}`);
+        return null;
+
+    } catch (error) {
+        logger.error('Error searching endorsement files:', error);
+        return null;
+    }
+}
+
+// GET endpoint: /zkpret/endorsement/lei/:leiOrName
+app.get('/zkpret/endorsement/lei/:leiOrName', async (req: express.Request, res: express.Response) => {
+    try {
+        const leiOrName = decodeURIComponent(req.params.leiOrName);
+        
+        if (!leiOrName || leiOrName.trim() === '') {
+            return res.status(400).json({
+                success: false,
+                error: 'LEI ID or Company Name is required in URL',
+                examples: [
+                    'http://localhost:3001/zkpret/endorsement/lei/894500Q32QG6KKGMMI95',
+                    'http://localhost:3001/zkpret/endorsement/lei/SREE%20PALANI%20ANDAVAR%20AGROS%20PRIVATE%20LIMITED'
+                ],
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        logger.info(`🔍 Endorsement lookup for: ${leiOrName}`);
+
+        const result = searchEndorsementByLeiOrName(leiOrName);
+
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                error: 'No endorsement found matching the provided LEI ID or Company Name',
+                searchedFor: leiOrName,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        return res.json({
+            success: true,
+            searchedFor: leiOrName,
+            fileName: result.fileName,
+            data: result.data,
+            timestamp: new Date().toISOString(),
+            endpoint: '/zkpret/endorsement/lei/:leiOrName'
+        });
+
+    } catch (error) {
+        logger.error('Endorsement lookup failed:', error);
+        return res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// NEW: Commercial Invoice (Custom) Endorsement Endpoint - reads specific CI file directly
+app.get('/zkpret/endorsement/custom/:customInvoiceId', async (req: express.Request, res: express.Response) => {
+    try {
+        const customInvoiceId = req.params.customInvoiceId; // e.g., "CI_VLEI_3001"
+        
+        // Filename is the same as the ID with .json extension
+        const filename = customInvoiceId + '.json';
+        
+        // Build full file path
+        const filePath = path.join(
+            process.cwd(), 
+            'src', 
+            'data', 
+            'Endorsements', 
+            filename
+        );
+        
+        logger.info(`📄 Commercial Invoice endorsement requested: ${customInvoiceId}`);
+        logger.info(`📁 Looking for file: ${filename}`);
+        
+        // Check if file exists
+        if (!fs.existsSync(filePath)) {
+            logger.warn(`⚠️ Commercial Invoice file not found: ${filename}`);
+            return res.status(404).json({
+                success: false,
+                error: `Commercial Invoice ${customInvoiceId} not found`,
+                expectedFile: filename,
+                expectedPath: filePath,
+                timestamp: new Date().toISOString(),
+                endpoint: `/zkpret/endorsement/custom/${customInvoiceId}`
+            });
+        }
+        
+        // Read and return the file
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        const endorsementData = JSON.parse(fileContent);
+        
+        logger.info(`✅ Commercial Invoice endorsement found: ${filename}`);
+        
+        return res.json({
+            success: true,
+            customInvoiceId: customInvoiceId,
+            data: endorsementData,
+            metadata: {
+                filename: filename,
+                filePath: filePath,
+                timestamp: new Date().toISOString(),
+                endpoint: `/zkpret/endorsement/custom/${customInvoiceId}`,
+                service: 'Commercial Invoice vLEI Endorsement Verification'
+            }
+        });
+        
+    } catch (error) {
+        logger.error('Commercial Invoice endorsement failed:', {
+            customInvoiceId: req.params.customInvoiceId,
+            error: error instanceof Error ? error.message : String(error)
+        });
+        return res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            endpoint: `/zkpret/endorsement/custom/${req.params.customInvoiceId}`,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// NEW: Bill of Lading Endorsement Endpoint - reads specific BL file directly
+app.get('/zkpret/endorsement/bill/:billOfLadingId', async (req: express.Request, res: express.Response) => {
+    try {
+        const billOfLadingId = req.params.billOfLadingId; // e.g., "BL_VLEI_2001"
+        
+        // Filename is the same as the ID with .json extension
+        const filename = billOfLadingId + '.json';
+        
+        // Build full file path
+        const filePath = path.join(
+            process.cwd(), 
+            'src', 
+            'data', 
+            'Endorsements', 
+            filename
+        );
+        
+        logger.info(`📋 Bill of Lading endorsement requested: ${billOfLadingId}`);
+        logger.info(`📁 Looking for file: ${filename}`);
+        
+        // Check if file exists
+        if (!fs.existsSync(filePath)) {
+            logger.warn(`⚠️ Bill of Lading file not found: ${filename}`);
+            return res.status(404).json({
+                success: false,
+                error: `Bill of Lading ${billOfLadingId} not found`,
+                expectedFile: filename,
+                expectedPath: filePath,
+                timestamp: new Date().toISOString(),
+                endpoint: `/zkpret/endorsement/bill/${billOfLadingId}`
+            });
+        }
+        
+        // Read and return the file
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        const endorsementData = JSON.parse(fileContent);
+        
+        logger.info(`✅ Bill of Lading endorsement found: ${filename}`);
+        
+        return res.json({
+            success: true,
+            billOfLadingId: billOfLadingId,
+            data: endorsementData,
+            metadata: {
+                filename: filename,
+                filePath: filePath,
+                timestamp: new Date().toISOString(),
+                endpoint: `/zkpret/endorsement/bill/${billOfLadingId}`,
+                service: 'Bill of Lading vLEI Endorsement Verification'
+            }
+        });
+        
+    } catch (error) {
+        logger.error('Bill of Lading endorsement failed:', {
+            billOfLadingId: req.params.billOfLadingId,
+            error: error instanceof Error ? error.message : String(error)
+        });
+        return res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            endpoint: `/zkpret/endorsement/bill/${req.params.billOfLadingId}`,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// NEW: Purchase Order Endorsement Endpoint - reads specific PO file directly
+app.get('/zkpret/endorsement/purchase/:purchaseOrderId', async (req: express.Request, res: express.Response) => {
+    try {
+        const purchaseOrderId = req.params.purchaseOrderId; // e.g., "PO--vLEI-1001"
+        
+        // Convert URL format to filename format
+        // "PO--vLEI-1001" becomes "PO_VLEI_1001.json"
+        const filename = purchaseOrderId.replace(/--/g, '_') + '.json';
+        
+        // Build full file path
+        const filePath = path.join(
+            process.cwd(), 
+            'src', 
+            'data', 
+            'Endorsements', 
+            filename
+        );
+        
+        logger.info(`📦 Purchase order endorsement requested: ${purchaseOrderId}`);
+        logger.info(`📁 Looking for file: ${filename}`);
+        
+        // Check if file exists
+        if (!fs.existsSync(filePath)) {
+            logger.warn(`⚠️ Purchase order file not found: ${filename}`);
+            return res.status(404).json({
+                success: false,
+                error: `Purchase order ${purchaseOrderId} not found`,
+                expectedFile: filename,
+                expectedPath: filePath,
+                timestamp: new Date().toISOString(),
+                endpoint: `/zkpret/endorsement/purchase/${purchaseOrderId}`
+            });
+        }
+        
+        // Read and return the file
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        const endorsementData = JSON.parse(fileContent);
+        
+        logger.info(`✅ Purchase order endorsement found: ${filename}`);
+        
+        return res.json({
+            success: true,
+            purchaseOrderId: purchaseOrderId,
+            data: endorsementData,
+            metadata: {
+                filename: filename,
+                filePath: filePath,
+                timestamp: new Date().toISOString(),
+                endpoint: `/zkpret/endorsement/purchase/${purchaseOrderId}`,
+                service: 'Purchase Order vLEI Endorsement Verification'
+            }
+        });
+        
+    } catch (error) {
+        logger.error('Purchase order endorsement failed:', {
+            purchaseOrderId: req.params.purchaseOrderId,
+            error: error instanceof Error ? error.message : String(error)
+        });
+        return res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            endpoint: `/zkpret/endorsement/purchase/${req.params.purchaseOrderId}`,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// ==== END ENDORSEMENT API ENDPOINTS ====
+
 app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.error('Unhandled error', {
         error: error.message,

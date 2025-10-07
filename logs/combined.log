@@ -4615,3 +4615,247 @@
 {"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-01T06:38:13.907Z","url":"/zkpret/compliance/global/eval/lei/SREE%20PALANI%20ANDAVAR%20AGROS%20PRIVATE%20LIMITED","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
 {"companyName":"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","level":"info","message":"🔍 Evaluation mode: GLEIF LEI execution","service":"zk-pret-server","timestamp":"2025-10-01T06:38:14.008Z"}
 {"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-01T06:49:22.599Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-10-06T04:03:20.232Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-10-06T04:03:20.267Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-10-06T04:03:20.705Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.132Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.149Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.149Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.164Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.165Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.165Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.166Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.168Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T04:03:21.180Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-06T04:04:09.019Z","url":"/zkpret/compliance/global/eval/lei/SREE%20PALANI%20ANDAVAR%20AGROS%20PRIVATE%20LIMITED","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"companyName":"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","level":"info","message":"🔍 Evaluation mode: GLEIF LEI execution","service":"zk-pret-server","timestamp":"2025-10-06T04:04:09.201Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-06T04:14:16.483Z","url":"/favicon.ico","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-06T04:16:31.991Z","url":"/zkpret/compliance/global/lei/SREE%20PALANI%20ANDAVAR%20AGROS%20PRIVATE%20LIMITED","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"companyName":"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","level":"info","message":"URL-based GLEIF execution","service":"zk-pret-server","timestamp":"2025-10-06T04:16:32.006Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-06T04:26:00.319Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.204Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.238Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.287Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.419Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.424Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.429Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.436Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.438Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.441Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.453Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.456Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T18:18:26.457Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-06T18:18:38.020Z","url":"/zkpret/endorsement/lei/894500Q32QG6KKGMMI95","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: 894500Q32QG6KKGMMI95","service":"zk-pret-server","timestamp":"2025-10-06T18:18:38.029Z"}
+{"level":"info","message":"🔍 Searching 2 endorsement files for: 894500Q32QG6KKGMMI95","service":"zk-pret-server","timestamp":"2025-10-06T18:18:38.038Z"}
+{"level":"error","message":"Error searching endorsement files: Expected property name or '}' in JSON at position 4 (line 2 column 3)","service":"zk-pret-server","stack":"SyntaxError: Expected property name or '}' in JSON at position 4 (line 2 column 3)\n    at JSON.parse (<anonymous>)\n    at searchEndorsementByLeiOrName (file:///C:/CHAINAIM3003/mcp-servers/zk-pret-test-v3.7.0/build/server/integrated-server.js:2285:35)\n    at file:///C:/CHAINAIM3003/mcp-servers/zk-pret-test-v3.7.0/build/server/integrated-server.js:2323:24\n    at Layer.handle [as handle_request] (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\index.js:376:14)","timestamp":"2025-10-06T18:18:38.052Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-06T18:18:39.075Z","url":"/favicon.ico","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-06T18:19:00.822Z","url":"/zkpret/endorsement/lei/SREE%20PALANI%20ANDAVAR%20AGROS%20PRIVATE%20LIMITED","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","service":"zk-pret-server","timestamp":"2025-10-06T18:19:00.844Z"}
+{"level":"info","message":"🔍 Searching 2 endorsement files for: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","service":"zk-pret-server","timestamp":"2025-10-06T18:19:00.851Z"}
+{"level":"error","message":"Error searching endorsement files: Expected property name or '}' in JSON at position 4 (line 2 column 3)","service":"zk-pret-server","stack":"SyntaxError: Expected property name or '}' in JSON at position 4 (line 2 column 3)\n    at JSON.parse (<anonymous>)\n    at searchEndorsementByLeiOrName (file:///C:/CHAINAIM3003/mcp-servers/zk-pret-test-v3.7.0/build/server/integrated-server.js:2285:35)\n    at file:///C:/CHAINAIM3003/mcp-servers/zk-pret-test-v3.7.0/build/server/integrated-server.js:2323:24\n    at Layer.handle [as handle_request] (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (C:\\CHAINAIM3003\\mcp-servers\\zk-pret-test-v3.7.0\\node_modules\\express\\lib\\router\\index.js:376:14)","timestamp":"2025-10-06T18:19:00.857Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-06T18:21:51.207Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.458Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.498Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.533Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.583Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.584Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.584Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.585Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.585Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.585Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.586Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.586Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-06T18:23:29.586Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-06T18:25:06.851Z","url":"/zkpret/endorsement/lei/894500Q32QG6KKGMMI95","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: 894500Q32QG6KKGMMI95","service":"zk-pret-server","timestamp":"2025-10-06T18:25:06.873Z"}
+{"level":"info","message":"🔍 Searching 2 endorsement files for: 894500Q32QG6KKGMMI95","service":"zk-pret-server","timestamp":"2025-10-06T18:25:06.888Z"}
+{"level":"info","message":"✅ Match found in file: vlei_org_endorsement_SPAAL_simple-full.json","service":"zk-pret-server","timestamp":"2025-10-06T18:25:06.961Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-06T18:25:29.045Z","url":"/zkpret/endorsement/lei/SREE%20PALANI%20ANDAVAR%20AGROS%20PRIVATE%20LIMITED","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","service":"zk-pret-server","timestamp":"2025-10-06T18:25:29.053Z"}
+{"level":"info","message":"🔍 Searching 2 endorsement files for: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","service":"zk-pret-server","timestamp":"2025-10-06T18:25:29.054Z"}
+{"level":"info","message":"✅ Match found in file: vlei_org_endorsement_SPAAL_simple-full.json","service":"zk-pret-server","timestamp":"2025-10-06T18:25:29.065Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-06T19:06:12.663Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.385Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.396Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.430Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.495Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.499Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.501Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.509Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.511Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.512Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.512Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.513Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T06:37:45.518Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T06:38:26.001Z","url":"/zkpret/endorsement/lei/SREE%20PALANI%20ANDAVAR%20AGROS%20PRIVATE%20LIMITED","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","service":"zk-pret-server","timestamp":"2025-10-07T06:38:26.036Z"}
+{"level":"info","message":"🔍 Searching 2 endorsement files for: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED","service":"zk-pret-server","timestamp":"2025-10-07T06:38:26.039Z"}
+{"level":"info","message":"✅ Match found in file: vlei_org_endorsement_SPAAL_simple-full.json","service":"zk-pret-server","timestamp":"2025-10-07T06:38:26.132Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T06:38:27.502Z","url":"/favicon.ico","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-07T06:39:34.504Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.518Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.532Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.546Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.576Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.577Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.577Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.577Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.577Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.578Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.578Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.578Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T08:15:58.578Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T08:16:01.289Z","url":"/zkpret/endorsement/lei/JUPITER%20KNITTING%20COMPANY","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: JUPITER KNITTING COMPANY","service":"zk-pret-server","timestamp":"2025-10-07T08:16:01.293Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: JUPITER KNITTING COMPANY","service":"zk-pret-server","timestamp":"2025-10-07T08:16:01.294Z"}
+{"level":"info","message":"✅ Match found in file: BL_2001_uncefact.json","service":"zk-pret-server","timestamp":"2025-10-07T08:16:01.297Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T08:28:34.260Z","url":"/zkpret/endorsement/lei/JUPITER%20KNITTING%20COMPANY","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: JUPITER KNITTING COMPANY","service":"zk-pret-server","timestamp":"2025-10-07T08:28:34.272Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: JUPITER KNITTING COMPANY","service":"zk-pret-server","timestamp":"2025-10-07T08:28:34.279Z"}
+{"level":"info","message":"✅ Match found in file: BL_2001_uncefact.json","service":"zk-pret-server","timestamp":"2025-10-07T08:28:34.288Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-07T08:36:56.991Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-10-07T08:37:20.958Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-10-07T08:37:20.967Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-10-07T08:37:20.992Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.032Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.033Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.035Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.035Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.035Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.036Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.036Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.036Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T08:37:21.036Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T08:37:58.474Z","url":"/zkpret/endorsement/lei/JUPITER%20KNITTING%20COMPANY","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: JUPITER KNITTING COMPANY","service":"zk-pret-server","timestamp":"2025-10-07T08:37:58.477Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: JUPITER KNITTING COMPANY","service":"zk-pret-server","timestamp":"2025-10-07T08:37:58.479Z"}
+{"level":"info","message":"✅ Match found in file: jupiter_vlei_endorsement.json (Company: JUPITER KNITTING COMPANY, LEI: 3358004DXAMRWRUIYJ05)","service":"zk-pret-server","timestamp":"2025-10-07T08:37:58.622Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T08:38:23.897Z","url":"/zkpret/endorsement/lei/TOMMY%20HILFIGER%20EUROPE%20B.V.","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T08:38:23.906Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T08:38:23.907Z"}
+{"level":"info","message":"✅ Match found in file: tommy_vlei_endorsement.json (Company: TOMMY HILFIGER EUROPE B.V., LEI: 54930012QJWZMYHNJW95)","service":"zk-pret-server","timestamp":"2025-10-07T08:38:24.340Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T08:38:35.473Z","url":"/zkpret/endorsement/lei/TOMMY%20HILFIGER%20EUROPE%20B.V.","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T08:38:35.474Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T08:38:35.475Z"}
+{"level":"info","message":"✅ Match found in file: tommy_vlei_endorsement.json (Company: TOMMY HILFIGER EUROPE B.V., LEI: 54930012QJWZMYHNJW95)","service":"zk-pret-server","timestamp":"2025-10-07T08:38:35.481Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:30:20.762Z","url":"/zkpret/endorsement/lei/Jupiter%20Knitting%20Company","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T09:30:20.781Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T09:30:20.786Z"}
+{"level":"info","message":"✅ Match found in file: jupiter_vlei_endorsement.json (Company: JUPITER KNITTING COMPANY, LEI: 3358004DXAMRWRUIYJ05)","service":"zk-pret-server","timestamp":"2025-10-07T09:30:20.817Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:30:58.040Z","url":"/zkpret/endorsement/lei/TOMMY%20HILFIGER%20EUROPE%20B.V.","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T09:30:58.048Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T09:30:58.049Z"}
+{"level":"info","message":"✅ Match found in file: tommy_vlei_endorsement.json (Company: TOMMY HILFIGER EUROPE B.V., LEI: 54930012QJWZMYHNJW95)","service":"zk-pret-server","timestamp":"2025-10-07T09:30:58.089Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:36:32.068Z","url":"/zkpret/endorsement/lei/Jupiter%20Knitting%20Company","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T09:36:32.086Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T09:36:32.117Z"}
+{"level":"info","message":"✅ Match found in file: jupiter_vlei_endorsement.json (Company: JUPITER KNITTING COMPANY, LEI: 3358004DXAMRWRUIYJ05)","service":"zk-pret-server","timestamp":"2025-10-07T09:36:32.167Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:46:13.317Z","url":"/zkpret/endorsement/lei/TOMMY%20HILFIGER%20EUROPE%20B.V.","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T09:46:13.321Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T09:46:13.323Z"}
+{"level":"info","message":"✅ Match found in file: tommy_vlei_endorsement.json (Company: TOMMY HILFIGER EUROPE B.V., LEI: 54930012QJWZMYHNJW95)","service":"zk-pret-server","timestamp":"2025-10-07T09:46:13.349Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:46:28.286Z","url":"/zkpret/endorsement/lei/Jupiter%20Knitting%20Company","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T09:46:28.288Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T09:46:28.290Z"}
+{"level":"info","message":"✅ Match found in file: jupiter_vlei_endorsement.json (Company: JUPITER KNITTING COMPANY, LEI: 3358004DXAMRWRUIYJ05)","service":"zk-pret-server","timestamp":"2025-10-07T09:46:28.299Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:55:57.460Z","url":"/zkpret/endorsement/purchase/PO--vLEI-1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-07T09:56:11.103Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.679Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.690Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.697Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.743Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.744Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.745Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.745Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.746Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.746Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.746Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.746Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T09:56:40.746Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:56:44.329Z","url":"/zkpret/endorsement/purchase/PO--vLEI-1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO--vLEI-1001","service":"zk-pret-server","timestamp":"2025-10-07T09:56:44.331Z"}
+{"level":"info","message":"📁 Looking for file: PO_vLEI-1001.json","service":"zk-pret-server","timestamp":"2025-10-07T09:56:44.331Z"}
+{"level":"warn","message":"⚠️ Purchase order file not found: PO_vLEI-1001.json","service":"zk-pret-server","timestamp":"2025-10-07T09:56:44.331Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:56:51.331Z","url":"/zkpret/endorsement/purchase/PO--vLEI-1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO--vLEI-1001","service":"zk-pret-server","timestamp":"2025-10-07T09:56:51.338Z"}
+{"level":"info","message":"📁 Looking for file: PO_vLEI-1001.json","service":"zk-pret-server","timestamp":"2025-10-07T09:56:51.341Z"}
+{"level":"warn","message":"⚠️ Purchase order file not found: PO_vLEI-1001.json","service":"zk-pret-server","timestamp":"2025-10-07T09:56:51.346Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T09:59:04.631Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T09:59:04.638Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T09:59:04.638Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T09:59:04.639Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:00:19.575Z","url":"/zkpret/endorsement/purchase/PO_1011_invalid","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_1011_invalid","service":"zk-pret-server","timestamp":"2025-10-07T10:00:19.576Z"}
+{"level":"info","message":"📁 Looking for file: PO_1011_invalid.json","service":"zk-pret-server","timestamp":"2025-10-07T10:00:19.576Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_1011_invalid.json","service":"zk-pret-server","timestamp":"2025-10-07T10:00:19.577Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:09:35.697Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T10:09:35.720Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:09:35.721Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:09:35.727Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:09:40.226Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T10:09:40.226Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:09:40.227Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:09:40.228Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:09:41.148Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T10:09:41.150Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:09:41.151Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:09:41.153Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:09:54.266Z","url":"/zkpret/endorsement/lei/TOMMY%20HILFIGER%20EUROPE%20B.V.","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T10:09:54.301Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T10:09:54.326Z"}
+{"level":"info","message":"✅ Match found in file: buyer_tommy_vlei_endorsement.json (Company: TOMMY HILFIGER EUROPE B.V., LEI: 54930012QJWZMYHNJW95)","service":"zk-pret-server","timestamp":"2025-10-07T10:09:54.379Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:10:03.089Z","url":"/zkpret/endorsement/lei/Jupiter%20Knitting%20Company","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T10:10:03.089Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T10:10:03.090Z"}
+{"level":"info","message":"✅ Match found in file: seller_jupiter_vlei_endorsement.json (Company: JUPITER KNITTING COMPANY, LEI: 3358004DXAMRWRUIYJ05)","service":"zk-pret-server","timestamp":"2025-10-07T10:10:03.112Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:10:12.337Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T10:10:12.337Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:10:12.338Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:10:12.339Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:11:06.479Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T10:11:06.484Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:11:06.485Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:11:06.488Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:11:11.644Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T10:11:11.717Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:11:11.718Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:11:11.818Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:11:28.238Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T10:11:28.239Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:11:28.241Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:11:28.244Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:12:55.471Z","url":"/zkpret/endorsement/lei/Jupiter%20Knitting%20Company","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T10:12:55.473Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: Jupiter Knitting Company","service":"zk-pret-server","timestamp":"2025-10-07T10:12:55.474Z"}
+{"level":"info","message":"✅ Match found in file: seller_jupiter_vlei_endorsement.json (Company: JUPITER KNITTING COMPANY, LEI: 3358004DXAMRWRUIYJ05)","service":"zk-pret-server","timestamp":"2025-10-07T10:12:55.489Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:12:57.504Z","url":"/zkpret/endorsement/lei/TOMMY%20HILFIGER%20EUROPE%20B.V.","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"🔍 Endorsement lookup for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T10:12:57.505Z"}
+{"level":"info","message":"🔍 Searching 13 endorsement files for: TOMMY HILFIGER EUROPE B.V.","service":"zk-pret-server","timestamp":"2025-10-07T10:12:57.505Z"}
+{"level":"info","message":"✅ Match found in file: buyer_tommy_vlei_endorsement.json (Company: TOMMY HILFIGER EUROPE B.V., LEI: 54930012QJWZMYHNJW95)","service":"zk-pret-server","timestamp":"2025-10-07T10:12:57.507Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:12:59.588Z","url":"/zkpret/endorsement/purchase/PO_VLEI_1001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📦 Purchase order endorsement requested: PO_VLEI_1001","service":"zk-pret-server","timestamp":"2025-10-07T10:12:59.589Z"}
+{"level":"info","message":"📁 Looking for file: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:12:59.590Z"}
+{"level":"info","message":"✅ Purchase order endorsement found: PO_VLEI_1001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:12:59.591Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-07T10:34:02.009Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.833Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.847Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.853Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.888Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.891Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.894Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.894Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.895Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.895Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.897Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.898Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-10-07T10:34:47.898Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:34:52.376Z","url":"/zkpret/endorsement/custom/CI_VLEI_3001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📄 Commercial Invoice endorsement requested: CI_VLEI_3001","service":"zk-pret-server","timestamp":"2025-10-07T10:34:52.381Z"}
+{"level":"info","message":"📁 Looking for file: CI_VLEI_3001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:34:52.382Z"}
+{"level":"info","message":"✅ Commercial Invoice endorsement found: CI_VLEI_3001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:34:52.385Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-10-07T10:35:42.848Z","url":"/zkpret/endorsement/bill/BL_VLEI_2001","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+{"level":"info","message":"📋 Bill of Lading endorsement requested: BL_VLEI_2001","service":"zk-pret-server","timestamp":"2025-10-07T10:35:42.861Z"}
+{"level":"info","message":"📁 Looking for file: BL_VLEI_2001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:35:42.875Z"}
+{"level":"info","message":"✅ Bill of Lading endorsement found: BL_VLEI_2001.json","service":"zk-pret-server","timestamp":"2025-10-07T10:35:42.894Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-07T10:35:57.638Z"}
