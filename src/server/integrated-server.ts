@@ -2246,6 +2246,117 @@ app.post('/zkpret/compliance/business/dvp/', async (req, res) => {
 
 // ==== END BUSINESS PROCESS INTEGRITY ENDPOINTS ====
 
+// ==== WALLET SIGNING ENDPOINTS ====
+
+// Step 1: Prepare unsigned transaction for wallet signing
+app.post('/api/v1/tools/gleif/prepare-wallet-transaction', async (req: express.Request, res: express.Response) => {
+    try {
+        const { companyName, userPublicKey } = req.body;
+
+        if (!companyName || !userPublicKey) {
+            return res.status(400).json({
+                success: false,
+                error: 'companyName and userPublicKey are required',
+                endpoint: '/api/v1/tools/gleif/prepare-wallet-transaction',
+                example: {
+                    companyName: "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED",
+                    userPublicKey: "B62qoXYZ..." // User's Aura Wallet address
+                },
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        logger.info('🔐 Preparing GLEIF verification for wallet signing', { companyName, userPublicKey });
+
+        // Import the GLEIFNetworkHandler
+        const { GLEIFNetworkHandler } = await import('../impl/network/handler/GLEIFNetworkHandler.js');
+        const handler = new GLEIFNetworkHandler();
+
+        const startTime = Date.now();
+        const result = await handler.prepareGLEIFVerificationForWallet(companyName, userPublicKey);
+        const executionTime = Date.now() - startTime;
+
+        return res.json({
+            success: true,
+            ...result,
+            metadata: {
+                companyName,
+                userPublicKey,
+                executionTimeMs: executionTime,
+                timestamp: new Date().toISOString(),
+                endpoint: '/api/v1/tools/gleif/prepare-wallet-transaction',
+                service: 'GLEIF Wallet Transaction Preparation',
+                mode: 'wallet-signing',
+                nextStep: 'Sign transaction with Aura Wallet and submit to /api/v1/tools/gleif/submit-signed-transaction'
+            }
+        });
+
+    } catch (error) {
+        logger.error('Failed to prepare wallet transaction', {
+            companyName: req.body.companyName,
+            userPublicKey: req.body.userPublicKey,
+            error: error instanceof Error ? error.message : String(error)
+        });
+        return res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            endpoint: '/api/v1/tools/gleif/prepare-wallet-transaction',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// Step 2: Submit signed transaction from wallet
+app.post('/api/v1/tools/gleif/submit-signed-transaction', async (req: express.Request, res: express.Response) => {
+    try {
+        const { signedTransaction, transactionData } = req.body;
+
+        if (!signedTransaction) {
+            return res.status(400).json({
+                success: false,
+                error: 'signedTransaction is required',
+                endpoint: '/api/v1/tools/gleif/submit-signed-transaction',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        logger.info('📨 Submitting signed transaction from user wallet');
+
+        // Import the GLEIFNetworkHandler
+        const { GLEIFNetworkHandler } = await import('../impl/network/handler/GLEIFNetworkHandler.js');
+        const handler = new GLEIFNetworkHandler();
+
+        const startTime = Date.now();
+        // Pass transactionData to enable monitoring and verification result query
+        const result = await handler.processSignedGLEIFTransaction(signedTransaction, transactionData);
+        const executionTime = Date.now() - startTime;
+
+        return res.json({
+            success: true,
+            ...result,
+            metadata: {
+                executionTimeMs: executionTime,
+                timestamp: new Date().toISOString(),
+                endpoint: '/api/v1/tools/gleif/submit-signed-transaction',
+                service: 'GLEIF Transaction Broadcasting with Monitoring',
+                mode: 'wallet-signing-complete'
+            }
+        });
+
+    } catch (error) {
+        logger.error('Failed to submit signed transaction', {
+            error: error instanceof Error ? error.message : String(error)
+        });
+        return res.status(500).json({
+            success: false,            error: error instanceof Error ? error.message : 'Unknown error',
+            endpoint: '/api/v1/tools/gleif/submit-signed-transaction',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// ==== END WALLET SIGNING ENDPOINTS ====
+
 app.post('/zkpret/compliance/data/integrity/', async (req, res) => {
     try {
         const { dataType, filePath } = req.body;
