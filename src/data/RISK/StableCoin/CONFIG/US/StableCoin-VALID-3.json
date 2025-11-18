@@ -1,0 +1,104 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "US StableCoin Professional Treasury Portfolio V3",
+    "description": "Industry-standard stablecoin reserve portfolio featuring 30% institutional cash deposits and 70% short-term US Treasury Bills with laddered maturity structure, designed for optimal liquidity management and regulatory compliance",
+    "currency": "USD",
+    "totalNotional": 25100,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "3.0",
+    "jurisdiction": "US",
+    "complianceTarget": {
+      "backingRatio": 100.4,
+      "maturityLimit": 93,
+      "yieldToHolders": false,
+      "corporateBondsAllowed": false,
+      "concentrationLimit": 100,
+      "qualityScore": 100
+    },
+    "riskProfile": "Ultra-Conservative",
+    "regulatoryFramework": ["STABLE_Act", "GENIUS_Act"],
+    "assetAllocation": {
+      "cashAndEquivalents": "30%",
+      "shortTermTreasuries": "70%",
+      "corporateBonds": "0%",
+      "otherAssets": "0%"
+    }
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "institutional_cash_deposits",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "7530",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "FDIC-insured institutional deposits at Federal Reserve member banks providing immediate liquidity for token redemptions (30% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury_30day_bills",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5856",
+      "maturityDate": "2024-01-31T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "30-day US Treasury Bills - ultra-short duration government securities for enhanced liquidity management (23.3% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury_60day_bills", 
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5857",
+      "maturityDate": "2024-03-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "60-day US Treasury Bills - intermediate-term government obligations within laddered maturity strategy (23.3% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury_90day_bills",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5857",
+      "maturityDate": "2024-03-31T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "90-day US Treasury Bills - maximum maturity government securities under regulatory guidelines providing enhanced yield (23.4% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "stablecoin_token_liability",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-25000",
+      "maturityDate": "2024-04-03T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Outstanding digital stablecoin tokens backed 1:1 by reserve assets, zero yield to token holders per US regulatory requirements"
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "EU MiCA Professional Treasury Portfolio V4",
+    "description": "Professional stablecoin reserve portfolio compliant with EU MiCA regulation featuring 60% cash and 40% government bonds - optimized for quality threshold",
+    "currency": "EUR",
+    "totalNotional": 25100,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "4.0",
+    "jurisdiction": "EU",
+    "complianceTarget": {
+      "backingRatio": 105,
+      "liquidityRatio": 35,
+      "maturityLimit": 365,
+      "yieldToHolders": true,
+      "corporateBondsAllowed": false,
+      "concentrationLimit": 60,
+      "qualityThreshold": 85
+    },
+    "riskProfile": "Moderate",
+    "regulatoryFramework": ["MiCA"],
+    "assetAllocation": {
+      "cashAndEquivalents": "60%",
+      "governmentBonds": "40%",
+      "corporateBonds": "0%",
+      "coveredBonds": "0%"
+    },
+    "testingPurpose": "EU MiCA compliance validation with mixed asset portfolio"
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "eu_cash_deposits",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "15000",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "EUR cash deposits at ECB-regulated banks providing immediate liquidity (60% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "german_bunds_90d",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "3800",
+      "maturityDate": "2024-04-01T00:00:00",
+      "nominalInterestRate": "0.0220",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "German Bundesanleihen 90-day maturity - AAA-rated EU sovereign debt (15% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "french_bonds_195d",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "3800",
+      "maturityDate": "2024-07-15T00:00:00",
+      "nominalInterestRate": "0.0235",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "French OAT bonds 195-day maturity - AAA-rated EU sovereign debt (15% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "eu_government_bonds",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "2500",
+      "maturityDate": "2024-08-30T00:00:00",
+      "nominalInterestRate": "0.0275",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "EU government bonds 241-day maturity - MiCA-compliant high-quality sovereign debt instruments (10% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "mica_stablecoin_liability",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-25000",
+      "maturityDate": "2024-12-28T00:00:00",
+      "nominalInterestRate": "0.0150",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "MiCA-compliant stablecoin tokens with yield distribution to holders (1.5% APY allowed under EU regulation)"
+    }
+  ],
+  "micaCompliance": {
+    "reserveSegregation": "MiCA Article 33 - Asset segregation requirements met",
+    "yieldDistribution": "MiCA Article 36 - Limited yield payments to token holders permitted",
+    "assetEligibility": "MiCA Article 34 - Only government bonds and bank deposits (all MiCA-approved assets)",
+    "liquidityRequirements": "MiCA Article 35 - 60% bank deposits maintained (>>30% requirement) providing excellent liquidity buffer",
+    "concentrationLimits": "MiCA Article 37 - All concentration limits respected: government bonds diversified across EU issuers",
+    "custodyRequirements": "MiCA Article 38 - EU-regulated custodian banks"
+  },
+  "professionalThresholds": {
+    "backing": {
+      "minimum": "100%",
+      "target": "105%",
+      "rationale": "MiCA minimum with professional buffer"
+    },
+    "liquidity": {
+      "minimum": "35%",
+      "rationale": "EU allows longer maturity terms with lower liquidity requirements"
+    },
+    "quality": {
+      "minimum": "85%",
+      "rationale": "High quality achieved with government bonds and bank deposits only - no prohibited assets"
+    },
+    "concentration": {
+      "maximum": "60%",
+      "rationale": "MiCA allows higher concentration than US frameworks"
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "RISK_ADVANCED_MERKLE_EDGE_100",
+    "description": "Risk Advanced Merkle - EDGE case scenario for boundary testing",
+    "currency": "USD",
+    "totalNotional": 65000,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "1.0",
+    "targetLCR": 100,
+    "targetNSFR": 100,
+    "maxAnalysisPeriods": 36,
+    "systemType": "RISK_ADVANCED_MERKLE_ONLY",
+    "designPrinciples": [
+      "Edge case scenario with borderline compliance thresholds",
+      "Precision testing for threshold boundary conditions",
+      "Multi-scenario analysis for tolerance validation",
+      "ACTUS event aggregation with precise boundary testing",
+      "Threshold variance testing for edge case business intelligence",
+      "Complete isolation from Basel3/Legacy/Stablecoin systems"
+    ],
+    "advancedSettings": {
+      "thresholdStrategy": "HIGH_PRECISION_BOUNDARY",
+      "stressTestProfile": "EDGE_CASE_VALIDATION",
+      "merkleOptimization": "PRECISION_FOCUSED",
+      "circuitComplexity": "BOUNDARY_ANALYSIS",
+      "scenarioGeneration": "PRECISION_EDGE_CASES"
+    }
+  },
+  "riskAdvancedConfig": {
+    "thresholdVariance": {
+      "baseThreshold": 100.0,
+      "toleranceRange": 1.0,
+      "stressTestMultiplier": 1.0,
+      "scenarioProfiles": {
+        "optimistic": {
+          "threshold": 99.5,
+          "tolerance": 1.5,
+          "description": "Slightly below threshold for edge testing"
+        },
+        "realistic": {
+          "threshold": 100.0,
+          "tolerance": 1.0,
+          "description": "Exact threshold boundary scenario"
+        },
+        "pessimistic": {
+          "threshold": 100.5,
+          "tolerance": 0.5,
+          "description": "Slightly above threshold for precision testing"
+        }
+      }
+    },
+    "merkleTreeConfig": {
+      "maxDepth": 20,
+      "leafEncoding": "FIELD_ELEMENTS",
+      "hashFunction": "POSEIDON",
+      "witnessValidation": "COMPREHENSIVE",
+      "circuitOptimization": true
+    },
+    "aggregationStrategy": {
+      "actusEventProcessing": "IN_CIRCUIT",
+      "cashFlowAggregation": "CRYPTOGRAPHIC_PROOF",
+      "metricCalculation": "ZK_VERIFIED",
+      "complianceValidation": "END_TO_END_MERKLE"
+    },
+    "performanceSettings": {
+      "adaptiveScaling": true,
+      "portfolioSizeOptimization": true,
+      "circuitComplexityManagement": true,
+      "proofGenerationOptimization": true
+    }
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "adv_cash01_edge",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "40500",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.001",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Precision Cash - Calculated for exact boundary compliance"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "adv_bond01_edge",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "12000",
+      "maturityDate": "2024-06-30T00:00:00",
+      "nominalInterestRate": "0.02",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Precision Government Bond - For exact threshold testing"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "adv_treasury01_edge",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6500",
+      "maturityDate": "2024-08-31T00:00:00",
+      "nominalInterestRate": "0.03",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Precision Treasury Security - For boundary condition analysis"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "adv_corporate01_edge",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "4000",
+      "maturityDate": "2024-09-30T00:00:00",
+      "nominalInterestRate": "0.04",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L2A",
+      "description": "Precision Corporate Bond - For edge case validation"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "adv_deposit01_edge",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-3000",
+      "maturityDate": "2026-01-05T00:00:00",
+      "nominalInterestRate": "0.015",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Precision Customer Deposit - Calibrated for boundary testing"
+    }
+  ]
+}

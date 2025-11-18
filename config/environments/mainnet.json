@@ -1,0 +1,134 @@
+{
+  "network": {
+    "environment": "MAINNET",
+    "proofsEnabled": true,
+    "minaEndpoint": "https://api.minascan.io/node/mainnet/v1/graphql",
+    "archiveEndpoint": "https://archive.minaexplorer.com"
+  },
+  "oracles": {
+    "registry": {
+      "MCA": {
+        "role": "MCA_ORACLE",
+        "deployer": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 0
+        },
+        "sender": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 1
+        },
+        "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+        "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+        "deployerAccountIndex": 0,
+        "senderAccountIndex": 1
+      },
+      "GLEIF": {
+        "role": "GLEIF_ORACLE",
+        "deployer": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 2
+        },
+        "sender": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 3
+        },
+        "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+        "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+        "deployerAccountIndex": 2,
+        "senderAccountIndex": 3
+      },
+      "EXIM": {
+        "role": "EXIM_ORACLE",
+        "deployer": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 4
+        },
+        "sender": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 5
+        },
+        "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+        "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+        "deployerAccountIndex": 4,
+        "senderAccountIndex": 5
+      },
+      "BPMN": {
+        "role": "BPMN_ORACLE",
+        "deployer": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 6
+        },
+        "sender": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 7
+        },
+        "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+        "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+        "deployerAccountIndex": 6,
+        "senderAccountIndex": 7
+      },
+      "RISK": {
+        "role": "RISK_ORACLE",
+        "deployer": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 8
+        },
+        "sender": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 9
+        },
+        "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+        "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+        "deployerAccountIndex": 8,
+        "senderAccountIndex": 9
+      },
+      "BL_REGISTRY": {
+        "role": "BL_REGISTRY_ORACLE",
+        "deployer": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 10
+        },
+        "sender": {
+          "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+          "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+          "index": 11
+        },
+        "publicKey": "PLACEHOLDER_PUBLIC_KEY_REPLACE_WITH_ACTUAL",
+        "privateKey": "PLACEHOLDER_PRIVATE_KEY_REPLACE_WITH_ACTUAL",
+        "deployerAccountIndex": 10,
+        "senderAccountIndex": 11
+      }
+    }
+  },
+  "deployments": {
+    "contracts": {}
+  },
+  "gleifApiConfig": {},
+  "metadata": {
+    "generated": "2025-07-04T00:00:00.000Z",
+    "timestamp": "2025-07-04T00-00-00",
+    "accountCount": 12,
+    "oracleTypes": [
+      "MCA",
+      "GLEIF",
+      "EXIM",
+      "BPMN",
+      "RISK",
+      "BL_REGISTRY"
+    ],
+    "version": "3.6",
+    "separateAccounts": true,
+    "note": "MAINNET template - replace placeholder keys with actual funded mainnet accounts"
+  }
+}

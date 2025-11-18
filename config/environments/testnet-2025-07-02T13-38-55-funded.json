@@ -1,0 +1,133 @@
+{
+  "network": {
+    "environment": "TESTNET",
+    "proofsEnabled": true,
+    "minaEndpoint": "https://api.minascan.io/node/devnet/v1/graphql",
+    "archiveEndpoint": "https://archive.devnet.minaexplorer.com"
+  },
+  "oracles": {
+    "registry": {
+      "MCA": {
+        "role": "MCA_ORACLE",
+        "deployer": {
+          "privateKey": "EKFYwXEokCWYtoLJ21rdCT8AhBcWwibZUZWJUSdzE8Kqbqb17qP3",
+          "publicKey": "B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA",
+          "index": 0
+        },
+        "sender": {
+          "privateKey": "EKEDfeav7x5JNKqcd5EkFEaaU7AwqaaV59t44rAqmgNkZNJKDjP5",
+          "publicKey": "B62qkojT9M5HGT3ydaWVmw3tX6ZeZyd5Nb2ABUY49kGQFgZkcHgkDW1",
+          "index": 1
+        },
+        "publicKey": "B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA",
+        "privateKey": "EKFYwXEokCWYtoLJ21rdCT8AhBcWwibZUZWJUSdzE8Kqbqb17qP3",
+        "deployerAccountIndex": 0,
+        "senderAccountIndex": 1
+      },
+      "GLEIF": {
+        "role": "GLEIF_ORACLE",
+        "deployer": {
+          "privateKey": "EKEHy37taYcCRXgKL3uhycUeniLzhDBS5y4DMN79pNYggsubLjgv",
+          "publicKey": "B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3",
+          "index": 2
+        },
+        "sender": {
+          "privateKey": "EKDtoqAPWNoB7RkVTbP4TkWxDmcPNgCrzvebEdwywi6Ts5JF9zyR",
+          "publicKey": "B62qofi6mojnWf1MQwL94C7Fgy91Hn9zzojbppYmKHdeVYrsHXnJJ5U",
+          "index": 3
+        },
+        "publicKey": "B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3",
+        "privateKey": "EKEHy37taYcCRXgKL3uhycUeniLzhDBS5y4DMN79pNYggsubLjgv",
+        "deployerAccountIndex": 2,
+        "senderAccountIndex": 3
+      },
+      "EXIM": {
+        "role": "EXIM_ORACLE",
+        "deployer": {
+          "privateKey": "EKFN338fEmwWzcFeRXRP4LBwd5dDNYMKLKC61NmtgqvjDhKbySuX",
+          "publicKey": "B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL",
+          "index": 4
+        },
+        "sender": {
+          "privateKey": "EKFB9V8LnaBM8oAReqrzxruh7EmzQUaWcnnP1JygTR41FN6gLvP9",
+          "publicKey": "B62qiux4fhjCR2tQrEo6iLoKVEaFSDoG2uxsj8Z23JfsJA61KENDB55",
+          "index": 5
+        },
+        "publicKey": "B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL",
+        "privateKey": "EKFN338fEmwWzcFeRXRP4LBwd5dDNYMKLKC61NmtgqvjDhKbySuX",
+        "deployerAccountIndex": 4,
+        "senderAccountIndex": 5
+      },
+      "BPMN": {
+        "role": "BPMN_ORACLE",
+        "deployer": {
+          "privateKey": "EKDurec4xzVAJPV2ZqkkzMmCmVxHAxoDGXDGtfvA2wQ1JEV3iMV7",
+          "publicKey": "B62qrpRopAxfDFkAjyHkxTcWysHnv36YKAjh7TK3nirEEvTMhKrfSVx",
+          "index": 6
+        },
+        "sender": {
+          "privateKey": "EKE1UQsE58fR7gqhQuV45k2yBCwm4XAkHgaFr27cxwbAdmvvnqHp",
+          "publicKey": "B62qnpF1AWj3ePCZsXKotRuqbi1Y6Fv69YZ7XJGcq88u7ZGyZbu9Mvm",
+          "index": 7
+        },
+        "publicKey": "B62qrpRopAxfDFkAjyHkxTcWysHnv36YKAjh7TK3nirEEvTMhKrfSVx",
+        "privateKey": "EKDurec4xzVAJPV2ZqkkzMmCmVxHAxoDGXDGtfvA2wQ1JEV3iMV7",
+        "deployerAccountIndex": 6,
+        "senderAccountIndex": 7
+      },
+      "RISK": {
+        "role": "RISK_ORACLE",
+        "deployer": {
+          "privateKey": "EKEaWjgrBqXXY2fExNrStAQaZ1h7d4tHRa2GT5mHeRes7kBknUgG",
+          "publicKey": "B62qiciGYeA6nKQumL45veZ6xeQQQ3p8anUNSEXmU3G8iqL1Pc6DtCE",
+          "index": 8
+        },
+        "sender": {
+          "privateKey": "EKFKoz2agYKSXu3vZE7UqLinYmxq1UFFNtWzcvKHy13EfgSxvdns",
+          "publicKey": "B62qioTkbviE6J4BjQPac9UNcTVkSKzicNGWjynh5jK3fXoymScVRny",
+          "index": 9
+        },
+        "publicKey": "B62qiciGYeA6nKQumL45veZ6xeQQQ3p8anUNSEXmU3G8iqL1Pc6DtCE",
+        "privateKey": "EKEaWjgrBqXXY2fExNrStAQaZ1h7d4tHRa2GT5mHeRes7kBknUgG",
+        "deployerAccountIndex": 8,
+        "senderAccountIndex": 9
+      },
+      "BL_REGISTRY": {
+        "role": "BL_REGISTRY_ORACLE",
+        "deployer": {
+          "privateKey": "EKEwfu89JeerQ1ViP9SNs91GMLHmmKshL2qFBVFYqT61vsy5W1AW",
+          "publicKey": "B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi",
+          "index": 10
+        },
+        "sender": {
+          "privateKey": "EKFEK55p9skt5vECHk4SpnMKYpnuceegAmNhKLjaonLvY4yNE7rm",
+          "publicKey": "B62qrWCSiE9AruxBbxVHKg4z31dDGaCoUXxHVwQ71Uuo1AkkTuLFrYg",
+          "index": 11
+        },
+        "publicKey": "B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi",
+        "privateKey": "EKEwfu89JeerQ1ViP9SNs91GMLHmmKshL2qFBVFYqT61vsy5W1AW",
+        "deployerAccountIndex": 10,
+        "senderAccountIndex": 11
+      }
+    }
+  },
+  "deployments": {
+    "contracts": {}
+  },
+  "gleifApiConfig": {},
+  "metadata": {
+    "generated": "2025-07-02T13:38:55.087Z",
+    "timestamp": "2025-07-02T13-38-55",
+    "accountCount": 12,
+    "oracleTypes": [
+      "MCA",
+      "GLEIF",
+      "EXIM",
+      "BPMN",
+      "RISK",
+      "BL_REGISTRY"
+    ],
+    "version": "3.6",
+    "separateAccounts": true
+  }
+}

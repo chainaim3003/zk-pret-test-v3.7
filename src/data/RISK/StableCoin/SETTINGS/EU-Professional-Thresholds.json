@@ -1,0 +1,136 @@
+{
+  "thresholdMetadata": {
+    "thresholdId": "EU_PROFESSIONAL_THRESHOLDS",
+    "description": "Professional stablecoin operational thresholds for EU jurisdiction under MiCA regulation",
+    "jurisdiction": "EU", 
+    "version": "2.0",
+    "lastUpdated": "2025-06-16T12:00:00Z",
+    "regulatoryBasis": "EU MiCA Regulation (EU) 2023/1114 - Article 36 Reserve Requirements"
+  },
+  "operationalThresholds": {
+    "backingRatioThreshold": 100,
+    "liquidityRatioThreshold": 30,
+    "concentrationLimit": 35,
+    "qualityThreshold": 85
+  },
+  "complianceRequirements": {
+    "frameworks": {
+      "MiCA": {
+        "minimumBackingRatio": 100,
+        "maturityLimitDays": 365,
+        "yieldAllowed": false,
+        "corporateBondsAllowed": true,
+        "weight": 1.0
+      }
+    },
+    "overallThreshold": 85,
+    "optimalBackingRatio": 105,
+    "maximumBackingRatio": 120,
+    "tolerance": 1
+  },
+  "professionalStandards": {
+    "liquidityJustification": "30% - MiCA Article 36 minimum bank deposit requirement for smaller stablecoins (<€5B)",
+    "qualityJustification": "85% - High quality threshold reflecting MiCA's restrictive allowed asset categories",
+    "concentrationJustification": "35% - MiCA Article 36 maximum concentration in single government issuer",
+    "backingJustification": "100% - MiCA mandates full 1:1 liquid reserve backing for all E-Money Tokens"
+  },
+  "micaReserveComposition": {
+    "stablecoinThresholds": {
+      "smallStablecoin": {
+        "outstandingAmountThreshold": 5000000000,
+        "minimumBankDeposits": 30,
+        "description": "For E-Money Tokens with outstanding amount < €5B"
+      },
+      "significantStablecoin": {
+        "outstandingAmountThreshold": 5000000000,
+        "minimumBankDeposits": 60,
+        "description": "For E-Money Tokens with outstanding amount ≥ €5B"
+      }
+    },
+    "allowedAssets": [
+      "BankDeposit",
+      "GovernmentBond", 
+      "LocalAuthorityDebt",
+      "QuasiGovernmentDebt",
+      "MoneyMarketInstrument",
+      "CoveredBond"
+    ],
+    "prohibitedAssets": [
+      "CorporateBond",
+      "Equity", 
+      "Commodity",
+      "Cryptocurrency",
+      "NonEUGovernmentBond"
+    ]
+  },
+  "micaConcentrationLimits": {
+    "singleGovernmentIssuer": {
+      "maximum": 35,
+      "description": "Maximum exposure to single EU Member State government issuer",
+      "enforcement": "STRICT"
+    },
+    "coveredBonds": {
+      "maximum": 10,
+      "description": "Maximum exposure to covered bond instruments",
+      "enforcement": "STRICT"
+    },
+    "otherSecurities": {
+      "maximum": 5,
+      "description": "Maximum exposure to money market funds and other eligible securities",
+      "enforcement": "STRICT"
+    },
+    "singleCreditInstitution": {
+      "maximum": 20,
+      "description": "Maximum exposure to single authorized credit institution for deposits",
+      "enforcement": "STRICT"
+    }
+  },
+  "micaOperationalRequirements": {
+    "segregation": {
+      "required": true,
+      "description": "Reserve assets must be segregated from issuer's own assets"
+    },
+    "custodian": {
+      "required": true,
+      "description": "Only authorized credit institutions or investment firms as custodians"
+    },
+    "redemption": {
+      "required": true,
+      "description": "Full redemption at face value on demand"
+    },
+    "yieldRestriction": {
+      "required": true,
+      "description": "No interest payments to E-Money Token holders"
+    },
+    "audit": {
+      "frequency": "Quarterly",
+      "description": "Mandatory external audits of reserve composition"
+    },
+    "reporting": {
+      "frequency": "Monthly",
+      "description": "Detailed reporting to competent authorities"
+    }
+  },
+  "micaValidationRules": {
+    "bankDepositValidation": {
+      "rule": "Bank deposits must meet minimum percentage based on outstanding amount",
+      "validation": "IF outstanding_amount < 5000000000 THEN bank_deposits_percentage >= 30 ELSE bank_deposits_percentage >= 60"
+    },
+    "concentrationValidation": {
+      "rule": "All concentration limits must be strictly enforced",
+      "validation": "single_government_issuer <= 35 AND covered_bonds <= 10 AND other_securities <= 5 AND single_credit_institution <= 20"
+    },
+    "assetEligibilityValidation": {
+      "rule": "Only MiCA-approved asset types are permitted",
+      "validation": "micaAssetType IN allowedAssets AND micaAssetType NOT IN prohibitedAssets"
+    },
+    "fullBackingValidation": {
+      "rule": "Total reserve value must equal or exceed outstanding token value",
+      "validation": "total_reserve_value >= outstanding_token_value * 1.00"
+    },
+    "yieldValidation": {
+      "rule": "No yield or interest payments to E-Money Token holders",
+      "validation": "nominal_interest_rate == 0.0000 FOR all liability contracts"
+    }
+  }
+}

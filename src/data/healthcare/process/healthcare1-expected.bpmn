@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+                  id="Definitions_1" 
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:process id="healthcare1_expected" name="Healthcare Treatment Coordination - Expected Process" isExecutable="true">
+    
+    <!-- Start Event -->
+    <bpmn:startEvent id="start_patient_admission" name="Patient Admission">
+      <bpmn:outgoing>flow_to_triage</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <!-- Initial Triage -->
+    <bpmn:userTask id="initial_triage" name="Initial Triage Assessment">
+      <bpmn:incoming>flow_to_triage</bpmn:incoming>
+      <bpmn:outgoing>flow_to_gateway</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Decision Gateway -->
+    <bpmn:exclusiveGateway id="urgency_gateway" name="Urgency Level?">
+      <bpmn:incoming>flow_to_gateway</bpmn:incoming>
+      <bpmn:outgoing>flow_to_emergency</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_standard</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_routine</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    
+    <!-- Emergency Path -->
+    <bpmn:userTask id="emergency_stabilization" name="Emergency Stabilization">
+      <bpmn:incoming>flow_to_emergency</bpmn:incoming>
+      <bpmn:outgoing>flow_emergency_to_parallel</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Standard Path -->
+    <bpmn:userTask id="detailed_assessment" name="Detailed Medical Assessment">
+      <bpmn:incoming>flow_to_standard</bpmn:incoming>
+      <bpmn:outgoing>flow_standard_to_parallel</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Routine Path -->
+    <bpmn:userTask id="routine_examination" name="Routine Medical Examination">
+      <bpmn:incoming>flow_to_routine</bpmn:incoming>
+      <bpmn:outgoing>flow_routine_to_parallel</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Parallel Gateway Start -->
+    <bpmn:parallelGateway id="parallel_start" name="Begin Parallel Processing">
+      <bpmn:incoming>flow_emergency_to_parallel</bpmn:incoming>
+      <bpmn:incoming>flow_standard_to_parallel</bpmn:incoming>
+      <bpmn:incoming>flow_routine_to_parallel</bpmn:incoming>
+      <bpmn:outgoing>flow_to_lab_tests</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_imaging</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_specialist</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_verification</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    
+    <!-- Parallel Tasks -->
+    <bpmn:userTask id="laboratory_tests" name="Laboratory Tests">
+      <bpmn:incoming>flow_to_lab_tests</bpmn:incoming>
+      <bpmn:outgoing>flow_lab_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <bpmn:userTask id="medical_imaging" name="Medical Imaging">
+      <bpmn:incoming>flow_to_imaging</bpmn:incoming>
+      <bpmn:outgoing>flow_imaging_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <bpmn:userTask id="specialist_consultation" name="Specialist Consultation">
+      <bpmn:incoming>flow_to_specialist</bpmn:incoming>
+      <bpmn:outgoing>flow_specialist_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <bpmn:userTask id="insurance_verification" name="Insurance & Authorization">
+      <bpmn:incoming>flow_to_verification</bpmn:incoming>
+      <bpmn:outgoing>flow_verification_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Parallel Gateway End -->
+    <bpmn:parallelGateway id="parallel_end" name="Synchronize Results">
+      <bpmn:incoming>flow_lab_to_end</bpmn:incoming>
+      <bpmn:incoming>flow_imaging_to_end</bpmn:incoming>
+      <bpmn:incoming>flow_specialist_to_end</bpmn:incoming>
+      <bpmn:incoming>flow_verification_to_end</bpmn:incoming>
+      <bpmn:outgoing>flow_to_treatment_plan</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    
+    <!-- Treatment Planning -->
+    <bpmn:userTask id="treatment_planning" name="Comprehensive Treatment Planning">
+      <bpmn:incoming>flow_to_treatment_plan</bpmn:incoming>
+      <bpmn:outgoing>flow_to_safety_check</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Safety and Compliance Check -->
+    <bpmn:userTask id="safety_compliance_check" name="Safety & Compliance Verification">
+      <bpmn:incoming>flow_to_safety_check</bpmn:incoming>
+      <bpmn:outgoing>flow_to_approval</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Multi-level Approval -->
+    <bpmn:userTask id="multi_level_approval" name="Multi-level Treatment Approval">
+      <bpmn:incoming>flow_to_approval</bpmn:incoming>
+      <bpmn:outgoing>flow_to_treatment</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Treatment Execution -->
+    <bpmn:userTask id="treatment_execution" name="Treatment Execution">
+      <bpmn:incoming>flow_to_treatment</bpmn:incoming>
+      <bpmn:outgoing>flow_to_monitoring</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Continuous Monitoring -->
+    <bpmn:userTask id="continuous_monitoring" name="Continuous Patient Monitoring">
+      <bpmn:incoming>flow_to_monitoring</bpmn:incoming>
+      <bpmn:outgoing>flow_to_documentation</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Documentation and Reporting -->
+    <bpmn:userTask id="documentation_reporting" name="Documentation & Regulatory Reporting">
+      <bpmn:incoming>flow_to_documentation</bpmn:incoming>
+      <bpmn:outgoing>flow_to_discharge</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Patient Discharge -->
+    <bpmn:userTask id="patient_discharge" name="Patient Discharge & Follow-up">
+      <bpmn:incoming>flow_to_discharge</bpmn:incoming>
+      <bpmn:outgoing>flow_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- End Event -->
+    <bpmn:endEvent id="end_treatment_complete" name="Treatment Complete">
+      <bpmn:incoming>flow_to_end</bpmn:incoming>
+    </bpmn:endEvent>
+    
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="flow_to_triage" sourceRef="start_patient_admission" targetRef="initial_triage"/>
+    <bpmn:sequenceFlow id="flow_to_gateway" sourceRef="initial_triage" targetRef="urgency_gateway"/>
+    
+    <!-- Gateway flows -->
+    <bpmn:sequenceFlow id="flow_to_emergency" name="Emergency" sourceRef="urgency_gateway" targetRef="emergency_stabilization">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">urgency == "emergency"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="flow_to_standard" name="Standard" sourceRef="urgency_gateway" targetRef="detailed_assessment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">urgency == "standard"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="flow_to_routine" name="Routine" sourceRef="urgency_gateway" targetRef="routine_examination">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">urgency == "routine"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <!-- To parallel gateway -->
+    <bpmn:sequenceFlow id="flow_emergency_to_parallel" sourceRef="emergency_stabilization" targetRef="parallel_start"/>
+    <bpmn:sequenceFlow id="flow_standard_to_parallel" sourceRef="detailed_assessment" targetRef="parallel_start"/>
+    <bpmn:sequenceFlow id="flow_routine_to_parallel" sourceRef="routine_examination" targetRef="parallel_start"/>
+    
+    <!-- Parallel flows -->
+    <bpmn:sequenceFlow id="flow_to_lab_tests" sourceRef="parallel_start" targetRef="laboratory_tests"/>
+    <bpmn:sequenceFlow id="flow_to_imaging" sourceRef="parallel_start" targetRef="medical_imaging"/>
+    <bpmn:sequenceFlow id="flow_to_specialist" sourceRef="parallel_start" targetRef="specialist_consultation"/>
+    <bpmn:sequenceFlow id="flow_to_verification" sourceRef="parallel_start" targetRef="insurance_verification"/>
+    
+    <!-- From parallel tasks -->
+    <bpmn:sequenceFlow id="flow_lab_to_end" sourceRef="laboratory_tests" targetRef="parallel_end"/>
+    <bpmn:sequenceFlow id="flow_imaging_to_end" sourceRef="medical_imaging" targetRef="parallel_end"/>
+    <bpmn:sequenceFlow id="flow_specialist_to_end" sourceRef="specialist_consultation" targetRef="parallel_end"/>
+    <bpmn:sequenceFlow id="flow_verification_to_end" sourceRef="insurance_verification" targetRef="parallel_end"/>
+    
+    <!-- Final flows -->
+    <bpmn:sequenceFlow id="flow_to_treatment_plan" sourceRef="parallel_end" targetRef="treatment_planning"/>
+    <bpmn:sequenceFlow id="flow_to_safety_check" sourceRef="treatment_planning" targetRef="safety_compliance_check"/>
+    <bpmn:sequenceFlow id="flow_to_approval" sourceRef="safety_compliance_check" targetRef="multi_level_approval"/>
+    <bpmn:sequenceFlow id="flow_to_treatment" sourceRef="multi_level_approval" targetRef="treatment_execution"/>
+    <bpmn:sequenceFlow id="flow_to_monitoring" sourceRef="treatment_execution" targetRef="continuous_monitoring"/>
+    <bpmn:sequenceFlow id="flow_to_documentation" sourceRef="continuous_monitoring" targetRef="documentation_reporting"/>
+    <bpmn:sequenceFlow id="flow_to_discharge" sourceRef="documentation_reporting" targetRef="patient_discharge"/>
+    <bpmn:sequenceFlow id="flow_to_end" sourceRef="patient_discharge" targetRef="end_treatment_complete"/>
+    
+  </bpmn:process>
+  
+  <!-- BPMN Diagram Information -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="healthcare1_expected">
+      
+      <!-- Row 1: Start and Initial Assessment -->
+      <bpmndi:BPMNShape id="start_patient_admission_di" bpmnElement="start_patient_admission">
+        <dc:Bounds x="152" y="102" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="139" y="145" width="62" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="initial_triage_di" bpmnElement="initial_triage">
+        <dc:Bounds x="240" y="80" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="250" y="96" width="80" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Decision Gateway -->
+      <bpmndi:BPMNShape id="urgency_gateway_di" bpmnElement="urgency_gateway" isMarkerVisible="true">
+        <dc:Bounds x="395" y="95" width="50" height="50"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="384" y="152" width="72" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Row 2: Emergency/Standard/Routine Paths -->
+      <bpmndi:BPMNShape id="emergency_stabilization_di" bpmnElement="emergency_stabilization">
+        <dc:Bounds x="520" y="20" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530" y="36" width="80" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="detailed_assessment_di" bpmnElement="detailed_assessment">
+        <dc:Bounds x="520" y="120" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530" y="136" width="80" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="routine_examination_di" bpmnElement="routine_examination">
+        <dc:Bounds x="520" y="220" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530" y="236" width="80" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Parallel Gateway Start -->
+      <bpmndi:BPMNShape id="parallel_start_di" bpmnElement="parallel_start">
+        <dc:Bounds x="695" y="135" width="50" height="50"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="676" y="192" width="89" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Row 3: Parallel Tasks -->
+      <bpmndi:BPMNShape id="laboratory_tests_di" bpmnElement="laboratory_tests">
+        <dc:Bounds x="820" y="40" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="840" y="66" width="60" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="medical_imaging_di" bpmnElement="medical_imaging">
+        <dc:Bounds x="820" y="140" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="840" y="166" width="60" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="specialist_consultation_di" bpmnElement="specialist_consultation">
+        <dc:Bounds x="820" y="240" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="830" y="256" width="80" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="insurance_verification_di" bpmnElement="insurance_verification">
+        <dc:Bounds x="820" y="340" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="825" y="350" width="90" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Parallel Gateway End -->
+      <bpmndi:BPMNShape id="parallel_end_di" bpmnElement="parallel_end">
+        <dc:Bounds x="995" y="185" width="50" height="50"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="983" y="242" width="75" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Row 4: Treatment Planning and Execution -->
+      <bpmndi:BPMNShape id="treatment_planning_di" bpmnElement="treatment_planning">
+        <dc:Bounds x="1120" y="170" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1125" y="176" width="90" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="safety_compliance_check_di" bpmnElement="safety_compliance_check">
+        <dc:Bounds x="1270" y="170" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1275" y="176" width="90" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="multi_level_approval_di" bpmnElement="multi_level_approval">
+        <dc:Bounds x="1420" y="170" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1425" y="176" width="90" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Row 5: Execution and Follow-up -->
+      <bpmndi:BPMNShape id="treatment_execution_di" bpmnElement="treatment_execution">
+        <dc:Bounds x="1570" y="170" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1585" y="186" width="70" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="continuous_monitoring_di" bpmnElement="continuous_monitoring">
+        <dc:Bounds x="1570" y="290" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1575" y="296" width="90" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="documentation_reporting_di" bpmnElement="documentation_reporting">
+        <dc:Bounds x="1420" y="290" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1425" y="296" width="90" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="patient_discharge_di" bpmnElement="patient_discharge">
+        <dc:Bounds x="1270" y="290" width="100" height="80"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1275" y="296" width="90" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- End Event -->
+      <bpmndi:BPMNShape id="end_treatment_complete_di" bpmnElement="end_treatment_complete">
+        <dc:Bounds x="1152" y="312" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1130" y="355" width="80" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge id="flow_to_triage_di" bpmnElement="flow_to_triage">
+        <di:waypoint x="188" y="120"/>
+        <di:waypoint x="240" y="120"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_gateway_di" bpmnElement="flow_to_gateway">
+        <di:waypoint x="340" y="120"/>
+        <di:waypoint x="395" y="120"/>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Gateway to paths -->
+      <bpmndi:BPMNEdge id="flow_to_emergency_di" bpmnElement="flow_to_emergency">
+        <di:waypoint x="420" y="95"/>
+        <di:waypoint x="420" y="60"/>
+        <di:waypoint x="520" y="60"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="434" y="43" width="53" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_standard_di" bpmnElement="flow_to_standard">
+        <di:waypoint x="445" y="120"/>
+        <di:waypoint x="520" y="160"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="460" y="133" width="45" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_routine_di" bpmnElement="flow_to_routine">
+        <di:waypoint x="420" y="145"/>
+        <di:waypoint x="420" y="260"/>
+        <di:waypoint x="520" y="260"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="442" y="243" width="36" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- To parallel gateway -->
+      <bpmndi:BPMNEdge id="flow_emergency_to_parallel_di" bpmnElement="flow_emergency_to_parallel">
+        <di:waypoint x="620" y="60"/>
+        <di:waypoint x="720" y="60"/>
+        <di:waypoint x="720" y="135"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_standard_to_parallel_di" bpmnElement="flow_standard_to_parallel">
+        <di:waypoint x="620" y="160"/>
+        <di:waypoint x="695" y="160"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_routine_to_parallel_di" bpmnElement="flow_routine_to_parallel">
+        <di:waypoint x="620" y="260"/>
+        <di:waypoint x="720" y="260"/>
+        <di:waypoint x="720" y="185"/>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Parallel flows out -->
+      <bpmndi:BPMNEdge id="flow_to_lab_tests_di" bpmnElement="flow_to_lab_tests">
+        <di:waypoint x="720" y="135"/>
+        <di:waypoint x="720" y="80"/>
+        <di:waypoint x="820" y="80"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_imaging_di" bpmnElement="flow_to_imaging">
+        <di:waypoint x="745" y="160"/>
+        <di:waypoint x="820" y="180"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_specialist_di" bpmnElement="flow_to_specialist">
+        <di:waypoint x="720" y="185"/>
+        <di:waypoint x="720" y="280"/>
+        <di:waypoint x="820" y="280"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_verification_di" bpmnElement="flow_to_verification">
+        <di:waypoint x="720" y="185"/>
+        <di:waypoint x="720" y="380"/>
+        <di:waypoint x="820" y="380"/>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Parallel flows in -->
+      <bpmndi:BPMNEdge id="flow_lab_to_end_di" bpmnElement="flow_lab_to_end">
+        <di:waypoint x="920" y="80"/>
+        <di:waypoint x="1020" y="80"/>
+        <di:waypoint x="1020" y="185"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_imaging_to_end_di" bpmnElement="flow_imaging_to_end">
+        <di:waypoint x="920" y="180"/>
+        <di:waypoint x="995" y="210"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_specialist_to_end_di" bpmnElement="flow_specialist_to_end">
+        <di:waypoint x="920" y="280"/>
+        <di:waypoint x="1020" y="280"/>
+        <di:waypoint x="1020" y="235"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_verification_to_end_di" bpmnElement="flow_verification_to_end">
+        <di:waypoint x="920" y="380"/>
+        <di:waypoint x="1020" y="380"/>
+        <di:waypoint x="1020" y="235"/>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Final sequence -->
+      <bpmndi:BPMNEdge id="flow_to_treatment_plan_di" bpmnElement="flow_to_treatment_plan">
+        <di:waypoint x="1045" y="210"/>
+        <di:waypoint x="1120" y="210"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_safety_check_di" bpmnElement="flow_to_safety_check">
+        <di:waypoint x="1220" y="210"/>
+        <di:waypoint x="1270" y="210"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_approval_di" bpmnElement="flow_to_approval">
+        <di:waypoint x="1370" y="210"/>
+        <di:waypoint x="1420" y="210"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_treatment_di" bpmnElement="flow_to_treatment">
+        <di:waypoint x="1520" y="210"/>
+        <di:waypoint x="1570" y="210"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_monitoring_di" bpmnElement="flow_to_monitoring">
+        <di:waypoint x="1620" y="250"/>
+        <di:waypoint x="1620" y="290"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_documentation_di" bpmnElement="flow_to_documentation">
+        <di:waypoint x="1570" y="330"/>
+        <di:waypoint x="1520" y="330"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_discharge_di" bpmnElement="flow_to_discharge">
+        <di:waypoint x="1420" y="330"/>
+        <di:waypoint x="1370" y="330"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="flow_to_end_di" bpmnElement="flow_to_end">
+        <di:waypoint x="1270" y="330"/>
+        <di:waypoint x="1188" y="330"/>
+      </bpmndi:BPMNEdge>
+      
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  
+</bpmn:definitions>

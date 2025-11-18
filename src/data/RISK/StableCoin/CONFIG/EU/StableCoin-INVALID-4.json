@@ -1,0 +1,127 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "EU MiCA Non-Compliant Portfolio V4",
+    "description": "EU stablecoin portfolio violating MiCA concentration limits and asset eligibility requirements - designed to FAIL compliance tests",
+    "currency": "EUR",
+    "totalNotional": 22000,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "4.0",
+    "jurisdiction": "EU",
+    "complianceTarget": {
+      "backingRatio": 100,
+      "liquidityRatio": 15,
+      "maturityLimit": 365,
+      "yieldToHolders": true,
+      "corporateBondsAllowed": false,
+      "concentrationLimit": 35,
+      "qualityThreshold": 85
+    },
+    "riskProfile": "Non-Compliant",
+    "regulatoryFramework": ["MiCA"],
+    "assetAllocation": {
+      "cashAndEquivalents": "15%",
+      "governmentBonds": "55%",
+      "corporateBonds": "30%",
+      "otherAssets": "0%"
+    },
+    "testingPurpose": "EU MiCA violation testing - concentration and asset eligibility failures"
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "insufficient_bank_deposits",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "3300",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Insufficient bank deposits - only 15% vs 30% MiCA requirement"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "excessive_german_concentration",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "12100",
+      "maturityDate": "2024-08-30T00:00:00",
+      "nominalInterestRate": "0.0220",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Excessive German government bond concentration - 55% violates 35% MiCA limit"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "prohibited_corporate_bonds",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6600",
+      "maturityDate": "2025-06-28T00:00:00",
+      "nominalInterestRate": "0.0450",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "High-yield corporate bonds with long maturity - violates MiCA asset quality requirements"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "mica_yield_bearing_liability",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-22000",
+      "maturityDate": "2024-12-28T00:00:00",
+      "nominalInterestRate": "0.0350",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "High-yield stablecoin tokens with 3.5% APY - may violate MiCA yield restrictions"
+    }
+  ],
+  "micaViolations": {
+    "concentrationViolation": "Single government issuer (Germany) exceeds 35% limit at 55%",
+    "bankDepositDeficiency": "Bank deposits at 15% below 30% minimum requirement",
+    "assetEligibilityViolation": "Corporate bonds with excessive yield and long maturity",
+    "yieldViolation": "Excessive yield to token holders may violate MiCA restrictions",
+    "qualityViolation": "Non-HQLA assets comprise 30% of portfolio"
+  },
+  "expectedFailures": [
+    "Liquidity Compliance: FAILED (15% < 30%)",
+    "Concentration Compliance: FAILED (55% > 35%)",
+    "Quality Compliance: FAILED (NonHQLA assets present)",
+    "Asset Eligibility: FAILED (prohibited corporate bonds)",
+    "Overall Compliance: FAILED"
+  ],
+  "professionalThresholds": {
+    "backing": {
+      "minimum": "100%",
+      "actual": "100%",
+      "status": "PASS"
+    },
+    "liquidity": {
+      "minimum": "30%",
+      "actual": "15%",
+      "status": "FAIL"
+    },
+    "quality": {
+      "minimum": "85%",
+      "actual": "70%",
+      "status": "FAIL"
+    },
+    "concentration": {
+      "maximum": "35%",
+      "actual": "55%",
+      "status": "FAIL"
+    }
+  }
+}

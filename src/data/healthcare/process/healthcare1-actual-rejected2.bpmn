@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+                  id="Definitions_1" 
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:process id="healthcare1_actual_rejected2" name="Healthcare Treatment - Rejected Case 2 (Emergency Override)" isExecutable="true">
+    
+    <!-- Start Event -->
+    <bpmn:startEvent id="start_emergency" name="Emergency Patient Arrives">
+      <bpmn:outgoing>flow_to_assessment</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <!-- Emergency Assessment -->
+    <bpmn:userTask id="emergency_assessment" name="Emergency Assessment">
+      <bpmn:incoming>flow_to_assessment</bpmn:incoming>
+      <bpmn:outgoing>flow_to_override</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- VIOLATION: Emergency override bypasses all safety checks -->
+    <bpmn:userTask id="emergency_override" name="Emergency Treatment Override">
+      <bpmn:incoming>flow_to_override</bpmn:incoming>
+      <bpmn:outgoing>flow_to_treatment</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- VIOLATION: Direct treatment without verification -->
+    <bpmn:userTask id="direct_treatment" name="Immediate Treatment">
+      <bpmn:incoming>flow_to_treatment</bpmn:incoming>
+      <bpmn:outgoing>flow_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- End Event -->
+    <bpmn:endEvent id="end_emergency" name="Emergency Treatment Complete">
+      <bpmn:incoming>flow_to_end</bpmn:incoming>
+    </bpmn:endEvent>
+    
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="flow_to_assessment" sourceRef="start_emergency" targetRef="emergency_assessment"/>
+    <bpmn:sequenceFlow id="flow_to_override" sourceRef="emergency_assessment" targetRef="emergency_override"/>
+    <bpmn:sequenceFlow id="flow_to_treatment" sourceRef="emergency_override" targetRef="direct_treatment"/>
+    <bpmn:sequenceFlow id="flow_to_end" sourceRef="direct_treatment" targetRef="end_emergency"/>
+    
+  </bpmn:process>
+  
+</bpmn:definitions>

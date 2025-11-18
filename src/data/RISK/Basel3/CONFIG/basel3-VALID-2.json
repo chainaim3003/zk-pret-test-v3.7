@@ -1,0 +1,97 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "BASEL3_PAM_COMPLIANT_ALT",
+    "description": "Basel III COMPLIANT ALTERNATIVE - LCR ≥120%, NSFR ≥120% (different portfolio mix)",
+    "currency": "USD",
+    "totalNotional": 58000,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "10.0",
+    "targetLCR": 120,
+    "targetNSFR": 120,
+    "maxAnalysisPeriods": 24,
+    "designPrinciples": [
+      "Use ONLY PAM contracts (simplest approach)",
+      "Negative notional for liability (positive IED payoff)",
+      "Positive notional for assets (negative IED payoff)",
+      "Balanced portfolio with moderate compliance margins",
+      "Alternative compliant scenario for testing"
+    ]
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "cash01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "30000",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.001",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Initial Cash - Moderate amount for balanced LCR"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "bond01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "15000",
+      "maturityDate": "2024-06-30T00:00:00",
+      "nominalInterestRate": "0.02",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Government Bond Asset - Increased for balanced portfolio"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "8000",
+      "maturityDate": "2024-08-31T00:00:00",
+      "nominalInterestRate": "0.03",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Treasury Security Asset - Balanced amount"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "corporate01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5000",
+      "maturityDate": "2024-09-30T00:00:00",
+      "nominalInterestRate": "0.04",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L2A",
+      "description": "Corporate Bond Asset - Balanced amount"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "deposit01",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-2000",
+      "maturityDate": "2026-01-05T00:00:00",
+      "nominalInterestRate": "0.015",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Customer Deposit - Balanced stable funding"
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "executionSettings": {
+    "settingsId": "RISK_ADVANCED_MERKLE_EXECUTION_SETTINGS_V1",
+    "description": "Comprehensive execution settings for all Risk Advanced Merkle scenarios",
+    "version": "1.0",
+    "created": "2024-06-15T00:00:00Z"
+  },
+  "executionPaths": {
+    "production": {
+      "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js",
+      "parameters": {
+        "liquidityThreshold": 100,
+        "actusUrl": "http://98.84.165.146:8083/eventsBatch",
+        "configFile": "src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json",
+        "executionMode": "production"
+      },
+      "expectedOutcome": "COMPLIANCE_ACHIEVED",
+      "description": "Production deployment with standard business thresholds"
+    },
+    "stress_testing": {
+      "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js",
+      "parameters": {
+        "liquidityThreshold": 100,
+        "actusUrl": "http://98.84.165.146:8083/eventsBatch",
+        "configFile": "src/data/RISK/Advanced/CONFIG/Advanced-INVALID-1.json",
+        "executionMode": "stress_testing"
+      },
+      "expectedOutcome": "COMPLIANCE_FAILED",
+      "description": "Stress testing with strict compliance validation"
+    },
+    "development": {
+      "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js",
+      "parameters": {
+        "liquidityThreshold": 95,
+        "actusUrl": "http://98.84.165.146:8083/eventsBatch",
+        "configFile": "src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json",
+        "executionMode": "development"
+      },
+      "expectedOutcome": "COMPLIANCE_ACHIEVED",
+      "description": "Development testing with lenient thresholds"
+    },
+    "ultra_strict": {
+      "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js",
+      "parameters": {
+        "liquidityThreshold": 100,
+        "actusUrl": "http://98.84.165.146:8083/eventsBatch",
+        "configFile": "src/data/RISK/Advanced/CONFIG/Advanced-INVALID-1.json",
+        "executionMode": "ultra_strict"
+      },
+      "expectedOutcome": "COMPLIANCE_FAILED",
+      "description": "Ultra-strict testing with 1% tolerance and 1.25x stress multiplier"
+    },
+    "regulatory_compliance": {
+      "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js",
+      "parameters": {
+        "liquidityThreshold": 100,
+        "actusUrl": "http://98.84.165.146:8083/eventsBatch",
+        "configFile": "src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json",
+        "executionMode": "regulatory_compliance"
+      },
+      "expectedOutcome": "COMPLIANCE_ACHIEVED",
+      "description": "Regulatory compliance simulation with 1.5% tolerance"
+    },
+    "edge_case_testing": {
+      "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js",
+      "parameters": {
+        "liquidityThreshold": 100,
+        "actusUrl": "http://98.84.165.146:8083/eventsBatch",
+        "configFile": "src/data/RISK/Advanced/CONFIG/Advanced-VALID-2.json",
+        "executionMode": "edge_case_testing"
+      },
+      "expectedOutcome": "BOUNDARY_ANALYSIS",
+      "description": "Edge case testing with 0.5% tolerance for ultimate precision"
+    }
+  },
+  "validationMatrix": {
+    "configValidation": {
+      "Advanced-VALID-1.json": {
+        "expectedResult": "PASS",
+        "thresholdCompliance": "ACHIEVED",
+        "liquidityRatio": ">= 110%",
+        "stressTestResult": "PASSED"
+      },
+      "Advanced-INVALID-1.json": {
+        "expectedResult": "FAIL",
+        "thresholdCompliance": "NOT_ACHIEVED",
+        "liquidityRatio": "< 90%",
+        "stressTestResult": "FAILED"
+      },
+      "Advanced-EDGE-1.json": {
+        "expectedResult": "BOUNDARY",
+        "thresholdCompliance": "BORDERLINE",
+        "liquidityRatio": "~= 100%",
+        "stressTestResult": "EDGE_CASE"
+      }
+    }
+  },
+  "performanceBenchmarks": {
+    "proofGeneration": {
+      "small_portfolio": "< 30 seconds",
+      "medium_portfolio": "< 2 minutes",
+      "large_portfolio": "< 5 minutes"
+    },
+    "memoryUsage": {
+      "maximum": "8GB",
+      "typical": "4GB",
+      "minimum": "2GB"
+    },
+    "circuitComplexity": {
+      "adaptive": true,
+      "maxComplexity": 100000,
+      "optimizationEnabled": true
+    }
+  },
+  "monitoringAndLogging": {
+    "detailedLogging": true,
+    "performanceMetrics": true,
+    "complianceTracking": true,
+    "errorHandling": "COMPREHENSIVE",
+    "insightsGeneration": true
+  },
+  "troubleshooting": {
+    "commonIssues": {
+      "fieldArithmeticOverflow": "Check values against maxSafeValue constraint",
+      "divisionByZero": "Use Provable.if patterns with bounds checking",
+      "circuitComplexity": "Enable adaptive scaling in configuration",
+      "proofGenerationTimeout": "Reduce portfolio size or enable optimizations"
+    },
+    "debuggingTools": {
+      "verboseLogging": true,
+      "intermediateStateCapture": true,
+      "merkleTreeValidation": true,
+      "witnessVerification": true
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "thresholdMetadata": {
+    "thresholdId": "US_PROFESSIONAL_THRESHOLDS",
+    "description": "Professional stablecoin operational thresholds for US jurisdiction under STABLE and GENIUS Acts",
+    "jurisdiction": "US",
+    "version": "2.0",
+    "lastUpdated": "2025-06-16T12:00:00Z",
+    "regulatoryBasis": "US STABLE Act and GENIUS Act 2025"
+  },
+  "operationalThresholds": {
+    "backingRatioThreshold": 100,
+    "liquidityRatioThreshold": 100,
+    "concentrationLimit": 75,
+    "qualityThreshold": 95
+  },
+  "complianceRequirements": {
+    "frameworks": {
+      "STABLE": {
+        "minimumBackingRatio": 100,
+        "maturityLimitDays": 93,
+        "yieldAllowed": false,
+        "corporateBondsAllowed": false,
+        "weight": 0.6,
+        "description": "House STABLE Act - Stringent requirements"
+      },
+      "GENIUS": {
+        "minimumBackingRatio": 100,
+        "maturityLimitDays": 93,
+        "yieldAllowed": false,
+        "corporateBondsAllowed": false,
+        "weight": 0.4,
+        "description": "Senate GENIUS Act - Moderate requirements"
+      }
+    },
+    "overallThreshold": 85,
+    "optimalBackingRatio": 105,
+    "maximumBackingRatio": 150,
+    "tolerance": 1
+  },
+  "professionalStandards": {
+    "liquidityJustification": "100% - All assets must be immediately liquid (cash, Fed deposits, Treasury bills ≤93 days)",
+    "qualityJustification": "95% - Only highest quality HQLA assets: US currency, Treasury securities, Fed deposits",
+    "concentrationJustification": "75% - Professional diversification while maintaining operational efficiency",
+    "backingJustification": "100% - Legal minimum 1:1 reserve backing requirement per STABLE/GENIUS Acts"
+  },
+  "stableActSpecificRequirements": {
+    "allowedReserveAssets": [
+      "US currency (coins and Federal Reserve notes)",
+      "Deposits with Federal Reserve Banks", 
+      "Demand deposits at insured depository institutions",
+      "Treasury bills with maturity ≤93 days",
+      "Repurchase agreements (overnight, backed by Treasury bills ≤93 days)",
+      "Reverse repurchase agreements (overnight, backed by Treasury bills ≤93 days)",
+      "Money market funds (registered under Investment Company Act)"
+    ],
+    "prohibitedFeatures": {
+      "interestPayments": "Prohibited - No interest or yield payments to stablecoin holders",
+      "corporateBonds": "Prohibited - Corporate bonds not allowed as reserves",
+      "longTermSecurities": "Prohibited - Securities with maturity >93 days not allowed"
+    },
+    "operationalRequirements": {
+      "reserveSegregation": "Required - Reserves must be segregated from issuer's own assets",
+      "pledging": "Prohibited - Reserves may not be pledged, rehypothecated, or reused except for liquidity",
+      "monthlyDisclosure": "Required - Monthly public disclosure of reserve composition",
+      "accountingFirm": "Required - Monthly examination by registered public accounting firm"
+    }
+  },
+  "geniusActSpecificRequirements": {
+    "allowedReserveAssets": [
+      "US coins and currency (including Federal Reserve notes)",
+      "Money with Federal Reserve Banks",
+      "Demand deposits at insured depository institutions",
+      "Treasury bills, notes, or bonds with maturity ≤93 days",
+      "Repurchase agreements (overnight, backed by Treasury bills ≤93 days)",
+      "Reverse repurchase agreements (7 days or less, backed by Treasury securities)",
+      "Money market funds (US currency, bank deposits, Treasury securities ≤93 days)"
+    ],
+    "liquidityProvisions": {
+      "repurchaseAgreements": "Treasury bills may be pledged for repos with maturity ≤90 days",
+      "centralClearing": "Repos must be centrally cleared or have regulator approval",
+      "overcollateralization": "Reverse repos subject to standard market overcollateralization"
+    },
+    "complianceFramework": {
+      "federalOversight": "Federal qualified nonbank issuers regulated by OCC",
+      "stateOversight": "State-regulated issuers for smaller market cap stablecoins",
+      "capitalRequirements": "Tailored capital, liquidity, and risk management standards"
+    }
+  },
+  "usValidationRules": {
+    "fullBackingValidation": {
+      "rule": "1:1 reserve backing with approved high-quality liquid assets only",
+      "validation": "total_reserve_value >= outstanding_stablecoin_value * 1.00 AND asset_type IN allowedReserveAssets"
+    },
+    "maturityValidation": {
+      "rule": "All securities must have maturity ≤93 days",
+      "validation": "maturity_days <= 93 FOR all_securities"
+    },
+    "yieldProhibition": {
+      "rule": "No interest or yield payments to stablecoin holders",
+      "validation": "nominal_interest_rate == 0.0000 FOR all stablecoin_liabilities"
+    },
+    "assetQualityValidation": {
+      "rule": "Only US government securities and insured deposits allowed",
+      "validation": "asset_type IN [USCurrency, FedDeposits, TreasurySecurities, InsuredDeposits, MoneyMarketFunds] AND corporate_bonds == false"
+    },
+    "segregationValidation": {
+      "rule": "Reserves must be segregated and not pledged except for liquidity",
+      "validation": "reserves_segregated == true AND pledging_for_non_liquidity == false"
+    }
+  }
+}

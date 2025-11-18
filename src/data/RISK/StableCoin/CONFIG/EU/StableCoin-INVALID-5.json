@@ -1,0 +1,147 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "EU MiCA Critically Non-Compliant Portfolio V5",
+    "description": "EU stablecoin portfolio with critical MiCA violations including prohibited assets, insufficient backing, and regulatory breaches - designed to FAIL all compliance tests",
+    "currency": "EUR",
+    "totalNotional": 18000,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "5.0",
+    "jurisdiction": "EU",
+    "complianceTarget": {
+      "backingRatio": 75,
+      "liquidityRatio": 5,
+      "maturityLimit": 365,
+      "yieldToHolders": true,
+      "corporateBondsAllowed": false,
+      "concentrationLimit": 35,
+      "qualityThreshold": 85
+    },
+    "riskProfile": "Critically Non-Compliant",
+    "regulatoryFramework": ["MiCA"],
+    "assetAllocation": {
+      "cashAndEquivalents": "5%",
+      "governmentBonds": "0%",
+      "corporateBonds": "25%",
+      "prohibitedAssets": "70%"
+    },
+    "testingPurpose": "EU MiCA critical violation testing - multiple regulatory breaches"
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "minimal_bank_deposits",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "900",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Critically insufficient bank deposits - only 5% vs 30% MiCA requirement"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "cryptocurrency_reserves",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "7200",
+      "maturityDate": "2024-12-31T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "BTC",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Bitcoin reserves - strictly prohibited under MiCA Article 36"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "non_eu_government_bonds",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "5400",
+      "maturityDate": "2026-01-01T00:00:00",
+      "nominalInterestRate": "0.0550",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "US Treasury bonds - non-EU government bonds prohibited under MiCA"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "high_risk_corporate_bonds",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "4500",
+      "maturityDate": "2027-06-28T00:00:00",
+      "nominalInterestRate": "0.0850",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "High-yield junk bonds with excessive maturity - multiple MiCA violations"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "mica_unbacked_liability",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-24000",
+      "maturityDate": "2024-12-28T00:00:00",
+      "nominalInterestRate": "0.0750",
+      "currency": "EUR",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Unbacked stablecoin tokens with excessive yield - critical MiCA violations"
+    }
+  ],
+  "criticalMicaViolations": {
+    "insufficientBacking": "Only 75% backing ratio vs 100% MiCA requirement - critical violation",
+    "prohibitedAssets": "Cryptocurrency and non-EU assets strictly forbidden under MiCA Article 36",
+    "bankDepositDeficiency": "Only 5% bank deposits vs 30% minimum - critical deficiency",
+    "assetSegregationFailure": "Mixed currency portfolio violates segregation requirements",
+    "excessiveYield": "7.5% yield to token holders violates MiCA yield restrictions",
+    "maturityViolations": "Securities with 3+ year maturity violate liquidity requirements",
+    "concentrationViolations": "Single asset classes exceed all MiCA concentration limits"
+  },
+  "expectedCriticalFailures": [
+    "Backing Compliance: CRITICAL FAIL (75% < 100%)",
+    "Liquidity Compliance: CRITICAL FAIL (5% < 30%)",
+    "Asset Eligibility: CRITICAL FAIL (prohibited cryptocurrencies)",
+    "Currency Compliance: CRITICAL FAIL (non-EUR assets)",
+    "Quality Compliance: CRITICAL FAIL (83% NonHQLA assets)",
+    "Yield Compliance: CRITICAL FAIL (excessive yield payments)",
+    "Overall Compliance: CRITICAL FAIL"
+  ],
+  "regulatoryStatus": "CRITICALLY_NON_COMPLIANT",
+  "professionalThresholds": {
+    "backing": {
+      "minimum": "100%",
+      "actual": "75%",
+      "status": "CRITICAL_FAIL"
+    },
+    "liquidity": {
+      "minimum": "30%",
+      "actual": "5%",
+      "status": "CRITICAL_FAIL"
+    },
+    "quality": {
+      "minimum": "85%",
+      "actual": "17%",
+      "status": "CRITICAL_FAIL"
+    },
+    "concentration": {
+      "maximum": "35%",
+      "actual": "40%",
+      "status": "FAIL"
+    }
+  }
+}

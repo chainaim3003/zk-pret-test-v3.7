@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "goldenCopy": {
+      "publishDate": "2025-10-05T08:00:00Z"
+    },
+    "pagination": {
+      "currentPage": 1,
+      "perPage": 15,
+      "from": 1,
+      "to": 1,
+      "total": 1,
+      "lastPage": 1
+    }
+  },
+  "links": {
+    "first": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalName%5D=SREE+PALANI+ANDAVAR+AGROS+PRIVATE+LIMITED&page%5Bnumber%5D=1&page%5Bsize%5D=15",
+    "last": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalName%5D=SREE+PALANI+ANDAVAR+AGROS+PRIVATE+LIMITED&page%5Bnumber%5D=1&page%5Bsize%5D=15"
+  },
+  "data": [
+    {
+      "type": "lei-records",
+      "id": "894500Q32QG6KKGMMI95",
+      "attributes": {
+        "lei": "894500Q32QG6KKGMMI95",
+        "entity": {
+          "legalName": {
+            "name": "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED",
+            "language": "en"
+          },
+          "otherNames": [],
+          "transliteratedOtherNames": [],
+          "legalAddress": {
+            "language": "en",
+            "addressLines": [
+              "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)"
+            ],
+            "addressNumber": null,
+            "addressNumberWithinBuilding": null,
+            "mailRouting": null,
+            "city": "Coimbatore",
+            "region": "IN-TN",
+            "country": "IN",
+            "postalCode": "641010"
+          },
+          "headquartersAddress": {
+            "language": "en",
+            "addressLines": [
+              "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)"
+            ],
+            "addressNumber": null,
+            "addressNumberWithinBuilding": null,
+            "mailRouting": null,
+            "city": "Coimbatore",
+            "region": "IN-TN",
+            "country": "IN",
+            "postalCode": "641010"
+          },
+          "registeredAt": {
+            "id": "RA000394",
+            "other": null
+          },
+          "registeredAs": "U01112TZ2022PTC039493",
+          "jurisdiction": "IN",
+          "category": "GENERAL",
+          "legalForm": {
+            "id": "YSP9",
+            "other": null
+          },
+          "associatedEntity": {
+            "lei": null,
+            "name": null
+          },
+          "status": "ACTIVE",
+          "expiration": {
+            "date": null,
+            "reason": null
+          },
+          "successorEntity": {
+            "lei": null,
+            "name": null
+          },
+          "successorEntities": [],
+          "creationDate": "2022-07-18T21:00:00Z",
+          "subCategory": null,
+          "otherAddresses": [],
+          "eventGroups": []
+        },
+        "registration": {
+          "initialRegistrationDate": "2025-05-22T12:25:39Z",
+          "lastUpdateDate": "2025-05-22T12:25:40Z",
+          "status": "ISSUED",
+          "nextRenewalDate": "2026-05-22T12:25:40Z",
+          "managingLou": "529900F6BNUR3RJ2WH29",
+          "corroborationLevel": "FULLY_CORROBORATED",
+          "validatedAt": {
+            "id": "RA000394",
+            "other": null
+          },
+          "validatedAs": "U01112TZ2022PTC039493",
+          "otherValidationAuthorities": []
+        },
+        "bic": null,
+        "mic": null,
+        "ocid": "in/U01112TZ2022PTC039493",
+        "qcc": "QINDAD21MX",
+        "spglobal": [
+          "1944713700"
+        ],
+        "conformityFlag": "CONFORMING"
+      },
+      "relationships": {
+        "managing-lou": {
+          "links": {
+            "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/managing-lou"
+          }
+        },
+        "lei-issuer": {
+          "links": {
+            "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/lei-issuer"
+          }
+        },
+        "field-modifications": {
+          "links": {
+            "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/field-modifications"
+          }
+        },
+        "direct-parent": {
+          "links": {
+            "reporting-exception": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/direct-parent-reporting-exception"
+          }
+        },
+        "ultimate-parent": {
+          "links": {
+            "reporting-exception": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/ultimate-parent-reporting-exception"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95"
+      }
+    }
+  ],
+  "endorsements": [
+    {
+      "endorsementId": "ORG-VLEI-001",
+      "timestamp": "2025-05-22T14:00:00Z",
+      "publicData": {
+        "organizationDID": "did:lei:894500Q32QG6KKGMMI95",
+        "companyLEI": "894500Q32QG6KKGMMI95",
+        "hasVLEICredentials": true,
+        "credentialsValid": true,
+        "gleifVerified": true
+      },
+      "privateDataReference": {
+        "ipfsHash": "QmOrganizationSreePalaniAndavarProfile2025Hash",
+        "encryptionMethod": "AES-256-GCM",
+        "dataCommitment": "0xorg894500q32qg6kkgmmi95commitment",
+        "accessControl": [
+          "did:lei:894500Q32QG6KKGMMI95",
+          "did:lei:529900F6BNUR3RJ2WH29",
+          "did:regulator:REGULATOR_LEI"
+        ]
+      },
+      "vLEIProof": {
+        "credentialChainHash": "0x9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o6p",
+        "gleifVerificationEndpoint": "https://api.gleif.org/verify/894500Q32QG6KKGMMI95"
+      },
+      "algorandTransaction": {
+        "walletAddress": "SREE1PALANI1ANDAVAR1AGROS1ORG1WALLET1MAIN1ABCDEF",
+        "signature": "0xorg3045022100s1r2e3e4p5a6l7a8n9i0a1n2d3a4v5a6r7a8g9r0",
+        "transactionId": "TXORG894500Q32QG6KKGMMI95202505ABCDEFGHIJKL",
+        "blockNumber": 45890234,
+        "timestamp": "2025-05-22T14:00:05Z"
+      }
+    }
+  ],
+  "privacyMetadata": {
+    "privacyLevel": "ENHANCED",
+    "complianceMode": "REGULATORY_ACCESSIBLE",
+    "publiclyVerifiable": true,
+    "gdprCompliant": true,
+    "notes": [
+      "Organization credentials encrypted and stored off-chain",
+      "Public can verify: valid LEI, valid vLEI credentials, GLEIF verified",
+      "Regulators/authorized parties can decrypt full details using DID-based access control",
+      "Blockchain signature ensures non-repudiation of organization identity"
+    ]
+  }
+}

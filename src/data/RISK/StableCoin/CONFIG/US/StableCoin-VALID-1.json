@@ -1,0 +1,96 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "StableCoin VALID-1 Portfolio",
+    "description": "Valid stablecoin portfolio for compliance testing",
+    "currency": "USD",
+    "totalNotional": 25100,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "2.0",
+    "jurisdiction": "US",
+    "complianceTarget": {
+      "backingRatio": 100.4,
+      "maturityLimit": 93,
+      "yieldToHolders": false,
+      "corporateBondsAllowed": false,
+      "concentrationLimit": 100,
+      "qualityScore": 100
+    }
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "cash01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6275",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Cash reserves (exactly 25% of portfolio)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "cash02",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6275",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Additional cash reserves (exactly 25% of portfolio)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "cash03",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6275",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Additional cash reserves (exactly 25% of portfolio)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "cash04",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6275",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Additional cash reserves (exactly 25% of portfolio)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "deposit01",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-25000",
+      "maturityDate": "2024-04-03T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Outstanding stablecoin tokens (no yield to holders - US compliant)"
+    }
+  ]
+}

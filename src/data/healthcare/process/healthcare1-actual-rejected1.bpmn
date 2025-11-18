@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+                  id="Definitions_1" 
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:process id="healthcare1_actual_rejected1" name="Healthcare Treatment - Rejected Case 1 (Missing Safety Checks)" isExecutable="true">
+    
+    <!-- Start Event -->
+    <bpmn:startEvent id="start_patient_admission" name="Patient Admission">
+      <bpmn:outgoing>flow_to_triage</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <!-- Initial Triage -->
+    <bpmn:userTask id="initial_triage" name="Initial Triage Assessment">
+      <bpmn:incoming>flow_to_triage</bpmn:incoming>
+      <bpmn:outgoing>flow_to_gateway</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Decision Gateway -->
+    <bpmn:exclusiveGateway id="urgency_gateway" name="Urgency Level?">
+      <bpmn:incoming>flow_to_gateway</bpmn:incoming>
+      <bpmn:outgoing>flow_to_emergency</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_standard</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_routine</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    
+    <!-- Emergency Path -->
+    <bpmn:userTask id="emergency_stabilization" name="Emergency Stabilization">
+      <bpmn:incoming>flow_to_emergency</bpmn:incoming>
+      <bpmn:outgoing>flow_emergency_to_parallel</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Standard Path -->
+    <bpmn:userTask id="detailed_assessment" name="Detailed Medical Assessment">
+      <bpmn:incoming>flow_to_standard</bpmn:incoming>
+      <bpmn:outgoing>flow_standard_to_parallel</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Routine Path -->
+    <bpmn:userTask id="routine_examination" name="Routine Medical Examination">
+      <bpmn:incoming>flow_to_routine</bpmn:incoming>
+      <bpmn:outgoing>flow_routine_to_parallel</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Parallel Gateway Start -->
+    <bpmn:parallelGateway id="parallel_start" name="Begin Parallel Processing">
+      <bpmn:incoming>flow_emergency_to_parallel</bpmn:incoming>
+      <bpmn:incoming>flow_standard_to_parallel</bpmn:incoming>
+      <bpmn:incoming>flow_routine_to_parallel</bpmn:incoming>
+      <bpmn:outgoing>flow_to_lab_tests</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_imaging</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_specialist</bpmn:outgoing>
+      <bpmn:outgoing>flow_to_verification</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    
+    <!-- Parallel Tasks -->
+    <bpmn:userTask id="laboratory_tests" name="Laboratory Tests">
+      <bpmn:incoming>flow_to_lab_tests</bpmn:incoming>
+      <bpmn:outgoing>flow_lab_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <bpmn:userTask id="medical_imaging" name="Medical Imaging">
+      <bpmn:incoming>flow_to_imaging</bpmn:incoming>
+      <bpmn:outgoing>flow_imaging_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <bpmn:userTask id="specialist_consultation" name="Specialist Consultation">
+      <bpmn:incoming>flow_to_specialist</bpmn:incoming>
+      <bpmn:outgoing>flow_specialist_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <bpmn:userTask id="insurance_verification" name="Insurance & Authorization">
+      <bpmn:incoming>flow_to_verification</bpmn:incoming>
+      <bpmn:outgoing>flow_verification_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Parallel Gateway End -->
+    <bpmn:parallelGateway id="parallel_end" name="Synchronize Results">
+      <bpmn:incoming>flow_lab_to_end</bpmn:incoming>
+      <bpmn:incoming>flow_imaging_to_end</bpmn:incoming>
+      <bpmn:incoming>flow_specialist_to_end</bpmn:incoming>
+      <bpmn:incoming>flow_verification_to_end</bpmn:incoming>
+      <bpmn:outgoing>flow_to_treatment_plan</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    
+    <!-- Treatment Planning -->
+    <bpmn:userTask id="treatment_planning" name="Comprehensive Treatment Planning">
+      <bpmn:incoming>flow_to_treatment_plan</bpmn:incoming>
+      <bpmn:outgoing>flow_to_treatment</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- VIOLATION: Skipping safety checks and going directly to treatment -->
+    <!-- Missing: Safety & Compliance Verification -->
+    <!-- Missing: Multi-level Treatment Approval -->
+    
+    <!-- Treatment Execution -->
+    <bpmn:userTask id="treatment_execution" name="Treatment Execution">
+      <bpmn:incoming>flow_to_treatment</bpmn:incoming>
+      <bpmn:outgoing>flow_to_monitoring</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Continuous Monitoring -->
+    <bpmn:userTask id="continuous_monitoring" name="Continuous Patient Monitoring">
+      <bpmn:incoming>flow_to_monitoring</bpmn:incoming>
+      <bpmn:outgoing>flow_to_documentation</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Documentation and Reporting -->
+    <bpmn:userTask id="documentation_reporting" name="Documentation & Regulatory Reporting">
+      <bpmn:incoming>flow_to_documentation</bpmn:incoming>
+      <bpmn:outgoing>flow_to_discharge</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Patient Discharge -->
+    <bpmn:userTask id="patient_discharge" name="Patient Discharge & Follow-up">
+      <bpmn:incoming>flow_to_discharge</bpmn:incoming>
+      <bpmn:outgoing>flow_to_end</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- End Event -->
+    <bpmn:endEvent id="end_treatment_complete" name="Treatment Complete">
+      <bpmn:incoming>flow_to_end</bpmn:incoming>
+    </bpmn:endEvent>
+    
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="flow_to_triage" sourceRef="start_patient_admission" targetRef="initial_triage"/>
+    <bpmn:sequenceFlow id="flow_to_gateway" sourceRef="initial_triage" targetRef="urgency_gateway"/>
+    
+    <!-- Gateway flows -->
+    <bpmn:sequenceFlow id="flow_to_emergency" name="Emergency" sourceRef="urgency_gateway" targetRef="emergency_stabilization">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">urgency == "emergency"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="flow_to_standard" name="Standard" sourceRef="urgency_gateway" targetRef="detailed_assessment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">urgency == "standard"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="flow_to_routine" name="Routine" sourceRef="urgency_gateway" targetRef="routine_examination">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">urgency == "routine"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <!-- To parallel gateway -->
+    <bpmn:sequenceFlow id="flow_emergency_to_parallel" sourceRef="emergency_stabilization" targetRef="parallel_start"/>
+    <bpmn:sequenceFlow id="flow_standard_to_parallel" sourceRef="detailed_assessment" targetRef="parallel_start"/>
+    <bpmn:sequenceFlow id="flow_routine_to_parallel" sourceRef="routine_examination" targetRef="parallel_start"/>
+    
+    <!-- Parallel flows -->
+    <bpmn:sequenceFlow id="flow_to_lab_tests" sourceRef="parallel_start" targetRef="laboratory_tests"/>
+    <bpmn:sequenceFlow id="flow_to_imaging" sourceRef="parallel_start" targetRef="medical_imaging"/>
+    <bpmn:sequenceFlow id="flow_to_specialist" sourceRef="parallel_start" targetRef="specialist_consultation"/>
+    <bpmn:sequenceFlow id="flow_to_verification" sourceRef="parallel_start" targetRef="insurance_verification"/>
+    
+    <!-- From parallel tasks -->
+    <bpmn:sequenceFlow id="flow_lab_to_end" sourceRef="laboratory_tests" targetRef="parallel_end"/>
+    <bpmn:sequenceFlow id="flow_imaging_to_end" sourceRef="medical_imaging" targetRef="parallel_end"/>
+    <bpmn:sequenceFlow id="flow_specialist_to_end" sourceRef="specialist_consultation" targetRef="parallel_end"/>
+    <bpmn:sequenceFlow id="flow_verification_to_end" sourceRef="insurance_verification" targetRef="parallel_end"/>
+    
+    <!-- VIOLATION: Direct flow from planning to treatment -->
+    <bpmn:sequenceFlow id="flow_to_treatment_plan" sourceRef="parallel_end" targetRef="treatment_planning"/>
+    <bpmn:sequenceFlow id="flow_to_treatment" sourceRef="treatment_planning" targetRef="treatment_execution"/>
+    
+    <!-- Final flows -->
+    <bpmn:sequenceFlow id="flow_to_monitoring" sourceRef="treatment_execution" targetRef="continuous_monitoring"/>
+    <bpmn:sequenceFlow id="flow_to_documentation" sourceRef="continuous_monitoring" targetRef="documentation_reporting"/>
+    <bpmn:sequenceFlow id="flow_to_discharge" sourceRef="documentation_reporting" targetRef="patient_discharge"/>
+    <bpmn:sequenceFlow id="flow_to_end" sourceRef="patient_discharge" targetRef="end_treatment_complete"/>
+    
+  </bpmn:process>
+  
+</bpmn:definitions>

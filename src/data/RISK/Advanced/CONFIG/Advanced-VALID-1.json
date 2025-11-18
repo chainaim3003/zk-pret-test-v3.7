@@ -1,0 +1,98 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "Advanced Liquidity Portfolio",
+    "description": "Advanced liquidity management portfolio with optimized cash flow structure",
+    "currency": "USD",
+    "totalNotional": 65500,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "10.0",
+    "targetLCR": 110,
+    "targetNSFR": 110,
+    "maxAnalysisPeriods": 24,
+    "designPrinciples": [
+      "Optimized cash and asset allocation strategy",
+      "Structured liability management (negative notional with positive cash flows)",
+      "Strategic asset positioning (positive notional with structured payoffs)",
+      "Enhanced initial liquidity for early period stability",
+      "Consistent liquidity coverage across all periods",
+      "Robust funding structure with stable deposit base"
+    ]
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "cash01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "45000",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.001",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Primary cash position for immediate liquidity needs"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "bond01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "10000",
+      "maturityDate": "2024-06-30T00:00:00",
+      "nominalInterestRate": "0.02",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Government bond investment for stable returns and liquidity"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6000",
+      "maturityDate": "2024-08-31T00:00:00",
+      "nominalInterestRate": "0.03",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Treasury security holding for portfolio diversification"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "corporate01",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "4000",
+      "maturityDate": "2024-09-30T00:00:00",
+      "nominalInterestRate": "0.04",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L2A",
+      "description": "Corporate bond investment for yield optimization"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "deposit01",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-2500",
+      "maturityDate": "2026-01-05T00:00:00",
+      "nominalInterestRate": "0.015",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Customer deposit liability providing stable funding base"
+    }
+  ]
+}

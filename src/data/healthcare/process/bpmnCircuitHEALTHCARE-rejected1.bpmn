@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_healthcare_rejected" targetNamespace="http://bpmn.io/schema/bpmn" exporter="zk-pret-healthcare-rejected" exporterVersion="1.0.0">
+  <bpmn:process id="Process_healthcare_rejected" isExecutable="false">
+    <!-- START EVENT -->
+    <bpmn:startEvent id="StartEvent_patient_presentation" name="0">
+      <bpmn:outgoing>Flow_to_unauthorized_entry</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <!-- This violates the expected pattern by using 'x' instead of 'a' -->
+    <bpmn:intermediateThrowEvent id="Event_unauthorized_entry" name="1">
+      <bpmn:incoming>Flow_to_unauthorized_entry</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_bypass_consent</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_unauthorized_entry" name="x" sourceRef="StartEvent_patient_presentation" targetRef="Event_unauthorized_entry" />
+    
+    <!-- Using 'y' instead of the expected 'b' or 'c' -->
+    <bpmn:intermediateThrowEvent id="Event_bypass_consent" name="2">
+      <bpmn:incoming>Flow_to_bypass_consent</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_skip_validation</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_bypass_consent" name="y" sourceRef="Event_unauthorized_entry" targetRef="Event_bypass_consent" />
+    
+    <!-- Using 'z' instead of expected patterns -->
+    <bpmn:intermediateThrowEvent id="Event_skip_validation" name="3">
+      <bpmn:incoming>Flow_to_skip_validation</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_unlicensed_consultation</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_skip_validation" name="z" sourceRef="Event_bypass_consent" targetRef="Event_skip_validation" />
+    
+    <!-- Using 'w' instead of expected 'd' -->
+    <bpmn:intermediateThrowEvent id="Event_unlicensed_consultation" name="4">
+      <bpmn:incoming>Flow_to_unlicensed_consultation</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_data_breach</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_unlicensed_consultation" name="w" sourceRef="Event_skip_validation" targetRef="Event_unlicensed_consultation" />
+    
+    <!-- Using 'v' instead of expected 'e' or 'f' -->
+    <bpmn:intermediateThrowEvent id="Event_data_breach" name="5">
+      <bpmn:incoming>Flow_to_data_breach</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_unauthorized_diagnosis</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_data_breach" name="v" sourceRef="Event_unlicensed_consultation" targetRef="Event_data_breach" />
+    
+    <!-- Using 'u' instead of expected patterns -->
+    <bpmn:intermediateThrowEvent id="Event_unauthorized_diagnosis" name="6">
+      <bpmn:incoming>Flow_to_unauthorized_diagnosis</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_compliance_violation</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_unauthorized_diagnosis" name="u" sourceRef="Event_data_breach" targetRef="Event_unauthorized_diagnosis" />
+    
+    <!-- Using 't' instead of expected 'g' at the end -->
+    <bpmn:intermediateThrowEvent id="Event_compliance_violation" name="7">
+      <bpmn:incoming>Flow_to_compliance_violation</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_system_shutdown</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_compliance_violation" name="t" sourceRef="Event_unauthorized_diagnosis" targetRef="Event_compliance_violation" />
+    
+    <!-- Using 's' for final flow -->
+    <bpmn:intermediateThrowEvent id="Event_system_shutdown" name="8">
+      <bpmn:incoming>Flow_to_system_shutdown</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_audit_trail</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_system_shutdown" name="s" sourceRef="Event_compliance_violation" targetRef="Event_system_shutdown" />
+    
+    <!-- Using 'r' for penultimate flow -->
+    <bpmn:intermediateThrowEvent id="Event_audit_trail" name="9">
+      <bpmn:incoming>Flow_to_audit_trail</bpmn:incoming>
+      <bpmn:outgoing>Flow_to_end</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_to_audit_trail" name="r" sourceRef="Event_system_shutdown" targetRef="Event_audit_trail" />
+    
+    <!-- END EVENT -->
+    <bpmn:endEvent id="EndEvent_security_breach_logged" name="10">
+      <bpmn:incoming>Flow_to_end</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_to_end" name="q" sourceRef="Event_audit_trail" targetRef="EndEvent_security_breach_logged" />
+    
+    <!-- Text Annotations for Documentation -->
+    <bpmn:textAnnotation id="TextAnnotation_start">
+      <bpmn:text>Patient Presentation - Unauthorized Path</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_start" associationDirection="None" sourceRef="StartEvent_patient_presentation" targetRef="TextAnnotation_start" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_unauthorized">
+      <bpmn:text>Unauthorized System Entry</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_unauthorized" associationDirection="None" sourceRef="Event_unauthorized_entry" targetRef="TextAnnotation_unauthorized" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_bypass">
+      <bpmn:text>Bypass Patient Consent Validation</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_bypass" associationDirection="None" sourceRef="Event_bypass_consent" targetRef="TextAnnotation_bypass" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_skip">
+      <bpmn:text>Skip FHIR R4 Standards Validation</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_skip" associationDirection="None" sourceRef="Event_skip_validation" targetRef="TextAnnotation_skip" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_unlicensed">
+      <bpmn:text>Unlicensed AI Medical Consultation</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_unlicensed" associationDirection="None" sourceRef="Event_unlicensed_consultation" targetRef="TextAnnotation_unlicensed" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_breach">
+      <bpmn:text>Unauthorized Patient Data Access</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_breach" associationDirection="None" sourceRef="Event_data_breach" targetRef="TextAnnotation_breach" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_diagnosis">
+      <bpmn:text>Unauthorized Medical Diagnosis</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_diagnosis" associationDirection="None" sourceRef="Event_unauthorized_diagnosis" targetRef="TextAnnotation_diagnosis" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_violation">
+      <bpmn:text>Critical Compliance Violations Detected</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_violation" associationDirection="None" sourceRef="Event_compliance_violation" targetRef="TextAnnotation_violation" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_shutdown">
+      <bpmn:text>Emergency System Shutdown</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_shutdown" associationDirection="None" sourceRef="Event_system_shutdown" targetRef="TextAnnotation_shutdown" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_audit">
+      <bpmn:text>Generate Security Audit Trail</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_audit" associationDirection="None" sourceRef="Event_audit_trail" targetRef="TextAnnotation_audit" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_end">
+      <bpmn:text>Security Breach Logged and Reported</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_end" associationDirection="None" sourceRef="EndEvent_security_breach_logged" targetRef="TextAnnotation_end" />
+    
+    <bpmn:textAnnotation id="TextAnnotation_violations_summary">
+      <bpmn:text>HIPAA Violations Detected:
+1. Unauthorized system access
+2. Patient consent bypassed
+3. FHIR standards ignored
+4. Unlicensed AI consultation
+5. Unauthorized data access
+6. Invalid medical diagnosis
+7. Regulatory non-compliance
+8. Security protocols violated
+9. Audit trail compromised</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_violations_summary" associationDirection="None" sourceRef="Event_compliance_violation" targetRef="TextAnnotation_violations_summary" />
+  </bpmn:process>
+  
+  <bpmndi:BPMNDiagram id="BPMNDiagram_healthcare_rejected">
+    <bpmndi:BPMNPlane id="BPMNPlane_healthcare_rejected" bpmnElement="Process_healthcare_rejected">
+      <bpmndi:BPMNShape id="StartEvent_patient_presentation_di" bpmnElement="StartEvent_patient_presentation">
+        <dc:Bounds x="162" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="176" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_unauthorized_entry_di" bpmnElement="Event_unauthorized_entry">
+        <dc:Bounds x="262" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="277" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_bypass_consent_di" bpmnElement="Event_bypass_consent">
+        <dc:Bounds x="362" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="377" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_skip_validation_di" bpmnElement="Event_skip_validation">
+        <dc:Bounds x="462" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="477" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_unlicensed_consultation_di" bpmnElement="Event_unlicensed_consultation">
+        <dc:Bounds x="562" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="577" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_data_breach_di" bpmnElement="Event_data_breach">
+        <dc:Bounds x="662" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="677" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_unauthorized_diagnosis_di" bpmnElement="Event_unauthorized_diagnosis">
+        <dc:Bounds x="762" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="777" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_compliance_violation_di" bpmnElement="Event_compliance_violation">
+        <dc:Bounds x="862" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="877" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_system_shutdown_di" bpmnElement="Event_system_shutdown">
+        <dc:Bounds x="962" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="977" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Event_audit_trail_di" bpmnElement="Event_audit_trail">
+        <dc:Bounds x="1062" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1077" y="325" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="EndEvent_security_breach_logged_di" bpmnElement="EndEvent_security_breach_logged">
+        <dc:Bounds x="1162" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1173" y="325" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge id="Flow_to_unauthorized_entry_di" bpmnElement="Flow_to_unauthorized_entry">
+        <di:waypoint x="198" y="300" />
+        <di:waypoint x="262" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="227" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_bypass_consent_di" bpmnElement="Flow_to_bypass_consent">
+        <di:waypoint x="298" y="300" />
+        <di:waypoint x="362" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="327" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_skip_validation_di" bpmnElement="Flow_to_skip_validation">
+        <di:waypoint x="398" y="300" />
+        <di:waypoint x="462" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="427" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_unlicensed_consultation_di" bpmnElement="Flow_to_unlicensed_consultation">
+        <di:waypoint x="498" y="300" />
+        <di:waypoint x="562" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="527" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_data_breach_di" bpmnElement="Flow_to_data_breach">
+        <di:waypoint x="598" y="300" />
+        <di:waypoint x="662" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="627" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_unauthorized_diagnosis_di" bpmnElement="Flow_to_unauthorized_diagnosis">
+        <di:waypoint x="698" y="300" />
+        <di:waypoint x="762" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="727" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_compliance_violation_di" bpmnElement="Flow_to_compliance_violation">
+        <di:waypoint x="798" y="300" />
+        <di:waypoint x="862" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="827" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_system_shutdown_di" bpmnElement="Flow_to_system_shutdown">
+        <di:waypoint x="898" y="300" />
+        <di:waypoint x="962" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="927" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_audit_trail_di" bpmnElement="Flow_to_audit_trail">
+        <di:waypoint x="998" y="300" />
+        <di:waypoint x="1062" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1027" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_to_end_di" bpmnElement="Flow_to_end">
+        <di:waypoint x="1098" y="300" />
+        <di:waypoint x="1162" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1127" y="282" width="7" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <!-- Text Annotations -->
+      <bpmndi:BPMNShape id="TextAnnotation_start_di" bpmnElement="TextAnnotation_start">
+        <dc:Bounds x="100" y="180" width="160" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_unauthorized_di" bpmnElement="TextAnnotation_unauthorized">
+        <dc:Bounds x="210" y="180" width="140" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_bypass_di" bpmnElement="TextAnnotation_bypass">
+        <dc:Bounds x="290" y="180" width="180" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_skip_di" bpmnElement="TextAnnotation_skip">
+        <dc:Bounds x="380" y="180" width="180" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_unlicensed_di" bpmnElement="TextAnnotation_unlicensed">
+        <dc:Bounds x="470" y="180" width="180" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_breach_di" bpmnElement="TextAnnotation_breach">
+        <dc:Bounds x="580" y="180" width="180" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_diagnosis_di" bpmnElement="TextAnnotation_diagnosis">
+        <dc:Bounds x="680" y="180" width="180" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_violation_di" bpmnElement="TextAnnotation_violation">
+        <dc:Bounds x="770" y="180" width="180" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_shutdown_di" bpmnElement="TextAnnotation_shutdown">
+        <dc:Bounds x="880" y="180" width="160" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_audit_di" bpmnElement="TextAnnotation_audit">
+        <dc:Bounds x="980" y="180" width="160" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_end_di" bpmnElement="TextAnnotation_end">
+        <dc:Bounds x="1070" y="180" width="180" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="TextAnnotation_violations_summary_di" bpmnElement="TextAnnotation_violations_summary">
+        <dc:Bounds x="700" y="50" width="300" height="120" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

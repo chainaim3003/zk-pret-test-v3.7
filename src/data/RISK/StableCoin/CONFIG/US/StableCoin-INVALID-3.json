@@ -1,0 +1,97 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "StableCoin INVALID-3 Portfolio - Excessive Maturity",
+    "description": "Invalid stablecoin portfolio with treasury securities exceeding 93-day maturity limit",
+    "currency": "USD",
+    "totalNotional": 25100,
+    "created": "2024-06-15T00:00:00Z",
+    "version": "3.0",
+    "jurisdiction": "US",
+    "complianceTarget": {
+      "backingRatio": 100.4,
+      "maturityLimit": 93,
+      "yieldToHolders": false,
+      "corporateBondsAllowed": false,
+      "concentrationLimit": 100,
+      "qualityScore": 100
+    },
+    "violationReason": "Treasury securities with maturity exceeding regulatory 93-day limit"
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "cash_reserves",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6275",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Standard cash reserves (25% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury_180day_violation",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6275",
+      "maturityDate": "2024-07-01T00:00:00",
+      "nominalInterestRate": "0.0540",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "180-day US Treasury Bills - VIOLATES 93-day maturity limit (25% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury_365day_violation",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6275",
+      "maturityDate": "2025-01-01T00:00:00",
+      "nominalInterestRate": "0.0580",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "365-day US Treasury Notes - SEVERE VIOLATION of maturity limits (25% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury_120day_violation",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6275",
+      "maturityDate": "2024-05-01T00:00:00",
+      "nominalInterestRate": "0.0525",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "120-day US Treasury Bills - exceeds 93-day regulatory limit (25% allocation)"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "stablecoin_liability",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-25000",
+      "maturityDate": "2025-06-30T00:00:00",
+      "nominalInterestRate": "0.0000",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Outstanding stablecoin tokens - regulatory compliant liability structure"
+    }
+  ]
+}

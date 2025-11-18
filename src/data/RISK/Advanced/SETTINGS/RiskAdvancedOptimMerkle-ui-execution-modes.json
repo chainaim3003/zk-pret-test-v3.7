@@ -1,0 +1,352 @@
+{
+  "uiExecutionModes": {
+    "metadata": {
+      "title": "Advanced Liquidity Risk Execution Modes",
+      "description": "Execution mode options for Advanced Risk Liquidity verification testing",
+      "version": "1.0",
+      "created": "2024-06-15T00:00:00Z",
+      "apiParameterName": "executionMode",
+      "parameterPosition": 5,
+      "commandTemplate": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js {threshold} {actusUrl} {configFile} {executionMode}"
+    },
+    "categories": {
+      "standard": {
+        "label": "Standard Testing",
+        "description": "Common testing scenarios for regular use",
+        "color": "blue",
+        "icon": "check-circle"
+      },
+      "strict": {
+        "label": "Strict & Regulatory",
+        "description": "High-precision testing for compliance and regulatory scenarios",
+        "color": "red",
+        "icon": "shield"
+      },
+      "development": {
+        "label": "Development & Debugging",
+        "description": "Lenient modes for development and testing iteration",
+        "color": "green",
+        "icon": "code"
+      },
+      "advanced": {
+        "label": "Advanced Testing",
+        "description": "Specialized testing for edge cases and boundary analysis",
+        "color": "purple",
+        "icon": "settings"
+      }
+    },
+    "executionModes": [
+      {
+        "key": "production",
+        "displayName": "Production (Enhanced)",
+        "category": "standard",
+        "description": "Standard business scenario with enhanced 2% tolerance precision",
+        "longDescription": "Recommended for production deployments and regular business validation. Uses enhanced precision with 2% tolerance for more stringent liquidity requirements.",
+        "technicalDetails": {
+          "baseThreshold": 100.0,
+          "tolerance": 2.0,
+          "stressMultiplier": 1.0,
+          "minimumPassingRatio": 98.0
+        },
+        "uiProperties": {
+          "difficulty": "medium",
+          "difficultyLevel": 3,
+          "color": "blue",
+          "badgeText": "ENHANCED",
+          "recommended": true,
+          "defaultSelection": true
+        },
+        "useCases": [
+          "Production deployment validation",
+          "Regular business compliance checking",
+          "Standard liquidity verification",
+          "Monthly/quarterly assessments"
+        ],
+        "expectedResults": {
+          "validScenarios": "PASS",
+          "invalidScenarios": "FAIL",
+          "borderlineCases": "Strict evaluation"
+        }
+      },
+      {
+        "key": "development",
+        "displayName": "Development (Lenient)",
+        "category": "development",
+        "description": "Lenient testing for development and iteration with 8% tolerance",
+        "longDescription": "Ideal for development phases, testing new portfolios, and iterative design. Provides more flexibility with 8% tolerance for easier testing.",
+        "technicalDetails": {
+          "baseThreshold": 95.0,
+          "tolerance": 8.0,
+          "stressMultiplier": 0.9,
+          "minimumPassingRatio": 87.0
+        },
+        "uiProperties": {
+          "difficulty": "easy",
+          "difficultyLevel": 1,
+          "color": "green",
+          "badgeText": "LENIENT",
+          "recommended": false,
+          "defaultSelection": false
+        },
+        "useCases": [
+          "Portfolio development and testing",
+          "Configuration iteration",
+          "Initial scenario validation",
+          "Proof-of-concept demonstrations"
+        ],
+        "expectedResults": {
+          "validScenarios": "PASS",
+          "invalidScenarios": "May PASS if borderline",
+          "borderlineCases": "Lenient evaluation"
+        }
+      },
+      {
+        "key": "stress_testing",
+        "displayName": "Stress Testing",
+        "category": "strict",
+        "description": "Rigorous compliance testing with 2% tolerance and 1.15x stress multiplier",
+        "longDescription": "Designed for stress testing scenarios with enhanced stress multipliers to simulate adverse market conditions.",
+        "technicalDetails": {
+          "baseThreshold": 100.0,
+          "tolerance": 2.0,
+          "stressMultiplier": 1.15,
+          "minimumPassingRatio": 98.0
+        },
+        "uiProperties": {
+          "difficulty": "hard",
+          "difficultyLevel": 4,
+          "color": "orange",
+          "badgeText": "STRESS",
+          "recommended": false,
+          "defaultSelection": false
+        },
+        "useCases": [
+          "Adverse scenario testing",
+          "Market stress simulation",
+          "Risk management validation",
+          "Regulatory stress tests"
+        ],
+        "expectedResults": {
+          "validScenarios": "PASS (with stress)",
+          "invalidScenarios": "FAIL",
+          "borderlineCases": "Likely to fail under stress"
+        }
+      },
+      {
+        "key": "ultra_strict",
+        "displayName": "Ultra Strict",
+        "category": "strict",
+        "description": "Maximum precision testing with 1% tolerance and 1.25x stress multiplier",
+        "longDescription": "The most stringent testing mode with minimal tolerance and maximum stress multipliers. Reserved for critical validation scenarios.",
+        "technicalDetails": {
+          "baseThreshold": 100.0,
+          "tolerance": 1.0,
+          "stressMultiplier": 1.25,
+          "minimumPassingRatio": 99.0
+        },
+        "uiProperties": {
+          "difficulty": "extreme",
+          "difficultyLevel": 5,
+          "color": "red",
+          "badgeText": "EXTREME",
+          "recommended": false,
+          "defaultSelection": false,
+          "warningMessage": "Extremely strict - only use for critical validation"
+        },
+        "useCases": [
+          "Critical system validation",
+          "Maximum precision requirements",
+          "Boundary limit testing",
+          "High-stakes compliance verification"
+        ],
+        "expectedResults": {
+          "validScenarios": "PASS (if very robust)",
+          "invalidScenarios": "FAIL",
+          "borderlineCases": "Almost certainly fail"
+        }
+      },
+      {
+        "key": "regulatory_compliance",
+        "displayName": "Regulatory Compliance",
+        "category": "strict",
+        "description": "Regulatory examination simulation with 1.5% tolerance and 1.2x stress",
+        "longDescription": "Simulates regulatory examination conditions with parameters designed to match typical regulatory review standards.",
+        "technicalDetails": {
+          "baseThreshold": 100.0,
+          "tolerance": 1.5,
+          "stressMultiplier": 1.2,
+          "minimumPassingRatio": 98.5
+        },
+        "uiProperties": {
+          "difficulty": "hard",
+          "difficultyLevel": 4,
+          "color": "indigo",
+          "badgeText": "REGULATORY",
+          "recommended": true,
+          "defaultSelection": false
+        },
+        "useCases": [
+          "Regulatory examination preparation",
+          "Compliance audit readiness",
+          "Supervisory review simulation",
+          "Official reporting validation"
+        ],
+        "expectedResults": {
+          "validScenarios": "PASS (regulatory standards)",
+          "invalidScenarios": "FAIL",
+          "borderlineCases": "Regulatory-level scrutiny"
+        }
+      },
+      {
+        "key": "edge_case_testing",
+        "displayName": "Edge Case Analysis",
+        "category": "advanced",
+        "description": "Ultra-precision boundary testing with 0.5% tolerance",
+        "longDescription": "Designed for precision boundary analysis and edge case detection. Uses minimal tolerance for maximum precision in threshold boundary conditions.",
+        "technicalDetails": {
+          "baseThreshold": 100.0,
+          "tolerance": 0.5,
+          "stressMultiplier": 1.0,
+          "minimumPassingRatio": 99.5
+        },
+        "uiProperties": {
+          "difficulty": "extreme",
+          "difficultyLevel": 5,
+          "color": "purple",
+          "badgeText": "PRECISION",
+          "recommended": false,
+          "defaultSelection": false,
+          "warningMessage": "Ultra-precise - for boundary analysis only"
+        },
+        "useCases": [
+          "Threshold boundary analysis",
+          "Edge case detection",
+          "Precision calibration",
+          "Academic research validation"
+        ],
+        "expectedResults": {
+          "validScenarios": "PASS (if perfectly calibrated)",
+          "invalidScenarios": "FAIL",
+          "borderlineCases": "Ultra-sensitive detection"
+        }
+      }
+    ],
+    "uiConfiguration": {
+      "dropdownSettings": {
+        "defaultValue": "production",
+        "sortBy": "difficultyLevel",
+        "groupBy": "category",
+        "showBadges": true,
+        "showDifficulty": true,
+        "showTechnicalDetails": false
+      },
+      "displayOptions": {
+        "showLongDescription": false,
+        "showUseCases": true,
+        "showExpectedResults": true,
+        "showWarnings": true,
+        "colorCodeByDifficulty": true
+      },
+      "validationRules": {
+        "requireConfirmation": ["ultra_strict", "edge_case_testing"],
+        "showWarningFor": ["ultra_strict", "edge_case_testing"],
+        "recommendedModes": ["production", "regulatory_compliance"]
+      }
+    }
+  },
+  "portfolioOptions": {
+    "metadata": {
+      "title": "Portfolio Configuration Options",
+      "description": "Available portfolio configurations for testing",
+      "parameterPosition": 3,
+      "basePath": "src/data/RISK/Advanced/CONFIG/"
+    },
+    "portfolios": [
+      {
+        "key": "Advanced-VALID-1.json",
+        "displayName": "Valid Portfolio #1 (Standard)",
+        "description": "Standard valid portfolio with balanced liquidity (200% ratio)",
+        "expectedResult": "PASS",
+        "characteristics": ["Balanced allocation", "High liquidity", "Conservative"],
+        "color": "green"
+      },
+      {
+        "key": "Advanced-VALID-2.json",
+        "displayName": "Valid Portfolio #2 (Enhanced)",
+        "description": "Enhanced valid portfolio with superior liquidity (1,800% ratio)",
+        "expectedResult": "PASS",
+        "characteristics": ["High cash reserves", "Enhanced liquidity", "Premium"],
+        "color": "green"
+      },
+      {
+        "key": "Advanced-INVALID-1.json",
+        "displayName": "Invalid Portfolio #1 (Insufficient)",
+        "description": "Liquidity-constrained portfolio with insufficient reserves (60% ratio)",
+        "expectedResult": "FAIL",
+        "characteristics": ["Limited cash", "High liabilities", "Risk scenario"],
+        "color": "red"
+      },
+      {
+        "key": "Advanced-INVALID-2.json",
+        "displayName": "Invalid Portfolio #2 (Mismatch)",
+        "description": "Maturity mismatch portfolio with funding concentration (50% ratio)",
+        "expectedResult": "FAIL",
+        "characteristics": ["Maturity mismatch", "Funding risk", "Stress scenario"],
+        "color": "red"
+      }
+    ]
+  },
+  "apiReference": {
+    "commandStructure": {
+      "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js",
+      "parameters": [
+        {
+          "position": 1,
+          "name": "liquidityThreshold",
+          "type": "number",
+          "description": "Liquidity threshold percentage (usually 100)",
+          "default": 100,
+          "required": true
+        },
+        {
+          "position": 2,
+          "name": "actusUrl",
+          "type": "string",
+          "description": "ACTUS API endpoint URL",
+          "default": "http://98.84.165.146:8083/eventsBatch",
+          "required": true
+        },
+        {
+          "position": 3,
+          "name": "configFile",
+          "type": "string",
+          "description": "Portfolio configuration file path",
+          "required": true,
+          "options": "portfolioOptions.portfolios"
+        },
+        {
+          "position": 4,
+          "name": "executionMode",
+          "type": "string",
+          "description": "Execution mode for tolerance and stress settings",
+          "required": true,
+          "options": "uiExecutionModes.executionModes"
+        }
+      ]
+    },
+    "exampleCommands": [
+      {
+        "name": "Standard Production Test",
+        "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js 100 http://98.84.165.146:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json production"
+      },
+      {
+        "name": "Regulatory Compliance Check",
+        "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js 100 http://98.84.165.146:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-VALID-2.json regulatory_compliance"
+      },
+      {
+        "name": "Stress Test Scenario",
+        "command": "node ./build/tests/with-sign/RiskLiquidityAdvancedOptimMerkleVerificationTestWithSign.js 100 http://98.84.165.146:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-INVALID-1.json stress_testing"
+      }
+    ]
+  }
+}
