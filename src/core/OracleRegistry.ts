@@ -25,7 +25,7 @@ const LOCAL_ORACLE_MAPPING = {
   'BPMN': { deployer: 6, sender: 7 },
   'RISK': { deployer: 8, sender: 9 },
   'BASEL3': { deployer: 8, sender: 9 }, // Reuse RISK accounts for Basel3
-  'BL_REGISTRY': { deployer: 6, sender: 7 } // Reuse BPMN accounts
+  'BSDI': { deployer: 6, sender: 7 } // Reuse BPMN accounts
 } as const;
 
 // ===== ENVIRONMENT-SPECIFIC ACCOUNT MANAGEMENT =====
@@ -167,6 +167,7 @@ let gleifDeployerAccount: any, gleifDeployerKey: any, gleifSenderAccount: any, g
 let eximDeployerAccount: any, eximDeployerKey: any, eximSenderAccount: any, eximSenderKey: any;
 let businessProverDeployerAccount: any, businessProverDeployerKey: any, businessProverSenderAccount: any, businessProverSenderKey: any;
 let riskProverDeployerAccount: any, riskProverDeployerKey: any, riskProverSenderAccount: any, riskProverSenderKey: any;
+let businessStdIntegrityDeployerAccount: any, businessStdIntegrityDeployerKey: any, businessStdIntegritySenderAccount: any, businessStdIntegritySenderKey: any;
 
 function initializeLegacyAccounts() {
   if (legacyAccountsInitialized) return;
@@ -217,6 +218,15 @@ function initializeLegacyAccounts() {
     riskProverSenderKey = BlockchainManager.isLocalBlockchainReady() ? 
       BlockchainManager.getTestAccount(LOCAL_ORACLE_MAPPING.RISK.sender).key : 
       getLocalOraclePrivateKey('RISK');
+
+    businessStdIntegrityDeployerAccount = getLocalOraclePublicKey('BSDI');
+    businessStdIntegrityDeployerKey = getLocalOraclePrivateKey('BSDI');
+    businessStdIntegritySenderAccount = BlockchainManager.isLocalBlockchainReady() ? 
+      BlockchainManager.getTestAccount(LOCAL_ORACLE_MAPPING.BSDI.sender) : 
+      getLocalOraclePublicKey('BSDI');
+    businessStdIntegritySenderKey = BlockchainManager.isLocalBlockchainReady() ? 
+      BlockchainManager.getTestAccount(LOCAL_ORACLE_MAPPING.BSDI.sender).key : 
+      getLocalOraclePrivateKey('BSDI');
   } else {
     // For TESTNET/MAINNET, use network oracle keys
     try {
@@ -244,6 +254,11 @@ function initializeLegacyAccounts() {
       riskProverDeployerKey = getNetworkOraclePrivateKey('RISK');
       riskProverSenderAccount = getNetworkOraclePublicKey('RISK');
       riskProverSenderKey = getNetworkOraclePrivateKey('RISK');
+      
+      businessStdIntegrityDeployerAccount = getNetworkOraclePublicKey('BSDI');
+      businessStdIntegrityDeployerKey = getNetworkOraclePrivateKey('BSDI');
+      businessStdIntegritySenderAccount = getNetworkOraclePublicKey('BSDI');
+      businessStdIntegritySenderKey = getNetworkOraclePrivateKey('BSDI');
     } catch (error) {
       console.warn(`Failed to initialize network oracle accounts: ${error}`);
       // Set to null for safety
@@ -252,6 +267,7 @@ function initializeLegacyAccounts() {
       eximDeployerAccount = null; eximDeployerKey = null; eximSenderAccount = null; eximSenderKey = null;
       businessProverDeployerAccount = null; businessProverDeployerKey = null; businessProverSenderAccount = null; businessProverSenderKey = null;
       riskProverDeployerAccount = null; riskProverDeployerKey = null; riskProverSenderAccount = null; riskProverSenderKey = null;
+      businessStdIntegrityDeployerAccount = null; businessStdIntegrityDeployerKey = null; businessStdIntegritySenderAccount = null; businessStdIntegritySenderKey = null;
     }
   }
   
@@ -279,6 +295,10 @@ function getRiskProverdeployerAccount() { initializeLegacyAccounts(); return ris
 function getRiskProverdeployerKey() { initializeLegacyAccounts(); return riskProverDeployerKey; }
 function getRiskProversenderAccount() { initializeLegacyAccounts(); return riskProverSenderAccount; }
 function getRiskProversenderKey() { initializeLegacyAccounts(); return riskProverSenderKey; }
+function getBusinessStdIntegritydeployerAccount() { initializeLegacyAccounts(); return businessStdIntegrityDeployerAccount; }
+function getBusinessStdIntegritydeployerKey() { initializeLegacyAccounts(); return businessStdIntegrityDeployerKey; }
+function getBusinessStdIntegritysenderAccount() { initializeLegacyAccounts(); return businessStdIntegritySenderAccount; }
+function getBusinessStdIntegritysenderKey() { initializeLegacyAccounts(); return businessStdIntegritySenderKey; }
 
 // Export with original names for backward compatibility (removed to avoid conflicts)
 export { getGLEIFdeployerAccount as GLEIFdeployerAccount, getGLEIFdeployerKey as GLEIFdeployerKey };
@@ -289,7 +309,8 @@ export { getBusinessProverdeployerAccount as BusinessProverdeployerAccount, getB
 export { getBusinessProversenderAccount as BusinessProversenderAccount, getBusinessProversenderKey as BusinessProversenderKey };
 export { getRiskProverdeployerAccount as RiskProverdeployerAccount, getRiskProverdeployerKey as RiskProverdeployerKey };
 export { getRiskProversenderAccount as RiskProversenderAccount, getRiskProversenderKey as RiskProversenderKey };
-
+export { getBusinessStdIntegritydeployerAccount as BusinessStdIntegritydeployerAccount, getBusinessStdIntegritydeployerKey as BusinessStdIntegritydeployerKey };
+export { getBusinessStdIntegritysenderAccount as BusinessStdIntegritysenderAccount, getBusinessStdIntegritysenderKey as BusinessStdIntegritysenderKey };
 // ===== SEMANTIC ORACLE ACCESS FUNCTIONS =====
 // These provide type-safe, semantic access to oracle accounts
 

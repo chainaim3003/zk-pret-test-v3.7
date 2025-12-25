@@ -173,14 +173,14 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
     
     // Import the actual ZK programs
     const { CorporateRegistrationOptim } = await import('../../../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js');
-    const { EXIMOptim } = await import('../../../../zk-programs/compliance/EXIMZKProgram.js');
+    const { EXIM } = await import('../../../../zk-programs/compliance/EXIMZKProgram.js');
     const { GLEIFOptim } = await import('../../../../zk-programs/compliance/GLEIFZKProgram.js');
     
     // Compile individual service programs first
     await CorporateRegistrationOptim.compile();
     console.log('✅ CorporateRegistrationOptim ZK program compiled');
     
-    await EXIMOptim.compile();
+    await EXIM.compile();
     console.log('✅ EXIMOptim ZK program compiled');
     
     await GLEIFOptim.compile();

@@ -94,7 +94,7 @@ function isDataAsOnCurrentOrPast(dataAsOn: CircuitString, currentTimestamp: UInt
 }
 
 // =================================== ZK Program ===================================
-export const EXIMOptim = ZkProgram({
+export const EXIM = ZkProgram({
    name: 'EXIMOptim',
    publicInput: UInt64, // Current timestamp
    publicOutput: EXIMOptimPublicOutput,
@@ -219,4 +219,4 @@ export const EXIMOptim = ZkProgram({
    },
 });
 
-export class EXIMOptimProof extends ZkProgram.Proof(EXIMOptim) {}
+export class EXIMOptimProof extends ZkProgram.Proof(EXIM) {}

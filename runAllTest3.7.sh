@@ -60,7 +60,7 @@ node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngr
 
 
 # Business Standard Data Integrity
-node ./build/impl/network/verifier/BusinessStdIntegrityNetworkMultiVerifier.js BOL ./src/data/scf/BILLOFLADING/BOL-VALID-1.json
+node ./build/impl/network/verifier/BusinessStdIntegrityNetworkMultiVerifier.js group1 BOL ./src/data/scf/BILLOFLADING/BOL-VALID-1.json
 
 
 # Risk Liquidity

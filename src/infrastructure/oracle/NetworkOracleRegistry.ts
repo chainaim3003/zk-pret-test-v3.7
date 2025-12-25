@@ -170,7 +170,7 @@ export class NetworkOracleRegistry implements OracleRegistry {
       }
 
       // Verify we have the essential accounts
-      const essentialRoles = ['MCA', 'GLEIF', 'EXIM', 'BPMN', 'RISK', 'BL_REGISTRY'];
+      const essentialRoles = ['MCA', 'GLEIF', 'EXIM', 'BPMN', 'RISK', 'BSDI'];
       const loadedRoles = Array.from(this.deployerRegistry.keys());
       const missingRoles = essentialRoles.filter(role => !loadedRoles.includes(role));
       

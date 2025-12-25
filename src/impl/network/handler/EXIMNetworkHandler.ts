@@ -37,12 +37,12 @@ import {
 
 // === ZK PROGRAMS AND CONTRACTS ===
 import { 
-  EXIMOptim, 
+  EXIM, 
   EXIMOptimComplianceData, 
   EXIMMerkleWitness8 
 } from '../../../zk-programs/compliance/EXIMZKProgram.js';
 import { 
-  EXIMOptimMultiCompanySmartContract, 
+  EXIMMultiSmartContract, 
   COMPANY_MERKLE_HEIGHT, 
   CompanyMerkleWitness, 
   EXIMCompanyRecord ,
@@ -229,17 +229,17 @@ export class EXIMNetworkHandler {
 
       // === ZK COMPILATION ===
       console.log('\n📝 Compiling ZK programs...');
-      await EXIMOptim.compile();
+      await EXIM.compile();
       console.log('✅ EXIMOptim ZK program compiled');
 
-      const { verificationKey } = await EXIMOptimMultiCompanySmartContract.compile();
+      const { verificationKey } = await EXIMMultiSmartContract.compile();
       console.log('✅ EXIMOptimMultiCompanySmartContract compiled');
 
       // === SMART CONTRACT LOOKUP ===
       console.log('\n🚀 Looking up smart contract address...');
       
       // Load contract address from environment configuration
-      const contractAddress = await environmentManager.getDeployedContractAddress('EXIMOptimMultiCompanySmartContract');
+      const contractAddress = await environmentManager.getDeployedContractAddress('EXIMMultiSmartContract');
       
       if (!contractAddress) {
         throw new Error(`EXIMOptimMultiCompanySmartContract address not found in ${currentEnv.toLowerCase()}.json deployments.contracts section`);
@@ -254,7 +254,7 @@ export class EXIMNetworkHandler {
       console.log(`📋 Source: config/environments/${currentEnv.toLowerCase()}.json`);
       
       const zkAppAddress = PublicKey.fromBase58(contractAddress);
-      const zkApp = new EXIMOptimMultiCompanySmartContract(zkAppAddress);
+      const zkApp = new EXIMMultiSmartContract(zkAppAddress);
       
       // Set fee for transactions
       const fee = this.getTransactionFee(currentEnvironment);
@@ -344,7 +344,7 @@ export class EXIMNetworkHandler {
 
           // === GENERATE ZK PROOF ===
           console.log(`\n⚡ Generating ZK proof for ${companyName}...`);
-          const proof = await EXIMOptim.proveOptimizedCompliance(
+          const proof = await EXIM.proveOptimizedCompliance(
             currentTimestamp,
             complianceData,
             oracleSignature,

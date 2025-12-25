@@ -162,7 +162,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
     enabled: true
   },
   {
-    name: 'BusinessStdIntegrityOptimMerkleSmartContract',
+    name: 'BusinessStdIntegrityMerkleSmartContract',
     category: CompilationCategory.SMART_CONTRACT,
     loader: () => import('../../contracts/process/BusinessStdIntegrityMerkleSmartContract.js'),
     dependencies: ['BusinessStdIntegrityOptimMerkle'],

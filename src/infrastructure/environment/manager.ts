@@ -198,7 +198,7 @@ export class EnvironmentManager {
           'EXIM': { publicKey: '', privateKey: '', role: 'EXIM_ORACLE' },
           'BPMN': { publicKey: '', privateKey: '', role: 'BUSINESS_PROCESS_ORACLE' },
           'RISK': { publicKey: '', privateKey: '', role: 'RISK_ORACLE' },
-          'BL_REGISTRY': { publicKey: '', privateKey: '', role: 'BILL_OF_LADING_ORACLE' }
+          'BSDI': { publicKey: '', privateKey: '', role: 'BSDI_ORACLE' }
         }
       };
     } else {
@@ -210,7 +210,7 @@ export class EnvironmentManager {
           'EXIM': { publicKey: process.env.EXIM_PUBLIC_KEY || '', role: 'EXIM_ORACLE' },
           'BPMN': { publicKey: process.env.BPMN_PUBLIC_KEY || '', role: 'BUSINESS_PROCESS_ORACLE' },
           'RISK': { publicKey: process.env.RISK_PUBLIC_KEY || '', role: 'RISK_ORACLE' },
-          'BL_REGISTRY': { publicKey: process.env.BL_REGISTRY_PUBLIC_KEY || '', role: 'BILL_OF_LADING_ORACLE' }
+          'BSDI': { publicKey: process.env.BSDI_PUBLIC_KEY || '', role: 'BSDI_ORACLE' }
         }
       };
     }

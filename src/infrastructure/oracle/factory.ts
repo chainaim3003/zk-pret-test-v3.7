@@ -322,7 +322,13 @@ export async function getCompatibilityAccounts() {
     BusinessProverdeployerKey: currentRegistry.getDeployerKey('BPMN'),
     BusinessProversenderAccount: currentRegistry.getSenderAccount('BPMN'),
     BusinessProversenderKey: currentRegistry.getSenderKey('BPMN'),
-
+    
+    // Business Process accounts
+    BusinessStdIntegritydeployerAccount: currentRegistry.getDeployerAccount('BSDI'),
+    BusinessStdIntegritydeployerKey: currentRegistry.getDeployerKey('BSDI'),
+    BusinessStdIntegritysenderAccount: currentRegistry.getSenderAccount('BSDI'),
+    BusinessStdIntegritysenderKey: currentRegistry.getSenderKey('BSDI'),
+    
     // Risk accounts
     RiskProverdeployerAccount: currentRegistry.getDeployerAccount('RISK'),
     RiskProverdeployerKey: currentRegistry.getDeployerKey('RISK'),

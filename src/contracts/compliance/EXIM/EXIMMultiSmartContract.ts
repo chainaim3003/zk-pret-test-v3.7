@@ -92,7 +92,7 @@ export class CompanyKey extends Struct({
  * - getGlobalComplianceStats() - Portfolio-level metrics
  * - resetRegistry() - Reset entire registry
  */
-export class EXIMOptimMultiCompanySmartContract extends SmartContract {
+export class EXIMMultiSmartContract extends SmartContract {
    // =================================== Multi-Company State (8 fields maximum) ===================================
    @state(Field) companiesRootHash = State<Field>();         // Merkle root of all companies
    @state(Field) totalCompaniesTracked = State<Field>();     // Total number of companies tracked

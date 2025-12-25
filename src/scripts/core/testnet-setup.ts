@@ -31,7 +31,7 @@ function generateTestnetAccounts(): any[] {
     console.log('🔑 Generating testnet wallet accounts...');
     
     const accounts = [];
-    const roles = ['MCA', 'GLEIF', 'EXIM', 'BPMN', 'RISK', 'BL_REGISTRY'];
+    const roles = ['MCA', 'GLEIF', 'EXIM', 'BPMN', 'RISK', 'BSDI'];
     
     for (let i = 0; i < roles.length; i++) {
         const role = roles[i];

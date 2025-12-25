@@ -15,14 +15,14 @@ dotenv.config();
 
 import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, MerkleTree, UInt64, Bool } from 'o1js';
 import { 
-  EXIMOptim, 
+  EXIM, 
   EXIMOptimComplianceData, 
   EXIMMerkleWitness8, 
   EXIM_MERKLE_TREE_HEIGHT,
   EXIM_FIELD_INDICES 
 } from '../../../zk-programs/compliance/EXIMZKProgram.js';
 import { 
-  EXIMOptimMultiCompanySmartContract,
+  EXIMMultiSmartContract,
   EXIMCompanyRecord,
   CompanyMerkleWitness,
   COMPANY_MERKLE_HEIGHT
@@ -71,17 +71,17 @@ export async function getEXIMLocalMultiVerifierUtils(
 
     // =================================== Compile Programs ===================================
     console.log('\n📝 Compiling ZK programs...');
-    await EXIMOptim.compile();
+    await EXIM.compile();
     console.log('✅ EXIMOptim ZK program compiled');
     
-    const { verificationKey } = await EXIMOptimMultiCompanySmartContract.compile();
-    console.log('✅ EXIMOptimMultiCompanySmartContract compiled');
+    const { verificationKey } = await EXIMMultiSmartContract.compile();
+    console.log('✅ EXIMMultiSmartContract compiled');
 
     // =================================== Deploy Multi-Company Smart Contract ===================================
     console.log('\n🚀 Deploying multi-company smart contract...');
     const zkAppKey = PrivateKey.random();
     const zkAppAddress = zkAppKey.toPublicKey();
-    const zkApp = new EXIMOptimMultiCompanySmartContract(zkAppAddress);
+    const zkApp = new EXIMMultiSmartContract(zkAppAddress);
 
     const deployTxn = await Mina.transaction(
       deployerAccount,
@@ -170,7 +170,7 @@ export async function getEXIMLocalMultiVerifierUtils(
         console.log(`📋 PAN: ${complianceData.pan.toString()}`);
         console.log(`📍 IEC Status: ${complianceData.iecStatus.toString()}`);
 
-        const proof = await EXIMOptim.proveOptimizedCompliance(
+        const proof = await EXIM.proveOptimizedCompliance(
           currentTimestamp,
           complianceData,
           oracleSignature,

@@ -3,7 +3,7 @@ dotenv.config();
 
 import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, MerkleTree, UInt64 } from 'o1js';
 import { 
-  EXIMOptim, 
+  EXIM, 
   EXIMOptimComplianceData, 
   EXIMMerkleWitness8, 
   EXIM_MERKLE_TREE_HEIGHT,
@@ -153,7 +153,7 @@ export async function getEXIMOptimSingleCompanyVerificationWithSignUtils(company
 
     // =================================== Compile Programs ===================================
     console.log('\n📝 Compiling ZK programs...');
-    await EXIMOptim.compile();
+    await EXIM.compile();
     console.log('✅ EXIMOptim ZK program compiled');
     
     const { verificationKey } = await EXIMOptimSingleCompanySmartContract.compile();
@@ -234,7 +234,7 @@ export async function getEXIMOptimSingleCompanyVerificationWithSignUtils(company
     console.log(`📋 PAN: ${complianceData.pan.toString()}`);
     console.log(`📍 IEC Status: ${complianceData.iecStatus.toString()}`);
 
-    const proof = await EXIMOptim.proveOptimizedCompliance(
+    const proof = await EXIM.proveOptimizedCompliance(
       currentTimestamp,
       complianceData,
       oracleSignature,
