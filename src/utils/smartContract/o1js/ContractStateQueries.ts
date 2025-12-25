@@ -5,7 +5,7 @@
  */
 
 import { Field, CircuitString, Poseidon, MerkleMap, MerkleMapWitness, fetchAccount, PublicKey } from 'o1js';
-import { GLEIFOptimMultiCompanySmartContract, GLEIFCompanyRecord } from '../../../contracts/complaince/GLEIF/GLEIFMultiSmartContract.js';
+import { GLEIFOptimMultiCompanySmartContract, GLEIFCompanyRecord } from '../../../contracts/compliance/GLEIF/GLEIFMultiSmartContract.js';
 
 export interface CompanyExistenceResult {
   exists: boolean;

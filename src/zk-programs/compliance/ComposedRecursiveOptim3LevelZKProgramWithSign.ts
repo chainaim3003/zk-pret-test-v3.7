@@ -4,7 +4,7 @@ import {
 } from 'o1js';
 
 // Import individual OptimProof types (these would need to be created)
-import { CorporateRegistrationOptimProof, CorporateRegistrationOptimPublicOutput } from '../../zk-programs/compliance/CorporateRegistrationZKProgram.js';
+import { CorporateRegistrationOptimProof, CorporateRegistrationOptimPublicOutput } from './CorporateRegistrationOptimZKProgram.js';
 import { EXIMOptimProof, EXIMOptimPublicOutput } from '../../zk-programs/compliance/EXIMZKProgram.js';
 import { GLEIFOptimProof, GLEIFOptimPublicOutput } from '../../zk-programs/compliance/GLEIFZKProgram.js';
 

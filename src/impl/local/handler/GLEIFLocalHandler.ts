@@ -15,7 +15,7 @@ import {
 } from '../../../zk-programs/compliance/GLEIFZKProgram.js';
 import { 
   GLEIFOptimMultiCompanySmartContract
-} from '../../../contracts/complaince/GLEIF/GLEIFMultiSmartContract.js';
+} from '../../../contracts/compliance/GLEIF/GLEIFMultiSmartContract.js';
 import { 
   getGleifDeployerAccount, 
   getGleifSenderAccount, 

@@ -1,5 +1,5 @@
 import { Field, SmartContract, state, State, method, Bool, CircuitString, UInt64, Struct } from 'o1js';
-import { CorporateRegistrationOptimProof } from '../../../zk-programs/compliance/CorporateRegistrationZKProgram.js';
+import { CorporateRegistrationOptimProof } from '../../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js';
 
 // =================================== Verification Record Structure ===================================
 export class CorporateRegistrationVerificationRecord extends Struct({
@@ -77,7 +77,7 @@ export class CorporateRegistrationOptimSingleCompanySmartContract extends SmartC
       // Extract company identification from proof and hash them
       const proofCompanyId = publicOutput.CIN;
       const proofCompanyName = publicOutput.companyName;
-      const proofJurisdiction = CircuitString.fromString('India'); // Default for Corporate Registration
+      const proofJurisdiction = CircuitString.fromString('IN'); // Default for Corporate Registration
       
       // Create hashes for comparison and storage
       const proofCompanyIdHash = proofCompanyId.hash();

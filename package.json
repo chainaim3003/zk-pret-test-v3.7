@@ -36,7 +36,7 @@
     "test:local-single-CorpReg": "npm run build && node build/scripts/local-deploy-verify-single-CorpReg.js",
     "test:local-single-CorpReg:IN": "npm run build && node build/scripts/local-deploy-verify-single-CorpReg.js --jurisdiction=IN",
     "example-CorpReg:single-sree": "npm run build && node build/scripts/local-deploy-verify-single-CorpReg.js \"U01112TZ2022PTC039493\"",
-    "deploy": "npm run build && node build/scripts/deploy.js",
+    "deploy": "npm run build && node build/scripts/core/deploy.js",
     "check-status": "npm run build && node build/scripts/check-deployment-status.js",
     "deploy:testnet-GLEIF": "npm run deploy testnet-gleif-dev",
     "deploy:testnet-GLEIF-stable": "npm run deploy testnet-gleif",

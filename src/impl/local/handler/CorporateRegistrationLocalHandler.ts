@@ -12,18 +12,20 @@ import { ComplianceVerificationBase } from '../../base/ComplianceVerificationBas
 // Corporate Registration specific imports
 import { 
   CorporateRegistrationOptim, 
-  CorporateRegistrationOptimComplianceData 
-} from '../../../zk-programs/compliance/CorporateRegistrationZKProgram.js';
+  CorporateRegistrationOptimComplianceData,
+  CORP_REG_FIELD_INDICES 
+} from '../../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js';
 
 import { 
-  CorporateRegistrationOptimMultiCompanySmartContract
-} from '../../../contracts/complaince/CorpReg/CorporateRegistrationMultiSmartContract.js';
+  CorporateRegistrationMultiSmartContract
+} from '../../../contracts/compliance/CorpReg/CorporateRegistrationMultiSmartContract.js';
 
 // API utilities
 import { 
   fetchCorporateRegistrationDataWithFullLogging, 
   analyzeCorporateRegistrationCompliance,
-  createComprehensiveCorporateRegistrationMerkleTree
+  createComprehensiveCorporateRegistrationMerkleTree,
+  
 } from '../../../utils/domain/compliance/CorpReg/CorporateRegistrationCoreAPIUtils.js';
 
 // LOCAL blockchain setup
@@ -68,12 +70,12 @@ export async function getCorporateRegistrationLocalMultiVerifierUtils(
     // Compile ZK program and contract
     console.log('\n⚡ Compiling ZK program and smart contract...');
     await CorporateRegistrationOptim.compile();
-    await CorporateRegistrationOptimMultiCompanySmartContract.compile();
+    await CorporateRegistrationMultiSmartContract.compile();
     console.log('✅ Compilation completed');
     
     // Deploy contract locally
     const zkAppKey = PrivateKey.random();
-    const zkApp = new CorporateRegistrationOptimMultiCompanySmartContract(zkAppKey.toPublicKey());
+    const zkApp = new CorporateRegistrationMultiSmartContract(zkAppKey.toPublicKey());
     
     console.log('\n🚀 Deploying smart contract locally...');
     const deployTxn = await Mina.transaction(deployerAccount, async () => {
@@ -142,7 +144,14 @@ async function processCompanyLocally(
     
     // Step 3: Create Merkle tree
     console.log('🌳 Creating Merkle tree...');
-    const { tree, extractedData } = createComprehensiveCorporateRegistrationMerkleTree(apiResponse);
+    const { tree, extractedData } = createComprehensiveCorporateRegistrationMerkleTree(
+      apiResponse,
+      MerkleTree,
+      CircuitString,
+      8,
+     CORP_REG_FIELD_INDICES
+
+    );
     console.log(`✅ Merkle tree created with ${extractedData.fieldCount} fields`);
     
     // Step 4: Generate ZK proof

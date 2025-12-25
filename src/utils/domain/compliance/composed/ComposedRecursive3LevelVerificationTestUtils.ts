@@ -3,7 +3,7 @@ dotenv.config();
 
 import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, UInt64, Bool, MerkleTree, MerkleWitness } from 'o1js';
 import { ComposedOptimCompliance, ComposedOptimProof, ComposedOptimCompliancePublicOutput } from '../../../../zk-programs/compliance/ComposedRecursiveOptim3LevelZKProgramWithSign.js';
-import { ComposedOptimComplianceVerifierSC } from '../../../../contracts/complaince/composed/ComposedRecursiveOptim3LevelSmartContractWithSign.js';
+import { ComposedOptimComplianceVerifierSC } from '../../../../contracts/compliance/composed/ComposedRecursiveOptim3LevelSmartContractWithSign.js';
 
 // Direct ZK Program compilation (Fix 1: Remove ZKCompilationManager)
 
@@ -172,7 +172,7 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
     console.log('🔧 Compiling individual service ZK programs...');
     
     // Import the actual ZK programs
-    const { CorporateRegistrationOptim } = await import('../../../../zk-programs/compliance/CorporateRegistrationZKProgram.js');
+    const { CorporateRegistrationOptim } = await import('../../../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js');
     const { EXIMOptim } = await import('../../../../zk-programs/compliance/EXIMZKProgram.js');
     const { GLEIFOptim } = await import('../../../../zk-programs/compliance/GLEIFZKProgram.js');
     

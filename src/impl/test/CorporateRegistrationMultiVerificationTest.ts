@@ -1,20 +1,20 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, MerkleTree, UInt64, Bool } from 'o1js';
+import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, MerkleTree, UInt64, Bool, MerkleMap, MerkleMapWitness } from 'o1js';
 import { 
   CorporateRegistrationOptim, 
   CorporateRegistrationOptimComplianceData, 
   CorporateRegistrationMerkleWitness8, 
   CORP_REG_MERKLE_TREE_HEIGHT,
   CORP_REG_FIELD_INDICES 
-} from '../../zk-programs/compliance/CorporateRegistrationZKProgram.js';
+} from '../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js';
 import { 
-  CorporateRegistrationOptimMultiCompanySmartContract,
+  CorporateRegistrationMultiSmartContract,
   CorporateRegistrationCompanyRecord,
   CompanyMerkleWitness,
   COMPANY_MERKLE_HEIGHT
-} from '../../contracts/complaince/CorpReg/CorporateRegistrationMultiSmartContract.js';
+} from '../../contracts/compliance/CorpReg/CorporateRegistrationMultiSmartContract.js';
 import { MCAdeployerAccount, MCAsenderAccount, MCAdeployerKey, MCAsenderKey, getPrivateKeyFor } from '../../core/OracleRegistry.js';
 import { 
   fetchCorporateRegistrationDataWithFullLogging, 
@@ -26,15 +26,17 @@ import {
 // =================================== Multi-Company Registry Management ===================================
 
 /**
- * Company registry for managing multiple companies in merkle tree
+ * Company registry for managing multiple companies in merkle tree and merkle map
  */
 class CompanyRegistry {
   private companiesTree: MerkleTree;
+  private companiesMap: MerkleMap; // Added MerkleMap for witness generation
   private companyRecords: Map<string, { record: CorporateRegistrationCompanyRecord; index: number }>;
   private nextIndex: number;
 
   constructor() {
     this.companiesTree = new MerkleTree(COMPANY_MERKLE_HEIGHT);
+    this.companiesMap = new MerkleMap(); // Initialize MerkleMap
     this.companyRecords = new Map();
     this.nextIndex = 0;
   }
@@ -63,12 +65,21 @@ class CompanyRegistry {
       companyRecord.isCompliant.toField(),
       companyRecord.complianceScore,
       companyRecord.totalVerifications,
+      companyRecord.passedVerifications,
+      companyRecord.failedVerifications,
+      companyRecord.consecutiveFailures,
       companyRecord.lastVerificationTime.value,
-      companyRecord.firstVerificationTime.value
+      companyRecord.firstVerificationTime.value,
+      companyRecord.lastPassTime.value,
+      companyRecord.lastFailTime.value
     ]);
     
     // Update merkle tree
     this.companiesTree.setLeaf(BigInt(index), companyHash);
+    
+    // Update merkle map - create company key from CIN and name hashes
+    const companyKey = Poseidon.hash([companyRecord.cinHash, companyRecord.companyNameHash]);
+    this.companiesMap.set(companyKey, companyHash);
     
     // Store company record
     this.companyRecords.set(cin, { record: companyRecord, index });
@@ -88,6 +99,22 @@ class CompanyRegistry {
   }
 
   /**
+   * Get MerkleMapWitness for a company
+   */
+  getCompanyMapWitness(cin: string): MerkleMapWitness | null {
+    const entry = this.companyRecords.get(cin);
+    if (!entry) return null;
+    
+    // Create the same company key used in addOrUpdateCompany
+    const companyKey = Poseidon.hash([
+      entry.record.cinHash, 
+      entry.record.companyNameHash
+    ]);
+    
+    return this.companiesMap.getWitness(companyKey);
+  }
+
+  /**
    * Get company record
    */
   getCompanyRecord(cin: string): CorporateRegistrationCompanyRecord | null {
@@ -100,6 +127,13 @@ class CompanyRegistry {
    */
   getRoot(): Field {
     return this.companiesTree.getRoot();
+  }
+
+  /**
+   * Get merkle map root
+   */
+  getMapRoot(): Field {
+    return this.companiesMap.getRoot();
   }
 
   /**
@@ -217,10 +251,10 @@ function createOptimizedCorporateRegistrationComplianceData(
   merkleRoot: Field
 ): CorporateRegistrationOptimComplianceData {
   return new CorporateRegistrationOptimComplianceData({
-    companyName: extractedData.companyName || CircuitString.fromString(''),
-    CIN: extractedData.CIN || CircuitString.fromString(''),
-    registrationNumber: extractedData.registrationNumber || CircuitString.fromString(''),
-    companyStatus: extractedData.companyStatus || CircuitString.fromString(''),
+    name: extractedData.companyName || CircuitString.fromString(''),
+    cin: extractedData.CIN || CircuitString.fromString(''),
+    registration_number: extractedData.registrationNumber || CircuitString.fromString(''),
+    company_status: extractedData.companyStatus || CircuitString.fromString(''),
     dateOfIncorporation: extractedData.dateOfIncorporation || CircuitString.fromString(''),
     category: extractedData.category || CircuitString.fromString(''),
     classOfCompany: extractedData.classOfCompany || CircuitString.fromString(''),
@@ -243,14 +277,19 @@ function createCompanyRecord(
   const currentTime = verificationTimestamp;
   
   return new CorporateRegistrationCompanyRecord({
-    cinHash: complianceData.CIN.hash(),
-    companyNameHash: complianceData.companyName.hash(),
-    jurisdictionHash: CircuitString.fromString('India').hash(), // Corporate Registration is India-specific
+    cinHash: complianceData.cin.hash(),
+    companyNameHash: complianceData.name.hash(),
+    jurisdictionHash: CircuitString.fromString('IN').hash(), // Corporate Registration is India-specific
     isCompliant: isCompliant,
     complianceScore: isCompliant.toField().mul(100), // 100 if compliant, 0 if not
     totalVerifications: Field(1), // This will be updated if company already exists
+    passedVerifications: isCompliant.toField(), // 1 if passed, 0 if failed
+    failedVerifications: isCompliant.not().toField(), // 1 if failed, 0 if passed
+    consecutiveFailures: isCompliant.not().toField(), // 1 if this verification failed, 0 if passed
     lastVerificationTime: currentTime,
-    firstVerificationTime: currentTime // Set to current time for new verifications
+    firstVerificationTime: currentTime, // Set to current time for new verifications
+    lastPassTime: isCompliant.toBoolean() ? currentTime : UInt64.from(0), // Set if passed
+    lastFailTime: !isCompliant.toBoolean() ? currentTime : UInt64.from(0) // Set if failed
   });
 }
 
@@ -281,14 +320,14 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
     await CorporateRegistrationOptim.compile();
     console.log('✅ CorporateRegistrationOptim ZK program compiled');
     
-    const { verificationKey } = await CorporateRegistrationOptimMultiCompanySmartContract.compile();
+    const { verificationKey } = await CorporateRegistrationMultiSmartContract.compile();
     console.log('✅ CorporateRegistrationOptimMultiCompanySmartContract compiled');
 
     // =================================== Deploy Multi-Company Smart Contract ===================================
     console.log('\n🚀 Deploying multi-company smart contract...');
     const zkAppKey = PrivateKey.random();
     const zkAppAddress = zkAppKey.toPublicKey();
-    const zkApp = new CorporateRegistrationOptimMultiCompanySmartContract(zkAppAddress);
+    const zkApp = new CorporateRegistrationMultiSmartContract(zkAppAddress);
 
     const deployTxn = await Mina.transaction(
       deployerAccount,
@@ -364,10 +403,10 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
 
         // =================================== Generate ZK Proof ===================================
         console.log(`\n⚡ Generating ZK proof for ${companyName}...`);
-        console.log(`📊 Proving compliance for: ${complianceData.companyName.toString()}`);
-        console.log(`🆔 CIN: ${complianceData.CIN.toString()}`);
-        console.log(`📋 Registration Number: ${complianceData.registrationNumber.toString()}`);
-        console.log(`📍 Company Status: ${complianceData.companyStatus.toString()}`);
+        console.log(`📊 Proving compliance for: ${complianceData.name.toString()}`);
+        console.log(`🆔 CIN: ${complianceData.cin.toString()}`);
+        console.log(`📋 Registration Number: ${complianceData.registration_number.toString()}`);
+        console.log(`📍 Company Status: ${complianceData.company_status.toString()}`);
 
         const proof = await CorporateRegistrationOptim.proveOptimizedCompliance(
           currentTimestamp,
@@ -391,7 +430,7 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
         console.log(`\n📋 Adding ${companyName} to company registry...`);
         const isCompliant = proof.publicOutput.isCorpRegCompliant;
         const companyRecord = createCompanyRecord(complianceData, isCompliant, currentTimestamp, true);
-        const cin = complianceData.CIN.toString();
+        const cin = complianceData.cin.toString();
         
         // Add company to registry and get witness
         const companyWitness = companyRegistry.addOrUpdateCompany(cin, companyRecord);
@@ -405,13 +444,23 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
         const stateBefore = zkApp.getRegistryInfo();
         console.log(`  Total Companies: ${stateBefore.totalCompaniesTracked.toString()}`);
         console.log(`  Compliant Companies: ${stateBefore.compliantCompaniesCount.toString()}`);
-        console.log(`  Global Compliance Score: ${stateBefore.globalComplianceScore.toString()}`);
+        // Calculate compliance percentage in JavaScript (ZK best practice)
+        const compliancePercentageBefore = stateBefore.totalCompaniesTracked.toString() !== '0' 
+          ? (Number(stateBefore.compliantCompaniesCount.toString()) / Number(stateBefore.totalCompaniesTracked.toString()) * 100).toFixed(2)
+          : '0';
+        console.log(`  Global Compliance Percentage: ${compliancePercentageBefore}%`);
         console.log(`  Total Verifications: ${stateBefore.totalVerificationsGlobal.toString()}`);
+
+        // Get MerkleMapWitness for the company
+        const companiesMapWitness = companyRegistry.getCompanyMapWitness(cin);
+        if (!companiesMapWitness) {
+          throw new Error(`Failed to get MerkleMapWitness for company: ${cin}`);
+        }
 
         const txn = await Mina.transaction(
           senderAccount,
           async () => {
-            await zkApp.verifyOptimizedComplianceWithProof(proof, companyWitness, companyRecord);
+            await zkApp.verifyOptimizedComplianceWithProof(proof, companyWitness, companyRecord, companiesMapWitness);
           }
         );
 
@@ -425,7 +474,11 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
         const stateAfter = zkApp.getRegistryInfo();
         console.log(`  Total Companies: ${stateAfter.totalCompaniesTracked.toString()}`);
         console.log(`  Compliant Companies: ${stateAfter.compliantCompaniesCount.toString()}`);
-        console.log(`  Global Compliance Score: ${stateAfter.globalComplianceScore.toString()}`);
+        // Calculate compliance percentage in JavaScript (ZK best practice)
+        const compliancePercentageAfter = stateAfter.totalCompaniesTracked.toString() !== '0'
+          ? (Number(stateAfter.compliantCompaniesCount.toString()) / Number(stateAfter.totalCompaniesTracked.toString()) * 100).toFixed(2)
+          : '0';
+        console.log(`  Global Compliance Percentage: ${compliancePercentageAfter}%`);
         console.log(`  Total Verifications: ${stateAfter.totalVerificationsGlobal.toString()}`);
         console.log(`  Companies Root Hash: ${stateAfter.companiesRootHash.toString()}`);
         console.log(`  Registry Version: ${stateAfter.registryVersion.toString()}`);
@@ -433,7 +486,7 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
         // Store verification result
         verificationResults.push({
           companyName,
-          cin: complianceData.CIN.toString(),
+          cin: complianceData.cin.toString(),
           isCompliant: isCompliant.toJSON(),
           complianceScore: complianceAnalysis.complianceScore,
           verificationTime: currentTimestamp.toString()
@@ -463,7 +516,11 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
     const finalStats = zkApp.getGlobalComplianceStats();
     console.log(`  • Total Companies Tracked: ${finalStats.totalCompanies.toString()}`);
     console.log(`  • Compliant Companies: ${finalStats.compliantCompanies.toString()}`);
-    console.log(`  • Compliance Percentage: ${finalStats.compliancePercentage.toString()}%`);
+    // Calculate compliance percentage in JavaScript (ZK best practice)
+    const finalCompliancePercentage = finalStats.totalCompanies.toString() !== '0'
+      ? (Number(finalStats.compliantCompanies.toString()) / Number(finalStats.totalCompanies.toString()) * 100).toFixed(2)
+      : '0';
+    console.log(`  • Compliance Percentage: ${finalCompliancePercentage}%`);
     console.log(`  • Total Verifications: ${finalStats.totalVerifications.toString()}`);
     if (finalStats.lastVerificationTime.toString() !== '0') {
       console.log(`  • Last Verification: ${new Date(Number(finalStats.lastVerificationTime.toString())).toISOString()}`);
@@ -510,7 +567,7 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
  */
 export async function verifySingleCompanyInMultiContract(
   companyName: string,
-  zkApp: CorporateRegistrationOptimMultiCompanySmartContract,
+  zkApp: CorporateRegistrationMultiSmartContract,
   companyRegistry: CompanyRegistry
 ) {
   console.log(`\n🔍 Verifying single company: ${companyName}`);

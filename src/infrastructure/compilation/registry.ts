@@ -17,7 +17,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'CorporateRegistrationOptim',
     category: CompilationCategory.ZK_PROGRAM,
-    loader: () => import('../../zk-programs/compliance/CorporateRegistrationZKProgram.js'),
+    loader: () => import('../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js'),
     compilationOrder: 1,
     enabled: true
   },
@@ -100,7 +100,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'GLEIFOptimMultiCompanySmartContract',
     category: CompilationCategory.SMART_CONTRACT,
-    loader: () => import('../../contracts/complaince/GLEIF/GLEIFMultiSmartContract.js'),
+    loader: () => import('../../contracts/compliance/GLEIF/GLEIFMultiSmartContract.js'),
     dependencies: ['GLEIFOptim'],
     compilationOrder: 2,
     enabled: true
@@ -108,7 +108,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'CorporateRegistrationOptimSmartContract',
     category: CompilationCategory.SMART_CONTRACT,
-    loader: () => import('../../contracts/complaince/CorpReg/CorporateRegistrationOptimSmartContract.js'),
+    loader: () => import('../../contracts/compliance/CorpReg/CorporateRegistrationOptimSmartContract.js'),
     dependencies: ['CorporateRegistrationOptim'],
     compilationOrder: 2,
     enabled: true
@@ -116,7 +116,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'CorporateRegistrationOptimMultiCompanySmartContract',
     category: CompilationCategory.SMART_CONTRACT,
-    loader: () => import('../../contracts/complaince/CorpReg/CorporateRegistrationMultiSmartContract.js'),
+    loader: () => import('../../contracts/compliance/CorpReg/CorporateRegistrationMultiSmartContract.js'),
     dependencies: ['CorporateRegistrationOptim'],
     compilationOrder: 2,
     enabled: true
@@ -124,7 +124,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'CorporateRegistrationOptimSingleCompanySmartContract',
     category: CompilationCategory.SMART_CONTRACT,
-    loader: () => import('../../contracts/complaince/CorpReg/CorporateRegistrationSmartContract.js'),
+    loader: () => import('../../contracts/compliance/CorpReg/CorporateRegistrationSmartContract.js'),
     dependencies: ['CorporateRegistrationOptim'],
     compilationOrder: 2,
     enabled: true
@@ -132,7 +132,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'EXIMOptimSmartContract',
     category: CompilationCategory.SMART_CONTRACT,
-    loader: () => import('../../contracts/complaince/EXIM/EXIMSmartContract.js'),
+    loader: () => import('../../contracts/compliance/EXIM/EXIMSmartContract.js'),
     dependencies: ['EXIMOptim'],
     compilationOrder: 2,
     enabled: true
@@ -140,7 +140,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'EXIMOptimMultiCompanySmartContract',
     category: CompilationCategory.SMART_CONTRACT,
-    loader: () => import('../../contracts/complaince/EXIM/EXIMMultiSmartContract.js'),
+    loader: () => import('../../contracts/compliance/EXIM/EXIMMultiSmartContract.js'),
     dependencies: ['EXIMOptim'],
     compilationOrder: 2,
     enabled: true
@@ -148,7 +148,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'EXIMOptimSingleCompanySmartContract',
     category: CompilationCategory.SMART_CONTRACT,
-    loader: () => import('../../contracts/complaince/EXIM/EXIMSingleSmartContract.js'),
+    loader: () => import('../../contracts/compliance/EXIM/EXIMSingleSmartContract.js'),
     dependencies: ['EXIMOptim'],
     compilationOrder: 2,
     enabled: true

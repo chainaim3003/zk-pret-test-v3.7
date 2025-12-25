@@ -21,7 +21,7 @@ import {
 import { 
   EXIMCompanyRecord,
   COMPANY_MERKLE_HEIGHT
-} from '../../../../contracts/complaince/EXIM/EXIMMultiSmartContract.js';
+} from '../../../../contracts/compliance/EXIM/EXIMMultiSmartContract.js';
 
 // =================================== EXIM API INTERFACES ===================================
 

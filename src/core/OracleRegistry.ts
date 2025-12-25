@@ -309,6 +309,10 @@ export function getCorpRegDeployerAccount(): PublicKey {
   return getPublicKeyFor('MCA');
 }
 
+export function getCorpRegSignerAccount(): PublicKey {
+  return getPublicKeyFor('MCA');
+}
+
 export function getCorpRegSenderAccount(): PublicKey {
   return getPublicKeyFor('MCA');
 }

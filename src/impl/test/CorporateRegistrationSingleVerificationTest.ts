@@ -8,8 +8,8 @@ import {
   CorporateRegistrationMerkleWitness8, 
   CORP_REG_MERKLE_TREE_HEIGHT,
   CORP_REG_FIELD_INDICES 
-} from '../../zk-programs/compliance/CorporateRegistrationZKProgram.js';
-import { CorporateRegistrationOptimSingleCompanySmartContract } from '../../contracts/complaince/CorpReg/CorporateRegistrationSmartContract.js';
+} from '../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js';
+import { CorporateRegistrationOptimSingleCompanySmartContract } from '../../contracts/compliance/CorpReg/CorporateRegistrationSmartContract.js';
 import { MCAdeployerAccount, MCAsenderAccount, MCAdeployerKey, MCAsenderKey, getPrivateKeyFor } from '../../core/OracleRegistry.js';
 import { 
   fetchCorporateRegistrationDataWithFullLogging, 
@@ -118,10 +118,10 @@ function createOptimizedComplianceData(
   merkleRoot: Field
 ): CorporateRegistrationOptimComplianceData {
   return new CorporateRegistrationOptimComplianceData({
-    companyName: extractedData.companyName || CircuitString.fromString(''),
-    CIN: extractedData.CIN || CircuitString.fromString(''),
-    registrationNumber: extractedData.registrationNumber || CircuitString.fromString(''),
-    companyStatus: extractedData.companyStatus || CircuitString.fromString(''),
+    name: extractedData.companyName || CircuitString.fromString(''),
+    cin: extractedData.CIN || CircuitString.fromString(''),
+    registration_number: extractedData.registrationNumber || CircuitString.fromString(''),
+    company_status: extractedData.companyStatus || CircuitString.fromString(''),
     dateOfIncorporation: extractedData.dateOfIncorporation || CircuitString.fromString(''),
     category: extractedData.category || CircuitString.fromString(''),
     classOfCompany: extractedData.classOfCompany || CircuitString.fromString(''),
@@ -233,10 +233,10 @@ export async function getCorporateRegistrationOptimSingleCompanyVerificationWith
 
     // =================================== Generate ZK Proof ===================================
     console.log('\n⚡ Generating ZK proof...');
-    console.log(`📊 Proving compliance for: ${complianceData.companyName.toString()}`);
-    console.log(`🆔 CIN: ${complianceData.CIN.toString()}`);
-    console.log(`📋 Registration Number: ${complianceData.registrationNumber.toString()}`);
-    console.log(`📈 Company Status: ${complianceData.companyStatus.toString()}`);
+    console.log(`📊 Proving compliance for: ${complianceData.name.toString()}`);
+    console.log(`🆔 CIN: ${complianceData.cin.toString()}`);
+    console.log(`📋 Registration Number: ${complianceData.registration_number.toString()}`);
+    console.log(`📈 Company Status: ${complianceData.company_status.toString()}`);
 
     const proof = await CorporateRegistrationOptim.proveOptimizedCompliance(
       currentTimestamp,
@@ -313,10 +313,10 @@ export async function getCorporateRegistrationOptimSingleCompanyVerificationWith
     console.log('\n🎉 Corporate Registration Single Company Verification Completed Successfully!');
     console.log('📈 Summary:');
     console.log(`  • Contract Type: Single Company (Enhanced)`);
-    console.log(`  • Company: ${complianceData.companyName.toString()}`);
-    console.log(`  • CIN: ${complianceData.CIN.toString()}`);
-    console.log(`  • Registration Number: ${complianceData.registrationNumber.toString()}`);
-    console.log(`  • Company Status: ${complianceData.companyStatus.toString()}`);
+    console.log(`  • Company: ${complianceData.name.toString()}`);
+    console.log(`  • CIN: ${complianceData.cin.toString()}`);
+    console.log(`  • Registration Number: ${complianceData.registration_number.toString()}`);
+    console.log(`  • Company Status: ${complianceData.company_status.toString()}`);
     console.log(`  • CorpReg Compliant: ${zkApp.corpRegCompliant.get().toJSON()}`);
     console.log(`  • Compliance Score: ${complianceAnalysis.complianceScore}%`);
     console.log(`  • Contract Verification Count: ${zkApp.totalVerifications.get().toJSON()}`);

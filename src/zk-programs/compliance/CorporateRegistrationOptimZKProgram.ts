@@ -9,7 +9,7 @@ import {
    UInt64,
    Bool,
 } from 'o1js';
-import { getPublicKeyFor } from '../../core/OracleRegistry.js';
+import { getCorpRegSignerAccount } from '../../core/OracleRegistry.js';
 
 // =================================== Merkle Tree Configuration ===================================
 export const CORP_REG_MERKLE_TREE_HEIGHT = 8; // Height 8 for up to 256 fields
@@ -102,17 +102,17 @@ export const CORP_REG_FIELD_INDICES = {
   updatedAt: 121,
   dataSource: 122,
   apiVersion: 123,
-};
+}; 
 
 // =================================== Optimized Corporate Registration Data Structure ===================================
 export class CorporateRegistrationOptimComplianceData extends Struct({
    // Core compliance identifiers
-   companyName: CircuitString,
-   CIN: CircuitString,
-   registrationNumber: CircuitString,
+   name: CircuitString,
+   cin: CircuitString,
+   registration_number: CircuitString,
    
    // Compliance critical fields
-   companyStatus: CircuitString,          // ACTIVE/INACTIVE
+   company_status: CircuitString,          // ACTIVE/INACTIVE
    dateOfIncorporation: CircuitString,    // For temporal validation
    
    // Business classification
@@ -170,6 +170,7 @@ export const CorporateRegistrationOptim = ZkProgram({
    methods: {
       proveOptimizedCompliance: {
          privateInputs: [
+
             CorporateRegistrationOptimComplianceData,
             Signature,              // Oracle signature on merkle root
             
@@ -204,31 +205,30 @@ export const CorporateRegistrationOptim = ZkProgram({
 
             // =================================== Oracle Signature Verification ===================================
             // Verify oracle signed the merkle root
-            const registryPublicKey = getPublicKeyFor('MCA');
+            const registryPublicKey = getCorpRegSignerAccount();
             const isValidSignature = oracleSignature.verify(registryPublicKey, [complianceData.merkle_root]);
             isValidSignature.assertTrue();
-
             // =================================== Merkle Inclusion Proofs ===================================
             // Verify each compliance field exists in the merkle tree
             const merkleRoot = complianceData.merkle_root;
             
             // Verify company name in merkle tree
-            const companyNameHash = complianceData.companyName.hash();
+            const companyNameHash = complianceData.name.hash();
             const companyNameRoot = companyNameWitness.calculateRoot(companyNameHash);
             companyNameRoot.assertEquals(merkleRoot);
             
             // Verify CIN in merkle tree
-            const cinHash = complianceData.CIN.hash();
+            const cinHash = complianceData.cin.hash();
             const cinRoot = cinWitness.calculateRoot(cinHash);
             cinRoot.assertEquals(merkleRoot);
             
             // Verify registration number in merkle tree
-            const registrationNumberHash = complianceData.registrationNumber.hash();
+            const registrationNumberHash = complianceData.registration_number.hash();
             const registrationNumberRoot = registrationNumberWitness.calculateRoot(registrationNumberHash);
             registrationNumberRoot.assertEquals(merkleRoot);
             
             // Verify company status in merkle tree
-            const companyStatusHash = complianceData.companyStatus.hash();
+            const companyStatusHash = complianceData.company_status.hash();
             const companyStatusRoot = companyStatusWitness.calculateRoot(companyStatusHash);
             companyStatusRoot.assertEquals(merkleRoot);
             
@@ -264,13 +264,13 @@ export const CorporateRegistrationOptim = ZkProgram({
 
             // =================================== Business Logic Compliance Checks ===================================
             // 1. CIN is not empty
-            const isCINValid = isFieldNotEmpty(complianceData.CIN);
+            const isCINValid = isFieldNotEmpty(complianceData.cin);
             
             // 2. Registration number is not empty
-            const isRegistrationNumberValid = isFieldNotEmpty(complianceData.registrationNumber);
+            const isRegistrationNumberValid = isFieldNotEmpty(complianceData.registration_number);
             
             // 3. Company name is not empty
-            const isCompanyNameValid = isFieldNotEmpty(complianceData.companyName);
+            const isCompanyNameValid = isFieldNotEmpty(complianceData.name);
             
             // 4. Date of incorporation is valid and <= current datetime
             const isDateOfIncorporationValid = isDateOfIncorporationValidCheck(
@@ -279,7 +279,7 @@ export const CorporateRegistrationOptim = ZkProgram({
             );
             
             // 5. Company status is "Active" (case insensitive)
-            const isStatusActive = isCompanyStatusActive(complianceData.companyStatus);
+            const isStatusActive = isCompanyStatusActive(complianceData.company_status);
             
             // =================================== Overall Compliance Determination ===================================
             // Company is compliant if ALL conditions are met
@@ -291,8 +291,8 @@ export const CorporateRegistrationOptim = ZkProgram({
 
             // =================================== Return Public Output ===================================
             return new CorporateRegistrationOptimPublicOutput({
-               companyName: complianceData.companyName,
-               CIN: complianceData.CIN,
+               companyName: complianceData.name,
+               CIN: complianceData.cin,
                isCorpRegCompliant,
                verification_timestamp: currentTimestamp,
                merkle_root: complianceData.merkle_root,

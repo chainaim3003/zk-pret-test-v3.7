@@ -1,5 +1,5 @@
 import { Field, SmartContract, state, State, method, Bool, CircuitString, UInt64 } from 'o1js';
-import { CorporateRegistrationOptimProof } from '../../../zk-programs/compliance/CorporateRegistrationZKProgram.js';
+import { CorporateRegistrationOptimProof } from '../../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js';
 
 export class CorporateRegistrationOptimSmartContract extends SmartContract {
    // =================================== State Variables ===================================

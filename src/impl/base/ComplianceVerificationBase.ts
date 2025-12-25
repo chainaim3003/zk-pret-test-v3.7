@@ -8,7 +8,7 @@ import { Field, Bool, UInt64, PublicKey } from 'o1js';
 import { 
   RegistryInfo,
   GlobalComplianceStats
-} from '../../contracts/complaince/GLEIF/GLEIFMultiSmartContract.js';
+} from '../../contracts/compliance/GLEIF/GLEIFMultiSmartContract.js';
 import {
   GLEIFOptimComplianceData
 } from '../../zk-programs/compliance/GLEIFZKProgram.js';

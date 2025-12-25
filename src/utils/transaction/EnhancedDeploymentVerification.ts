@@ -8,7 +8,7 @@
 
 import { Field, Mina, PublicKey, UInt64, PrivateKey, Bool, AccountUpdate, fetchAccount } from 'o1js';
 import { TransactionMonitor, TransactionResult } from './TransactionMonitor.js';
-import { GLEIFOptimMultiCompanySmartContract } from '../../contracts/complaince/GLEIF/GLEIFMultiSmartContract.js';
+import { GLEIFOptimMultiCompanySmartContract } from '../../contracts/compliance/GLEIF/GLEIFMultiSmartContract.js';
 
 export interface DeploymentResult {
   success: boolean;

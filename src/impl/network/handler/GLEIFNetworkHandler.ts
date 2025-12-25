@@ -50,7 +50,7 @@ import {
   CompanyMerkleWitness,
   CompanyKey,
   GLEIFCompanyRecord
-} from '../../../contracts/complaince/GLEIF/GLEIFMultiSmartContract.js';
+} from '../../../contracts/compliance/GLEIF/GLEIFMultiSmartContract.js';
 
 // === INFRASTRUCTURE IMPORTS ===
 import { 

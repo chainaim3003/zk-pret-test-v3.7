@@ -47,7 +47,7 @@ import {
   CompanyMerkleWitness, 
   EXIMCompanyRecord ,
   CompanyKey
-} from '../../../contracts/complaince/EXIM/EXIMMultiSmartContract.js';
+} from '../../../contracts/compliance/EXIM/EXIMMultiSmartContract.js';
 
 // === INFRASTRUCTURE IMPORTS ===
 import { 

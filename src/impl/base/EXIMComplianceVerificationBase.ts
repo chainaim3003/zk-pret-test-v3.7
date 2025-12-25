@@ -8,7 +8,7 @@ import { Field, Bool, UInt64, PublicKey } from 'o1js';
 import { 
   RegistryInfo,
   GlobalComplianceStats
-} from '../../contracts/complaince/EXIM/EXIMMultiSmartContract.js';
+} from '../../contracts/compliance/EXIM/EXIMMultiSmartContract.js';
 import {
   EXIMOptimComplianceData
 } from '../../zk-programs/compliance/EXIMZKProgram.js';
