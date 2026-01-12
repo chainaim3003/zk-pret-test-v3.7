@@ -1,0 +1,44 @@
+[
+  {
+    "riskFactorID": "ust5Y_falling",
+    "marketObjectCode": "ust5Y",
+    "base": 1,
+    "time": "2014-01-01T00:00:00",
+    "value": 0.04
+  },
+  {
+    "riskFactorID": "ust5Y_falling",
+    "marketObjectCode": "ust5Y",
+    "base": 1,
+    "time": "2015-03-01T00:00:00",
+    "value": 0.039
+  },
+  {
+    "riskFactorID": "ust5Y_falling",
+    "marketObjectCode": "ust5Y",
+    "base": 1,
+    "time": "2016-06-01T00:00:00",
+    "value": 0.038
+  },
+  {
+    "riskFactorID": "ust5Y_falling",
+    "marketObjectCode": "ust5Y",
+    "base": 1,
+    "time": "2017-12-01T00:00:00",
+    "value": 0.037
+  },
+  {
+    "riskFactorID": "ust5Y_falling",
+    "marketObjectCode": "ust5Y",
+    "base": 1,
+    "time": "2018-02-01T00:00:00",
+    "value": 0.036
+  },
+  {
+    "riskFactorID": "ust5Y_falling",
+    "marketObjectCode": "ust5Y",
+    "base": 1,
+    "time": "2019-05-01T00:00:00",
+    "value": 0.035
+  }
+]

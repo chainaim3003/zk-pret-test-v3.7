@@ -3,7 +3,7 @@ dotenv.config();
 
 import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, UInt64, Bool, MerkleTree, MerkleWitness } from 'o1js';
 import { ComposedOptimCompliance, ComposedOptimProof, ComposedOptimCompliancePublicOutput } from '../../../../zk-programs/compliance/ComposedRecursiveOptim3LevelZKProgramWithSign.js';
-import { ComposedOptimComplianceVerifierSC } from '../../../../contracts/compliance/composed/ComposedRecursiveOptim3LevelSmartContractWithSign.js';
+import { ComposedOptimComplianceVerifierSC,ComposedProofMerkleWitness } from '../../../../contracts/compliance/composed/ComposedRecursiveOptim3LevelSmartContractWithSign.js';
 
 // Direct ZK Program compilation (Fix 1: Remove ZKCompilationManager)
 
@@ -339,6 +339,7 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
         console.log(`\\n📋 Storing composed proof with lineage for ${companyName}...`);
         const { index, witness } = proofRegistry.storeProofWithLineage(proofLineage);
 
+        const composedWitness = new ComposedProofMerkleWitness(witness);
         // =================================== Verify on Smart Contract ===================================
         console.log(`\\n🔍 Verifying composed proof on smart contract for ${companyName}...`);
         
@@ -348,8 +349,8 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
           async () => {
             await zkApp.verifyAndStoreComposedProof(
               finalComposedProof as any,
-              CircuitString.fromString(companyIdentifier),
-              witness
+              CircuitString.fromString(companyCIN),
+              composedWitness
             );
           }
         );

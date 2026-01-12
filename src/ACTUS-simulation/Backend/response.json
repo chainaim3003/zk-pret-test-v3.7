@@ -1,0 +1,25 @@
+[
+  {
+    "_id": "67b4e0b5a8e95119a371ef66",
+    "contractType": "ANN",
+    "contractID": "ann01",
+    "contractRole": "RPA",
+    "contractDealDate": "2012-12-28T00:00:00",
+    "initialExchangeDate": "2013-01-01T00:00:00",
+    "statusDate": "2012-12-30T00:00:00",
+    "notionalPrincipal": 5000,
+    "cycleAnchorDateOfPrincipalRedemption": "2013-02-01T00:00:00",
+    "nextPrincipalRedemptionPayment": 434.866594118346,
+    "dayCountConvention": "A365",
+    "nominalInterestRate": 0.08,
+    "currency": "USD",
+    "cycleOfPrincipalRedemption": "P1ML0",
+    "maturityDate": "2014-01-01T00:00:00",
+    "rateMultiplier": 1,
+    "rateSpread": 0,
+    "fixingDays": "P0D",
+    "cycleAnchorDateOfInterestPayment": "2013-02-01T00:00:00",
+    "cycleOfInterestPayment": "P1ML0",
+    "notionalVolume": 0
+  }
+]

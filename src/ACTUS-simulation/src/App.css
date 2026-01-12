@@ -1,0 +1,572 @@
+/* General Styles */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 0;
+  color: white;
+  background-image: url("image.jpg");
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+.header {
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  margin-right: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.auth-btn,
+.connect-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-btn:hover,
+.connect-btn:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Main Content Styles */
+.main-content {
+  padding: 2rem;
+  flex: 1;
+}
+
+.title {
+  color: white;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+form {
+  width: 50%; /* Adjust the form's width as needed */
+}
+
+.form-container {
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  margin-left: 25%;
+}
+
+
+.form-left,
+.form-right {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.form-left{
+  background: none;
+}
+
+/* Dropdown and Input Styles */
+.dropdown-section1,
+.dropdown-section2 {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dropdown-item {
+  flex: 1;
+}
+
+.dropdown-item label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.dropdown {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.dropdown:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.input-section {
+  margin-bottom: 1.5rem;
+}
+
+.input-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.input-section input[type="text"] {
+  width: 98%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.input-section input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Button Styles */
+.button-section {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.button-section button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.button-section button:hover {
+  background-color: #0056b3;
+}
+
+/* More Specific Button Styling */
+.upload-section button,
+.json-section button,
+.form-section button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem; /* Add some space above the button */
+}
+
+.upload-section button:hover,
+.json-section button:hover,
+.form-section button:hover {
+  background-color: #0056b3;
+}
+
+/* Upload Section Styles */
+.upload-section {
+  text-align: center;
+}
+
+.dropzone {
+  padding: 2rem;
+  border: 2px dashed #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin-bottom: 1rem;
+  color:black;
+}
+
+.dropzone.active {
+  background-color: #e9f5ff;
+  border-color: #007bff;
+}
+
+.upload-section aside {
+  margin-top: 1rem;
+  text-align: left;
+  color:black;
+}
+
+.upload-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.upload-section li {
+  margin-bottom: 0.5rem;
+}
+
+/* JSON Section Styles */
+.json-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.json-input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+  margin-bottom: 1rem;
+  min-height: 150px;
+  resize: vertical;
+}
+
+.json-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.json-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.generated-json {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.generated-json {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color:black;
+}
+
+.error {
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+/* App.css */
+
+/* Form Section Styles */
+.form-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-row label {
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.form-row input[type="text"] {
+  width: 90%; /* Adjusted width to account for padding/border */  
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.form-row input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.data-point {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.data-point label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.data-point input[type="text"] {
+  width: 97%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  background-color: white;
+  transition: border-color 0.3s ease;
+}
+
+.data-point input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.data-point button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.data-point button:hover {
+  background-color: #c82333;
+}
+
+/* Input component css */
+.input-wrapper {
+  margin-bottom: 15px;
+}
+
+.input-wrapper label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.input-wrapper input {
+  width: 98%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Footer Styles */
+.footer {
+  padding: 1rem 2rem;
+  text-align: center;
+  color: #555;
+}
+
+/* General Button Style */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit-button {
+  background-color: #28a745;
+  margin-top: 20px;
+  width:50%;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.success-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.is-invalid {
+  border-color: red;
+}
+
+.invalid-feedback {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 2px;
+}
+
+.feedback-message {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.json-section .error {
+  color: red;
+  margin-top: 5px;
+}
+
+.auth-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+  margin-top: 10%;
+  margin-left:40%;  
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.auth-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.auth-form {
+  width:100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auth-form label{
+  color:#333 ;
+}
+
+.auth-input {
+  width: 70%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-input:focus {
+  border-color: #6a11cb;
+  box-shadow: 0 0 8px rgba(106, 17, 203, 0.2);
+}
+
+.auth-button {
+  width:40%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+
+.auth-button.primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.auth-button.primary:hover {
+  background-color: #2575fc;
+  transform: translateY(-2px);
+}
+
+.auth-button.switch {
+  color: #fff;
+  background-color: #007bff;
+}
+
+.auth-button.switch:hover {
+  background-color: #2575fc;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.auth-button.google {
+  display: inline-flex; /* Use flexbox for alignment */
+  align-items: center; /* Vertically center the icon */
+  justify-content: center; /* Horizontally center the icon */
+  vertical-align: middle; /* Fallback for older browsers */
+}
+
+.auth-button.google:hover {
+  transform: translateY(-2px);
+}
+
+.auth-error {
+  color: #ff4d4d;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% {
+      transform: translateX(0);
+  }
+  25% {
+      transform: translateX(-10px);
+  }
+  50% {
+      transform: translateX(10px);
+  }
+  75% {
+      transform: translateX(-10px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .auth-container {
+      padding: 1.5rem;
+  }
+
+  .auth-title {
+      font-size: 1.75rem;
+  }
+
+  .auth-input, .auth-button {
+      font-size: 0.9rem;
+  }
+}
