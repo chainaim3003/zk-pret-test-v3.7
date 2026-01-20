@@ -186,7 +186,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
     enabled: true
   },
   {
-    name: 'RiskLiquidityStableCoinOptimMerkleSmartContract',
+    name: 'RiskLiquidityStableCoinSmartContract',
     category: CompilationCategory.SMART_CONTRACT,
     loader: () => import('../../contracts/risk/RiskLiquidityStableCoinSmartContract.js'),
     dependencies: ['RiskLiquidityStableCoinOptimMerkle'],

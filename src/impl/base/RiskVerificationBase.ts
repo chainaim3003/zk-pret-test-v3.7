@@ -26,6 +26,13 @@ export interface RiskVerificationResult {
         beforeVerification: number;
         afterVerification: number;
     };
+    transactionDetails?: {
+        hash: string;
+        explorerUrl: string;
+        contractAddress: string;
+        network: string;
+        totalVerifications: number;
+    };
     riskMetrics: any;
     summary: string;
 }

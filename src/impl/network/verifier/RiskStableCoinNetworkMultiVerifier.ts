@@ -1,27 +1,39 @@
 /**
  * CLI Entry Point for StableCoin Risk Network Verification
- * PRESERVES EXACT SAME CLI PATTERN as working implementation
+ * ENHANCED WITH GROUP STRUCTURE (Following BusinessProcess Pattern)
  * 
- * Uses new organized RiskStableCoinNetworkHandler while maintaining
- * 100% backward compatibility with existing CLI interface
+ * Uses new organized RiskStableCoinNetworkHandler with proper group tracking
  */
 
+import { CircuitString } from 'o1js';
 import { RiskStableCoinNetworkHandler } from '../handler/RiskStableCoinNetworkHandler.js';
 
 async function main() {
-    console.log('🚀 StableCoin Risk Network Verification (Organized Architecture)');
+    console.log('🚀 StableCoin Risk Network Verification (Group Structure Enabled)');
 
-    // PRESERVE EXACT PARAMETER PARSING from working implementation
-    const backingRatioThreshold = parseFloat(process.argv[2]) || 100;
-    const actusUrl = process.argv[3] || 'http://localhost:8083/eventsBatch';
-    const portfolioPath = process.argv[4];
-    const executionMode = process.argv[5] || 'ultra_strict';
-    const jurisdictionCLI = process.argv[6];
+    // === GROUP STRUCTURE PATTERN (Following BusinessProcess) ===
+    // Parse command line arguments in same order as BusinessProcess
+    const args = process.argv.slice(2);
+    
+    // Extract parameters following BusinessProcess pattern
+    const riskGroupID = args[0];                                    
+    const backingRatioThreshold = parseFloat(args[1]) || 100;      
+    const actusUrl = args[2] || 'http://localhost:8083/eventsBatch'; 
+    const portfolioPath = args[3];                                  
+    const executionMode = args[4] || 'ultra_strict';               
+    const jurisdictionCLI = args[5];                                
 
-    // PRESERVE EXACT VALIDATION LOGIC from working implementation
+    // === VALIDATION (Following BusinessProcess Pattern) ===
+    if (!riskGroupID) {
+        console.error('❌ Error: Risk Group ID is required (first argument)');
+        console.log('Usage: node RiskStableCoinNetworkMultiVerifier.js <RISK_GROUP_ID> <backingRatio> <actusUrl> <portfolioPath> <executionMode> <jurisdiction>');
+        console.log('Example: node RiskStableCoinNetworkMultiVerifier.js RISK_GROUP_001 100 http://localhost:8083/eventsBatch ./portfolio.json ultra_strict US');
+        process.exit(1);
+    }
+
     if (!portfolioPath) {
         console.error('❌ Error: Portfolio path is required');
-        console.log('Usage: node RiskStableCoinNetworkMultiVerifier.js <backingRatio> <actusUrl> <portfolioPath> <executionMode> <jurisdiction>');
+        console.log('Usage: node RiskStableCoinNetworkMultiVerifier.js <RISK_GROUP_ID> <backingRatio> <actusUrl> <portfolioPath> <executionMode> <jurisdiction>');
         process.exit(1);
     }
 
@@ -29,6 +41,10 @@ async function main() {
         console.error('❌ Error: Invalid jurisdiction. Must be US or EU.');
         process.exit(1);
     }
+    
+    // Convert Risk Group ID to CircuitString (Following BusinessProcess Pattern)
+    const riskGroupIDCircuit = CircuitString.fromString(riskGroupID);
+    console.log(`🏷️  Risk Group ID: ${riskGroupID}`);
 
     // PRESERVE EXACT PORTFOLIO LOADING from working implementation
     let finalContractPortfolio: any[] | string = portfolioPath;
@@ -92,11 +108,17 @@ async function main() {
     console.log(`📁 Portfolio Path: ${portfolioPath}`);
     console.log(`🚀 Execution Mode: ${executionMode}`);
     console.log(`🏛️ Jurisdiction: ${jurisdictionCLI}`);
-
+    
+    // === GROUP STRUCTURE VERIFICATION (Following BusinessProcess Pattern) ===
+    console.log('\n🏗️  Starting Risk Group Verification...');
+    console.log(`📊 Risk Group ID: ${riskGroupID}`);
+    
+    // Single process verification
     try {
-        // Execute using new organized handler - SAME FUNCTIONALITY
+        // Execute using new organized handler with GROUP STRUCTURE
         const handler = new RiskStableCoinNetworkHandler();
         const result = await handler.executeStableCoinRiskVerification({
+            riskGroupID: riskGroupIDCircuit,  // Pass as CircuitString 
             backingRatioThreshold,
             liquidityRatioThreshold,
             concentrationLimit: finalConcentrationLimit,
@@ -110,13 +132,11 @@ async function main() {
         // PRESERVE EXACT OUTPUT HANDLING from working implementation
         if (result.success) {
             console.log('\n🎉 StableCoin Risk verification completed successfully!');
-            console.log(`📊 Status Change: ${result.contractStatus.beforeVerification} → ${result.contractStatus.afterVerification}`);
             
-            if (result.contractStatus.afterVerification === 90) {
-                console.log('✅ STABLECOIN COMPLIANCE ACHIEVED - Contract status changed to 90');
-            } else {
-                console.log('❌ STABLECOIN COMPLIANCE NOT ACHIEVED - Contract status remains at 100');
-            }
+            // === GROUP VERIFICATION SUMMARY (Following BusinessProcess Pattern) ===
+            console.log(`\n🏗️  Risk Group Verification Summary:`);
+            console.log(`   📊 Risk Group ID: ${riskGroupID}`);
+            console.log(`   ✅ Group Structure: Enabled`);
         } else {
             console.log('\n❌ StableCoin Risk verification failed');
             process.exit(1);

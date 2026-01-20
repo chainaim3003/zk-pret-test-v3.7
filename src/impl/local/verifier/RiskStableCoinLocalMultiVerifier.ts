@@ -1,27 +1,40 @@
 /**
  * CLI Entry Point for StableCoin Risk LOCAL Verification
- * PRESERVES EXACT SAME CLI PATTERN as working implementation
+ * ENHANCED WITH GROUP STRUCTURE (Following Network Pattern)
  * Optimized for local development/testing with faster execution
  * 
  * Uses new organized RiskStableCoinLocalHandler for improved development workflow
  */
 
+import { CircuitString } from 'o1js';
 import { RiskStableCoinLocalHandler } from '../handler/RiskStableCoinLocalHandler.js';
 
 async function main() {
-    console.log('🏠 StableCoin Risk LOCAL Verification (Organized Architecture - Development Optimized)');
+    console.log('🏠 StableCoin Risk LOCAL Verification (Group Structure Enabled - Development Optimized)');
 
-    // PRESERVE EXACT PARAMETER PARSING from working implementation
-    const backingRatioThreshold = parseFloat(process.argv[2]) || 100;
-    const actusUrl = process.argv[3] || 'http://localhost:8083/eventsBatch';
-    const portfolioPath = process.argv[4];
-    const executionMode = process.argv[5] || 'ultra_strict';
-    const jurisdictionCLI = process.argv[6];
+    // === GROUP STRUCTURE PATTERN (Following Network Implementation) ===
+    // Parse command line arguments in same order as Network
+    const args = process.argv.slice(2);
+    
+    // Extract parameters following Network pattern
+    const riskGroupID = args[0];                                    
+    const backingRatioThreshold = parseFloat(args[1]) || 100;      
+    const actusUrl = args[2] || 'http://localhost:8083/eventsBatch'; 
+    const portfolioPath = args[3];                                  
+    const executionMode = args[4] || 'ultra_strict';               
+    const jurisdictionCLI = args[5];                                
 
-    // PRESERVE EXACT VALIDATION LOGIC from working implementation
+    // === VALIDATION (Following Network Pattern) ===
+    if (!riskGroupID) {
+        console.error('❌ Error: Risk Group ID is required (first argument)');
+        console.log('Usage: node RiskStableCoinLocalMultiVerifier.js <RISK_GROUP_ID> <backingRatio> <actusUrl> <portfolioPath> <executionMode> <jurisdiction>');
+        console.log('Example: node RiskStableCoinLocalMultiVerifier.js RISK_GROUP_001 100 http://localhost:8083/eventsBatch ./portfolio.json ultra_strict US');
+        process.exit(1);
+    }
+
     if (!portfolioPath) {
         console.error('❌ Error: Portfolio path is required');
-        console.log('Usage: node RiskStableCoinLocalMultiVerifier.js <backingRatio> <actusUrl> <portfolioPath> <executionMode> <jurisdiction>');
+        console.log('Usage: node RiskStableCoinLocalMultiVerifier.js <RISK_GROUP_ID> <backingRatio> <actusUrl> <portfolioPath> <executionMode> <jurisdiction>');
         process.exit(1);
     }
 
@@ -29,6 +42,10 @@ async function main() {
         console.error('❌ Error: Invalid jurisdiction. Must be US or EU.');
         process.exit(1);
     }
+    
+    // Convert Risk Group ID to CircuitString (Following Network Pattern)
+    const riskGroupIDCircuit = CircuitString.fromString(riskGroupID);
+    console.log(`🏷️  LOCAL Risk Group ID: ${riskGroupID}`);
 
     // PRESERVE EXACT PORTFOLIO LOADING from working implementation
     let finalContractPortfolio: any[] | string = portfolioPath;
@@ -90,11 +107,16 @@ async function main() {
     console.log(`📁 LOCAL Portfolio Path: ${portfolioPath}`);
     console.log(`🚀 LOCAL Execution Mode: ${executionMode}`);
     console.log(`🏛️ LOCAL Jurisdiction: ${jurisdictionCLI}`);
+    
+    // === GROUP STRUCTURE VERIFICATION (Following Network Pattern) ===
+    console.log('\n🏗️  Starting LOCAL Risk Group Verification...');
+    console.log(`📊 Risk Group ID: ${riskGroupID}`);
 
     try {
-        // Execute using new organized LOCAL handler - SAME FUNCTIONALITY but faster
+        // Execute using new organized LOCAL handler with GROUP STRUCTURE
         const handler = new RiskStableCoinLocalHandler();
         const result = await handler.executeStableCoinRiskVerification({
+            riskGroupID: riskGroupIDCircuit,  // Pass as CircuitString
             backingRatioThreshold,
             liquidityRatioThreshold,
             concentrationLimit: finalConcentrationLimit,
@@ -108,19 +130,15 @@ async function main() {
         // PRESERVE EXACT OUTPUT HANDLING from working implementation with LOCAL prefix
         if (result.success) {
             console.log('\n🎉 LOCAL StableCoin Risk verification completed successfully!');
-            console.log(`📊 LOCAL Status Change: ${result.contractStatus.beforeVerification} → ${result.contractStatus.afterVerification}`);
             
-            if (result.contractStatus.afterVerification === 90) {
-                console.log('✅ LOCAL STABLECOIN COMPLIANCE ACHIEVED - Contract status changed to 90');
-            } else {
-                console.log('❌ LOCAL STABLECOIN COMPLIANCE NOT ACHIEVED - Contract status remains at 100');
-            }
-            
-            // LOCAL SPECIFIC: Show development benefits
-            console.log('🏠 LOCAL DEVELOPMENT BENEFITS:');
-            console.log('   ⚡ Faster execution (no network delays)');
-            console.log('   🔧 Instant blockchain setup');
-            console.log('   📊 Immediate feedback for testing');
+            // === GROUP VERIFICATION SUMMARY (Following Network Pattern) ===
+            console.log(`\n🏗️  LOCAL Risk Group Verification Summary:`);
+            console.log(`   📊 Risk Group ID: ${riskGroupID}`);
+            console.log(`   ✅ Group Structure: Enabled`);
+            console.log(`   🏠 LOCAL DEVELOPMENT BENEFITS:`);
+            console.log('      ⚡ Faster execution (no network delays)');
+            console.log('      🔧 Instant blockchain setup');
+            console.log('      📊 Immediate feedback for testing');
         } else {
             console.log('\n❌ LOCAL StableCoin Risk verification failed');
             process.exit(1);

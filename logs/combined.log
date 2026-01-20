@@ -7835,3 +7835,60 @@
 {"level":"info","message":"New WebSocket connection established","service":"zk-pret-server","timestamp":"2025-10-18T13:37:42.320Z"}
 {"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-10-18T13:37:55.018Z"}
 {"level":"info","message":"Async-only HTTP server closed","service":"zk-pret-server","timestamp":"2025-10-18T13:37:59.000Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.189Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.196Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.202Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.226Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.227Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.227Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.228Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.228Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.229Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.229Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.229Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2025-12-02T15:49:22.230Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:50:39.880Z","url":"/api/v1/health","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:50:54.239Z","url":"/api/v1/tools","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:51:07.126Z","url":"/api/v1/status","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:51:32.456Z","url":"/api/v1/jobs","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:51:56.137Z","url":"/api/v1/basel3-config-files","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"Basel III config files requested - found 5 files","service":"zk-pret-server","timestamp":"2025-12-02T15:51:56.138Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:52:08.912Z","url":"/api/v1/risk-advanced-config-files","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"Risk Advanced config files requested - found 6 files","service":"zk-pret-server","timestamp":"2025-12-02T15:52:08.913Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:52:23.029Z","url":"/api/v1/stablecoin-jurisdictions","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"Stablecoin jurisdictions requested - found 2 jurisdictions","service":"zk-pret-server","timestamp":"2025-12-02T15:52:23.031Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:52:49.715Z","url":"/api/v1/stablecoin-situations/:jurisdiction","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"Reading stablecoin config files from: C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\RISK\\StableCoin\\CONFIG\\:jurisdiction","service":"zk-pret-server","timestamp":"2025-12-02T15:52:49.716Z"}
+{"level":"warn","message":"Stablecoin config directory does not exist: C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\RISK\\StableCoin\\CONFIG\\:jurisdiction","service":"zk-pret-server","timestamp":"2025-12-02T15:52:49.716Z"}
+{"level":"info","message":"Stablecoin config files requested for :jurisdiction - found 0 files","service":"zk-pret-server","timestamp":"2025-12-02T15:52:49.717Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:53:02.208Z","url":"/api/v1/risk-advanced-execution-settings","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"Risk Advanced execution settings requested - found 4 paths","service":"zk-pret-server","timestamp":"2025-12-02T15:53:02.208Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:53:18.421Z","url":"/api/v1/process-files/SCF/actual","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"📁 Attempting to read process files from: C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\SCF\\process\\ACTUAL","service":"zk-pret-server","timestamp":"2025-12-02T15:53:18.422Z"}
+{"level":"info","message":"📄 Found 5 process files in C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\SCF\\process\\ACTUAL","service":"zk-pret-server","timestamp":"2025-12-02T15:53:18.422Z"}
+{"level":"info","message":"Process files requested for SCF/actual - found 5 files","service":"zk-pret-server","timestamp":"2025-12-02T15:53:18.423Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:53:28.142Z","url":"/api/v1/process-files/STABLECOIN/expected","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"📁 Attempting to read process files from: C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\STABLECOIN\\process\\EXPECTED","service":"zk-pret-server","timestamp":"2025-12-02T15:53:28.142Z"}
+{"level":"info","message":"📄 Found 1 process files in C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\STABLECOIN\\process\\EXPECTED","service":"zk-pret-server","timestamp":"2025-12-02T15:53:28.143Z"}
+{"level":"info","message":"Process files requested for STABLECOIN/expected - found 1 files","service":"zk-pret-server","timestamp":"2025-12-02T15:53:28.143Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:53:39.590Z","url":"/api/v1/scf-expected-files","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"📡 SCF expected files endpoint called","service":"zk-pret-server","timestamp":"2025-12-02T15:53:39.591Z"}
+{"level":"info","message":"📁 Attempting to read process files from: C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\SCF\\process\\EXPECTED","service":"zk-pret-server","timestamp":"2025-12-02T15:53:39.591Z"}
+{"level":"info","message":"📄 Found 2 process files in C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\SCF\\process\\EXPECTED","service":"zk-pret-server","timestamp":"2025-12-02T15:53:39.591Z"}
+{"level":"info","message":"✅ SCF expected files requested - found 2 files","service":"zk-pret-server","timestamp":"2025-12-02T15:53:39.592Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:53:51.037Z","url":"/api/v1/dvp-actual-files","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"📡 DVP actual files endpoint called","service":"zk-pret-server","timestamp":"2025-12-02T15:53:51.037Z"}
+{"level":"info","message":"📁 Attempting to read process files from: C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\DVP\\process\\ACTUAL","service":"zk-pret-server","timestamp":"2025-12-02T15:53:51.037Z"}
+{"level":"info","message":"📄 Found 4 process files in C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\DVP\\process\\ACTUAL","service":"zk-pret-server","timestamp":"2025-12-02T15:53:51.038Z"}
+{"level":"info","message":"✅ DVP actual files requested - found 4 files","service":"zk-pret-server","timestamp":"2025-12-02T15:53:51.038Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:54:02.289Z","url":"/api/v1/tools/gleif","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:54:12.448Z","url":"/api/v1/tools/exim","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:54:16.124Z","url":"/api/v1/tools/exim","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:54:24.155Z","url":"/api/v1/tools/corporate","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:54:37.144Z","url":"/api/v1/tools/execute","userAgent":"PostmanRuntime/7.49.1"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"zk-pret-server","timestamp":"2025-12-02T15:54:49.277Z","url":"/api/v1/stablecoin-expected-files","userAgent":"PostmanRuntime/7.49.1"}
+{"level":"info","message":"📡 STABLECOIN expected files endpoint called","service":"zk-pret-server","timestamp":"2025-12-02T15:54:49.278Z"}
+{"level":"info","message":"📁 Attempting to read process files from: C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\STABLECOIN\\process\\EXPECTED","service":"zk-pret-server","timestamp":"2025-12-02T15:54:49.279Z"}
+{"level":"info","message":"📄 Found 1 process files in C:\\THIRUMARAN\\CHAINAIM\\CHAINAIM3003\\mcp-servers\\PROJ\\zk Pret\\zk-pret-test-v3.7\\src\\data\\STABLECOIN\\process\\EXPECTED","service":"zk-pret-server","timestamp":"2025-12-02T15:54:49.280Z"}
+{"level":"info","message":"✅ STABLECOIN expected files requested - found 1 files","service":"zk-pret-server","timestamp":"2025-12-02T15:54:49.280Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","service":"zk-pret-server","timestamp":"2025-12-02T15:56:07.319Z"}

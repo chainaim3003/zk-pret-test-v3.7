@@ -104,7 +104,7 @@ export class RiskLiquidityStableCoinOptimMerklePublicOutput extends Struct({
 
 // =================================== DEBUG VERSION - Disable Merkle Verification ===================================
 
-export const RiskLiquidityStableCoinOptimMerkleZKProgramWithSign = ZkProgram({
+export const RiskLiquidityStableCoin = ZkProgram({
     name: 'RiskLiquidityStableCoinOptimMerkle',
     publicInput: UInt64,
     publicOutput: RiskLiquidityStableCoinOptimMerklePublicOutput,
@@ -336,7 +336,7 @@ export const RiskLiquidityStableCoinOptimMerkleZKProgramWithSign = ZkProgram({
     },
 });
 
-export class RiskLiquidityStableCoinOptimMerkleProof extends ZkProgram.Proof(RiskLiquidityStableCoinOptimMerkleZKProgramWithSign) {}
+export class RiskLiquidityStableCoinOptimMerkleProof extends ZkProgram.Proof(RiskLiquidityStableCoin) {}
 
 // =================================== Utility Functions ===================================
 

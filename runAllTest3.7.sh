@@ -29,7 +29,7 @@ node ./build/impl/local/verifier/BusinessStdIntegrityLocalMultiVerifier.js BOL .
 #Basel3
 node ./build/impl/local/verifier/RiskBasel3LocalMultiVerifier.js 80 80 http://34.203.247.32:8083/eventsBatch src/data/RISK/Basel3/CONFIG/basel3-VALID-1.json
 #StableCoin
-node ./build/impl/local/verifier/RiskStableCoinLocalMultiVerifier.js 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/StableCoin/CONFIG/US/StableCoin-VALID-1.json ultra_strict US
+node ./build/impl/local/verifier/RiskStableCoinLocalMultiVerifier.js RISK_GROUP_001 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/StableCoin/CONFIG/US/StableCoin-VALID-2.json ultra_strict US
 #Advanced
 node ./build/impl/local/verifier/RiskAdvancedLocalMultiVerifier.js 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json
 
@@ -67,7 +67,7 @@ node ./build/impl/network/verifier/BusinessStdIntegrityNetworkMultiVerifier.js g
 #Basel3
 node ./build/impl/network/verifier/RiskBasel3NetworkMultiVerifier.js 80 80 http://34.203.247.32:8083/eventsBatch src/data/RISK/Basel3/CONFIG/basel3-VALID-1.json
 #StableCoin
-node ./build/impl/network/verifier/RiskStableCoinNetworkMultiVerifier.js 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/StableCoin/CONFIG/US/StableCoin-VALID-1.json ultra_strict US
+node ./build/impl/network/verifier/RiskStableCoinNetworkMultiVerifier.js RISK_GROUP_001 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/StableCoin/CONFIG/US/StableCoin-VALID-1.json ultra_strict US
 #Advanced
 node ./build/impl/network/verifier/RiskAdvancedNetworkMultiVerifier.js 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json
 
@@ -79,3 +79,7 @@ node ./build/impl/network/verifier/RiskAdvancedNetworkMultiVerifier.js 100 http:
 # Composed Recursive 3 Level Verification Test
 
 node ./build/impl/test/ComposedRecursive3LevelVerificationTest.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" "U01112TZ2022PTC039493"
+
+
+#deploy risk contract
+node ./build/scripts/network/deploy-risk-stablecoin.js

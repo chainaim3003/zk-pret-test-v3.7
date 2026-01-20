@@ -98,7 +98,7 @@ Execute each of the following commands to run individual test cases:
 
 **CorporateRegistration :**
   *  TESTNET
-
+d
      ```bash
      node ./build/tests/with-sign/CorporateRegistrationVerificationTestWithSign.js "U01112TZ2022PTC039493" "TESTNET"
      ```

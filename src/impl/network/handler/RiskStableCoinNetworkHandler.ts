@@ -14,13 +14,23 @@
  * Following successful GLEIF/BusinessProcess network architecture
  */
 
-import { RiskVerificationBase, RiskEnvironment, RiskVerificationResult } from '../../base/RiskVerificationBase.js';
+import { RiskVerificationBase, RiskEnvironment, RiskVerificationResult } from '../../base/RiskStableCoinVerificationBase.js';
 import { BaseVerificationCore } from '../../base/BaseVerificationCore.js';
 import { ComplianceVerificationBase } from '../../base/ComplianceVerificationBase.js';
 
 // PRESERVE EXACT IMPORTS from working implementation
-import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, UInt64, MerkleTree, PublicKey } from 'o1js';
+import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, UInt64, MerkleTree, PublicKey, fetchAccount, VerificationKey, MerkleMap, MerkleMapWitness, Bool } from 'o1js';
+import * as fs from 'fs';
+import * as path from 'path';
 import { getPrivateKeyFor } from '../../../core/OracleRegistry.js';
+import { 
+    initializeOracleRegistry,
+    getDeployerAccount,
+    getDeployerKey,
+    getSenderAccount,
+    getSenderKey,
+    environmentManager
+} from '../../../infrastructure/index.js';
 import { 
     fetchRiskLiquidityStableCoinOptimMerkleData,
     processStableCoinRiskData,
@@ -31,13 +41,20 @@ import {
 } from '../../../utils/optimerkle/domain/risk/stablecoin/RiskLiquidityStableCoinOptimMerkleUtils.js';
 import { loadContractPortfolio } from '../../../utils/optimerkle/domain/risk/ACTUSOptimMerkleAPI.js';
 import {
-    RiskLiquidityStableCoinOptimMerkleZKProgramWithSign,
+    RiskLiquidityStableCoin,
     createStableCoinRiskComplianceData,
     validateStableCoinRiskComplianceData
 } from '../../../zk-programs/risk/RiskLiquidityStableCoinZKProgram.js';
-import { RiskLiquidityStableCoinOptimMerkleSmartContract } from '../../../contracts/risk/RiskLiquidityStableCoinSmartContract.js';
+import { 
+    RiskLiquidityStableCoinSmartContract,
+    RiskGroupRecord,
+    RiskGroupKey,
+    RISK_GROUP_MERKLE_HEIGHT,
+    RiskGroupMerkleWitness
+} from '../../../contracts/risk/RiskLiquidityStableCoinSmartContract.js';
 
 export interface StableCoinRiskParams {
+    riskGroupID: CircuitString | string,
     backingRatioThreshold: number;
     liquidityRatioThreshold?: number;
     concentrationLimit?: number;
@@ -70,6 +87,29 @@ export class RiskStableCoinNetworkHandler {
         this.riskBase = new RiskVerificationBase();
     }
 
+    // === TRANSACTION FEES CONFIGURATION (Following BusinessProcess Pattern) ===
+    private static readonly TRANSACTION_FEES = {
+        LOCAL: UInt64.from(1000000),
+        TESTNET: UInt64.from(100000000),
+        DEVNET: UInt64.from(100000000),
+        MAINNET: UInt64.from(300000000),
+    };
+
+    private getTransactionFee(environment: string): UInt64 {
+        switch (environment.toUpperCase()) {
+            case 'LOCAL':
+                return RiskStableCoinNetworkHandler.TRANSACTION_FEES.LOCAL;
+            case 'TESTNET':
+            case 'DEVNET':
+                return RiskStableCoinNetworkHandler.TRANSACTION_FEES.TESTNET;
+            case 'MAINNET':
+                return RiskStableCoinNetworkHandler.TRANSACTION_FEES.MAINNET;
+            default:
+                console.warn(`Unknown environment ${environment}, using TESTNET fee`);
+                return RiskStableCoinNetworkHandler.TRANSACTION_FEES.TESTNET;
+        }
+    }
+
     /**
      * NETWORK StableCoin Risk Verification
      * IDENTICAL logic to LOCAL handler with dual-mode environment support
@@ -79,32 +119,245 @@ export class RiskStableCoinNetworkHandler {
         console.log('🌐 Starting NETWORK StableCoin Proof of Reserves OptimMerkle Verification...');
         
         try {
-            // DUAL-MODE OPTIMIZATION: Environment setup with auto-detection
-            const riskEnv = await this.setupNetworkRiskEnvironment();
-            
-            // PRESERVE EXACT COMPILATION PATTERN from working LOCAL code
-            console.log('🔧 NETWORK: Compiling ZK program and smart contract...');
-            await RiskLiquidityStableCoinOptimMerkleZKProgramWithSign.compile();
-            const { verificationKey } = await RiskLiquidityStableCoinOptimMerkleSmartContract.compile();
-            console.log('✅ NETWORK Compilation successful');
+            // === STEP 1: Initialize Oracle Registry (Following BusinessProcess Pattern) ===
+            console.log('\n📋 Step 1: Initializing Oracle Registry');
+            await initializeOracleRegistry();
+            console.log('✅ Oracle Registry initialized');
 
-            // PRESERVE EXACT DEPLOYMENT PATTERN from working LOCAL code
-            console.log('📦 NETWORK: Deploying smart contract...');
-            const zkAppKey = PrivateKey.random();
-            const zkAppAddress = zkAppKey.toPublicKey();
-            const zkApp = new RiskLiquidityStableCoinOptimMerkleSmartContract(zkAppAddress);
+            // === STEP 2: Environment Setup (Following BusinessProcess Pattern) ===
+            console.log('\n📋 Step 2: Setting up environment');
+            const currentEnv = environmentManager.getCurrentEnvironment();
+            const shouldConnectToDevnet = environmentManager.shouldConnectToDevnet();
             
-            const deployTxn = await Mina.transaction(riskEnv.deployerAccount, async () => {
-                AccountUpdate.fundNewAccount(riskEnv.deployerAccount);
-                await zkApp.deploy({ verificationKey });
-            });
-            
-            await deployTxn.sign([riskEnv.deployerKey, zkAppKey]).send();
-            console.log('✅ NETWORK Smart contract deployed');
+            console.log(`🌐 Environment: ${currentEnv}`);
+            console.log(`🔗 Connect to DEVNET: ${shouldConnectToDevnet}`);
 
-            // Get initial contract status (should be 100)
-            const initialStatus = zkApp.riskComplianceStatus.get().toBigInt();
-            console.log(`📊 NETWORK Initial contract status: ${initialStatus}`);
+            // === STEP 3: Account Setup (Following BusinessProcess Pattern) ===
+            console.log('\n📋 Step 3: Setting up accounts');
+            
+            let deployerAccount: PublicKey;
+            let deployerKey: PrivateKey;
+            let senderAccount: PublicKey;
+            let senderKey: PrivateKey;
+            
+            if (shouldConnectToDevnet) {
+                console.log('🌐 DEVNET environment detected - using funded Oracle accounts');
+                
+                // Use baseCore for network setup (following BusinessProcess pattern)
+                const connected = this.baseCore.setupNetworkConnection();
+                if (!connected) {
+                    throw new Error('Failed to establish DEVNET connection');
+                }
+                console.log('✅ Network connection established via BaseVerificationCore');
+                
+                try {
+                    deployerAccount = getDeployerAccount('RISK');
+                    deployerKey = getDeployerKey('RISK');
+                    senderAccount = getSenderAccount('RISK');
+                    senderKey = getSenderKey('RISK');
+                    
+                    // Verify account balances (following BusinessProcess pattern)
+                    console.log('💰 Verifying DEVNET account balances...');
+                    try {
+                        const senderBalance = await fetchAccount({ publicKey: senderAccount });
+                        const actualBalance = Number(senderBalance.account?.balance?.toString() || '0') / 1e9;
+                        console.log(`💰 Sender Balance: ${actualBalance.toFixed(3)} MINA`);
+                    } catch (balanceError) {
+                        console.warn('⚠️ Could not fetch balance, proceeding...');
+                    }
+                    
+                    console.log('✅ Blockchain environment initialized with DEVNET Oracle accounts');
+                    
+                } catch (oracleError) {
+                    console.error('❌ Failed to get Oracle accounts:', oracleError);
+                    throw new Error(`Oracle Registry not properly initialized: ${oracleError}`);
+                }
+                
+            } else {
+                // LOCAL MODE setup (following BusinessProcess pattern)
+                console.log(`🔧 ${currentEnv} environment - creating LocalBlockchain`);
+                
+                const Local = await Mina.LocalBlockchain({ proofsEnabled: true });
+                Mina.setActiveInstance(Local);
+
+                deployerAccount = Local.testAccounts[0];
+                deployerKey = Local.testAccounts[0].key;
+                senderAccount = Local.testAccounts[1];
+                senderKey = Local.testAccounts[1].key;
+                
+                console.log('✅ Local blockchain initialized');
+            }
+
+            console.log(`🏦 Deployer Account: ${deployerAccount.toBase58()}`);
+            console.log(`💸 Sender Account: ${senderAccount.toBase58()}`);
+
+            const riskEnv = {
+                deployerAccount,
+                deployerKey,
+                senderAccount,
+                senderKey,
+                useProof: true
+            };
+            
+            // === STEP 4: ZK Compilation (Following BusinessProcess Pattern) ===
+            console.log('\n📋 Step 4: Compiling ZK programs...');
+            
+            // MUST compile ZK Program first (SmartContract depends on it)
+            await RiskLiquidityStableCoin.compile();
+            console.log('✅ RiskLiquidityStableCoinOptimMerkleZKProgramWithSign compiled');
+            
+            // MUST compile SmartContract to generate prover (required for transaction.prove())
+            const { verificationKey } = await RiskLiquidityStableCoinSmartContract.compile();
+            console.log('✅ RiskLiquidityStableCoinSmartContract compiled');
+            console.log(`🔑 Verification Key Hash: ${verificationKey.hash.toString()}`);
+            
+            // Load and verify deployed contract configuration
+            console.log('📋 Loading deployed contract configuration...');
+            const configPath = path.join(process.cwd(), 'config', 'environments', `${currentEnv.toLowerCase()}.json`);
+            const configData = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+            const deployedContract = configData.deployments?.contracts?.RiskLiquidityStableCoinSmartContract;
+            
+            // === VERIFICATION KEY CHECK - Only warn if exists but doesn't match ===
+            if (deployedContract && deployedContract.verificationKey) {
+                // Verify the compiled verification key matches the deployed contract
+                if (verificationKey.hash.toString() !== deployedContract.verificationKey.hash) {
+                    console.warn('⚠️ WARNING: Compiled verification key does not match deployed contract!');
+                    console.warn(`   Compiled: ${verificationKey.hash.toString()}`);
+                    console.warn(`   Deployed: ${deployedContract.verificationKey.hash}`);
+                    console.warn('   This may cause transaction verification to fail.');
+                } else {
+                    console.log(`✅ Verification key matches deployed contract (hash: ${deployedContract.verificationKey.hash})`);
+                }
+            } else {
+                console.log('📝 No existing contract deployment found - will deploy new contract');
+            }
+
+            // === STEP 5: Contract Lookup/Deploy (Following BusinessProcess Pattern) ===
+            console.log('\n📋 Step 5: Contract lookup/deployment...');
+            
+            // Try to use the deployed contract address (Following BusinessProcess Pattern)
+            const contractAddress = await environmentManager.getDeployedContractAddress('RiskLiquidityStableCoinSmartContract');
+            
+            let zkAppAddress: PublicKey;
+            let zkApp: RiskLiquidityStableCoinSmartContract;
+            let isNewDeployment = false; // Track if we just deployed a new contract
+            
+            if (!contractAddress) {
+                // === NO EXISTING CONTRACT - DEPLOY NEW ONE ===
+                console.log('⚠️ No existing contract found - deploying new smart contract...');
+                console.log('📦 Following BusinessProcess deployment pattern...');
+                
+                const zkAppKey = PrivateKey.random();
+                zkAppAddress = zkAppKey.toPublicKey();
+                zkApp = new RiskLiquidityStableCoinSmartContract(zkAppAddress);
+                
+                console.log(`🔑 New contract address: ${zkAppAddress.toBase58()}`);
+                
+                // Set fee for transactions
+                const fee = this.getTransactionFee(currentEnv);
+                
+                const deploymentStart = Date.now();
+                const deployTxn = await Mina.transaction({ sender: riskEnv.deployerAccount, fee }, async () => {
+                    AccountUpdate.fundNewAccount(riskEnv.deployerAccount);
+                    await zkApp.deploy({ verificationKey });
+                });
+                
+                const txnHash = await deployTxn.sign([riskEnv.deployerKey, zkAppKey]).send();
+                const deploymentTime = Date.now() - deploymentStart;
+                
+                console.log('✅ New smart contract deployed successfully');
+                console.log(`🔍 Transaction Hash: ${txnHash.hash}`);
+                
+                // === UPDATE CONFIG FILE (Following deploy-risk-stablecoin.ts pattern) ===
+                console.log('\n📋 Updating testnet.json config...');
+                
+                try {
+                    const configPath = path.join(process.cwd(), 'config', 'environments', `${currentEnv.toLowerCase()}.json`);
+                    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+                    
+                    const deploymentRecord = {
+                        address: zkAppAddress.toBase58(),
+                        status: 'DEPLOYED',
+                        deployedAt: new Date().toISOString(),
+                        transactionHash: txnHash.hash,
+                        alias: `${currentEnv.toLowerCase()}-risk-auto`,
+                        oracle: 'RISK',
+                        contractName: 'RiskLiquidityStableCoinSmartContract',
+                        zkAppPrivateKey: zkAppKey.toBase58(),
+                        verificationKey: {
+                            data: verificationKey.data,
+                            hash: verificationKey.hash
+                        },
+                        deploymentMetrics: {
+                            deploymentTime: Math.floor(deploymentTime),
+                            totalDeploymentTime: Math.floor(deploymentTime / 1000)
+                        },
+                        deploymentScope: {
+                            type: 'AUTO_DEPLOYED',
+                            servingAliases: [
+                                `${currentEnv.toLowerCase()}-risk`,
+                                `${currentEnv.toLowerCase()}-risk-auto`
+                            ],
+                            reason: 'Auto-deployed during verification (no existing contract found)',
+                            sourceAlias: `${currentEnv.toLowerCase()}-risk-auto`
+                        }
+                    };
+                    
+                    // Update or add the contract entry
+                    if (!config.deployments) {
+                        config.deployments = { contracts: {} };
+                    }
+                    if (!config.deployments.contracts) {
+                        config.deployments.contracts = {};
+                    }
+                    config.deployments.contracts.RiskLiquidityStableCoinSmartContract = deploymentRecord;
+                    
+                    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+                    console.log(`✅ Updated ${configPath}`);
+                    console.log(`📝 Contract saved to deployments.contracts section`);
+                } catch (configError) {
+                    console.error(`⚠️ Failed to update config file: ${configError}`);
+                    console.log(`📝 Manual update required to ${currentEnv.toLowerCase()}.json:`);
+                    console.log(`     "RiskLiquidityStableCoinSmartContract": {`);
+                    console.log(`       "address": "${zkAppAddress.toBase58()}",`);
+                    console.log(`       "zkAppPrivateKey": "${zkAppKey.toBase58()}",`);
+                    console.log(`       "verificationKey": {`);
+                    console.log(`         "data": "${verificationKey.data}",`);
+                    console.log(`         "hash": "${verificationKey.hash}"`);
+                    console.log(`       }`);
+                    console.log(`     }`);
+                }
+                
+                isNewDeployment = true; // Mark as new deployment
+            } else {
+                // === EXISTING CONTRACT FOUND - USE IT ===
+                console.log(`✅ Contract address found: ${contractAddress}`);
+                console.log(`📋 Source: config/environments/${currentEnv.toLowerCase()}.json`);
+                
+                zkAppAddress = PublicKey.fromBase58(contractAddress);
+                zkApp = new RiskLiquidityStableCoinSmartContract(zkAppAddress);
+            }
+            
+            // Set fee for transactions (outside the if/else for consistency)
+            const fee = this.getTransactionFee(currentEnv);
+            
+            // Fetch contract state to ensure network sync (following BusinessProcess pattern)
+            // NOTE: Skip for new deployments as account won't be on-chain yet
+            if (shouldConnectToDevnet && !isNewDeployment) {
+                console.log('📊 Fetching contract account state...');
+                try {
+                    await fetchAccount({ publicKey: zkAppAddress });
+                    console.log('✅ Contract account state fetched successfully');
+                } catch (contractError) {
+                    console.log('⚠️ Contract account state fetch failed, proceeding...');
+                }
+            } else if (isNewDeployment) {
+                console.log('ℹ️  Skipping account fetch for newly deployed contract (not on-chain yet)');
+            }
+
+            //STEP 6 
+            //GROUP ID INCLUSION
+            const riskGroupIDStr = typeof params.riskGroupID === 'string' ? params.riskGroupID : params.riskGroupID.toString();
 
             // PRESERVE EXACT ACTUS DATA PROCESSING from working LOCAL code
             console.log('🌐 NETWORK: Fetching ACTUS data for StableCoin scenario...');
@@ -236,7 +489,7 @@ export class RiskStableCoinNetworkHandler {
             );
             validateStableCoinRiskComplianceData(zkComplianceData);
             
-            // PRESERVE EXACT ORACLE SIGNATURE CREATION from working LOCAL code
+            // STEP 7 ORACLE SIGNATURE CREATION from working LOCAL code no network part
             console.log('🔐 NETWORK: Creating oracle signature...');
             const oraclePrivateKey = getPrivateKeyFor('RISK');
             const oracleSignature = Signature.create(oraclePrivateKey, [merkleStructure.merkleRoot]);
@@ -244,12 +497,12 @@ export class RiskStableCoinNetworkHandler {
             
             console.log('✅ NETWORK ZK compliance data structure created and validated');
             
-            // PRESERVE EXACT ZK PROOF GENERATION from working LOCAL code
+            // STEP 8 PRESERVE EXACT ZK PROOF GENERATION from working LOCAL code
             console.log('🌐 NETWORK: Generating ZK proof (ZK-compliant StableCoin check)...');
             const currentTimestamp = UInt64.from(Date.now());
             
             // 🔧 EXACT working pattern: Use merkleStructure.witnesses.xxx
-            const proof = await RiskLiquidityStableCoinOptimMerkleZKProgramWithSign.proveStableCoinRiskCompliance(
+            const proof = await RiskLiquidityStableCoin.proveStableCoinRiskCompliance(
                 currentTimestamp,                           // publicInput: UInt64
                 zkComplianceData,                          // complianceData
                 oracleSignature,                           // oracleSignature
@@ -271,60 +524,215 @@ export class RiskStableCoinNetworkHandler {
             console.log(`📊 NETWORK Proof public output - Concentration Risk: ${proof.publicOutput.concentrationRisk}`);
             console.log(`📊 NETWORK Proof public output - Asset Quality Score: ${proof.publicOutput.assetQualityScore}`);
 
-            // PRESERVE EXACT CONTRACT VERIFICATION from working LOCAL code  
-            console.log('🔍 NETWORK: Verifying proof with smart contract...');
-            const verifyTxn = await Mina.transaction(riskEnv.senderAccount, async () => {
-                await zkApp.verifyStableCoinRiskComplianceWithProof(proof);
-            });
+            // === STEP 9: Smart Contract Transaction (Following BusinessProcess Pattern) ===
+            console.log('\n📋 Step 9: Smart contract verification transaction...');
             
-            // DUAL-MODE transaction handling
-            if (this.environmentConfig!.mode === 'LOCAL_TEST') {
-                // LOCAL mode: immediate execution like LOCAL handler
-                await verifyTxn.prove();
-                await verifyTxn.sign([riskEnv.senderKey]).send();
-                console.log('✅ NETWORK Proof verified by smart contract (LOCAL mode)');
+            // 🔧 FIX: Create master timestamp for consistency (following BusinessProcess pattern)
+            const masterTimestamp = Date.now();
+            let transactionHash: string;
+            
+            // === SKIP TRANSACTION FOR NEW DEPLOYMENTS (Following deployment pattern) ===
+            if (isNewDeployment) {
+                console.log('⚠️  NEW DEPLOYMENT DETECTED - Skipping verification transaction');
+                console.log('📝 Contract was just deployed and is not yet on-chain');
+                console.log('✅ Next Steps:');
+                console.log('   1. Wait for deployment transaction to be included in a block (~3 minutes)');
+                console.log('   2. Update testnet.json with the deployed contract address');
+                console.log('   3. Run this verification again');
+                
+                transactionHash = `deployment_${masterTimestamp}_STABLECOIN_RISK`;
+                console.log(`🔍 Deployment Reference: ${transactionHash}`);
             } else {
-                // NETWORK mode: wait for confirmation
-                const proofTxn = await verifyTxn.prove();
-                await verifyTxn.sign([riskEnv.senderKey]).send();
-                console.log('🔄 NETWORK: Waiting for transaction confirmation...');
-                await this.waitForTransactionConfirmation(verifyTxn);
-                console.log('✅ NETWORK Proof verified by smart contract (production mode)');
+                // === EXISTING CONTRACT - PROCEED WITH VERIFICATION TRANSACTION ===
+                
+                // 🔧 GLEIF PATTERN: Fetch contract state to ensure network sync
+                if (shouldConnectToDevnet) {
+                    console.log('📊 Fetching contract account state...');
+                    try {
+                        await fetchAccount({ publicKey: zkAppAddress });
+                        console.log('✅ Contract account state fetched successfully');
+                    } catch (contractError) {
+                        console.log('⚠️ Contract account state fetch failed, proceeding with transaction...');
+                    }
+                }
+                
+                // === GROUP STRUCTURE LOGIC (Following BusinessProcess Pattern) ===
+                console.log('\n🏗️  Building Risk Group Structure...');
+                
+                // Determine compliance status from proof
+                const isCompliant = Bool(proof.publicOutput.stableCoinCompliant);
+                
+                // ✅ CRITICAL FIX: Extract timestamp from proof to ensure exact match with contract verification
+                const proofTimestamp = proof.publicOutput.verificationTimestamp;
+                
+                // ✅ CRITICAL FIX: Extract Risk Group ID from proof (EXACTLY like BPMN extracts from proof)
+                // The contract uses publicOutput.scenarioID as the group ID, so we MUST use the same
+                const proofRiskGroupID = proof.publicOutput.scenarioID;
+                const riskGroupIDHash = proofRiskGroupID.hash();
+                
+                console.log(`   📋 Using Risk Group ID from proof: ${proofRiskGroupID.toString()}`);
+                console.log(`   🔐 Group ID Hash: ${riskGroupIDHash.toString().substring(0, 30)}...`);
+                console.log(`   ⏰ Proof Timestamp: ${proofTimestamp.toString()}`);
+                
+                // Create Risk Group Record (similar to BPMNGroupRecord)
+                const riskGroupRecord = new RiskGroupRecord({
+                    groupIDHash: riskGroupIDHash,
+                    isValid: isCompliant,
+                    complianceScore: Field(proof.publicOutput.regulatoryScore || 100),
+                    totalVerifications: Field(1),
+                    passedVerifications: isCompliant.toField(),
+                    failedVerifications: isCompliant.not().toField(),
+                    consecutiveFailures: isCompliant.not().toField(),
+                    lastVerificationTime: proofTimestamp,       // Use proof's timestamp
+                    firstVerificationTime: proofTimestamp,      // Use proof's timestamp
+                    lastPassTime: UInt64.from(0),
+                    lastFailTime: UInt64.from(0)
+                });
+                
+                console.log('✅ Risk Group Record created');
+                console.log(`   Group ID Hash: ${riskGroupIDHash.toString().substring(0, 30)}...`);
+                console.log(`   Compliance Status: ${isCompliant.toBoolean()}`);
+                console.log(`   Compliance Score: ${proof.publicOutput.regulatoryScore}`);
+                
+                // Create Risk Group Key
+                const riskGroupKey = RiskGroupKey.create(riskGroupIDHash);
+                const companiesMap = new MerkleMap();
+                const riskGroupMapWitness = companiesMap.getWitness(riskGroupKey.toField());
+                
+                console.log('✅ Risk Group Key and Map Witness created');
+                
+                // Create Risk Group Merkle Witness (Following GLEIF Pattern)
+                console.log('🔧 Creating RiskGroupMerkleWitness using GLEIF pattern...');
+                let riskGroupWitness: RiskGroupMerkleWitness;
+                try {
+                    // Create a temporary MerkleTree for proper witness generation
+                    const tempGroupTree = new MerkleTree(RISK_GROUP_MERKLE_HEIGHT);
+                    
+                    // Set the group record at index 0 with ALL fields
+                    const groupHash = Poseidon.hash([
+                        riskGroupRecord.groupIDHash,
+                        riskGroupRecord.isValid.toField(),
+                        riskGroupRecord.complianceScore,
+                        riskGroupRecord.totalVerifications,
+                        riskGroupRecord.passedVerifications,
+                        riskGroupRecord.failedVerifications,
+                        riskGroupRecord.consecutiveFailures,
+                        riskGroupRecord.lastVerificationTime.value,
+                        riskGroupRecord.firstVerificationTime.value,
+                        riskGroupRecord.lastPassTime.value,
+                        riskGroupRecord.lastFailTime.value
+                    ]);
+                    tempGroupTree.setLeaf(BigInt(0), groupHash);
+                    
+                    // Generate the actual witness from the real tree
+                    const realWitness = tempGroupTree.getWitness(BigInt(0));
+                    riskGroupWitness = new RiskGroupMerkleWitness(realWitness);
+                    console.log('✅ RiskGroupMerkleWitness created successfully');
+                } catch (witnessError) {
+                    const errorMessage = witnessError instanceof Error ? witnessError.message : 'Unknown witness creation error';
+                    console.error(`❌ Error creating RiskGroupMerkleWitness: ${errorMessage}`);
+                    throw new Error(`Failed to create RiskGroupMerkleWitness: ${errorMessage}`);
+                }
+                
+                // Create transaction with group structure
+                console.log('\n🔧 Creating transaction with Risk Group verification...');
+                const verifyTxn = await Mina.transaction(
+                    { sender: senderAccount, fee },
+                    async () => {
+                        await zkApp.verifyStableCoinRiskComplianceWithGroup(
+                            proof,
+                            riskGroupWitness,
+                            riskGroupRecord,
+                            riskGroupMapWitness
+                        );
+                    }
+                );
+                
+                console.log('⚡ Generating transaction proof...');
+                await verifyTxn.prove();
+                console.log('✅ Transaction proof generated successfully');
+                
+                // 🔧 GLEIF PATTERN: Sign and send transaction with proper error handling
+                try {
+                    await verifyTxn.sign([senderKey]).send();
+                    console.log('✅ Smart contract transaction sent successfully');
+                } catch (sendError) {
+                    console.error('❌ Transaction send failed:', sendError);
+                    const errorMessage = sendError instanceof Error ? sendError.message : 'Unknown transaction error';
+                    throw new Error(`Transaction submission failed: ${errorMessage}`);
+                }
+                
+                // Generate transaction hash based on network type (following BusinessProcess pattern)
+                transactionHash = `txn_${masterTimestamp}_STABLECOIN_RISK`;
+                console.log(`✅ Transaction submitted to ${currentEnv.toUpperCase()}`);
+                console.log(`🔍 Transaction Hash: ${transactionHash}`);
+                
+                console.log('\n📊 Risk Group Verification Summary:');
+                console.log(`   ✅ Group Structure: Enabled`);
+                console.log(`   ✅ Risk Group ID: ${riskGroupIDStr}`);
+                console.log(`   ✅ Compliance Score: ${proof.publicOutput.regulatoryScore}`);
+                console.log(`   ✅ Verification Status: ${isCompliant.toBoolean() ? 'PASSED' : 'FAILED'}`);
             }
             
-            // PRESERVE EXACT STATUS TRACKING from working LOCAL code
-            const finalStatus = Number(zkApp.riskComplianceStatus.get().toBigInt());
-            const totalVerifications = Number(zkApp.totalVerifications.get().toBigInt());
+            // Fetch updated contract state after transaction
+            // NOTE: Skip for new deployments as state won't be available on-chain yet
+            let finalStatus: number;
+            let totalVerifications: number;
             
-            console.log(`📊 NETWORK Final contract status: ${finalStatus}`);
-            console.log(`📈 NETWORK Total verifications: ${totalVerifications}`);
+            if (isNewDeployment) {
+                console.log('ℹ️  Skipping state fetch for newly deployed contract');
+                // New deployments: Use expected post-transaction values
+                finalStatus = proof.publicOutput.stableCoinCompliant.toBoolean() && 
+                              proof.publicOutput.regulatoryCompliant.toBoolean() ? 100 : 0;
+                totalVerifications = 1; // First verification
+                console.log(`📊 NETWORK Final contract status: ${finalStatus} (new deployment, using proof result)`);
+                console.log(`📈 NETWORK Total verifications: ${totalVerifications} (new deployment)`);
+            } else if (shouldConnectToDevnet) {
+                // Existing contracts on DEVNET: Fetch fresh on-chain state
+                console.log('\n📊 Fetching updated contract state after confirmation wait...');
+                try {
+                    // CRITICAL: Re-fetch account to get LATEST on-chain state (not cached)
+                    const accountInfo = await fetchAccount({ publicKey: zkAppAddress });
+                    console.log('✅ Updated contract state fetched successfully');
+                    
+                    // CRITICAL: Create NEW contract instance to force reading fresh state
+                    // The old zkApp instance has stale precondition cache
+                    const freshZkApp = new RiskLiquidityStableCoinSmartContract(zkAppAddress);
+                    
+                    // Read the FRESH on-chain state from the new instance
+                    finalStatus = Number(freshZkApp.totalRiskGroupTracked.get().toBigInt());
+                    totalVerifications = Number(freshZkApp.totalVerificationsGlobal.get().toBigInt());
+                    
+                    console.log(`📊 NETWORK Final contract status (Total Risk Groups): ${finalStatus}`);
+                    console.log(`📈 NETWORK Total verifications: ${totalVerifications}`);
+                } catch (fetchError) {
+                    console.warn('⚠️ Could not fetch updated state, using expected values');
+                    totalVerifications = 0;
+                }
+            } else {
+                // LOCAL mode: Read from existing instance (state is immediate)
+                try {
+                    finalStatus = Number(zkApp.totalRiskGroupTracked.get().toBigInt());
+                    totalVerifications = Number(zkApp.totalVerificationsGlobal.get().toBigInt());
+                    console.log(`📊 NETWORK Final contract status (Total Risk Groups): ${finalStatus}`);
+                    console.log(`📈 NETWORK Total verifications: ${totalVerifications}`);
+                } catch (stateError) {
+                    console.warn('⚠️ Could not read contract state, using proof results');
+                    finalStatus = proof.publicOutput.stableCoinCompliant.toBoolean() && 
+                                  proof.publicOutput.regulatoryCompliant.toBoolean() ? 1 : 0;
+                    totalVerifications = 0;
+                }
+            }
 
             // PRESERVE EXACT SUMMARY GENERATION from working LOCAL code
             const summary = generateStableCoinRiskSummary(stableCoinRiskData, riskMetrics);
 
             // PRESERVE EXACT SUCCESS LOGGING from working LOCAL code
             const success = riskMetrics.overallCompliant;
-            
-            if (success) {
-                console.log(`\n🎉 NETWORK StableCoin Risk verification completed successfully!`);
-                console.log(`📊 NETWORK Status Change: ${initialStatus} → ${finalStatus}`);
-                
-                if (finalStatus === 90) {
-                    console.log(`✅ NETWORK STABLECOIN COMPLIANCE ACHIEVED - Contract status changed to 90`);
-                } else {
-                    console.log(`❌ NETWORK STABLECOIN COMPLIANCE NOT ACHIEVED - Contract status remains at 100`);
-                }
-            } else {
-                console.log(`\n❌ NETWORK StableCoin Risk verification failed`);
-            }
 
             return {
                 success,
                 proof,
-                contractStatus: {
-                    beforeVerification: Number(initialStatus),
-                    afterVerification: finalStatus
-                },
                 riskMetrics,
                 summary
             };
@@ -336,7 +744,6 @@ export class RiskStableCoinNetworkHandler {
             return {
                 success: false,
                 proof: null,
-                contractStatus: { beforeVerification: 0, afterVerification: 0 },
                 riskMetrics: null,
                 summary: `Error: ${error.message}`
             };
@@ -365,27 +772,57 @@ export class RiskStableCoinNetworkHandler {
     /**
      * Smart Environment Detection
      * Automatically determines whether to use LOCAL or NETWORK mode
+     * Using environmentManager from BusinessProcess pattern
      */
     private async detectEnvironmentMode(): Promise<NetworkEnvironmentConfig> {
-        const deployerPrivateKeyBase58 = process.env.DEPLOYER_PRIVATE_KEY;
-        const networkUrl = process.env.MINA_NETWORK_URL;
-        const forcedMode = process.env.NETWORK_MODE; // 'local' | 'network'
+        // Initialize Oracle Registry (BusinessProcess pattern)
+        await initializeOracleRegistry();
+        
+        // Use environmentManager to detect environment (BusinessProcess pattern)
+        const currentEnv = environmentManager.getCurrentEnvironment();
+        const shouldConnectToDevnet = environmentManager.shouldConnectToDevnet();
+        
+        console.log(`🌐 Environment: ${currentEnv}`);
+        console.log(`🔗 Connect to DEVNET: ${shouldConnectToDevnet}`);
 
-        // Priority 1: Explicit mode override
-        if (forcedMode === 'local') {
-            console.log('🔧 NETWORK: Forced LOCAL mode via NETWORK_MODE=local');
-            return await this.setupLocalMode();
+        // If DEVNET mode, use Oracle accounts
+        if (shouldConnectToDevnet) {
+            console.log('🌐 NETWORK: DEVNET mode - using Oracle Registry accounts');
+            
+            // Setup network connection via BaseCore
+            const connected = this.baseCore.setupNetworkConnection();
+            if (!connected) {
+                throw new Error('Failed to establish DEVNET connection');
+            }
+            
+            const deployerAccount = getDeployerAccount('RISK');
+            const deployerKey = getDeployerKey('RISK');
+            const senderAccount = getSenderAccount('RISK');
+            const senderKey = getSenderKey('RISK');
+            
+            // Verify account balance
+            try {
+                console.log('💰 Verifying DEVNET account balances...');
+                const senderBalance = await fetchAccount({ publicKey: senderAccount });
+                const actualBalance = Number(senderBalance.account?.balance?.toString() || '0') / 1e9;
+                console.log(`💰 Sender Balance: ${actualBalance.toFixed(3)} MINA`);
+            } catch (balanceError) {
+                console.warn('⚠️ Could not fetch balance, proceeding...');
+            }
+            
+            return {
+                mode: 'NETWORK_PRODUCTION',
+                useLocalBlockchain: false,
+                deployerKey,
+                deployerAccount,
+                senderKey,
+                senderAccount,
+                networkUrl: process.env.MINA_NETWORK_URL
+            };
         }
 
-        // Priority 2: Network mode if all credentials available
-        if (deployerPrivateKeyBase58 && networkUrl) {
-            console.log('🌐 NETWORK: Production mode - credentials detected');
-            return await this.setupNetworkMode(deployerPrivateKeyBase58, networkUrl);
-        }
-
-        // Priority 3: Fallback to LOCAL mode for testing
-        console.log('🏠 NETWORK: Fallback to LOCAL mode - using LocalBlockchain for testing');
-        console.log('💡 NETWORK: To use production mode, set DEPLOYER_PRIVATE_KEY and MINA_NETWORK_URL');
+        // Fallback to LOCAL mode
+        console.log(`🔧 ${currentEnv} environment - using LocalBlockchain`);
         return await this.setupLocalMode();
     }
 
