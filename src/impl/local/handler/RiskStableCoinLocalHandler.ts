@@ -94,14 +94,6 @@ export class RiskStableCoinLocalHandler {
             const senderAccount = testAccounts[1];
             const senderKey = senderAccount.key;
             
-            // OLD APPROACH - COMMENTED OUT (kept for reference)
-            // const { Local } = await import('../../../core/OracleRegistry.js');
-            // const localBlockchain = await Local;
-            // Mina.setActiveInstance(localBlockchain);
-            // const deployerAccount = localBlockchain.testAccounts[0];
-            // const deployerKey = deployerAccount.key;
-            // const senderAccount = localBlockchain.testAccounts[1];
-            // const senderKey = senderAccount.key;
             console.log('🏠 LOCAL: proofsEnabled = false (optimized for development)');
             console.log('✅ BlockchainManager: LocalBlockchain initialized (proofs: true)');
             console.log('✅ LOCAL blockchain environment ready');
@@ -307,28 +299,12 @@ export class RiskStableCoinLocalHandler {
             // PRESERVE EXACT STATUS TRACKING from working code (UPDATED FOR GROUP STRUCTURE)
             const finalStatus = Number(zkApp.totalRiskGroupTracked.get().toBigInt());
             const totalVerifications = Number(zkApp.totalVerificationsGlobal.get().toBigInt());
-            
-            // console.log(`📊 Final contract status (Total Risk Groups): ${finalStatus}`);
-            // console.log(`📈 Total verifications: ${totalVerifications}`);
 
             // PRESERVE EXACT SUMMARY GENERATION from working code
             const summary = generateStableCoinRiskSummary(stableCoinRiskData, riskMetrics);
 
             // PRESERVE EXACT SUCCESS LOGGING from working code
             const success = riskMetrics.overallCompliant;
-            
-            // if (success) {
-            //     console.log(`\n🎉 LOCAL StableCoin Risk verification completed successfully!`);
-            //     console.log(`📊 LOCAL Status Change: ${initialStatus} → ${finalStatus}`);
-                
-            //     if (finalStatus === 90) {
-            //         console.log(`✅ LOCAL STABLECOIN COMPLIANCE ACHIEVED - Contract status changed to 90`);
-            //     } else {
-            //         console.log(`❌ LOCAL STABLECOIN COMPLIANCE NOT ACHIEVED - Contract status remains at 100`);
-            //     }
-            // } else {
-            //     console.log(`\n❌ LOCAL StableCoin Risk verification failed`);
-            // }
 
             return {
                 success,
