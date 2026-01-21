@@ -1,9 +1,6 @@
 /**
  * CorporateRegistrationNetworkHandler.ts - Consolidated Network Verification
- * 
- * FULLY SYNCHRONIZED WITH: GLEIFNetworkHandler.ts
  * COMPOSITION PATTERN: Uses BaseVerificationCore and ComplianceVerificationBase
- * ZERO FUNCTIONAL CHANGES: All methods work exactly as GLEIF pattern
  */
 
 import * as dotenv from 'dotenv';

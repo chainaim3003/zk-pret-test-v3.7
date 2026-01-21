@@ -1,12 +1,6 @@
 /**
  * EXIMNetworkHandler.ts - Consolidated Network Verification
  *
- * PARALLEL TO: GLEIFNetworkHandler.ts
- * CONSOLIDATED FROM:
- * - EXIMEnhancedTestWrapper.ts (network orchestration) - Not yet created, following GLEIF pattern
- * - EXIMEnvironmentAwareUtils.ts (network utilities) - Not needed, using base classes
- * - EXIMNetworkMultiVerifierUtils.ts (main verification logic) - Creating new following GLEIF pattern
- *
  * COMPOSITION PATTERN: Uses BaseVerificationCore and ComplianceVerificationBase
  * ZERO FUNCTIONAL CHANGES: All methods work exactly as before
  */

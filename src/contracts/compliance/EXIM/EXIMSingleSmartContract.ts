@@ -26,12 +26,6 @@ export class EXIMOptimSingleCompanySmartContract extends SmartContract {
    @state(Field) totalVerifications = State<Field>();                 // Total number of verifications
    @state(UInt64) firstVerificationTime = State<UInt64>();           // When first verified
    
-   // =================================== NOTE: Removed fields to meet 8-field limit ===================================
-   // ❌ @state(Field) verificationsMapRoot = State<Field>(); // REMOVED - can be computed off-chain
-   // ❌ @state(UInt64) contractCreationTime = State<UInt64>(); // REMOVED - can use blockchain timestamp
-   
-   // =================================== NOTE: totalCompaniesVerified REMOVED ===================================
-   // ❌ @state(Field) totalCompaniesVerified = State<Field>(); // REMOVED - meaningless for single company
 
    // =================================== Initialize Contract ===================================
    init() {
@@ -122,8 +116,6 @@ export class EXIMOptimSingleCompanySmartContract extends SmartContract {
         : currentFirstVerificationTime;
       this.firstVerificationTime.set(updatedFirstTime);
 
-      // NOTE: verificationsMapRoot removed to meet o1js 8-field limit
-      // Verification history can be tracked off-chain or via events
    }
 
    // =================================== Company Information Queries ===================================

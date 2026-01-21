@@ -553,19 +553,46 @@ export class BusinessProcessNetworkHandler {
       console.log('✅ Transaction proof generated successfully');
       
       // 🔧 GLEIF PATTERN: Sign and send transaction with proper error handling
-      try {
-        await verifyTxn.sign([senderKey]).send();
-        console.log('✅ Smart contract transaction completed');
-      } catch (sendError) {
-        console.error('❌ Transaction send failed:', sendError);
-        const errorMessage = sendError instanceof Error ? sendError.message : 'Unknown transaction error';
-        throw new Error(`Transaction submission failed: ${errorMessage}`);
-      }
+      // try {
+      //   await verifyTxn.sign([senderKey]).send();
+      //   console.log('✅ Smart contract transaction completed');
+      // } catch (sendError) {
+      //   console.error('❌ Transaction send failed:', sendError);
+      //   const errorMessage = sendError instanceof Error ? sendError.message : 'Unknown transaction error';
+      //   throw new Error(`Transaction submission failed: ${errorMessage}`);
+      // }
+      // 🔧 FIX: Capture real transaction hash from blockchain
+let transactionHash: string;
+try {
+  console.log('📤 Signing and sending transaction to blockchain...');
+  const pendingTx = await verifyTxn.sign([senderKey]).send();
+  
+  // Extract the REAL blockchain transaction hash
+  transactionHash = pendingTx.hash;
+  
+  if (!transactionHash) {
+    throw new Error('Transaction was sent but no hash was returned');
+  }
+  
+  console.log('✅ Smart contract transaction completed');
+  console.log(`✅ Transaction submitted to ${networkType.toUpperCase()}`);
+  console.log(`🔍 Real Blockchain Transaction Hash: ${transactionHash}`);
+  
+  // Optional: Wait for confirmation (uncomment if you want to wait)
+  // console.log('⏳ Waiting for transaction confirmation...');
+  // await pendingTx.wait();
+  // console.log('✅ Transaction confirmed on blockchain!');
+  
+} catch (sendError) {
+  console.error('❌ Transaction send failed:', sendError);
+  const errorMessage = sendError instanceof Error ? sendError.message : 'Unknown transaction error';
+  throw new Error(`Transaction submission failed: ${errorMessage}`);
+}
       
       // Generate transaction hash based on network type
-      const transactionHash = `txn_${masterTimestamp}_${processType}`;
-      console.log(`✅ Transaction submitted to ${networkType.toUpperCase()}`);
-      console.log(`🔍 Transaction Hash: ${transactionHash}`);
+      // const transactionHash = `txn_${masterTimestamp}_${processType}`;
+      // console.log(`✅ Transaction submitted to ${networkType.toUpperCase()}`);
+      // console.log(`🔍 Transaction Hash: ${transactionHash}`);
       
       console.log(`\n📊 PROCESS VERIFICATION RESULTS (Post-Verification):`);
       console.log('='.repeat(50));

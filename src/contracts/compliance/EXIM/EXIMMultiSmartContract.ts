@@ -101,9 +101,7 @@ export class EXIMMultiSmartContract extends SmartContract {
    @state(Field) totalVerificationsGlobal = State<Field>();  // Total verifications across all companies
    @state(UInt64) lastVerificationTime = State<UInt64>();    // Most recent verification timestamp
    @state(Field) registryVersion = State<Field>();           // Registry version for upgrades
-   //@state(UInt64) contractCreationTime = State<UInt64>();
     @state(Field) companiesMapRoot = State<Field>();     // When contract was deployed
-   //@state(Bool) contractDisabled = State<Bool>();            // Field 7: Emergency disable
 
    // =================================== Initialize Contract ===================================
    init() {
@@ -118,7 +116,6 @@ export class EXIMMultiSmartContract extends SmartContract {
       
       // Initialize timestamps
       this.lastVerificationTime.set(UInt64.from(0));
-      //this.contractCreationTime.set(UInt64.from(Date.now()));
       
       // Initialize version
       this.registryVersion.set(Field(1)); // Version 1.0
@@ -126,8 +123,6 @@ export class EXIMMultiSmartContract extends SmartContract {
       const emptyMap = new MerkleMap();
       this.companiesMapRoot.set(emptyMap.getRoot());
       
-
-      //this.contractDisabled.set(Bool(false));
    }
 
    // =================================== Main Verification Method ===================================
@@ -137,7 +132,6 @@ export class EXIMMultiSmartContract extends SmartContract {
       companyRecord: EXIMCompanyRecord,
       companiesMapWitness:MerkleMapWitness
    ) {
-      //this.contractDisabled.requireEquals(Bool(false));
 
       // Add required state preconditions for proper constraint generation
       this.companiesRootHash.requireEquals(this.companiesRootHash.get());
@@ -191,14 +185,8 @@ export class EXIMMultiSmartContract extends SmartContract {
          isCompliant: companyRecord.isCompliant,
          complianceScore: companyRecord.complianceScore,
          totalVerifications: Field(1),                    // Start with 1 verification
-         //passedVerifications: isCompliant.toField(),      // 1 if passed, 0 if failed
-         //failedVerifications: isCompliant.not().toField(), // 1 if failed, 0 if passed
-         //consecutiveFailures: isCompliant.not().toField(), // 1 if this verification failed, 0 if passed
          lastVerificationTime: verificationTimestamp,
          firstVerificationTime: verificationTimestamp,
-         // Fixed: Simple conditional logic - only one should be set to current time
-         //lastPassTime: isCompliant.toField().equals(Field(1)) ? verificationTimestamp : UInt64.from(0),
-         //lastFailTime: isCompliant.toField().equals(Field(0)) ? verificationTimestamp : UInt64.from(0),
       });
       
       const companyRecordHash = Poseidon.hash([
@@ -213,7 +201,6 @@ export class EXIMMultiSmartContract extends SmartContract {
       ]);
 
       // Calculate new merkle root with the company record
-      //const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       const [newMapRoot, _key1] = companiesMapWitness.computeRootAndKey(companyRecordHash);
       this.companiesMapRoot.set(newMapRoot);
 
@@ -223,9 +210,6 @@ export class EXIMMultiSmartContract extends SmartContract {
       Provable.log('🔍 SMART CONTRACT DEBUG: Starting company existence check');
       Provable.log('🔍 Company Key:', companyKeyField);
       Provable.log('🔍 Current Map Root:', currentMapRoot);
-      
-      //this.companiesRootHash.set(calculatedRoot);
-
 
       const [witnessRoot, witnessKey] = companiesMapWitness.computeRootAndKey(Field(0));
       Provable.log('🔍 Witness Root:', witnessRoot);
@@ -252,11 +236,6 @@ export class EXIMMultiSmartContract extends SmartContract {
       );
 
       // =================================== Update Global Statistics ===================================
-      // This is simplified logic - in practice, you'd need to track whether this is a new company
-      // or an update to an existing company to properly update counts
-      
-      // For now, assume each verification could be either new or update
-      // A more sophisticated implementation would require additional state management
       
       // Update global verification count
       const newTotalVerifications = currentTotalVerifications.add(1);
@@ -279,28 +258,6 @@ export class EXIMMultiSmartContract extends SmartContract {
       // Update last verification time
       this.lastVerificationTime.set(verificationTimestamp);
 
-
-
-      // this.totalVerificationsGlobal.set(newTotalVerifications);
-
-      // // Update last verification time
-      // this.lastVerificationTime.set(verificationTimestamp);
-
-      // // Update company count (simplified - would need better logic for tracking new vs existing)
-      // // For demonstration, we increment if this appears to be a new verification
-      // const potentialNewTotal = currentTotalCompanies.add(1);
-      // this.totalCompaniesTracked.set(potentialNewTotal);
-
-      // // Update compliant count (simplified calculation)
-      // //const complianceChange = isCompliant.toField();
-      // //const newCompliantCount = currentCompliantCount.add(complianceChange);
-      // this.compliantCompaniesCount.set(newCompliantCount);
-
-      // // Calculate and update global compliance score
-      // const globalScore = potentialNewTotal.equals(Field(0)).toField().equals(Field(1))
-      //    ? Field(0) // No companies yet
-      //    : newCompliantCount.mul(100).div(potentialNewTotal);
-      // this.globalComplianceScore.set(globalScore);
    }
 
    getGlobalComplianceStats(): GlobalComplianceStats {
@@ -315,7 +272,7 @@ export class EXIMMultiSmartContract extends SmartContract {
       
       // Calculate compliance percentage
       const compliancePercentage = totalCompanies.equals(Field(0)).toField().equals(Field(1))
-         ? Field(0) // No companies yet
+         ? Field(0)
          : compliantCompanies.mul(100).div(totalCompanies);
       
       return new GlobalComplianceStats({
@@ -378,18 +335,13 @@ async getCompanyByIEC(iec: CircuitString, mapWitness: MerkleMapWitness): Promise
          // Create default record structure
          const existingRecord = new EXIMCompanyRecord({
             iecHash: iecHash,
-            entityNameHash: iecHash, // Would be actual name hash in production
+            entityNameHash: iecHash, 
             jurisdictionHash: CircuitString.fromString('Global').hash(),
-            isCompliant: Bool(true), // Would be deserialized from hash
+            isCompliant: Bool(true), 
             complianceScore: Field(0),
             totalVerifications: Field(0),
-            //passedVerifications: Field(0),
-            //failedVerifications: Field(0),
-            //consecutiveFailures: Field(0),
             lastVerificationTime: UInt64.from(0),
             firstVerificationTime: UInt64.from(0),
-            //lastPassTime: UInt64.from(0),
-            //lastFailTime: UInt64.from(0),
          });
          
          return {
@@ -436,13 +388,8 @@ getCompanyDataWithWitness(
          isCompliant: Bool(false),
          complianceScore: Field(0),
          totalVerifications: Field(0),
-         // passedVerifications: Field(0),
-         // failedVerifications: Field(0),
-         // consecutiveFailures: Field(0),
          lastVerificationTime: UInt64.from(0),
          firstVerificationTime: UInt64.from(0),
-         // lastPassTime: UInt64.from(0),
-         // lastFailTime: UInt64.from(0)
       });
       
       return {
@@ -451,33 +398,6 @@ getCompanyDataWithWitness(
          isValid: isValid
       };
    }
-
-   /**
-    * Get global compliance statistics
-    */
-   // getGlobalComplianceStats(): GlobalComplianceStats {
-   //    // Add required state preconditions
-   //    this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
-   //    this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
-   //    this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
-   //    this.lastVerificationTime.requireEquals(this.lastVerificationTime.get());
-      
-   //    const totalCompanies = this.totalCompaniesTracked.get();
-   //    const compliantCompanies = this.compliantCompaniesCount.get();
-      
-   //    // Calculate compliance percentage
-   //    const compliancePercentage = totalCompanies.equals(Field(0)).toField().equals(Field(1))
-   //       ? Field(0) // No companies yet
-   //       : compliantCompanies.mul(100).div(totalCompanies);
-      
-   //    return new GlobalComplianceStats({
-   //       totalCompanies: totalCompanies,
-   //       compliantCompanies: compliantCompanies,
-   //       compliancePercentage: compliancePercentage,
-   //       totalVerifications: this.totalVerificationsGlobal.get(),
-   //       lastVerificationTime: this.lastVerificationTime.get(),
-   //    });
-   // }
 
    // =================================== Individual Company Query Methods (Same as SingleCompany) ===================================
    
@@ -680,53 +600,9 @@ getCompanyDataWithWitness(
       
       return iecMatches.and(recordExists);
    }
-// getEnhancedContractState(): {
-//       totalCompanies: Field;
-//       compliantCompanies: Field;
-//       mapRoot: Field;
-//       isEmpty: Bool;
-//       version: Field;
-//       isDisabled: Bool;
-//    } {
-//       // State preconditions
-//       this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
-//       this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
-//       this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
-//       this.registryVersion.requireEquals(this.registryVersion.get());
-//       this.contractDisabled.requireEquals(this.contractDisabled.get());
-      
-//       const totalCompanies = this.totalCompaniesTracked.get();
-//       const mapRoot = this.companiesMapRoot.get();
-      
-//       // Check if contract is empty (no companies)
-//       const isEmpty = totalCompanies.equals(Field(0));
-      
-//       return {
-//          totalCompanies: totalCompanies,
-//          compliantCompanies: this.compliantCompaniesCount.get(),
-//          mapRoot: mapRoot,
-//          isEmpty: isEmpty,
-//          version: this.registryVersion.get(),
-//          isDisabled: this.contractDisabled.get()
-//       };
-//    }
 
    // =================================== Administrative Methods (Enhanced to match SingleCompany) ===================================
-      /**
-    * Emergency disable function - stops all new verifications
-    */
-   // @method async emergencyDisable() {
-   //    this.contractDisabled.requireEquals(this.contractDisabled.get());
-   //    this.contractDisabled.set(Bool(true));
-   // }
-   
-   // /**
-   //  * Re-enable contract (in case of false alarm)
-   //  */
-   // @method async reEnableContract() {
-   //    this.contractDisabled.requireEquals(this.contractDisabled.get());
-   //    this.contractDisabled.set(Bool(false));
-   // }
+    
    /**
     * Reset compliance status for a specific company (admin function)
     */
@@ -817,7 +693,6 @@ getCompanyDataWithWitness(
       totalCompanies: Field;
       compliantCompanies: Field;
       totalVerifications: Field;
-      //creationTime: UInt64;
       version: Field;
    } {
       // Add required state preconditions
@@ -825,7 +700,6 @@ getCompanyDataWithWitness(
       this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
       this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
       this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
-      //this.contractCreationTime.requireEquals(this.contractCreationTime.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
       
       return {
@@ -833,7 +707,6 @@ getCompanyDataWithWitness(
          totalCompanies: this.totalCompaniesTracked.get(),
          compliantCompanies: this.compliantCompaniesCount.get(),
          totalVerifications: this.totalVerificationsGlobal.get(),
-         //creationTime: this.contractCreationTime.get(),
          version: this.registryVersion.get(),
       };
    }

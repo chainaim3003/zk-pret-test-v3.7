@@ -81,7 +81,6 @@ export class GlobalComplianceStats extends Struct({
 
 // =================================== GLEIF Multi-Company Contract with Two-Stage Lookup Support ===================================
 export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
-   // ✅ o1js COMPLIANT: State fields (7/8 used, within limit)
    @state(Field) totalCompaniesTracked = State<Field>();      // Field 1: Unique LEI count
    @state(Field) compliantCompaniesCount = State<Field>();    // Field 2: Compliant count
    @state(Field) totalVerificationsGlobal = State<Field>();  // Field 3: All verifications
@@ -89,9 +88,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
    @state(Field) companiesMapRoot = State<Field>();           // Field 5: MerkleMap root
    @state(Field) registryVersion = State<Field>();           // Field 6: Version
    @state(Bool) contractDisabled = State<Bool>();            // Field 7: Emergency disable
-   // Field 8: Available for future use
 
-   // ✅ o1js COMPLIANT: Initialize Contract with proper state
    init() {
       super.init();
       
@@ -183,7 +180,6 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
          consecutiveFailures: isCompliant.not().toField(), // 1 if this verification failed, 0 if passed
          lastVerificationTime: verificationTimestamp,
          firstVerificationTime: verificationTimestamp,
-         // Fixed: Simple conditional logic - only one should be set to current time
          lastPassTime: isCompliant.toField().equals(Field(1)) ? verificationTimestamp : UInt64.from(0),
          lastFailTime: isCompliant.toField().equals(Field(0)) ? verificationTimestamp : UInt64.from(0),
       });
@@ -249,7 +245,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       // Always increment total verifications (regardless of company newness)
       const newTotalVerifications: Field = currentTotalVerifications.add(Field(1));
       
-      // ✅ FIXED: Smart compliant company tracking
+      // Smart compliant company tracking
       // Only increment compliant count for NEW COMPLIANT companies
       const newCompliantCount: Field = Provable.if(
          isNewCompany.and(isCompliant),
@@ -342,9 +338,9 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       // Create default record structure
       const existingRecord = new GLEIFCompanyRecord({
          leiHash: leiHash,
-         legalNameHash: leiHash, // Would be actual name hash in production
+         legalNameHash: leiHash, 
          jurisdictionHash: CircuitString.fromString('Global').hash(),
-         isCompliant: Bool(true), // Would be deserialized from hash
+         isCompliant: Bool(true), 
          complianceScore: Field(0),
          totalVerifications: Field(0),
          passedVerifications: Field(0),
@@ -365,7 +361,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
    }
    
    /**
-    * ✅ FIXED: Enhanced company existence checking - no @method, no async, no Promise
+    * Enhanced company existence checking - no @method, no async, no Promise
     */
    getCompanyDataWithWitness(
       lei: CircuitString,

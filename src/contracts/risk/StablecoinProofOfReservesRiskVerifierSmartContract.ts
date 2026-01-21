@@ -14,7 +14,6 @@ export class LiquidityRatioVerifierSmartContract extends SmartContract {
    }
 
 
-
    // Method to verify compliance and update state
    @method async verifyComplianceWithProof(proof: LiquidityRatioProof) {
 

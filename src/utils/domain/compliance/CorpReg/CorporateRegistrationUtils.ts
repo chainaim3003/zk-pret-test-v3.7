@@ -21,7 +21,12 @@ interface MasterDataRequest {
 /**
  * Authenticate with the API and get access token
  */
-async function authenticate(): Promise<string> {
+async function authenticate(apiUrl: string): Promise<any> {
+    
+    if(apiUrl !== 'https://api.sandbox.co.in/mca/company/master-data/search'){
+        console.log('////////////////////////////////////////////////////////////////////////')
+    }
+    else{
     // Check if we have a valid cached token
     if (authToken && Date.now() < tokenExpiry) {
         console.log('🔄 Using cached authentication token');
@@ -32,6 +37,14 @@ async function authenticate(): Promise<string> {
     if (!authUrl) {
         throw new Error('AUTH_URL is not set in environment variables');
     }
+//     const authUrl = process.env.AUTH_URL;
+// if (!authUrl || authUrl.includes('mock.pstmn.io')) {
+//     console.log('⚠ Mock environment detected - skipping authentication');
+//     console.log('🧪 Returning mock token for testing');
+//     authToken = 'mock_token_for_testing';
+//     tokenExpiry = Date.now() + (50 * 60 * 1000);
+//     return authToken;
+// }
 
     const authHeaders = {
         'x-api-key': process.env.API_KEY || '',
@@ -88,7 +101,7 @@ async function authenticate(): Promise<string> {
         }
     } catch (error: any) {
         console.log('\n❌ ===== AUTHENTICATION ERROR =====');
-        console.log('⚠️ Error Type:', error.name || 'Unknown');
+        console.log('⚠ Error Type:', error.name || 'Unknown');
         console.log('📋 Error Message:', error.message);
         console.log('🌐 Request URL:', authUrl);
         console.log('⏰ Error Timestamp:', new Date().toISOString());
@@ -107,6 +120,7 @@ async function authenticate(): Promise<string> {
         throw new Error(`Authentication failed: ${error.message}`);
     }
 }
+}
 
 /**
  * Fetch master data using the authenticated token
@@ -118,7 +132,7 @@ async function fetchMasterData(
 ): Promise<any> {
 
     if(apiUrl !== 'https://api.sandbox.co.in/mca/company/master-data/search') {
-        console.log('////////////////////////////////////////**********************************////////////////////////////////')
+        console.log('////////////////////////////////////////////////////////////////////////')
         const response = await axios.get(`${apiUrl}/${cin}`);
         return response.data;
     }
@@ -132,7 +146,7 @@ async function fetchMasterData(
         };
 
         const requestHeaders = {
-            //'Authorization': `Bearer ${accessToken}`,
+            //'Authorization': Bearer ${accessToken},
             'Authorization': accessToken,
             'x-api-key': process.env.API_KEY || '',
             'x-api-version': process.env.API_VERSION || 'v3',
@@ -143,7 +157,7 @@ async function fetchMasterData(
         console.log('🌐 Making API request to:', apiUrl);
         console.log('📋 Request Method: POST');
         console.log('🔐 Request Headers:', JSON.stringify({
-            //'Authorization': `Bearer ${accessToken.substring(0, 20)}...`,
+            //'Authorization': Bearer ${accessToken.substring(0, 20)}...,
             'Authorization':accessToken,
             'x-api-key': process.env.API_KEY?.substring(0, 10) + '...',
             'x-api-version': requestHeaders['x-api-version'],
@@ -158,7 +172,7 @@ async function fetchMasterData(
             body,
             {
                 headers: requestHeaders,
-                timeout: 30000
+                timeout: 90000
             }
         );
 
@@ -189,7 +203,7 @@ async function fetchMasterData(
             }
             
             if (response.data.data?.charges) {
-                console.log('⚖️ Charges Data:', Array.isArray(response.data.data.charges) ? response.data.data.charges.length + ' items' : 'Present');
+                console.log('⚖ Charges Data:', Array.isArray(response.data.data.charges) ? response.data.data.charges.length + ' items' : 'Present');
             }
             
             if (response.data.data?.['directors/signatory_details']) {
@@ -202,7 +216,7 @@ async function fetchMasterData(
         return response.data;
     } catch (error: any) {
         console.log('\n❌ ===== CORPORATE REGISTRATION API ERROR =====');
-        console.log('⚠️ Error Type:', error.name || 'Unknown');
+        console.log('⚠ Error Type:', error.name || 'Unknown');
         console.log('📋 Error Message:', error.message);
         console.log('🌐 Request URL:', apiUrl);
         console.log('⏰ Error Timestamp:', new Date().toISOString());
@@ -245,10 +259,10 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
             throw new Error('CIN is required.');
         }
         
-        const accessToken = await authenticate();
+        const accessToken = await authenticate(BASEURL);
         return fetchMasterData(accessToken, BASEURL, cin);
 
-        // const response =await axios.get(`${BASEURL}/${cin}`);
+        // const response =await axios.get(${BASEURL}/${cin});
         // return response.data;
         
     } else if (typeOfNet === 'LOCAL') {
@@ -263,10 +277,10 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
         }
         
         console.log('Using sandbox API endpoint for LOCAL:', BASEURL);
-        const accessToken = await authenticate();
+        const accessToken = await authenticate(BASEURL);
         return fetchMasterData(accessToken, BASEURL, cin);
 
-        // const response =await axios.get(`${BASEURL}/${cin}`);
+        // const response =await axios.get(${BASEURL}/${cin});
         // return response.data;
         
     } else {
@@ -279,10 +293,10 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
             throw new Error('CIN is required.');
         }
         
-        const accessToken = await authenticate();
+        const accessToken = await authenticate(BASEURL);
         return fetchMasterData(accessToken, BASEURL, cin);
 
-        // const response =await axios.get(`${BASEURL}/${cin}`);
+        // const response =await axios.get(${BASEURL}/${cin});
         // return response.data;
     }
 }

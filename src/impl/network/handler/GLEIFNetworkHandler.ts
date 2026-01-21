@@ -1,11 +1,6 @@
 /**
  * GLEIFNetworkHandler.ts - Consolidated Network Verification
  * 
- * CONSOLIDATED FROM:
- * - GLEIFEnhancedTestWrapper.ts (runGLEIFTestWithFundedAccounts method)
- * - GLEIFEnvironmentAwareUtils.ts (all network utilities - now via composition)
- * - GLEIFNetworkMultiVerifierUtils.ts (main verification logic + unique methods)
- * 
  * COMPOSITION PATTERN: Uses BaseVerificationCore and ComplianceVerificationBase
  * ZERO FUNCTIONAL CHANGES: All methods work exactly as before
  */
