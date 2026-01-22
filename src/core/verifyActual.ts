@@ -136,18 +136,11 @@ export async function verifyActualFromFile(filename: string): Promise<any> {
         const data = await fs.promises.readFile('src/core/data.json', 'utf8');
         const jsonData = JSON.parse(data);
         const requiredKeys = jsonData.requiredKeys;
-        const d = jsonData.d;
-        //console.log('requiredKeys:', requiredKeys);
-        //console.log('d:', d);             
+        const d = jsonData.d;           
         
         const evalBLJson = JSON.parse(await fs.promises.readFile(filename, 'utf8'));
 
-       ///console.log(" eval BL Json in verify Actual from file ...")
-        //console.log(evalBLJson)
-
         const out = await verifySchema(requiredKeys, d, evalBLJson);
-
-        //console.log("out ...........&&&&&&&&&&   verifyActualFromFile...  ", out )
 
         if (out) {
             console.log("Schema verification completed successfully.");
@@ -163,8 +156,6 @@ export async function verifyActualFromFile(filename: string): Promise<any> {
 }
 
 export async function verifyActualFromJSONString(jsonString: string): Promise<any> {
-//export function verifyProcess(input: UInt8[]) {
-//export function verifyActualFromJSONString(jsonString: string) {
     try {
 
         console.log("data file parsed... ");
@@ -173,16 +164,12 @@ export async function verifyActualFromJSONString(jsonString: string): Promise<an
         const data = await fs.promises.readFile('src/core/data.json', 'utf8');
         const jsonData = JSON.parse(data);
 
-       // console.log("jsonData... ",jsonData);
-
         const requiredKeys = jsonData.requiredKeys;
         const d = jsonData.d;
         console.log('requiredKeys:', requiredKeys);
         console.log('d:', d);
         
         const jsonContent = JSON.parse(jsonString);
-        //const result = await verifySchema(requiredKeys, d, jsonContent);
-        //let result = Bool(true);
         let result = true;
         result = await verifySchema(requiredKeys, d, jsonContent);
 
@@ -201,5 +188,4 @@ export async function verifyActualFromJSONString(jsonString: string): Promise<an
 }
 }
 
-//verifyActual();
 verifyActualFromFile('src/data/scf/actualBL2.json'); 

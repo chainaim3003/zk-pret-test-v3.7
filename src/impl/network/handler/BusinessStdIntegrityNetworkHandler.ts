@@ -635,7 +635,6 @@ export class BusinessStdIntegrityNetworkHandler {
             console.log(`🔍 Explorer: https://minascan.io/${networkType}/tx/${transactionHash}`);
             
             console.log('\n🎉 SUCCESS: Process verification passed with cryptographic proof!');
-            //console.log(`🔐 Process Hash: ${processHash.toString().substring(0, 30)}...`);
             console.log(`🌳 Merkle Root: ${merkleRoot.toString().substring(0, 30)}...`);
             
             console.log(`\n📊 Final Summary:`);
@@ -648,7 +647,6 @@ export class BusinessStdIntegrityNetworkHandler {
             console.log('🎉 BUSINESS PROCESS VERIFICATION COMPLETED SUCCESSFULLY');
             console.log(`📊 Process Type: ${documentType}`);
             console.log(`🏗️  Contract Address: ${zkAppAddress.toBase58()}`);
-            //console.log(`🔍 Process Hash: ${processHash.toString()}`);
             console.log(`🌳 Merkle Root: ${merkleRoot.toString()}`);
             console.log(`🎯 Transaction Hash: ${transactionHash}`);
             console.log(`✅ ZK Proof Verified: Yes`);

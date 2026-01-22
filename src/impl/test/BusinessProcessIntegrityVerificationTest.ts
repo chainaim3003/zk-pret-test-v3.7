@@ -229,12 +229,8 @@ export class BusinessProcessIntegrityOptimMerkleTestUtils {
       
       // ===== STEP 3: FETCH ORACLE DATA (SAME API AS WORKING) =====
       console.log('📡 Fetching oracle data...');
-      // const response = await axios.get('https://0f4aef00-9db0-4057-949e-df6937e3449b.mock.pstmn.io/vernon_mca');
-      // const parsedData = response.data;
-      // console.log('✅ Oracle data fetched successfully');
 
       // // ===== STEP 4: CREATE OPTIMIZED BUSINESS PROCESS DATA =====
-      // const businessProcessID = Field(parsedData["BusinessProcess ID"] ?? 0);
       const timestamp = Field(Date.now());;
 
       // Create circuit-safe strings - SIMPLIFIED approach
@@ -244,7 +240,6 @@ export class BusinessProcessIntegrityOptimMerkleTestUtils {
       const executorCircuitString = this.createCircuitString("OPTIMERKLE_EXECUTOR_001", 32);
 
       // Create initial data structure
-      //const bpmnGroupIDCircuitString = bpmngroupid;
 
       const bpComplianceData = new BusinessProcessIntegrityOptimMerkleData({
         bpmnGroupID:bpmngroupid,

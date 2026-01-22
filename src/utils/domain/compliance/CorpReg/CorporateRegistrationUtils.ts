@@ -37,14 +37,7 @@ async function authenticate(apiUrl: string): Promise<any> {
     if (!authUrl) {
         throw new Error('AUTH_URL is not set in environment variables');
     }
-//     const authUrl = process.env.AUTH_URL;
-// if (!authUrl || authUrl.includes('mock.pstmn.io')) {
-//     console.log('⚠ Mock environment detected - skipping authentication');
-//     console.log('🧪 Returning mock token for testing');
-//     authToken = 'mock_token_for_testing';
-//     tokenExpiry = Date.now() + (50 * 60 * 1000);
-//     return authToken;
-// }
+
 
     const authHeaders = {
         'x-api-key': process.env.API_KEY || '',
@@ -146,7 +139,6 @@ async function fetchMasterData(
         };
 
         const requestHeaders = {
-            //'Authorization': Bearer ${accessToken},
             'Authorization': accessToken,
             'x-api-key': process.env.API_KEY || '',
             'x-api-version': process.env.API_VERSION || 'v3',
@@ -157,7 +149,6 @@ async function fetchMasterData(
         console.log('🌐 Making API request to:', apiUrl);
         console.log('📋 Request Method: POST');
         console.log('🔐 Request Headers:', JSON.stringify({
-            //'Authorization': Bearer ${accessToken.substring(0, 20)}...,
             'Authorization':accessToken,
             'x-api-key': process.env.API_KEY?.substring(0, 10) + '...',
             'x-api-version': requestHeaders['x-api-version'],
@@ -262,8 +253,6 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
         const accessToken = await authenticate(BASEURL);
         return fetchMasterData(accessToken, BASEURL, cin);
 
-        // const response =await axios.get(${BASEURL}/${cin});
-        // return response.data;
         
     } else if (typeOfNet === 'LOCAL') {
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++in sandbox++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
@@ -280,8 +269,6 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
         const accessToken = await authenticate(BASEURL);
         return fetchMasterData(accessToken, BASEURL, cin);
 
-        // const response =await axios.get(${BASEURL}/${cin});
-        // return response.data;
         
     } else {
         console.log('///////////////////////////////////////////////in prod//////////////////////////////////////////////');
@@ -296,7 +283,6 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
         const accessToken = await authenticate(BASEURL);
         return fetchMasterData(accessToken, BASEURL, cin);
 
-        // const response =await axios.get(${BASEURL}/${cin});
-        // return response.data;
+        
     }
 }

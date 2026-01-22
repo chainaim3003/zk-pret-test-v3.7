@@ -185,123 +185,6 @@ export async function getEXIMLocalMultiVerifierUtils(
         console.log(`✅ ZK proof generated successfully for ${companyName}`);
         proofs.push(proof);
 
-        // =================================== Add Company to Registry ===================================
-        // console.log(`\n📋 Adding ${companyName} to company registry...`);
-        // const isCompliant = proof.publicOutput.isEXIMCompliant;
-        // const companyRecord = createCompanyRecord(
-        //   complianceData, 
-        //   isCompliant, 
-        //   currentTimestamp,
-        //   CircuitString,
-        //   EXIMCompanyRecord,
-        //   Field
-        // );
-        // const iec = complianceData.iec.toString();
-        
-        // // Add company to registry and get witness
-        // const companyWitness = companyRegistry.addOrUpdateCompany(iec, companyRecord);
-        // console.log(`✅ Company added to registry. Total companies: ${companyRegistry.getTotalCompanies()}`);
-
-        // // =================================== Verify Proof on Multi-Company Smart Contract ===================================
-        // console.log(`\n🔍 Verifying proof on multi-company smart contract for ${companyName}...`);
-        
-        // // Show contract state before verification
-        // console.log('📊 Contract state before verification:');
-        // const stateBefore = zkApp.getRegistryInfo();
-        // console.log(`  Total Companies: ${stateBefore.totalCompaniesTracked.toString()}`);
-        // console.log(`  Compliant Companies: ${stateBefore.compliantCompaniesCount.toString()}`);
-        // console.log(`  Global Compliance Score: ${stateBefore.globalComplianceScore.toString()}`);
-        // console.log(`  Total Verifications: ${stateBefore.totalVerificationsGlobal.toString()}`);
-
-        // // Create proper CompanyMerkleWitness for the contract call
-        // let properCompanyWitness: CompanyMerkleWitness;
-        // try {
-        //   const tempCompanyTree = new MerkleTree(COMPANY_MERKLE_HEIGHT);
-        //   const companyHash = Poseidon.hash([
-        //     companyRecord.iecHash,
-        //     companyRecord.entityNameHash,
-        //     companyRecord.jurisdictionHash,
-        //     companyRecord.isCompliant.toField(),
-        //     companyRecord.complianceScore,
-        //     companyRecord.totalVerifications,
-        //     companyRecord.lastVerificationTime.value,
-        //     companyRecord.firstVerificationTime.value
-        //   ]);
-        //   tempCompanyTree.setLeaf(BigInt(0), companyHash);
-        //   const realWitness = tempCompanyTree.getWitness(BigInt(0));
-        //   properCompanyWitness = new CompanyMerkleWitness(realWitness);
-        //   console.log('✅ CompanyMerkleWitness created successfully');
-        // } catch (witnessError) {
-        //   console.error(`❌ Error creating CompanyMerkleWitness: ${(witnessError as Error).message}`);
-        //   throw new Error(`Failed to create CompanyMerkleWitness: ${(witnessError as Error).message}`);
-        // }
-
-        // const txn = await Mina.transaction(
-        //   senderAccount,
-        //   async () => {
-        //     await zkApp.verifyOptimizedComplianceWithProof(proof, properCompanyWitness, companyRecord,companyWitness);
-        //   }
-        // );
-
-        // await txn.prove();
-        // await txn.sign([senderKey]).send();
-
-        // console.log(`✅ Proof verified on multi-company smart contract for ${companyName}!`);
-        
-        // // Show contract state after verification
-        // console.log('📊 Contract state after verification:');
-        // const stateAfter = zkApp.getRegistryInfo();
-        // console.log(`  Total Companies: ${stateAfter.totalCompaniesTracked.toString()}`);
-        // console.log(`  Compliant Companies: ${stateAfter.compliantCompaniesCount.toString()}`);
-        // console.log(`  Global Compliance Score: ${stateAfter.globalComplianceScore.toString()}`);
-        // console.log(`  Total Verifications: ${stateAfter.totalVerificationsGlobal.toString()}`);
-        // console.log(`  Companies Root Hash: ${stateAfter.companiesRootHash.toString()}`);
-        // console.log(`  Registry Version: ${stateAfter.registryVersion.toString()}`);
-
-        // // =================================== Demonstrate Enhanced Individual Company Tracking ===================================
-        // console.log(`\n🔍 Testing enhanced individual company tracking for ${companyName}...`);
-        
-        // // Test individual company queries (same as SingleCompany)
-        // const companyInfo = zkApp.getCompanyInfo(properCompanyWitness, companyRecord);
-        // const currentCompliance = zkApp.getCurrentCompliance(properCompanyWitness, companyRecord);
-        // const verificationStats = zkApp.getVerificationStats(properCompanyWitness, companyRecord);
-        
-        // console.log('📋 Individual Company Information:');
-        // console.log(`  • Company Identifier Hash: ${companyInfo.companyIdentifierHash.toString()}`);
-        // console.log(`  • Company Name Hash: ${companyInfo.companyNameHash.toString()}`);
-        // console.log(`  • Jurisdiction Hash: ${companyInfo.jurisdictionHash.toString()}`);
-        // console.log(`  • Is Compliant: ${companyInfo.isCompliant.toJSON()}`);
-        // console.log(`  • Compliance Score: ${companyInfo.complianceScore.toJSON()}`);
-        
-        // console.log('📊 Current Compliance Status:');
-        // console.log(`  • Status: ${currentCompliance.isCompliant.toJSON()}`);
-        // console.log(`  • Last Verification: ${new Date(Number(currentCompliance.lastVerificationTime.toString())).toISOString()}`);
-        // console.log(`  • Score: ${currentCompliance.complianceScore.toJSON()}`);
-        
-        // console.log('📈 Verification Statistics:');
-        // console.log(`  • Total Verifications: ${verificationStats.totalVerifications.toJSON()}`);
-        // console.log(`  • First Verification: ${new Date(Number(verificationStats.firstVerificationTime.toString())).toISOString()}`);
-        // console.log(`  • Last Verification: ${new Date(Number(verificationStats.lastVerificationTime.toString())).toISOString()}`);
-        // console.log(`  • Has Been Verified: ${verificationStats.hasBeenVerified.toJSON()}`);
-
-        // // =================================== Test Company Name-based Queries ===================================
-        // console.log(`\n🏢 Testing company name-based compliance queries...`);
-        // const companyNameCircuit = CircuitString.fromString(companyName);
-        
-        // // Test if company is tracked by name
-        // const isTrackedByName = zkApp.isTrackingCompanyByName(companyNameCircuit, properCompanyWitness, companyRecord);
-        // console.log(`  • Is ${companyName} tracked: ${isTrackedByName.toJSON()}`);
-        
-        // // Test EXIM compliance by company name
-        // const isEXIMCompliantByName = zkApp.isCompanyEXIMCompliant(companyNameCircuit, properCompanyWitness, companyRecord);
-        // console.log(`  • Is ${companyName} EXIM compliant: ${isEXIMCompliantByName.toJSON()}`);
-        
-        // // Test comprehensive company info by name
-        // const complianceByName = zkApp.getCompanyComplianceByName(companyNameCircuit, properCompanyWitness, companyRecord);
-        // console.log(`  • Company tracked by name: ${complianceByName.isTracked.toJSON()}`);
-        // console.log(`  • Company compliant by name: ${complianceByName.isCompliant.toJSON()}`);
-        // console.log(`  • Compliance score by name: ${complianceByName.complianceScore.toJSON()}`);
-        // console.log(`  • Verification count by name: ${complianceByName.verificationCount.toJSON()}`);
 
         // Store verification result
         verificationResults.push({
@@ -317,10 +200,6 @@ export async function getEXIMLocalMultiVerifierUtils(
         // Continue with other companies instead of stopping
         verificationResults.push({
           companyName,
-          // iec: 'ERROR',
-          // isCompliant: false,
-          // complianceScore: 0,
-          // verificationTime: Date.now().toString(),
           error: err.message
         });
         continue;
@@ -385,85 +264,16 @@ export async function getEXIMLocalMultiVerifierUtils(
   }
 }
 
-// =================================== CLI ENTRY POINT ===================================
+  
 
-// async function main(): Promise<void> {
-//   // Get company names and network type from command line arguments
-//   const companyNamesArg = process.argv[2];
   
-//   if (!companyNamesArg) {
-//     console.error('❌ Error: Company names are required');
-//     console.log('📖 Usage: node EXIMLocalMultiVerifierUtils.js "COMPANY1,COMPANY2"');
-//     console.log('📝 Example: node EXIMLocalMultiVerifierUtils.js "Tata Motors Limited,Reliance Industries Limited"');
-//     console.log('📝 Example: node EXIMLocalMultiVerifierUtils.js "Wipro Limited,Infosys Limited"');
-//     console.log('📝 Single Company: node EXIMLocalMultiVerifierUtils.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"');
-//     console.log('🔍 Features: Individual company tracking, name-based queries, same capabilities as SingleCompany contract');
-//     process.exit(1);
-//   }
-  
-//   // Parse company names from comma-separated string
-//   const companyNames = companyNamesArg.split(',').map(name => name.trim()).filter(name => name.length > 0);
-  
-//   if (companyNames.length === 0) {
-//     console.error('❌ Error: At least one company name is required');
-//     process.exit(1);
-//   }
-  
-//   if (companyNames.length > 10) {
-//     console.error('❌ Error: Maximum 10 companies supported in this demo');
-//     process.exit(1);
-//   }
-  
-//   console.log('🏢 Company Names:', companyNames);
-//   console.log('🏠 Environment: LOCAL (local blockchain)');
-//   console.log('📊 Total Companies to Process:', companyNames.length);
-  
-//   try {
-//     const result = await getEXIMLocalMultiVerifierUtils(companyNames);
-    
-//     console.log('\n🎯 Multi-Company Verification completed successfully!');
-//     console.log('\n📊 Final Summary:');
-//     console.log(`✅ Total Companies Processed: ${result.verificationResults.length}`);
-//     console.log(`✅ Successful Verifications: ${result.verificationResults.filter((r: any) => !r.error).length}`);
-//     console.log(`❌ Failed Verifications: ${result.verificationResults.filter((r: any) => r.error).length}`);
-//     console.log(`🏆 Compliant Companies: ${result.verificationResults.filter((r: any) => r.isCompliant).length}`);
-//     console.log(`⚠️ Non-Compliant Companies: ${result.verificationResults.filter((r: any) => !r.isCompliant && !r.error).length}`);
-    
-//     console.log('\n🏢 Company Status Details:');
-//     result.verificationResults.forEach((company: any, index: number) => {
-//       const status = company.error ? '❌ ERROR' : (company.isCompliant ? '✅ COMPLIANT' : '⚠️ NON-COMPLIANT');
-//       console.log(`  ${index + 1}. ${company.companyName}: ${status}`);
-//       if (!company.error) {
-//         console.log(`     📄 IEC: ${company.iec}`);
-//         console.log(`     📊 Score: ${company.complianceScore}%`);
-//         console.log(`     🕒 Verified: ${new Date(Number(company.verificationTime)).toISOString()}`);
-//       } else {
-//         console.log(`     ❌ Error: ${company.error}`);
-//       }
-//     });
-    
-//     console.log('\n🎉 Multi-Company EXIM LOCAL Verification Demo Completed Successfully!');
-//     console.log('📋 Features Demonstrated:');
-//     console.log('  ✅ Multiple company verification in single contract');
-//     console.log('  ✅ Global compliance statistics tracking');
-//     console.log('  ✅ Individual company state management');
-//     console.log('  ✅ Merkle tree-based company registry');
-//     console.log('  ✅ Aggregate compliance scoring');
-//     console.log('  ✅ Real-time EXIM API integration');
-//     console.log('  ✅ Zero-knowledge proof generation and verification');
-//     console.log('  ✅ Smart contract state updates');
-//     console.log('  ✅ LOCAL blockchain execution');
-    
-//   } catch (error) {
-//     console.error('💥 Error:', error);
-//     console.error('💥 Error Stack:', (error as Error).stack || 'No stack trace available');
-//     process.exit(1);
-//   }
-// }
 
-// Always run main function when this module is executed
-// main().catch(err => {
-//   console.error('💥 Fatal Error:', err);
-//   console.error('💥 Fatal Error Stack:', err.stack);
-//   process.exit(1);
-// });
+  
+
+    
+
+    
+
+
+
+

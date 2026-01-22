@@ -718,7 +718,6 @@ export class PRETDeployer {
     return entry;
   });
     const contractLoading = await this.addMicroStepAsync(step, 'LOAD_CONTRACT_CLASS', async () => {
-      //const contractPath = `../contracts/complaince/CorpReg/${contractName}.js`;
       const contractPath = `../contracts/${registryEntry.path}/${contractName}.js`;
 
       try {
@@ -742,22 +741,9 @@ export class PRETDeployer {
 
       const zkProgramName = registryEntry.zkProgram;
       const zkProgramCategory = registryEntry.zkProgramCategory;
-
-      // const CONTRACT_DEPENDENCIES: { [key: string]: string } = {
-      //   'GLEIFOptimMultiCompanySmartContract': 'GLEIFOptimZKProgram',
-      //   'EXIMOptimMultiCompanySmartContract': 'EXIMOptimZKProgram',
-      //   'CorporateRegistrationMultiSmartContract': 'CorporateRegistrationOptimZKProgram',
-      //   'BPMNGenericSmartContract':'BPMNGenericZKProgram'
-      // };
-      
-      // const dependencyProgram = CONTRACT_DEPENDENCIES[contractName];
-      // if (dependencyProgram) {
         console.log(`   🔄 Compiling dependencies... (${zkProgramName})`);
         
         try {
-          // // Import the appropriate ZK program
-          // const zkProgramPath = `../zk-programs/compliance/${dependencyProgram}.js`;
-          // const zkProgramModule = await import(zkProgramPath);
 
           // Construct ZK program path
         const zkProgramPath = `../zk-programs/${zkProgramCategory}/${zkProgramName}.js`;
@@ -781,10 +767,6 @@ export class PRETDeployer {
           const errorMessage = error instanceof Error ? error.message : String(error);
           throw new Error(`Failed to compile dependencies: ${errorMessage}`);
         }
-      // } else {
-      //   console.log(`   ⚠️ No ZK dependencies configured for contract: ${contractName}`);
-      //   throw new Error(`No ZK dependencies configured for contract: ${contractName}`);
-      // }
     });
 
     const compilation = await this.addMicroStepAsync(step, 'COMPILE_CONTRACT', async () => {

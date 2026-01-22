@@ -119,49 +119,6 @@ export interface CorporateRegistrationDataSummary {
   complianceScore: number;
 }
 
-// =================================== Core Field Indices ===================================
-
-// export const CORP_REG_FIELD_INDICES = {
-//   companyName: 0,
-//   CIN: 1,
-//   companyStatus: 2,
-//   category: 3,
-//   classOfCompany: 4,
-//   registrationNumber: 5,
-//   listed: 6,
-//   suspended: 7,
-//   dateOfIncorporation: 8,
-//   numberOfPartners: 9,
-//   companyType: 10,
-//   companySubcategory: 11,
-//   rocCode: 12,
-//   registrarOfCompanies: 13,
-//   email: 14,
-//   phone: 15,
-//   website: 16,
-//   activityDescription: 17,
-//   companyActivityCode: 18,
-//   industrialClass: 19,
-//   mcaId: 20,
-//   jurisdiction: 21,
-//   legalForm: 22,
-//   llpinDetails: 23,
-//   foreignCompanyDetails: 24,
-//   registeredAddressLine1: 25,
-//   registeredCity: 26,
-//   registeredState: 27,
-//   registeredCountry: 28,
-//   registeredPincode: 29,
-//   authorizedCapital: 30,
-//   paidUpCapital: 31,
-//   numberOfMembers: 32,
-//   numberOfDirectors: 33,
-//   complianceStatus: 34,
-//   filingStatus: 35,
-//   lastAgmDate: 36,
-//   lastBsDate: 37,
-//   lastAnnualReturnDate: 38,
-// } as const;
 
 // =================================== Enhanced Fetch with Two-Stage Lookup ===================================
 
@@ -169,50 +126,13 @@ export interface CorporateRegistrationDataSummary {
  * Fetch company data from Corporate Registration API with enhanced Stage 1 logging
  * Parallels GLEIF's fetchGLEIFDataWithFullLogging
  */
-// export async function fetchCorporateRegistrationDataWithFullLogging(
-//   companyNameOrCin: string,
-//   jurisdiction: string = 'IN'
-// ): Promise<CorporateRegistrationAPIResponse> {
-//   console.log(`🔍 STAGE 1: Two-Stage Lookup - Resolving company identifier to CIN`);
-//   console.log(`📋 Company Identifier: "${companyNameOrCin}"`);
-//   console.log(`🌍 Jurisdiction: ${jurisdiction}`);
-  
-//   // Enhanced: Clean the company name/CIN first
-//   const cleanIdentifier = companyNameOrCin
-//     .trim()
-//     .replace(/\^/g, '') // Remove any ^ characters
-//     .replace(/[^\w\s\&\.\'\_]/g, '') // Keep only safe characters
-//     .replace(/\s+/g, ' '); // Normalize spaces
-    
-//   console.log(`🧹 Normalized: "${cleanIdentifier}"`);
-  
-//   try {
-//     const apiResponse = await fetchCorporateRegistrationDataWithFullDetails(cleanIdentifier, jurisdiction);
-    
-//     // Enhanced CIN extraction and validation
-//     const cin = extractCINFromResponse(apiResponse);
-//     const companyName = apiResponse.data?.company_master_data?.company_name;
-    
-//     console.log(`✅ STAGE 1 SUCCESS: Identifier resolved to CIN`);
-//     console.log(`   CIN: ${cin}`);
-//     console.log(`   Company Name: ${companyName}`);
-//     console.log(`   Status: ${apiResponse.data?.company_master_data?.company_status || apiResponse.data?.company_master_data?.['company_status(for_efiling)']}`);
-    
-//     return apiResponse;
-    
-//   } catch (error) {
-//     console.error(`❌ STAGE 1 FAILED: Could not resolve "${companyNameOrCin}" to CIN`);
-//     const errorMessage = error instanceof Error ? error.message : String(error);
-//     throw new Error(`Company identifier resolution failed: ${errorMessage}`);
-//   }
-// }
+
 export async function fetchCorporateRegistrationDataWithFullLogging(
   cin: string,
   jurisdiction: string = 'IN'
 ): Promise<CorporateRegistrationAPIResponse> {
   console.log(`\n🚀 Starting Corporate Registration Data Fetch`);
   console.log(`🔍 CIN: ${cin}`);
-  //console.log(`🌐 Network Type: ${typeOfNet}`);
   console.log(`📡 All environments now use LIVE API`);
   
   try {
@@ -363,72 +283,6 @@ export async function fetchCorporateRegistrationDataWithFullDetails(
  * Analyze Corporate Registration compliance based on API response
  * Enhanced version of the original analyzeCorporateRegistrationCompliance
  */
-// export function analyzeCorporateRegistrationCompliance(apiResponse: CorporateRegistrationAPIResponse): CorporateRegistrationComplianceAnalysis {
-//   if (!apiResponse.data?.company_master_data) {
-//     return {
-//       isCompliant: false,
-//       complianceScore: 0,
-//       issues: ['No Corporate Registration data available'],
-//       summary: 'Company not found in Corporate Registration database'
-//     };
-//   }
-
-//   const record = apiResponse.data.company_master_data;
-//   const issues: string[] = [];
-//   let complianceScore = 0;
-
-//   // Check 1: Company status
-//   const status = record.company_status || record['company_status(for_efiling)'];
-//   if (status?.toLowerCase() === 'active') {
-//     complianceScore += 20;
-//   } else {
-//     issues.push(`Company status is not ACTIVE: ${status}`);
-//   }
-
-//   // Check 2: CIN format validation
-//   const cin = record.cin;
-//   if (cin && validateCIN(cin)) {
-//     complianceScore += 20;
-//   } else {
-//     issues.push(`Invalid CIN format: ${cin}`);
-//   }
-
-//   // Check 3: Required fields present
-//   if (record.company_name && record.jurisdiction) {
-//     complianceScore += 20;
-//   } else {
-//     issues.push('Missing required company information');
-//   }
-
-//   // Check 4: Registration number present
-//   if (record.registration_number) {
-//     complianceScore += 20;
-//   } else {
-//     issues.push('Missing registration number');
-//   }
-
-//   // Check 5: Date of incorporation valid
-//   if (record.date_of_incorporation) {
-//     const incorpDate = new Date(record.date_of_incorporation);
-//     if (incorpDate < new Date()) {
-//       complianceScore += 20;
-//     } else {
-//       issues.push('Invalid date of incorporation');
-//     }
-//   } else {
-//     issues.push('Missing date of incorporation');
-//   }
-
-//   const isCompliant = complianceScore >= 80;
-//   const summary = isCompliant ? 'Company meets Corporate Registration compliance requirements' : `Company has compliance issues: ${issues.join(', ')}`;
-
-//   return {
-//     isCompliant,
-//     complianceScore,
-//     issues,
-//     summary
-//   };
-// }
 
 export function analyzeCorporateRegistrationCompliance(
   response: CorporateRegistrationAPIResponse,
@@ -629,7 +483,6 @@ export function createOptimizedCorporateRegistrationComplianceData(
       // Related fields
       listed: safeCircuitString(extractedData.listed, 'listed'),
       suspended: safeCircuitString(extractedData.suspended, 'suspended'),
-     // roc_code: safeCircuitString(extractedData.rocCode, 'rocCode'),
       
       // Merkle tree root
       merkle_root: merkleRoot
@@ -943,24 +796,7 @@ export function createCorporateRegistrationCompanyRecord(
  * Extract company summary for logging
  * Enhanced version with all fields
  */
-// export function extractCorporateRegistrationSummary(
-//   response: CorporateRegistrationAPIResponse,
-// ): CorporateRegistrationDataSummary {
-//   const masterData = response.data?.company_master_data || {};
-//   const status = masterData['company_status(for_efiling)'] || masterData.company_status || 'UNKNOWN';
-  
-//   // Analyze compliance
-//   const compliance = analyzeCorporateRegistrationCompliance(response);
-  
-//   return {
-//     companyName: masterData.company_name || 'UNKNOWN',
-//     cin: masterData.cin || 'UNKNOWN',
-//     companyStatus: status,
-//     jurisdiction: masterData.jurisdiction || 'IN',
-//     category: masterData.company_category || 'UNKNOWN',
-//     complianceScore: compliance.complianceScore
-//   };
-// }
+
 export function extractCorporateRegistrationSummary(
   response: CorporateRegistrationAPIResponse,
 ): {

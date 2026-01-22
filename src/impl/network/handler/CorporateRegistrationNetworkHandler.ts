@@ -344,19 +344,6 @@ export class CorporateRegistrationNetworkHandler {
       // === PREPARE ZK PROOF DATA ===
       const merkleRoot = tree.getRoot();
       const currentTimestamp = UInt64.from(Date.now());
-      // const complianceData = new CorporateRegistrationOptimComplianceData({
-      //   companyName: extractedData.companyName,
-      //   CIN: extractedData.CIN,
-      //   category: extractedData.category,
-      //   classOfCompany: extractedData.classOfCompany,
-      //   registrationNumber: extractedData.registrationNumber,
-      //   listed: extractedData.listed,
-      //   suspended: extractedData.suspended,
-      //   companyStatus: extractedData.companyStatus,
-      //   dateOfIncorporation: extractedData.dateOfIncorporation,
-      //   numberOfPartners: extractedData.numberOfPartners,
-      //   merkle_root: merkleRoot
-      // });
       const complianceData = createOptimizedCorporateRegistrationComplianceData(
         extractedData,merkleRoot,CircuitString,CorporateRegistrationOptimComplianceData
       );
@@ -424,21 +411,6 @@ export class CorporateRegistrationNetworkHandler {
       const isCompliant = Bool(complianceAnalysis.isCompliant);
       const isCompliantBoolean = complianceAnalysis.isCompliant;
       
-      // const companyRecord = new CorporateRegistrationCompanyRecord({
-      //   cinHash: complianceData.CIN.hash(),
-      //   companyNameHash: complianceData.companyName.hash(),
-      //   jurisdictionHash: CircuitString.fromString(jurisdiction).hash(),
-      //   isCompliant: isCompliant,
-      //   complianceScore: Field(complianceAnalysis.complianceScore),
-      //   totalVerifications: Field(1),
-      //   passedVerifications: Field(isCompliantBoolean ? 1 : 0),
-      //   failedVerifications: Field(isCompliantBoolean ? 0 : 1),
-      //   consecutiveFailures: Field(isCompliantBoolean ? 0 : 1),
-      //   lastVerificationTime: currentTimestamp,
-      //   firstVerificationTime: currentTimestamp,
-      //   lastPassTime: isCompliantBoolean ? currentTimestamp : UInt64.from(0),
-      //   lastFailTime: isCompliantBoolean ? UInt64.from(0) : currentTimestamp,
-      // });
        const companyRecord = createCorporateRegistrationCompanyRecord(
               complianceData, Bool(complianceAnalysis.isCompliant),
               currentTimestamp, CircuitString, CorporateRegistrationCompanyRecord, Field
@@ -465,10 +437,6 @@ export class CorporateRegistrationNetworkHandler {
       const companyWitness = new CompanyMerkleWitness(realWitness);
       
       const companiesMap = new MerkleMap();
-      // const companyKey = Poseidon.hash([
-      //   companyRecord.cinHash,
-      //   companyRecord.companyNameHash
-      // ]);
        const companyKey = CompanyKey.create(
               complianceData.CIN.hash(),
               complianceData.companyName.hash()
@@ -915,21 +883,7 @@ export class CorporateRegistrationNetworkHandler {
           console.log(`\n🔐 Preparing ZK proof data for ${companyName}...`);
           const merkleRoot = tree.getRoot();
           const currentTimestamp = UInt64.from(Date.now());
-          
-
-  //       const complianceData = new CorporateRegistrationOptimComplianceData({
-  // companyName: CircuitString.fromString(extractedData.companyName || ''),
-  // CIN: CircuitString.fromString(extractedData.CIN || ''),
-  // registrationNumber: CircuitString.fromString(extractedData.registrationNumber || ''),
-  // companyStatus: CircuitString.fromString(extractedData.companyStatus || ''),
-  // dateOfIncorporation: CircuitString.fromString(extractedData.dateOfIncorporation || ''),
-  // category: CircuitString.fromString(extractedData.category || ''),
-  // classOfCompany: CircuitString.fromString(extractedData.classOfCompany || ''),
-  // numberOfPartners: CircuitString.fromString(extractedData.numberOfPartners || '0'),
-  // listed: CircuitString.fromString(extractedData.listed || ''),
-  // suspended: CircuitString.fromString(extractedData.suspended || ''),
-  // merkle_root: merkleRoot
-// });
+      
           const complianceData = createOptimizedCorporateRegistrationComplianceData(
             extractedData,merkleRoot,CircuitString,CorporateRegistrationOptimComplianceData
           );
@@ -1006,21 +960,6 @@ export class CorporateRegistrationNetworkHandler {
           const isCompliant = Bool(complianceAnalysis.isCompliant);
           const isCompliantBoolean = complianceAnalysis.isCompliant;
           
-          // const companyRecord = new CorporateRegistrationCompanyRecord({
-          //   cinHash: complianceData.CIN.hash(),
-          //   companyNameHash: complianceData.companyName.hash(),
-          //   jurisdictionHash: CircuitString.fromString(jurisdiction).hash(),
-          //   isCompliant: isCompliant,
-          //   complianceScore: Field(complianceAnalysis.complianceScore),
-          //   totalVerifications: Field(1),
-          //   passedVerifications: Field(isCompliantBoolean ? 1 : 0),
-          //   failedVerifications: Field(isCompliantBoolean ? 0 : 1),
-          //   consecutiveFailures: Field(isCompliantBoolean ? 0 : 1),
-          //   lastVerificationTime: currentTimestamp,
-          //   firstVerificationTime: currentTimestamp,
-          //   lastPassTime: isCompliantBoolean ? currentTimestamp : UInt64.from(0),
-          //   lastFailTime: isCompliantBoolean ? UInt64.from(0) : currentTimestamp,
-          // });
            const companyRecord = createCorporateRegistrationCompanyRecord(
               complianceData, Bool(complianceAnalysis.isCompliant),
               currentTimestamp, CircuitString, CorporateRegistrationCompanyRecord, Field

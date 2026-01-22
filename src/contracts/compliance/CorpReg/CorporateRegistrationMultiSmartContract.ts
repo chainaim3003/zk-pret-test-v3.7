@@ -6,12 +6,6 @@ export const COMPANY_MERKLE_HEIGHT = 8; // Height 8 for up to 256 companies
 export class CompanyMerkleWitness extends MerkleWitness(COMPANY_MERKLE_HEIGHT) {}
 
 // =================================== ✅ ENHANCED: Company Record Structure ===================================
-// 🆕 Added fields from GLEIF (lines 42-43, 48):
-// - passedVerifications: Field
-// - failedVerifications: Field  
-// - consecutiveFailures: Field
-// - lastPassTime: UInt64
-// - lastFailTime: UInt64
 export class CorporateRegistrationCompanyRecord extends Struct({
    cinHash: Field,                     // Hash of CIN for privacy
    companyNameHash: Field,             // Hash of company name for privacy
@@ -29,7 +23,6 @@ export class CorporateRegistrationCompanyRecord extends Struct({
 }) {}
 
 // =================================== 🆕 NEW: Company Verification Statistics ===================================
-// Added from GLEIF (lines 60-73)
 export class CompanyVerificationStats extends Struct({
    cinHash: Field,
    companyNameHash: Field,
@@ -47,7 +40,6 @@ export class CompanyVerificationStats extends Struct({
 }) {}
 
 // =================================== 🆕 NEW: Company Query Results ===================================
-// Added from GLEIF (lines 76-81)
 export class CompanyQueryResult extends Struct({
    exists: Bool,
    record: CorporateRegistrationCompanyRecord,
@@ -56,7 +48,6 @@ export class CompanyQueryResult extends Struct({
 }) {}
 
 // =================================== 🆕 NEW: Company Storage Key ===================================
-// Added from GLEIF (lines 84-94)
 export class CompanyKey extends Struct({
    cinHash: Field,
    nameHash: Field,
@@ -101,7 +92,6 @@ export class CorporateRegistrationMultiSmartContract extends SmartContract {
    @state(Field) companiesMapRoot = State<Field>();           // 🆕 Field 5: MerkleMap root (was companiesRootHash)
    @state(Field) registryVersion = State<Field>();           // Field 6: Registry version
    @state(Bool) contractDisabled = State<Bool>();            // 🆕 Field 7: Emergency disable
-   // @state(UInt64) contractCreationTime = State<UInt64>();    // Field 8: Contract creation time
 
    // =================================== ✅ ENHANCED: Initialize Contract ===================================
    // 🆕 Improved initialization from GLEIF (line 158)
@@ -115,7 +105,6 @@ export class CorporateRegistrationMultiSmartContract extends SmartContract {
       
       // Initialize timestamps with actual current time
       this.lastVerificationTime.set(UInt64.from(Date.now()));
-      //this.contractCreationTime.set(UInt64.from(Date.now()));
       
       // Initialize version
       this.registryVersion.set(Field(1)); // Version 1.0
@@ -520,7 +509,6 @@ export class CorporateRegistrationMultiSmartContract extends SmartContract {
       totalCompanies: Field;
       compliantCompanies: Field;
       totalVerifications: Field;
-      //creationTime: UInt64;
       version: Field;
    } {
       // Add required state preconditions
@@ -528,7 +516,6 @@ export class CorporateRegistrationMultiSmartContract extends SmartContract {
       this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
       this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
       this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
-      //this.contractCreationTime.requireEquals(this.contractCreationTime.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
       
       return {
@@ -536,7 +523,6 @@ export class CorporateRegistrationMultiSmartContract extends SmartContract {
          totalCompanies: this.totalCompaniesTracked.get(),
          compliantCompanies: this.compliantCompaniesCount.get(),
          totalVerifications: this.totalVerificationsGlobal.get(),
-         //creationTime: this.contractCreationTime.get(),
          version: this.registryVersion.get(),
       };
    }

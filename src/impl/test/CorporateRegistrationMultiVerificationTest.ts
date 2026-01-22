@@ -300,7 +300,6 @@ export async function getCorporateRegistrationOptimMultiCompanyVerificationWithS
 ) {
   console.log(`\n🚀 Corporate Registration Multi-Company Verification Test Started`);
   console.log(`🏢 Companies: ${companyNames.join(', ')}`);
-  //console.log(`🌐 Network: ${typeOfNet}`);
   console.log(`📊 Total Companies: ${companyNames.length}`);
 
   try {

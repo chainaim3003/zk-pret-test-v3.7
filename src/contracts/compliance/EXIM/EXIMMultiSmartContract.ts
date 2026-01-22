@@ -101,7 +101,7 @@ export class EXIMMultiSmartContract extends SmartContract {
    @state(Field) totalVerificationsGlobal = State<Field>();  // Total verifications across all companies
    @state(UInt64) lastVerificationTime = State<UInt64>();    // Most recent verification timestamp
    @state(Field) registryVersion = State<Field>();           // Registry version for upgrades
-    @state(Field) companiesMapRoot = State<Field>();     // When contract was deployed
+   @state(Field) companiesMapRoot = State<Field>();     // When contract was deployed
 
    // =================================== Initialize Contract ===================================
    init() {
@@ -250,7 +250,7 @@ export class EXIMMultiSmartContract extends SmartContract {
       Provable.log('🔍 NEW Compliant Count:', newCompliantCount);
       Provable.log('🔍 NEW Total Verifications:', newTotalVerifications);
       
-      // ✅ FIXED: Update all state fields
+      // Update all state fields
       this.totalCompaniesTracked.set(newTotalCompanies);
       this.compliantCompaniesCount.set(newCompliantCount);
       this.totalVerificationsGlobal.set(newTotalVerifications);

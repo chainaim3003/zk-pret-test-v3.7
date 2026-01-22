@@ -212,14 +212,6 @@ export class BusinessStdMerkleTree {
     return this.tree.getRoot();
   }
 
-  // public witness(index: number): BusinessStdMerkleWitness8 {
-  //   return new BusinessStdMerkleWitness8(this.tree.getWitness(BigInt(index)));
-  // }
-
-  // // Compatibility method for test utils
-  // public getWitness(index: number): BusinessStdMerkleWitness8 {
-  //   return this.witness(index);
-  // }
 
   // Get field value by index
   public getFieldValue(index: number): CircuitString {
@@ -349,16 +341,6 @@ export class BusinessStdMerkleUtils {
     return tree;
   }
 
-  // Get witnesses for specific fields
-  // static getFieldWitnesses(tree: BusinessStdMerkleTree, fieldNames: string[]): BusinessStdMerkleWitness8[] {
-  //   return fieldNames.map(fieldName => {
-  //     const index = this.FIELD_INDICES[fieldName as keyof typeof this.FIELD_INDICES];
-  //     if (index === undefined) {
-  //       throw new Error(`Unknown field name: ${fieldName}. Available fields: ${Object.keys(this.FIELD_INDICES).join(', ')}`);
-  //     }
-  //     return tree.witness(index);
-  //   });
-  // }
 
   // Get field values for specific fields
   static getFieldValues(tree: BusinessStdMerkleTree, fieldNames: string[]): CircuitString[] {
@@ -373,7 +355,6 @@ export class BusinessStdMerkleUtils {
 
   // Get core compliance fields for required 24 field validation
   static getCoreComplianceFields(tree: BusinessStdMerkleTree): {
-    //witnesses: BusinessStdMerkleWitness8[],
     values: CircuitString[],
     fieldNames: string[]
   } {
@@ -400,88 +381,11 @@ export class BusinessStdMerkleUtils {
     ];
     
     return {
-      //witnesses: this.getFieldWitnesses(tree, coreFields),
       values: this.getFieldValues(tree, coreFields),
       fieldNames: coreFields
     };
   }
 
-  // // Get enhanced compliance fields (core + additional ZKRegex fields)
-  // static getEnhancedComplianceFields(tree: BusinessStdMerkleTree): {
-  //   witnesses: BusinessStdMerkleWitness8[],
-  //   values: CircuitString[],
-  //   fieldNames: string[]
-  // } {
-  //   const enhancedFields = [
-  //     // Core 24 fields
-  //     'transportDocumentReference', 'shipperPartyName', 'issuingPartyName', 
-  //     'addressCity', 'countryCode', 'carrierCode',
-  //     'transportDocumentTypeCode', 'receiptTypeAtOrigin', 
-  //     'deliveryTypeAtDestination', 'carrierCodeListProvider',
-  //     'isShippedOnBoardType', 'isElectronic', 'isToOrder',
-  //     'partyContactDetailsCount', 'consignmentItemsCount', 
-  //     'utilizedTransportEquipmentsCount', 'vesselVoyagesCount',
-  //     'transportDocumentStatus', 'street', 'termsAndConditions',
-  //     'cargoMovementTypeAtOrigin', 'cargoMovementTypeAtDestination',
-  //     'plannedArrivalDate', 'plannedDepartureDate',
-      
-  //     // Additional ZKRegex fields (14 fields)
-  //     'vesselName', 'carrierExportVoyageNumber', 'equipmentReference',
-  //     'carrierBookingReference', 'serviceContractReference', 'sealNumber',
-  //     'currencyCode', 'portOfLoadingCountry', 'portOfDischargeCountry',
-  //     'ISOEquipmentCode', 'packageCode', 'paymentTermCode',
-  //     'freightPaymentTermCode', 'portOfLoadingCode'
-  //   ];
-    
-  //   return {
-  //     witnesses: this.getFieldWitnesses(tree, enhancedFields),
-  //     values: this.getFieldValues(tree, enhancedFields),
-  //     fieldNames: enhancedFields
-  //   };
-  // }
-
-//   // Verify a field exists in the tree (useful for testing)
-//   static verifyFieldInTree(tree: BusinessStdMerkleTree, fieldName: string, expectedValue?: string): boolean {
-//     try {
-//       const index = this.FIELD_INDICES[fieldName as keyof typeof this.FIELD_INDICES];
-//       if (index === undefined) return false;
-
-//       const witness = tree.witness(index);
-//       const fieldValue = tree.getFieldValue(index);
-//       const fieldHash = Poseidon.hash(fieldValue.values.map(c => c.toField()));
-//       const calculatedRoot = witness.calculateRoot(fieldHash);
-      
-//       const rootMatches = calculatedRoot.equals(tree.root).toBoolean();
-      
-//       if (expectedValue) {
-//         const valueMatches = fieldValue.toString() === expectedValue;
-//         console.log(`🔍 Field '${fieldName}': Root match=${rootMatches}, Value match=${valueMatches}`);
-//         return rootMatches && valueMatches;
-//       }
-      
-//       console.log(`🔍 Field '${fieldName}': Root match=${rootMatches}`);
-//       return rootMatches;
-//     } catch (error) {
-//       console.error(`❌ Error verifying field '${fieldName}':`, error);
-//       return false;
-//     }
-//   }
-
-//   // Print tree summary
-//   static printTreeSummary(tree: BusinessStdMerkleTree): void {
-//     console.log('\n📊 Business Standard Merkle Tree Summary:');
-//     console.log(`🔗 Root: ${tree.root.toString()}`);
-//     console.log(`📁 Total fields: ${tree.values.length}`);
-//     console.log('\n📋 Available fields:');
-    
-//     const fields = tree.listFields();
-//     fields.forEach((field, index) => {
-//       const truncatedValue = field.value.length > 50 ? 
-//         field.value.substring(0, 47) + '...' : field.value;
-//       console.log(`  ${field.index.toString().padStart(2)}: ${field.name.padEnd(35)} = "${truncatedValue}"`);
-//     });
-//     console.log('');
-//   }
 }
 
 export interface BusinessStdIntegrityVerificationResult {
@@ -515,15 +419,12 @@ function validateCriticalFields(values: any[], fieldNames: string[], requiredCou
         console.log('\n📜 Business Rule: All core fields are MANDATORY for compliance.');
         console.log('                   Cannot generate proof with missing critical data.');
         
-        //throw new Error(`Cannot generate proof: ${missingCriticalFields.length} critical fields missing: ${missingCriticalFields.map(f => f.name).join(', ')}`);
         return false;
     }
     else{
         return true;
     }
     
-    //console.log(`✅ All ${requiredCount} critical fields present - proceeding with REAL proof generation`);
-    //return true;
 }
 
 
@@ -559,18 +460,10 @@ export async function getBusinessStdIntegrityLocalVerifier(
     console.log('\n🏠 Starting Business Standard Integrity LOCAL Verification');
     console.log('='.repeat(65));
     console.log(`📄 Document Type: ${documentType}`);
-    //console.log(`📂 Document File: ${documentFile}`);
     console.log('✅ REAL ZK Proofs: Using actual BusinessStdIntegrityOptimMerkleVerifier');
     
     try {
-        // Load and validate document data - EXACT pattern
-        // console.log(`\n📂 Loading document data from: ${documentFile}`);
-        // if (!fs.existsSync(documentFile)) {
-        //     throw new Error(`File not found: ${documentFile}`);
-        // }
         
-        // const documentDataRaw = fs.readFileSync(documentFile, 'utf8');
-        //const documentData = JSON.parse(documentDataRaw);
         console.log('✅ Document data loaded successfully');
         
         const proofResult = await generateRealBusinessStdIntegrityProof(documentData);

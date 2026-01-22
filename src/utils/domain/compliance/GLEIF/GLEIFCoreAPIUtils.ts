@@ -491,7 +491,6 @@ export class CompanyRegistry {
     this.COMPANY_MERKLE_HEIGHT = merkleHeight;
     this.companyRecords = new Map();
     this.nextIndex = 0;
-    // this.companiesTree = new MerkleTree(this.COMPANY_MERKLE_HEIGHT); // Set in actual usage
   }
 
   /**

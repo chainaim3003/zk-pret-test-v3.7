@@ -13,8 +13,6 @@
  */
 
 import { Field, Bool, UInt64, CircuitString, Poseidon ,PublicKey} from 'o1js';
-// MerkleWitness8 will be imported where needed
-// import { MerkleWitness8 } from '../../../utils/optimerkle/MerkleTreeManager.js';
 
 
 import parseBpmn from '../../utils/transform/parsebpmn.js';

@@ -150,8 +150,6 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
     // Verify the proof cryptographically
     composedProof.verify();
     
-    // Additional verification logic would go here
-    // For now, just verify the proof is valid
   }
 
   // =================================== State Query Methods ===================================
@@ -165,8 +163,6 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
     const currentTotal = this.totalProofsStored.getAndRequireEquals();
     const currentTimestamp = this.lastUpdateTimestamp.getAndRequireEquals();
     
-    // For now, just verify state access works
-    // In a real implementation, this might emit an event with the state info
   }
 
   /**
@@ -209,7 +205,6 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
 
   // =================================== Event Definitions for Off-Chain Indexing ===================================
   
-  // No events defined to avoid o1js constraint issues
 }
 
 /**

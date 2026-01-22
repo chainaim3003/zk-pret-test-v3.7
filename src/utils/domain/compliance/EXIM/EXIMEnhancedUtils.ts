@@ -5,7 +5,6 @@ import axios from 'axios';
 // =================================== EXIM API Response Interface ===================================
 interface EXIMAPIResponse {
   success?: boolean;
-  //data?: {
     iec?: string;
     entityName?: string;
     iecIssueDate?: string;
@@ -41,7 +40,6 @@ interface EXIMAPIResponse {
     directors?: Array<{
       name?: string;
     }>;
-  //};
   error?: string;
   message?: string;
   
@@ -61,7 +59,6 @@ export function printEXIMResponse(
 ): void {
   console.log(`\n🚢 ===== EXIM API RESPONSE =====`);
   console.log(`🔍 Query: ${companyIdentifier}`);
-  //console.log(`🌐 Network: ${typeOfNet}`);
   console.log(`📅 Timestamp: ${new Date().toISOString()}`);
   console.log(`🔄 API Response Structure Analysis:`);
   
@@ -117,27 +114,6 @@ export function printEXIMResponse(
       console.log(`  Contact No: ${data.contactNo !== undefined ? data.contactNo : 'N/A'}`);
       console.log(`  Email: ${data.email || 'N/A'}`);
       
-      // Branch information
-      /*if (data.branches && Array.isArray(data.branches) && data.branches.length > 0) {
-        console.log(`\n🏢 Branch Information (${data.branches.length} branches):`);
-        data.branches.forEach((branch, index) => {
-          console.log(`  Branch ${index + 1}:`);
-          console.log(`    Branch Code: ${branch.branchCode !== undefined ? branch.branchCode : 'N/A'}`);
-          console.log(`    Address 1: ${branch.badd1 || 'N/A'}`);
-          console.log(`    Address 2: ${branch.badd2 || 'N/A'}`);
-          console.log(`    City: ${branch.city || 'N/A'}`);
-          console.log(`    State: ${branch.state || 'N/A'}`);
-          console.log(`    PIN: ${branch.pin !== undefined ? branch.pin : 'N/A'}`);
-        });
-      }
-      
-      // Director information
-      if (data.directors && Array.isArray(data.directors) && data.directors.length > 0) {
-        console.log(`\n👥 Director Information (${data.directors.length} directors):`);
-        data.directors.forEach((director, index) => {
-          console.log(`  Director ${index + 1}: ${director.name || 'N/A'}`);
-        });
-      }*/
       
       // Complete field inventory
       console.log(`\n📋 Complete Field Inventory (All fields):`);
@@ -167,7 +143,6 @@ export async function fetchEXIMDataWithFullLogging(
 ): Promise<EXIMAPIResponse> {
   console.log(`\n🚀 Starting EXIM Data Fetch`);
   console.log(`🔍 Company Name: ${companyName}`);
-  //console.log(`🌐 Network Type: ${typeOfNet}`);
   
   try {
     // Import the existing utility function to avoid breaking existing code

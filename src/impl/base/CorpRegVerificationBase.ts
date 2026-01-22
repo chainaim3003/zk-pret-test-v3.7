@@ -225,14 +225,6 @@ export class CorpRegVerificationBase {
       // Get analysis with error handling
       const analysis = this.analyzeComplianceFields(complianceData);
       
-      // Safe field extraction for logging
-    //   const entityStatus = this.safeToString(complianceData.entity_status, 'entity_status');
-    //   const registrationStatus = this.safeToString(complianceData.registration_status, 'registration_status');
-    //   const conformityFlag = this.safeToString(complianceData.conformity_flag, 'conformity_flag');
-    //   const lastUpdateDate = this.safeToString(complianceData.lastUpdateDate, 'lastUpdateDate');
-    //   const nextRenewalDate = this.safeToString(complianceData.nextRenewalDate, 'nextRenewalDate');
-    //   const lei = this.safeToString(complianceData.lei, 'lei');
-      
       const companyName = this.safeToString(complianceData.name, 'companyName');
       const cin = this.safeToString(complianceData.cin, ' CIN');
       const registrationNumber = this.safeToString(complianceData.registration_number, 'registrationNumber');

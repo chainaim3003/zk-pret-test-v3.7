@@ -11,22 +11,18 @@ export class bpmnCircuit extends SmartContract {
   }
 
   @method async verifyTrace(trace : Bytes50) {
-	// console.log("calling verifiyTrace for, ")
     let out = verifyProcess(trace.bytes);
     this.accepted.set(out)
   }
 }
 
-
 // Command used: 'a(cb|bc)d(ef|f)g' '--functionName' 'verifyProcess' '--filePath' './src/bpmnCircuit.ts'
 export function verifyProcess(input: UInt8[]) {
-	// console.log("calling verifyProcess ")
 	const num_bytes = input.length;
 	let states: Bool[][] = Array.from({ length: num_bytes + 1 }, () => []);
 	let state_changed: Bool[] = Array.from({ length: num_bytes }, () => Bool(false));
 	
 	states[0][0] = Bool(true);
-	//states[0][0] = Bool(false);
 	for (let i = 1; i < 9; i++) {
 		states[0][i] = Bool(false);
 	}
@@ -75,7 +71,6 @@ export function verifyProcess(input: UInt8[]) {
 	}
 	
 	let final_state_result = Bool(false);
-	//let final_state_result = Bool(true);//we are changing the default value to true because at compile time it is breaking the code.
 	for (let i = 0; i <= num_bytes; i++) {
 		final_state_result = final_state_result.or(states[i][8]);
 	}

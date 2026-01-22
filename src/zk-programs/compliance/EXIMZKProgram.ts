@@ -200,7 +200,6 @@ export const EXIM = ZkProgram({
             // Entity is EXIM compliant if ALL conditions are met
             const isEXIMCompliant = isEntityNameValid
                .and(isIECValid)
-               //.and(isPANValid)
                .and(isIECIssueDateValid)
                .and(isIECModificationDateValid)
                .and(isDataAsOnValid)

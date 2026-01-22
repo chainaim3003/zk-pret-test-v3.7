@@ -17,17 +17,9 @@ import { safeLogSmartContractStateLocal } from './SafeStateRetrievalLocal.js';
 import { environmentManager } from '../../infrastructure/index.js';
 
 
-// isEntityActive,
-//         isValidName,
-//         hasValidDates,
-//         hasValidIEC,
-//         allRulesPassed,
-//         rulesPassedCount
-
 export interface ComplianceAnalysis {
   isEntityActive: boolean;
   isValidName: boolean;
-  //isConformityOk: boolean;
   hasValidDates: boolean;
   hasValidIEC: boolean;
   allRulesPassed: boolean;
@@ -98,33 +90,20 @@ export class ComplianceVerificationBase {
         console.error('❌ Invalid compliance data provided');
         throw new Error('Invalid compliance data structure');
       }
-
-//        iec: CircuitString,
-//    entityName: CircuitString,
-//    iecIssueDate: CircuitString,
-//    pan: CircuitString,
-//    iecStatus: Field,
-//    iecModificationDate: CircuitString,
-//    dataAsOn: CircuitString,
       
       // Safe field extraction with fallbacks
       const entityName = this.safeToString(complianceData.entityName, 'entityName');
       const iecStatus = this.safeToString(complianceData.iecStatus, 'iecStatus');
-    //   const conformityFlag = this.safeToString(complianceData.conformity_flag, 'conformity_flag');
-    //   const lastUpdateDate = this.safeToString(complianceData.lastUpdateDate, 'lastUpdateDate');
       const iecModificationDate = this.safeToString(complianceData.iecModificationDate, 'iecModificationDate');
       const iec = this.safeToString(complianceData.iec, 'iec');
       
       // Business logic validation
       const isEntityActive = iecStatus === '0';
       const isValidName = entityName !== '' && entityName !== 'EMPTY' && entityName !== 'UNDEFINED';
-    //   const isConformityOk = ['CONFORMING', 'UNKNOWN', '', 'EMPTY'].includes(conformityFlag);
-    const hasValidDates = iecModificationDate !== '' && iecModificationDate !== 'EMPTY';
-                        //    nextRenewalDate !== '' && nextRenewalDate !== 'EMPTY' &&
-                        //    lastUpdateDate !== 'UNDEFINED' && nextRenewalDate !== 'UNDEFINED';
+      const hasValidDates = iecModificationDate !== '' && iecModificationDate !== 'EMPTY';
       const hasValidIEC = iec !== '' && iec !== 'EMPTY' && iec !== 'UNDEFINED';
       
-      const allRulesPassed = isEntityActive && hasValidDates && hasValidIEC && isValidName; // && isConformityOk;
+      const allRulesPassed = isEntityActive && hasValidDates && hasValidIEC && isValidName; 
       const rulesPassedCount = [isEntityActive, hasValidDates, hasValidIEC, isValidName]
         .filter(Boolean).length;
 
@@ -143,7 +122,6 @@ export class ComplianceVerificationBase {
       return {
         isEntityActive: false,
         isValidName: false,
-        //isConformityOk: false,
         hasValidDates: false,
         hasValidIEC: false,
         allRulesPassed: false,
@@ -243,16 +221,12 @@ export class ComplianceVerificationBase {
       // Safe field extraction for logging
       const entityName = this.safeToString(complianceData.entityName, 'entityName');
       const iecStatus = this.safeToString(complianceData.iecStatus, 'iecStatus');
-      //const conformityFlag = this.safeToString(complianceData.conformity_flag, 'conformity_flag');
       const iecModificationDate = this.safeToString(complianceData.iecModificationDate, 'iecModificationDate');
-      //const nextRenewalDate = this.safeToString(complianceData.nextRenewalDate, 'nextRenewalDate');
       const iec = this.safeToString(complianceData.iec, 'iec');
       
       // Log analysis results
       console.log(`  🏢 Entity Status: "${iecStatus}" → ${analysis.isEntityActive ? '✅ ACTIVE (Pass)' : '❌ NOT ACTIVE (Fail)'}`);
       console.log(`  📋 Valid Name: "${entityName}" → ${analysis.isValidName ? '✅ ISSUED (Pass)' : '❌ NOT ISSUED (Fail)'}`);
-      //console.log(`  🔍 Conformity Flag: "${conformityFlag}" → ${analysis.isConformityOk ? '✅ ACCEPTABLE (Pass)' : '❌ NON-CONFORMING (Fail)'}`);
-      //console.log(`  📅 Date Validation: Last Update "${lastUpdateDate}", Next Renewal "${nextRenewalDate}" → ${analysis.hasValidDates ? '✅ VALID DATES (Pass)' : '❌ INVALID DATES (Fail)'}`);
       console.log(`  🆔 LEI Validation: "${iec}" → ${analysis.hasValidIEC ? '✅ VALID LEI (Pass)' : '❌ EMPTY LEI (Fail)'}`);
       
       // Safe Bool conversion
@@ -277,7 +251,6 @@ export class ComplianceVerificationBase {
         console.log(`  ⚠️ Rules That ${phase === 'Pre-Verification' ? 'Will' : 'Did'} Fail:`);
         if (!analysis.isEntityActive) console.log(`    - Entity Status must be "ACTIVE", got "${iecStatus}"`);
         if (!analysis.isValidName) console.log(`    - Registration Status must be "ISSUED", got "${entityName}"`);
-        //if (!analysis.isConformityOk) console.log(`    - Conformity Flag must be "CONFORMING", "UNKNOWN" or empty, got "${conformityFlag}"`);
         if (!analysis.hasValidDates) console.log(`    - Last Update and Next Renewal dates must not be empty`);
         if (!analysis.hasValidIEC) console.log(`    - LEI must not be empty`);
       }

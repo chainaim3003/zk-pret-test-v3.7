@@ -3,7 +3,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export async function fetchEXIMCompanyData(companyName: string): Promise<any> {
-    //const BASEURL = process.env.GLEIF_URL_PROD;
     let BASEURL: string | undefined;
     let url: string;
     let typeOfNet = process.env.BUILD_ENV;
@@ -48,9 +47,6 @@ export async function fetchEXIMCompanyData(companyName: string): Promise<any> {
     const parsedData = response.data;
     console.log('EXIM API Response:', parsedData);
 
-    // if (!parsedData.data || parsedData.data.length === 0) {
-    // throw new Error('No company found with that name.');
-    // }
 
     return parsedData;
 }

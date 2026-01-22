@@ -132,7 +132,6 @@ async function fetchMasterData(
         };
 
         const requestHeaders = {
-            //'Authorization': `Bearer ${accessToken}`,
             'Authorization': accessToken,
             'x-api-key': process.env.API_KEY || '',
             'x-api-version': process.env.API_VERSION || 'v3',
@@ -143,7 +142,6 @@ async function fetchMasterData(
         console.log('🌐 Making API request to:', apiUrl);
         console.log('📋 Request Method: POST');
         console.log('🔐 Request Headers:', JSON.stringify({
-            //'Authorization': `Bearer ${accessToken.substring(0, 20)}...`,
             'Authorization':accessToken,
             'x-api-key': process.env.API_KEY?.substring(0, 10) + '...',
             'x-api-version': requestHeaders['x-api-version'],
@@ -263,8 +261,6 @@ export async function fetchCorporateRegistrationData(cin: string): Promise<any> 
         const accessToken = await authenticate();
         return fetchMasterData(accessToken, BASEURL, cin);
 
-        // const response =await axios.get(`${BASEURL}/${cin}`);
-        // return response.data;
         
     } else {
         console.log('///////////////////////////////////////////////in prod//////////////////////////////////////////////');
@@ -390,7 +386,6 @@ export function printCorporateRegistrationResponse(
 ): void {
   console.log(`\n🏢 ===== CORPORATE REGISTRATION API RESPONSE =====`);
   console.log(`🔍 Query: ${companyIdentifier}`);
-  //console.log(`🌐 Network: ${typeOfNet}`);
   console.log(`📅 Timestamp: ${new Date().toISOString()}`);
   console.log(`🔄 API Response Structure Analysis:`);
   
@@ -514,12 +509,9 @@ export async function fetchCorporateRegistrationDataWithFullLogging(
 ): Promise<CorporateRegistrationAPIResponse> {
   console.log(`\n🚀 Starting Corporate Registration Data Fetch`);
   console.log(`🔍 CIN: ${cin}`);
-  //console.log(`🌐 Network Type: ${typeOfNet}`);
   console.log(`📡 All environments now use LIVE API`);
   
   try {
-    // Import the existing utility function to avoid breaking existing code
-    //const { fetchCorporateRegistrationData } = await import('./CorporateRegistrationUtils.js');
     
     // Use the existing function to get the data
     const response = await fetchCorporateRegistrationData(cin);
@@ -662,27 +654,3 @@ export function isCompanyCorporateRegistrationCompliant(
   }
 }
 
-// //export type { CorporateRegistrationAPIResponse };
-// async function main() {
-//   try {
-//     // Get company name from CLI args (default fallback)
-//     const companyName = process.argv[2] ;
-
-//     console.log(`\n🏁 Starting compliance check for: ${companyName}\n`);
-
-//     // Call compliance check
-//     const isCompliant = await isCompanyCorporateRegistrationCompliant(companyName);
-
-//     console.log(`\n📊 Compliance Result:`);
-//     console.log(`   Company: ${companyName}`);
-//     console.log(`   Compliant: ${isCompliant ? "✅ YES" : "❌ NO"}`);
-
-//     process.exit(0);
-//   } catch (err: any) {
-//     console.error(`\n🚨 Error in main(): ${err.message}`);
-//     process.exit(1);
-//   }
-// }
-
-// // If this file is executed directly (not imported), run main
-// main();

@@ -3,7 +3,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export async function fetchEXIMCompanyData(companyName: string): Promise<any> {
-    //const BASEURL = process.env.GLEIF_URL_PROD;
     let BASEURL: string | undefined;
     let url: string;
     let typeOfNet = process.env.BUILD_ENV;
@@ -48,10 +47,7 @@ export async function fetchEXIMCompanyData(companyName: string): Promise<any> {
     const parsedData = response.data;
     console.log('EXIM API Response:', parsedData);
 
-    // if (!parsedData.data || parsedData.data.length === 0) {
-    // throw new Error('No company found with that name.');
-    // }
-
+  
     return parsedData;
 }
 
@@ -128,8 +124,7 @@ export async function fetchEXIMDataWithFullLogging(
   console.log(`🔍 Company Name: ${companyName}`);
   
   try {
-    // Import the existing utility function to avoid breaking existing code
-    //const { fetchEXIMCompanyData } = await import('./EXIMUtils.js');
+    
     
     // Use the existing function to get the data
     const response = await fetchEXIMCompanyData(companyName);
@@ -346,30 +341,4 @@ export function isCompanyEXIMCompliant(
   }
 }
 
-/**
- * Main entrypoint for testing EXIM compliance
- * Usage: ts-node EXIMCoreAPIUtils.ts "CompanyName"
- */
-// async function main() {
-//   try {
-//     // Get company name from CLI args (default fallback)
-//     const companyName = process.argv[2] ;
 
-//     console.log(`\n🏁 Starting compliance check for: ${companyName}\n`);
-
-//     // Call compliance check
-//     const isCompliant = await isCompanyEXIMCompliant(companyName);
-
-//     console.log(`\n📊 Compliance Result:`);
-//     console.log(`   Company: ${companyName}`);
-//     console.log(`   Compliant: ${isCompliant ? "✅ YES" : "❌ NO"}`);
-
-//     process.exit(0);
-//   } catch (err: any) {
-//     console.error(`\n🚨 Error in main(): ${err.message}`);
-//     process.exit(1);
-//   }
-// }
-
-// // If this file is executed directly (not imported), run main
-// main();

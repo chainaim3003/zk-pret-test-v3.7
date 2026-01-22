@@ -142,8 +142,8 @@ export class BPMNGenericSmartContract extends SmartContract {
       // Extract company identification from proof and hash them
       const proofGroupID = publicOutput.bpmnGroupID;
       
-   // Create hashes for comparison and storage
-   const proofGroupIDHash =proofGroupID.hash();
+      // Create hashes for comparison and storage
+      const proofGroupIDHash =proofGroupID.hash();
       
       // Create company key for storage
       const bpmnGroupKey = BPMNGroupKey.create(proofGroupIDHash);
