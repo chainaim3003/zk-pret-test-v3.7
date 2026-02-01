@@ -63,7 +63,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'RiskLiquidityAdvancedOptimMerkle',
     category: CompilationCategory.RISK_LIQUIDITY,
-    loader: () => import('../../zk-programs/risk/RiskLiquidityAdvancedMerkleZKProgram.js'),
+    loader: () => import('../../zk-programs/risk/RiskLiquidityAdvancedZKProgram.js'),
     compilationOrder: 1,
     enabled: true
   },

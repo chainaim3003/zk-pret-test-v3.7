@@ -23,11 +23,11 @@ import {
 } from '../../utils/optimerkle/domain/risk/adv/RiskLiquidityAdvancedOptimMerkleUtils.js';
 import { loadContractPortfolio } from '../../utils/optimerkle/domain/risk/ACTUSOptimMerkleAPI.js';
 import {
-    RiskLiquidityAdvancedOptimMerkleZKProgramWithSign,
+    RiskLiquidityAdvanced,
     createAdvancedRiskComplianceData,
     validateAdvancedRiskComplianceData
-} from '../../zk-programs/risk/RiskLiquidityAdvancedMerkleZKProgram.js';
-import { RiskLiquidityAdvancedOptimMerkleSmartContract } from '../../contracts/risk/RiskLiquidityAdvancedSmartContract.js';
+} from '../../zk-programs/risk/RiskLiquidityAdvancedZKProgram.js';
+import { RiskLiquidityAdvancedSmartContract } from '../../contracts/risk/RiskLiquidityAdvancedSmartContract.js';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -117,8 +117,8 @@ export async function executeRiskLiquidityAdvancedOptimMerkleVerification(
         console.log('🔧 Compiling ZK program and smart contract (ZK-COMPLIANT - no Basel3)...');
         console.log('✅ ZK Compliance: No division operations, Poseidon hash encoding, safe Field bounds');
         
-        await RiskLiquidityAdvancedOptimMerkleZKProgramWithSign.compile();
-        const { verificationKey } = await RiskLiquidityAdvancedOptimMerkleSmartContract.compile();
+        await RiskLiquidityAdvanced.compile();
+        const { verificationKey } = await RiskLiquidityAdvancedSmartContract.compile();
         
         console.log('✅ Compilation successful');
 
@@ -127,7 +127,7 @@ export async function executeRiskLiquidityAdvancedOptimMerkleVerification(
         
         const zkAppKey = PrivateKey.random();
         const zkAppAddress = zkAppKey.toPublicKey();
-        const zkApp = new RiskLiquidityAdvancedOptimMerkleSmartContract(zkAppAddress);
+        const zkApp = new RiskLiquidityAdvancedSmartContract(zkAppAddress);
 
         const deployTxn = await Mina.transaction(deployerAccount, async () => {
             AccountUpdate.fundNewAccount(deployerAccount);
@@ -137,9 +137,9 @@ export async function executeRiskLiquidityAdvancedOptimMerkleVerification(
         await deployTxn.sign([deployerKey, zkAppKey]).send();
         console.log('✅ Smart contract deployed');
 
-        // Get initial contract status (should be 100)
-        const initialStatus = zkApp.riskComplianceStatus.get().toBigInt();
-        console.log(`📊 Initial contract status: ${initialStatus}`);
+        // Get initial contract status (should be 0 groups)
+        const initialStatus = zkApp.totalRiskGroupTracked.get().toBigInt();
+        console.log(`📊 Initial total risk groups: ${initialStatus}`);
 
         // =================================== Step 4: Fetch and Process ACTUS Data ===================================
         console.log('🌐 Fetching ACTUS data for Advanced Risk scenario...');
@@ -213,7 +213,7 @@ export async function executeRiskLiquidityAdvancedOptimMerkleVerification(
         console.log('🔒 Generating ZK proof (ZK-compliant liquidity check)...');
         
         const currentTimestamp = UInt64.from(Date.now());
-        const proof = await RiskLiquidityAdvancedOptimMerkleZKProgramWithSign.proveAdvancedRiskCompliance(
+        const proof = await RiskLiquidityAdvanced.proveAdvancedRiskCompliance(
             currentTimestamp,
             zkComplianceData,
             oracleSignature,
@@ -239,10 +239,10 @@ export async function executeRiskLiquidityAdvancedOptimMerkleVerification(
         console.log('✅ Proof verified by smart contract');
 
         // =================================== Step 11: Check Final Contract Status ===================================
-        const finalStatus = zkApp.riskComplianceStatus.get().toBigInt();
-        const totalVerifications = zkApp.totalVerifications.get().toBigInt();
+        const finalStatus = zkApp.totalRiskGroupTracked.get().toBigInt();
+        const totalVerifications = zkApp.totalVerificationsGlobal.get().toBigInt();
         
-        console.log(`📊 Final contract status: ${finalStatus}`);
+        console.log(`📊 Final total risk groups: ${finalStatus}`);
         console.log(`🔢 Total verifications: ${totalVerifications}`);
 
         // =================================== Step 12: Generate Summary Report ===================================

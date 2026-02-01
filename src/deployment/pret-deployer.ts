@@ -61,7 +61,14 @@ const CONTRACT_REGISTRY: { [contractName: string]: ContractRegistryEntry } = {
     path: 'risk',
     zkProgram:'RiskLiquidityStableCoinZKProgram',
     zkProgramCategory:'risk'
+  },
+
+  'RiskLiquidityAdvancedSmartContract':{
+    path: 'risk',
+    zkProgram:'RiskLiquidityAdvancedZKProgram',
+    zkProgramCategory:'risk'
   }
+
   
   // ===== ADD NEW CONTRACTS HERE =====
   // 'YourNewContract': {

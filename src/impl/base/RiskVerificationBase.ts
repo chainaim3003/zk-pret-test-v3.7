@@ -31,8 +31,7 @@ export interface RiskVerificationResult {
         explorerUrl: string;
         contractAddress: string;
         network: string;
-        totalVerifications: number;
-    };
+        totalVerifications: number;        riskGroupID?: string;    };
     riskMetrics: any;
     summary: string;
 }

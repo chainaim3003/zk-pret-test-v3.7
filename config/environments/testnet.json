@@ -230,6 +230,27 @@
       "contractName": "RiskLiquidityStableCoinSmartContract",
       "oracle": "RISK",
       "description": "Force deployment - used when deployer knows there are contract changes that need redeployment"
+    },
+    "testnet-advance": {
+      "name": "testnet-advance",
+      "environment": "TESTNET",
+      "contractName": "RiskLiquidityAdvancedSmartContract",
+      "oracle": "RISK",
+      "description": "Stable testnet ADVANCE deployment"
+    },
+    "testnet-advance-dev": {
+      "name": "testnet-advance-dev",
+      "environment": "TESTNET",
+      "contractName": "RiskLiquidityAdvancedSmartContract",
+      "oracle": "RISK",
+      "description": "Development iteration testing"
+    },
+    "testnet-advance-force": {
+      "name": "testnet-advance-force",
+      "environment": "TESTNET",
+      "contractName": "RiskLiquidityAdvancedSmartContract",
+      "oracle": "RISK",
+      "description": "Force deployment - used when deployer knows there are contract changes that need redeployment"
     }
   },
   "deprecatedDeployments": {
@@ -1244,6 +1265,93 @@
           "proofTime": 1,
           "broadcastTime": 394,
           "totalDeploymentTime": 2
+        }
+      },
+      "RiskLiquidityAdvancedOptimMerkleSmartContract": {
+        "address": "B62qnAv9Rv1K4hfDwx1BgzX9m3KRjKpyEeHHEXEjHtdersGzPzUQmTs",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-01-24T12:28:34.603Z",
+        "transactionHash": "5JusNjooYFmurMheWKfZq8ycPTQR23GYRpchCmMQaccSTQYqN6jp",
+        "alias": "testnet-risk-advanced",
+        "oracle": "RISK",
+        "contractName": "RiskLiquidityAdvancedOptimMerkleSmartContract",
+        "zkAppPrivateKey": "EKFNt5MJy1EE3NTsuJ3xVvWJJLn3noZf7dGCbQdMwQtxe3pTmu3f",
+        "verificationKey": {
+          "data": "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",
+          "hash": "26452021668427475006596459972154814229889055358718426103152261325578105275746"
+        },
+        "deploymentMetrics": {
+          "compilationTime": 66539,
+          "deploymentTime": 3684,
+          "totalTime": 70
+        },
+        "deploymentScope": {
+          "type": "MANUAL_DEPLOYED",
+          "servingAliases": [
+            "testnet-risk-advanced",
+            "testnet-advanced"
+          ],
+          "reason": "Deployed via deploy-risk-advanced.ts script",
+          "sourceAlias": "testnet-risk-advanced",
+          "networkExplorer": "https://minascan.io/devnet/tx/5JusNjooYFmurMheWKfZq8ycPTQR23GYRpchCmMQaccSTQYqN6jp"
+        }
+      },
+      "RiskLiquidityAdvancedSmartContract": {
+        "address": "B62qiX4aujFPnyXDuGpKLWJbonoXa7a6NE2Hz8yB1GM2zCbaJHgjQGC",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-01-27T12:56:51.585Z",
+        "transactionHash": "5Ju86EutJvWTuNT3FyztUqVkmwgm2GV1YqPBGBvLUGyK6YR3HqHF",
+        "alias": "testnet-advance-force",
+        "oracle": "RISK",
+        "contractName": "RiskLiquidityAdvancedSmartContract",
+        "zkAppPrivateKey": "EKE1Jf4tm4TunZky5QfZ1zsVVGomiPVJ5ccmjdLAXU8irZbAEuZN",
+        "verificationKey": {
+          "data": "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",
+          "hash": "26452021668427475006596459972154814229889055358718426103152261325578105275746"
+        },
+        "deploymentMetrics": {
+          "proofTime": 4,
+          "broadcastTime": 583,
+          "totalDeploymentTime": 8
+        },
+        "deploymentScope": {
+          "type": "FORCE_PROMOTED",
+          "servingAliases": [
+            "testnet-advance",
+            "testnet-advance-dev",
+            "testnet-advance-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-advance-force"
+        }
+      },
+      "RiskLiquidityAdvancedSmartContract_FORCE_1769518611588": {
+        "address": "B62qiX4aujFPnyXDuGpKLWJbonoXa7a6NE2Hz8yB1GM2zCbaJHgjQGC",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-01-27T12:56:51.585Z",
+        "transactionHash": "5Ju86EutJvWTuNT3FyztUqVkmwgm2GV1YqPBGBvLUGyK6YR3HqHF",
+        "alias": "testnet-advance-force",
+        "oracle": "RISK",
+        "contractName": "RiskLiquidityAdvancedSmartContract",
+        "zkAppPrivateKey": "EKE1Jf4tm4TunZky5QfZ1zsVVGomiPVJ5ccmjdLAXU8irZbAEuZN",
+        "verificationKey": {
+          "data": "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",
+          "hash": "26452021668427475006596459972154814229889055358718426103152261325578105275746"
+        },
+        "deploymentMetrics": {
+          "proofTime": 4,
+          "broadcastTime": 583,
+          "totalDeploymentTime": 8
+        },
+        "deploymentScope": {
+          "type": "FORCE_AUDIT_RECORD",
+          "servingAliases": [
+            "testnet-advance",
+            "testnet-advance-dev",
+            "testnet-advance-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-advance-force"
         }
       }
     }

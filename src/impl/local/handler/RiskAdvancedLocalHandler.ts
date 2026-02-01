@@ -13,7 +13,7 @@ import { BaseVerificationCore } from '../../base/BaseVerificationCore.js';
 import { ComplianceVerificationBase } from '../../base/ComplianceVerificationBase.js';
 
 // PRESERVE EXACT IMPORTS from working implementation
-import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, UInt64, MerkleTree } from 'o1js';
+import { Field, Mina, PrivateKey, AccountUpdate, CircuitString, Poseidon, Signature, UInt64, MerkleTree, MerkleMap } from 'o1js';
 import { getPrivateKeyFor } from '../../../core/OracleRegistry.js';
 import { 
     fetchRiskLiquidityAdvancedOptimMerkleData,
@@ -29,14 +29,21 @@ import {
 } from '../../../utils/optimerkle/domain/risk/adv/RiskLiquidityAdvancedOptimMerkleUtils.js';
 import { loadContractPortfolio } from '../../../utils/optimerkle/domain/risk/ACTUSOptimMerkleAPI.js';
 import {
-    RiskLiquidityAdvancedOptimMerkleZKProgramWithSign,
+    RiskLiquidityAdvanced,
     createAdvancedRiskComplianceData,
     validateAdvancedRiskComplianceData,
     MerkleWitness8
-} from '../../../zk-programs/risk/RiskLiquidityAdvancedMerkleZKProgram.js';
-import { RiskLiquidityAdvancedOptimMerkleSmartContract } from '../../../contracts/risk/RiskLiquidityAdvancedSmartContract.js';
+} from '../../../zk-programs/risk/RiskLiquidityAdvancedZKProgram.js';
+import { 
+    RiskLiquidityAdvancedSmartContract,
+    RiskGroupRecord,
+    RiskGroupKey,
+    RISK_GROUP_MERKLE_HEIGHT,
+    RiskGroupMerkleWitness
+} from '../../../contracts/risk/RiskLiquidityAdvancedSmartContract.js';
 
 export interface AdvancedRiskParams {
+    riskGroupID: CircuitString | string;
     liquidityThreshold: number;
     actusUrl: string;
     contractPortfolio?: any[];
@@ -95,14 +102,14 @@ export class RiskAdvancedLocalHandler {
 
             // PRESERVE EXACT COMPILATION PATTERN from working code
             console.log('🔧 LOCAL: Compiling ZK program and smart contract...');
-            await RiskLiquidityAdvancedOptimMerkleZKProgramWithSign.compile();
-            const { verificationKey } = await RiskLiquidityAdvancedOptimMerkleSmartContract.compile();
+            await RiskLiquidityAdvanced.compile();
+            const { verificationKey } = await RiskLiquidityAdvancedSmartContract.compile();
             console.log('✅ LOCAL Compilation successful');
 
             // PRESERVE EXACT DEPLOYMENT PATTERN from working code
             const zkAppKey = PrivateKey.random();
             const zkAppAddress = zkAppKey.toPublicKey();
-            const zkApp = new RiskLiquidityAdvancedOptimMerkleSmartContract(zkAppAddress);
+            const zkApp = new RiskLiquidityAdvancedSmartContract(zkAppAddress);
             
             const deployTxn = await Mina.transaction(riskEnv.deployerAccount, async () => {
                 AccountUpdate.fundNewAccount(riskEnv.deployerAccount);
@@ -112,8 +119,8 @@ export class RiskAdvancedLocalHandler {
             await deployTxn.sign([riskEnv.deployerKey, zkAppKey]).send();
             console.log('✅ LOCAL Smart contract deployed');
 
-            // Get initial contract status (should be 100)
-            const initialStatus = zkApp.riskComplianceStatus.get().toBigInt();
+            // Get initial contract status (should be 0 groups)
+            const initialStatus = zkApp.totalRiskGroupTracked.get().toBigInt();
 
             // PRESERVE EXACT ACTUS DATA PROCESSING from working code
             console.log('🌐 LOCAL: Fetching ACTUS data for Advanced Risk scenario...');
@@ -172,7 +179,7 @@ export class RiskAdvancedLocalHandler {
             // PRESERVE EXACT ZK PROOF GENERATION from working code
             console.log('⚡ LOCAL: Generating ZK proof (ZK-compliant liquidity check)...');
             const currentTimestamp = UInt64.from(Date.now());
-            const proof = await RiskLiquidityAdvancedOptimMerkleZKProgramWithSign.proveAdvancedRiskCompliance(
+            const proof = await RiskLiquidityAdvanced.proveAdvancedRiskCompliance(
                 currentTimestamp,
                 zkComplianceData,
                 oracleSignature,
@@ -183,10 +190,92 @@ export class RiskAdvancedLocalHandler {
             );
             console.log('✅ LOCAL ZK proof generated successfully');
 
+            // Get Risk Group ID from params
+            const riskGroupIDStr = typeof params.riskGroupID === 'string' ? params.riskGroupID : params.riskGroupID.toString();
+            
+            // Determine compliance status from proof
+            const isCompliant = proof.publicOutput.riskCompliant;
+            
+            // Extract timestamp from proof to ensure exact match with contract verification
+            const proofTimestamp = proof.publicOutput.verificationTimestamp;
+            
+            // Extract Risk Group ID from proof (using scenarioID as the group identifier)
+            const proofRiskGroupID = proof.publicOutput.scenarioID;
+            const riskGroupIDHash = proofRiskGroupID.hash();
+            
+            console.log(`   📋 Using Risk Group ID from proof: ${proofRiskGroupID.toString()}`);
+            console.log(`   🔐 Group ID Hash: ${riskGroupIDHash.toString().substring(0, 30)}...`);
+            console.log(`   ⏰ Proof Timestamp: ${proofTimestamp.toString()}`);
+            
+            // Create Risk Group Record (similar to StableCoin RiskGroupRecord)
+            const riskGroupRecord = new RiskGroupRecord({
+                groupIDHash: riskGroupIDHash,
+                isValid: isCompliant,
+                complianceScore: Field(100), // Default compliance score
+                totalVerifications: Field(1),
+                passedVerifications: isCompliant.toField(),
+                failedVerifications: isCompliant.not().toField(),
+                consecutiveFailures: isCompliant.not().toField(),
+                lastVerificationTime: proofTimestamp,
+                firstVerificationTime: proofTimestamp,
+                lastPassTime: UInt64.from(0),
+                lastFailTime: UInt64.from(0)
+            });
+            
+            console.log('✅ LOCAL Risk Group Record created');
+            console.log(`   Group ID Hash: ${riskGroupIDHash.toString().substring(0, 30)}...`);
+            console.log(`   Compliance Status: ${isCompliant.toBoolean()}`);
+            console.log(`   Compliance Score: 100`);
+            
+            // Create Risk Group Key
+            const riskGroupKey = RiskGroupKey.create(riskGroupIDHash);
+            const companiesMap = new MerkleMap();
+            const riskGroupMapWitness = companiesMap.getWitness(riskGroupKey.toField());
+            
+            console.log('✅ LOCAL Risk Group Key and Map Witness created');
+            
+            // Create Risk Group Merkle Witness (Following StableCoin Pattern)
+            console.log('🔧 LOCAL Creating RiskGroupMerkleWitness...');
+            let riskGroupWitness: RiskGroupMerkleWitness;
+            try {
+                // Create a temporary MerkleTree for proper witness generation
+                const tempGroupTree = new MerkleTree(RISK_GROUP_MERKLE_HEIGHT);
+                
+                // Set the group record at index 0 with ALL fields
+                const groupHash = Poseidon.hash([
+                    riskGroupRecord.groupIDHash,
+                    riskGroupRecord.isValid.toField(),
+                    riskGroupRecord.complianceScore,
+                    riskGroupRecord.totalVerifications,
+                    riskGroupRecord.passedVerifications,
+                    riskGroupRecord.failedVerifications,
+                    riskGroupRecord.consecutiveFailures,
+                    riskGroupRecord.lastVerificationTime.value,
+                    riskGroupRecord.firstVerificationTime.value,
+                    riskGroupRecord.lastPassTime.value,
+                    riskGroupRecord.lastFailTime.value
+                ]);
+                tempGroupTree.setLeaf(BigInt(0), groupHash);
+                
+                // Generate the actual witness from the real tree
+                const realWitness = tempGroupTree.getWitness(BigInt(0));
+                riskGroupWitness = new RiskGroupMerkleWitness(realWitness);
+                console.log('✅ LOCAL RiskGroupMerkleWitness created successfully');
+            } catch (witnessError) {
+                const errorMessage = witnessError instanceof Error ? witnessError.message : 'Unknown witness creation error';
+                console.error(`❌ LOCAL Error creating RiskGroupMerkleWitness: ${errorMessage}`);
+                throw new Error(`Failed to create RiskGroupMerkleWitness: ${errorMessage}`);
+            }
+
             // PRESERVE EXACT CONTRACT VERIFICATION from working code
             console.log('📋 LOCAL: Verifying proof with smart contract...');
             const verificationTxn = await Mina.transaction(riskEnv.deployerAccount, async () => {
-                await zkApp.verifyAdvancedRiskComplianceWithProof(proof);
+                await zkApp.verifyAdvancedRiskComplianceWithGroup(
+                    proof,
+                    riskGroupWitness,
+                    riskGroupRecord,
+                    riskGroupMapWitness
+                );
             });
             
             await verificationTxn.prove();
@@ -194,9 +283,9 @@ export class RiskAdvancedLocalHandler {
             console.log('✅ LOCAL Proof verified by smart contract');
 
             // Get final contract status
-            const finalStatus = zkApp.riskComplianceStatus.get().toBigInt();
+            const finalStatus = zkApp.totalRiskGroupTracked.get().toBigInt();
             console.log(`📊 LOCAL Final contract status: ${finalStatus}`);
-            console.log(`📊 LOCAL Total verifications: 1`);
+            console.log(`📊 LOCAL Total verifications: ${zkApp.totalVerificationsGlobal.get().toBigInt()}`);
 
             // PRESERVE EXACT SUMMARY GENERATION from working code
             const summary = generateAdvancedRiskSummary(advancedRiskData, riskMetrics);

@@ -75,7 +75,7 @@ export class RiskLiquidityAdvancedOptimMerklePublicOutput extends Struct({
 
 // =================================== Advanced Risk ZK Program ===================================
 
-export const RiskLiquidityAdvancedOptimMerkleZKProgramWithSign = ZkProgram({
+export const RiskLiquidityAdvanced = ZkProgram({
     name: 'RiskLiquidityAdvancedOptimMerkle',
     publicInput: UInt64, // Current timestamp
     publicOutput: RiskLiquidityAdvancedOptimMerklePublicOutput,
@@ -199,7 +199,7 @@ export const RiskLiquidityAdvancedOptimMerkleZKProgramWithSign = ZkProgram({
     },
 });
 
-export class RiskLiquidityAdvancedOptimMerkleProof extends ZkProgram.Proof(RiskLiquidityAdvancedOptimMerkleZKProgramWithSign) {}
+export class RiskLiquidityAdvancedOptimMerkleProof extends ZkProgram.Proof(RiskLiquidityAdvanced) {}
 
 // =================================== Utility Functions ===================================
 

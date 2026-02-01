@@ -6,23 +6,32 @@
  * Uses new organized RiskAdvancedLocalHandler for improved development workflow
  */
 
+import { CircuitString } from 'o1js';
 import { RiskAdvancedLocalHandler } from '../handler/RiskAdvancedLocalHandler.js';
 
 async function main() {
     console.log('🏠 Advanced Risk LOCAL Verification (Organized Architecture - Development Optimized)');
 
     // PRESERVE EXACT PARAMETER PARSING from working implementation
-    const liquidityThreshold = parseFloat(process.argv[2]);
-    const actusUrl = process.argv[3] || 'http://localhost:8083/eventsBatch';
-    const portfolioPath = process.argv[4];
-    const executionMode = process.argv[5] || 'production';
+    const riskGroupID = process.argv[2];
+    const liquidityThreshold = parseFloat(process.argv[3]);
+    const actusUrl = process.argv[4] || 'http://localhost:8083/eventsBatch';
+    const portfolioPath = process.argv[5];
+    const executionMode = process.argv[6] || 'production';
 
     // PRESERVE EXACT VALIDATION LOGIC from working implementation
-    if (isNaN(liquidityThreshold)) {
-        console.error('❌ Error: Liquidity threshold is required');
-        console.log('Usage: node RiskAdvancedLocalMultiVerifier.js <liquidityThreshold> <actusUrl> [portfolioPath] [executionMode]');
+    if (!riskGroupID) {
+        console.error('❌ Error: Risk Group ID is required');
+        console.log('Usage: node RiskAdvancedLocalMultiVerifier.js <riskGroupID> <liquidityThreshold> <actusUrl> [portfolioPath] [executionMode]');
         process.exit(1);
     }
+    if (isNaN(liquidityThreshold)) {
+        console.error('❌ Error: Liquidity threshold is required');
+        console.log('Usage: node RiskAdvancedLocalMultiVerifier.js <riskGroupID> <liquidityThreshold> <actusUrl> [portfolioPath] [executionMode]');
+        process.exit(1);
+    }
+
+    const riskGroupIDCircuit = CircuitString.fromString(riskGroupID);
 
     // PRESERVE EXACT PORTFOLIO LOADING from working implementation
     let contractPortfolio: any[] | undefined;
@@ -52,7 +61,8 @@ async function main() {
     const handler = new RiskAdvancedLocalHandler();
     
     console.log(`🏠 LOCAL Parameters:`);
-    console.log(`   🎯 Liquidity Threshold: ${liquidityThreshold}%`);
+    console.log(`   �️ Risk Group ID: ${riskGroupID}`);
+    console.log(`   �🎯 Liquidity Threshold: ${liquidityThreshold}%`);
     console.log(`   🌐 ACTUS API URL: ${actusUrl}`);
     console.log(`   📁 Portfolio Path: ${portfolioPath || 'Using default contracts'}`);
     console.log(`   ⚙️ Execution Mode: ${executionMode}`);
@@ -61,6 +71,7 @@ async function main() {
         const startTime = Date.now();
         
         const result = await handler.executeAdvancedRiskVerification({
+            riskGroupID: riskGroupIDCircuit,
             liquidityThreshold,
             actusUrl,
             contractPortfolio,
