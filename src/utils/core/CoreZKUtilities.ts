@@ -138,3 +138,55 @@ export function stringArrayToFieldsZK(strings: string[]): Field[] {
 export function numberArrayToFieldsZK(numbers: number[]): Field[] {
     return numbers.map(num => Field(Math.round(num)));
 }
+
+/**
+ * Safe division operation for ZK circuits
+ * Prevents division by zero and ensures Field arithmetic consistency
+ */
+export function safeDivideZK(numerator: Field, denominator: Field): Field {
+    // Assert denominator is not zero to prevent division by zero
+    denominator.assertGreaterThan(Field(0), 'Division by zero is not allowed in ZK arithmetic');
+    
+    // Perform safe division using Field.div
+    return numerator.div(denominator);
+}
+
+/**
+ * Consistent Field arithmetic for addition
+ * Ensures all operations use Field methods for ZK consistency
+ */
+export function addFieldsZK(a: Field, b: Field): Field {
+    return a.add(b);
+}
+
+/**
+ * Consistent Field arithmetic for subtraction
+ * Ensures all operations use Field methods for ZK consistency
+ */
+export function subtractFieldsZK(a: Field, b: Field): Field {
+    return a.sub(b);
+}
+
+/**
+ * Consistent Field arithmetic for multiplication
+ * Ensures all operations use Field methods for ZK consistency
+ */
+export function multiplyFieldsZK(a: Field, b: Field): Field {
+    return a.mul(b);
+}
+
+/**
+ * Calculate percentage using consistent Field arithmetic
+ * Returns (numerator * 100) / denominator as Field
+ */
+export function calculatePercentageZK(numerator: Field, denominator: Field): Field {
+    return safeDivideZK(numerator.mul(Field(100)), denominator);
+}
+
+/**
+ * Calculate ratio using consistent Field arithmetic
+ * Returns numerator / denominator as Field
+ */
+export function calculateRatioZK(numerator: Field, denominator: Field): Field {
+    return safeDivideZK(numerator, denominator);
+}

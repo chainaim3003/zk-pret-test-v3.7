@@ -70,7 +70,7 @@ export const COMPILATION_REGISTRY: CompilationItem[] = [
   {
     name: 'RiskLiquidityBasel3OptimMerkle',
     category: CompilationCategory.RISK_LIQUIDITY,
-    loader: () => import('../../zk-programs/risk/RiskLiquidityBasel3MerkleZKProgram.js'),
+        loader: () => import('../../zk-programs/risk/RiskLiquidityBasel3ZKProgram.js'),
     compilationOrder: 1,
     enabled: true
   },

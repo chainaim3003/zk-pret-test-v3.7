@@ -24,7 +24,7 @@ const LOCAL_ORACLE_MAPPING = {
   'EXIM': { deployer: 4, sender: 5 },
   'BPMN': { deployer: 6, sender: 7 },
   'RISK': { deployer: 8, sender: 9 },
-  'BASEL3': { deployer: 8, sender: 9 }, // Reuse RISK accounts for Basel3
+  //'BASEL3': { deployer: 8, sender: 9 }, // Reuse RISK accounts for Basel3
   'BSDI': { deployer: 6, sender: 7 } // Reuse BPMN accounts
 } as const;
 

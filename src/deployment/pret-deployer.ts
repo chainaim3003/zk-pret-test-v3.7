@@ -67,6 +67,13 @@ const CONTRACT_REGISTRY: { [contractName: string]: ContractRegistryEntry } = {
     path: 'risk',
     zkProgram:'RiskLiquidityAdvancedZKProgram',
     zkProgramCategory:'risk'
+  },
+
+  // Basel III risk contract
+  'RiskLiquidityBasel3SmartContract': {
+    path: 'risk',
+    zkProgram: 'RiskLiquidityBasel3ZKProgram',
+    zkProgramCategory: 'risk'
   }
 
   
