@@ -62,12 +62,12 @@ The Internatunal Trade Finance is a 2-3 T opportunity, currently under-penerated
 
 ## Running the Implementation
 
-This document provides instructions for running the ZK-PRET-DEV-V2 implementation.
+This document provides instructions for running the zk-pret-test-v3.7 implementation.
 
 **1. Clone the Repository:**
 
 ```bash
-git clone https://github.com/chainaimlabs/ZK-PRET-TEST-V3.git
+git clone https://github.com/chainaim3003/zk-pret-test-v3.7.git
 ```
 
 ### Running Test Cases from Node Runtime
@@ -75,7 +75,7 @@ git clone https://github.com/chainaimlabs/ZK-PRET-TEST-V3.git
 Navigate to the following directory in your terminal:
 
 ```
-cd /ZK-PRET-DEV-V3
+cd /zk-pret-test-v3.7
 ```
 
 Then, execute the following commands in sequence:
@@ -98,9 +98,9 @@ Execute each of the following commands to run individual test cases:
 
 **CorporateRegistration :**
   *  TESTNET
-d
+
      ```bash
-     node ./build/tests/with-sign/CorporateRegistrationVerificationTestWithSign.js "U01112TZ2022PTC039493" "TESTNET"
+     node ./build/impl/network/verifier/CorporateRegistrationNetworkMultiVerifier.js "U01112TZ2022PTC039493" "TESTNET"
      ```
   *  MAINNET
      
@@ -110,18 +110,18 @@ d
   *  LOCAL
     
      ```bash
-     node ./build/tests/with-sign/CorporateRegistrationVerificationTestWithSign.js "zenova_mca" "LOCAL"
+     npm run test:local-complete-CorpReg "U01112TZ2022PTC039493" "LOCAL"
      ```
    **Note:** 
-   * For `CorporateRegistrationVerificationTestWithSign` in TESTNET,MAINNET you can replace `"U01112TZ2022PTC039493"` with your own `CIN`
-   * For LOCAL you can relpace `"zenova_mca"` with your own CompanyName
+   * For `CorporateRegistrationNetworkMultiVerifier` in TESTNET, you can replace `"U01112TZ2022PTC039493"` with your own `CIN`
+   * For LOCAL you can relpace `"U01112TZ2022PTC039493"` with your own `CIN`
  ---
 **EXIM :**
 
   * TESTNET
   
     ```bash
-    node ./build/tests/with-sign/EXIMVerificationTestWithSign.js "palani" "TESTNET"
+    node ./build/impl/network/verifier/EXIMNetworkMultiVerifier.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" "TESTNET"
     ```
   * MAINNET
     
@@ -131,10 +131,10 @@ d
   * LOCAL
     
     ```bash
-    node ./build/tests/with-sign/EXIMVerificationTestWithSign.js "palani" "LOCAL"
+    npm run test:local-complete-EXIM "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" "LOCAL"
     ```
    **Note:** 
-   * For `EXIMVerificationTestWithSign` you can relpace `"palani"` with your own CompanyName
+   * For `EXIMNetworkMultiVerifier` you can relpace `"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"` with your own CompanyName
 ---
 
 **GLEIF :**
@@ -142,7 +142,7 @@ d
   * TESTNET
   
     ```bash
-    node ./build/tests/with-sign/GLEIFVerificationTestWithSign.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" 'TESTNET'
+    node ./build/impl/network/verifier/GLEIFNetworkMultiVerifier.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" 'TESTNET'
     ```
   * MAINNET
     
@@ -152,25 +152,38 @@ d
   * LOCAL
     
     ```bash
-    node ./build/tests/with-sign/GLEIFVerificationTestWithSign.js "zenova_gleif" 'LOCAL'
+    npm run test:local-complete-GLEIF "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" 'LOCAL'
     ```
    **Note:** 
-   * For `GLEIFVerificationTestWithSign` you can relpace `"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"` with your own CompanyName
+   * For `GLEIFNetworkMultiVerifier` you can relpace `"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"` with your own CompanyName
 ---
 **BusinessStandardDataIntegrity**
-```bash
-node ./build/tests/with-sign/BusinessStandardDataIntegrityVerificationTest.js .\src\data\scf\actualBL1.json
-```
+  * TESTNET
+
+    ```bash
+    node ./build/impl/network/verifier/BusinessStdIntegrityNetworkMultiVerifier.js group1 BOL ./src/data/scf/BILLOFLADING/BOL-VALID-1.json
+    ```
+  * LOCAL
+
+    ```bash
+    node ./build/impl/local/verifier/BusinessStdIntegrityLocalMultiVerifier.js group1 BOL ./src/data/scf/BILLOFLADING/BOL-VALID-1.json
+    ```
 ---
 **BusinessProcessIntegrity**
+  * TESTNET
 
-```bash
-node ./build/tests/with-sign/BusinessProcessIntegrityVerificationFileTestWithSign.js 'SCF' src/data/scf/process/bpmn-SCF-Example-Process-Expected.bpmn src/data/scf/process/bpmn-SCF-Example-Execution-Actual-Accepted-1.bpmn result.txt
-```
+    ```bash
+    node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngroup1 SCF ./src/data/scf/process/EXPECTED/SCF-Expected.bpmn ./src/data/scf/process/ACTUAL/SCF-Accepted1.bpmn result.txt
+    ```
+  * LOCAL
+
+    ```bash
+    node ./build/impl/local/verifier/BusinessProcessLocalMultiVerifier.js bpmngroup1 SCF ./src/data/scf/process/EXPECTED/SCF-Expected.bpmn ./src/data/scf/process/ACTUAL/SCF-Accepted1.bpmn
+    ```
 
 **Note:** 
 
-* For the `BusinessProcessIntegrityVerificationFileTestWithSign.js` test, you can replace `"bpmn-SCF-Example-Execution-Actual-Accepted-1.bpmn"` with any of the `*.bpmn` files located in the `ZK-PRET-DEV-V3\src\data\scf\process\` directory (Accepted or Rejected).
+* For the `BusinessProcessNetworkMultiVerifier.js` test, you can replace `"./src/data/scf/process/ACTUAL/SCF-Accepted1.bpmn"` with any of the `*.bpmn` files located in the `zk-pret-test-v3.7\src\data\scf\process` directory (Accepted or Rejected).
 * You can replace `SCF` with `STABLECOIN` or `DVP`
 
 ## Business Process Prover for StableCoin Regulatory processes 
@@ -180,15 +193,15 @@ The process model for the steps of the governance of the issuance processes, and
 
 ## Passing Case 
 
-node ./build/tests/with-sign/BusinessProcessIntegrityVerificationFileTestWithSign.js "STABLECOIN" src/data/STABLECOIN/process/bpmnCircuitSTABLECOIN-expected.bpmn src/data/STABLECOIN/process/bpmnCircuitSTABLECOIN-accepted1.bpmn result.txt
-Expected BPMN File Name: src/data/STABLECOIN/process/bpmnCircuitSTABLECOIN-expected.bpmn
-Actual BPMN File Name: src/data/STABLECOIN/process/bpmnCircuitSTABLECOIN-accepted1.bpmn
+node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngroup1 STABLECOIN ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn 
+Expected BPMN File Name: src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn
+Actual BPMN File Name: src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn
 
 ## Failing Case 
 
-node ./build/tests/with-sign/BusinessProcessIntegrityVerificationFileTestWithSign.js "STABLECOIN" src/data/STABLECOIN/process/bpmnCircuitSTABLECOIN-expected.bpmn src/data/STABLECOIN/process/bpmnCircuitSTABLECOIN-rejected1.bpmn result.txt
-Expected BPMN File Name: src/data/STABLECOIN/process/bpmnCircuitSTABLECOIN-expected.bpmn
-Actual BPMN File Name: src/data/STABLECOIN/process/bpmnCircuitSTABLECOIN-rejected1.bpmn
+node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngroup1 STABLECOIN ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Rejected1.bpmn
+Expected BPMN File Name: src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn
+Actual BPMN File Name: src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Rejected1.bpmn
 
 
 
@@ -199,58 +212,82 @@ The process model for the deliveruVersusPayment processes for Supply chain proce
 
 ## Passing Case 
 
-node ./build/tests/with-sign/BusinessProcessIntegrityVerificationFileTestWithSign.js "DVP" src/data/DVP/process/bpmnCircuitDVP-expected.bpmn src/data/DVP/process/bpmnCircuitDVP-rejected1.bpmn result.txt
-Expected BPMN File Name: src/data/DVP/process/bpmnCircuitDVP-expected.bpmn
-Actual BPMN File Name: src/data/DVP/process/bpmnCircuitDVP-accepted1.bpmn
+node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngroup1 DVP ./src/data/DVP/process/EXPECTED/DVP-Expected.bpmn ./src/data/DVP/process/ACTUAL/DVP-Accepted1.bpmn
+
+Expected BPMN File Name: src/data/DVP/process/EXPECTED/DVP-Expected.bpmn
+Actual BPMN File Name: src/data/DVP/process/ACTUAL/DVP-Accepted1.bpmn
 
 ## Failing Case 
 
-node ./build/tests/with-sign/BusinessProcessIntegrityVerificationFileTestWithSign.js "DVP" src/data/DVP/process/bpmnCircuitDVP-expected.bpmn src/data/DVP/process/bpmnCircuitDVP-rejected1.bpmn result.txt
-Expected BPMN File Name: src/data/DVP/process/bpmnCircuitDVP-expected.bpmn
-Actual BPMN File Name: src/data/DVP/process/bpmnCircuitDVP-rejected1.bpmn
+node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngroup1 DVP ./src/data/DVP/process/EXPECTED/DVP-Expected.bpmn src/data/DVP/process/ACTUAL/DVP-Rejected1.bpmn
+Expected BPMN File Name: src/data/DVP/process/EXPECTED/DVP-Expected.bpmn
+Actual BPMN File Name: src/data/DVP/process/ACTUAL/DVP-Rejected1.bpmn
 
 
-
-
-
-
-
-
-```bash
-node ./build/tests/with-sign/ComposedRecursive3LevelVerificationTestWithSign.js
-```
+**Composed**
+## Composed Recursive 3 Level Verification Test
+  
+  * TESTNET 
+    ```bash
+    node ./build/impl/test/ComposedRecursive3LevelVerificationTest.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" "U01112TZ2022PTC039493"
+    ```
+  **Note:** 
+   * For `ComposedRecursive3LevelVerificationTest` you can replace `"U01112TZ2022PTC039493"` with your own `CIN`
+   * you can relpace `"SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"` with your own CompanyName
+   ---
 
 **4. Risk Liquidity ACTUS Verifier Tests:**
 
 *   **Passing Tests:**
 
-Either use the actus server hosted locally on http://localhost:8083 using `ACTUS_NODE_LOCAL` or the online actus server http://98.84.165.146:8083 using `ACTUS_NODE_REMOTE`
- ```bash
-node ./build/tests/with-sign/RiskLiquidityACTUSVerifierTest_basel3_Withsign.js 0.5 http://98.84.165.146:8083/eventsBatch
-```
-or
-```bash
-node ./build/tests/with-sign/RiskLiquidityACTUSVerifierTest_basel3_Withsign.js 1 http://98.84.165.146:8083/eventsBatch
-```
+Either use the actus server hosted locally on http://localhost:8083 using `ACTUS_NODE_LOCAL` or the online actus server http://34.203.247.32:8083 using `ACTUS_NODE_REMOTE`
+
+* TESTNET
+  ```bash
+  node ./build/impl/network/verifier/RiskBasel3NetworkMultiVerifier.js 80 80 http://34.203.247.32:8083/eventsBatch src/data/RISK/Basel3/CONFIG/basel3-VALID-1.json
+
+  ```
+* LOCAL
+  ```bash
+  node ./build/impl/local/verifier/RiskBasel3LocalMultiVerifier.js 80 80 http://34.203.247.32:8083/eventsBatch src/data/RISK/Basel3/CONFIG/basel3-VALID-1.json
+  ```
     
 *   **Test to prove Failing case:**
 
     ```bash
-    node ./build/tests/with-sign/RiskLiquidityACTUSVerifierTest_basel3_Withsign.js 2 http://98.84.165.146:8083/eventsBatch
+    node ./build/impl/network/verifier/RiskBasel3NetworkMultiVerifier.js 80 80 http://34.203.247.32:8083/eventsBatch src/data/RISK/Basel3/CONFIG/basel3-INVALID-1.json
     ```
-*   **RiskLiquidityACTUSVerifierTest_adv_zk_Withsign.js Tests:**
-    *   **Passing Test:**
+*   **RiskLiquidityACTUSVerifierTest_adv_zk.js Tests:**
+  *   **Passing Test:**
 
-        ```bash
-        node ./build/tests/with-sign/RiskLiquidityACTUSVerifierTest_adv_zk_WithSign.js 8 http://98.84.165.146:8083/eventsBatch
-        ```
-    *   **Test to prove Failing case:**
+  * TESTNET
+    ```bash
+    node ./build/impl/network/verifier/RiskAdvancedNetworkMultiVerifier.js 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json
+    ```
+  * LOCAL
+    ```bash
+    node ./build/impl/local/verifier/RiskAdvancedLocalMultiVerifier.js 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json
+    ```
+  *   **Test to prove Failing case:**
 
-        ```bash
-        node ./build/tests/with-sign/RiskLiquidityACTUSVerifierTest_adv_zk_WithSign.js 9 http://98.84.165.146:8083/eventsBatch
-        ```
+    ```bash
+    node ./build/impl/network/verifier/RiskAdvancedNetworkMultiVerifier.js RISK_GROUP_001 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-INVALID-1.json
+    ```
 
-    *   **Important:** Docker needs to be running for the `RiskLiquidityACTUSVerifierTest_adv_zk.js` and `RiskLiquidityACTUSVerifierTest_adv_zk_WithSign.js` tests.
+    *   **Important:** Docker needs to be running for the `RiskBasel3LocalMultiVerifier.js` and `RiskAdvancedNetworkMultiVerifier.js` tests.
+
+*  **RiskLiquidityACTUSVerifierTest_StableCoin Tests:**
+  *   **passing Test:**
+  * TESTNET
+
+    ```bash
+    node ./build/impl/network/verifier/RiskStableCoinNetworkMultiVerifier.js RISK_GROUP_001 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/StableCoin/CONFIG/US/StableCoin-VALID-1.json ultra_strict US
+    ```
+  * LOCAL
+    ```bash
+    node ./build/impl/local/verifier/RiskStableCoinLocalMultiVerifier.js RISK_GROUP_001 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/StableCoin/CONFIG/US/StableCoin-VALID-2.json ultra_strict US
+    ```
+
 
 **5. Run all tests**
    Alternatively, to run test cases in one go:

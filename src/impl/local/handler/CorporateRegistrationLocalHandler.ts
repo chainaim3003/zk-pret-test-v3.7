@@ -13,6 +13,7 @@ import { ComplianceVerificationBase } from '../../base/ComplianceVerificationBas
 import { 
   CorporateRegistrationOptim, 
   CorporateRegistrationOptimComplianceData,
+  CorporateRegistrationMerkleWitness8,
   CORP_REG_FIELD_INDICES 
 } from '../../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js';
 
@@ -158,21 +159,26 @@ async function processCompanyLocally(
     console.log(`⚡ Generating ZK proof for ${companyIdentifier}...`);
     const proof = await generateLocalCorpRegZKProof(extractedData, tree, jurisdiction);
     console.log('✅ ZK proof generated successfully');
+
+    // Extract the actual compliance result from the ZK proof
+    const zkProofIsCompliant = proof.publicOutput.isCorpRegCompliant.toBoolean();
+    console.log(`\n🔍 COMPLIANCE RECONCILIATION:`);
+    console.log(`   ZK Proof Result: ${zkProofIsCompliant ? '✅ Compliant' : '❌ Non-Compliant'}`);
     
     // Step 5: Verify on smart contract
     console.log(`⚡ Executing smart contract verification transaction...`);
     await verifyProofOnLocalContract(proof, zkApp, index);
     console.log('✅ Smart contract transaction completed');
     
-    console.log(`\n✅ Company ${index + 1} verification completed successfully!`);
+    console.log(`\n${zkProofIsCompliant ? '✅' : '❌'} Company ${index + 1} verification completed: ${zkProofIsCompliant ? 'COMPLIANT' : 'NON-COMPLIANT'}`);
     
     return {
       companyIdentifier,
       jurisdiction,
       cin: extractedData.CIN?.toString() || companyIdentifier,
       companyName: extractedData.companyName?.toString() || companyIdentifier,
-      isCompliant: complianceAnalysis.isCompliant,
-      complianceScore: complianceAnalysis.complianceScore,
+      isCompliant: zkProofIsCompliant,
+      complianceScore: zkProofIsCompliant ? 100 : 0,
       verificationTime: Date.now(),
       proof
     };
@@ -201,19 +207,84 @@ async function generateLocalCorpRegZKProof(
   
   // Generate oracle signature
   const oracleSignature = Signature.create(oraclePrivateKey, [extractedData.merkle_root]);
+  console.log('   🔐 Oracle signature created for Merkle root');  
+
+  // Create compliance data structure
+  const complianceData = new CorporateRegistrationOptimComplianceData({
+    name: extractedData.companyName || CircuitString.fromString(''),
+    cin: extractedData.CIN || CircuitString.fromString(''),
+    registration_number: extractedData.registrationNumber || CircuitString.fromString(''),
+    company_status: extractedData.companyStatus || CircuitString.fromString(''),
+    dateOfIncorporation: extractedData.dateOfIncorporation || CircuitString.fromString(''),
+    category: extractedData.category || CircuitString.fromString(''),
+    classOfCompany: extractedData.classOfCompany || CircuitString.fromString(''),
+    numberOfPartners: extractedData.numberOfPartners || CircuitString.fromString(''),
+    listed: extractedData.listed || CircuitString.fromString(''),
+    suspended: extractedData.suspended || CircuitString.fromString(''),
+    merkle_root: extractedData.merkle_root,
+  });
+
+  // Create all Merkle witnesses - wrap with CorporateRegistrationMerkleWitness8
+  const companyNameWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.companyName))
+  );
+  const cinWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.CIN))
+  );
+  const registrationNumberWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.registrationNumber))
+  );
+  const companyStatusWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.companyStatus))
+  );
+  const dateOfIncorporationWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.dateOfIncorporation))
+  );
+  const categoryWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.category))
+  );
+  const classOfCompanyWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.classOfCompany))
+  );
+  const numberOfPartnersWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.numberOfPartners))
+  );
+  const listedWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.listed))
+  );
+  const suspendedWitness = new CorporateRegistrationMerkleWitness8(
+    tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.suspended))
+  );
+
+  const currentTimestamp = UInt64.from(Date.now());
+
   
   // Create a simplified proof structure for LOCAL testing
   console.log('   Creating proof structure (simplified for LOCAL testing)...');
   
-  const proof = {
-    companyIdentifier: extractedData.CIN?.toString() || 'UNKNOWN',
-    companyName: extractedData.companyName?.toString() || 'UNKNOWN',
-    isCompliant: true, // Will be determined by actual compliance analysis
-    merkleRoot: extractedData.merkle_root,
+
+  // Generate REAL ZK proof using the actual circuit
+  const proof = await CorporateRegistrationOptim.proveOptimizedCompliance(
+    currentTimestamp,
+    complianceData,
     oracleSignature,
-    timestamp: Date.now(),
-    jurisdiction
-  };
+    companyNameWitness,
+    cinWitness,
+    registrationNumberWitness,
+    companyStatusWitness,
+    dateOfIncorporationWitness,
+    categoryWitness,
+    classOfCompanyWitness,
+    numberOfPartnersWitness,
+    listedWitness,
+    suspendedWitness,
+    
+      
+  );
+  
+  console.log('   ✅ Real ZK proof generated with circuit execution!');
+  console.log('   ✅ Oracle signature verified in ZK circuit');
+  console.log(`   📊 Compliance Result: ${proof.publicOutput.isCorpRegCompliant.toBoolean()}`);
   
   return proof;
 }

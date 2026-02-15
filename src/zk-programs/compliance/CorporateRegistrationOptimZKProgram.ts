@@ -10,6 +10,7 @@ import {
    Bool,
 } from 'o1js';
 import { getCorpRegSignerAccount } from '../../core/OracleRegistry.js';
+import { isDateInPast } from '../../utils/security/SecureDateValidation.js';
 
 // =================================== Merkle Tree Configuration ===================================
 export const CORP_REG_MERKLE_TREE_HEIGHT = 8; // Height 8 for up to 256 fields
@@ -110,6 +111,7 @@ export class CorporateRegistrationOptimComplianceData extends Struct({
    name: CircuitString,
    cin: CircuitString,
    registration_number: CircuitString,
+
    
    // Compliance critical fields
    company_status: CircuitString,          // ACTIVE/INACTIVE
@@ -138,11 +140,52 @@ export class CorporateRegistrationOptimPublicOutput extends Struct({
 }) {}
 
 // =================================== Utility Functions ===================================
-function isFieldNotEmpty(field: CircuitString): Bool {
+
+// CIN VALIDATION - empty check and length check
+// CIN must not be empty AND must be exactly 21 characters
+function isCINValidCheck(cin: CircuitString): Bool {
+   // Check 1: CIN is not empty
    const emptyField = CircuitString.fromString("");
-   return field.equals(emptyField).not();
+   const isNotEmpty = cin.equals(emptyField).not();
+   
+   // Check 2: CIN length is exactly 21 characters
+   const cinFields = cin.values;
+   let length: Field = Field(0);
+   for (let i = 0; i < cinFields.length; i++) {
+      const isNonZero = cinFields[i].toField().equals(Field(0)).not();
+      length = length.add(isNonZero.toField());
+   }
+   const requiredLength = Field(21);
+   const isLengthValid = length.equals(requiredLength);
+   
+   // Both conditions must be true
+   return isNotEmpty.and(isLengthValid);
 }
 
+// REGISTRATION NUMBER VALIDATION - Empty check and exact length check
+// Registration number must not be empty AND must be exactly 6 characters
+function isRegistrationNumberValidCheck(regNumber: CircuitString): Bool {
+   // Check 1: Registration number is not empty
+   const emptyField = CircuitString.fromString("");
+   const isNotEmpty = regNumber.equals(emptyField).not();
+   
+   // Check 2: Registration number length validation (exactly 6 characters)
+   const regFields = regNumber.values;
+   let length: Field = Field(0);
+   for (let i = 0; i < regFields.length; i++) {
+      const isNonZero = regFields[i].toField().equals(Field(0)).not();
+      length = length.add(isNonZero.toField());
+   }
+   
+   // Check if length equals exactly 6
+   const requiredLength = Field(6);
+   const isLengthValid = length.equals(requiredLength);
+   
+   // Both conditions must be true
+   return isNotEmpty.and(isLengthValid);
+}
+
+// COMPANY STATUS VALIDATION - Case insensitive "ACTIVE" check
 function isCompanyStatusActive(status: CircuitString): Bool {
    // Case insensitive comparison for "ACTIVE"
    const activeStatusUpper = CircuitString.fromString("ACTIVE");
@@ -154,12 +197,25 @@ function isCompanyStatusActive(status: CircuitString): Bool {
       .or(status.equals(activeStatusCapitalized));
 }
 
+
+// SECURE DATE VALIDATION - Fully Constrained
+// Validates date format, components, and ensures date is not in the future
 function isDateOfIncorporationValidCheck(dateStr: CircuitString, currentTimestamp: UInt64): Bool {
-   // Basic validation - check if date string is not empty
-   // In a real implementation, you'd parse the date and compare with currentTimestamp
-   // For now, just check that the date exists and is not empty
-   return isFieldNotEmpty(dateStr);
+   // Use fully constrained date validation from SecureDateValidation utility
+   // This checks:
+   // 1. Date format is YYYY-MM-DD
+   // 2. Year is in valid range (1900-2100)
+   // 3. Month is 1-12
+   // 4. Day is valid for the month (accounts for leap years)
+   // 5. Date is not in the future (incorporation date can't be future)
+   return isDateInPast(dateStr, currentTimestamp);
 }
+
+function isFieldNotEmpty(field: CircuitString): Bool {
+   const emptyField = CircuitString.fromString("");
+   return field.equals(emptyField).not();
+}
+
 
 // =================================== ZK Program ===================================
 export const CorporateRegistrationOptim = ZkProgram({
@@ -185,6 +241,8 @@ export const CorporateRegistrationOptim = ZkProgram({
             CorporateRegistrationMerkleWitness8,  // numberOfPartners witness
             CorporateRegistrationMerkleWitness8,  // listed witness
             CorporateRegistrationMerkleWitness8,  // suspended witness
+
+
          ],
          
          async method(
@@ -201,13 +259,9 @@ export const CorporateRegistrationOptim = ZkProgram({
             numberOfPartnersWitness: CorporateRegistrationMerkleWitness8,
             listedWitness: CorporateRegistrationMerkleWitness8,
             suspendedWitness: CorporateRegistrationMerkleWitness8,
+            
          ): Promise<CorporateRegistrationOptimPublicOutput> {
 
-            // =================================== Oracle Signature Verification ===================================
-            // Verify oracle signed the merkle root
-            const registryPublicKey = getCorpRegSignerAccount();
-            const isValidSignature = oracleSignature.verify(registryPublicKey, [complianceData.merkle_root]);
-            isValidSignature.assertTrue();
             // =================================== Merkle Inclusion Proofs ===================================
             // Verify each compliance field exists in the merkle tree
             const merkleRoot = complianceData.merkle_root;
@@ -263,11 +317,11 @@ export const CorporateRegistrationOptim = ZkProgram({
             suspendedRoot.assertEquals(merkleRoot);
 
             // =================================== Business Logic Compliance Checks ===================================
-            // 1. CIN is not empty
-            const isCINValid = isFieldNotEmpty(complianceData.cin);
+            // 1. CIN validation (not empty AND exactly 21 characters)
+            const isCINValid = isCINValidCheck(complianceData.cin);
             
-            // 2. Registration number is not empty
-            const isRegistrationNumberValid = isFieldNotEmpty(complianceData.registration_number);
+            // 2. Registration number validation (not empty AND minimum 4 characters)
+            const isRegistrationNumberValid = isRegistrationNumberValidCheck(complianceData.registration_number);
             
             // 3. Company name is not empty
             const isCompanyNameValid = isFieldNotEmpty(complianceData.name);
@@ -280,6 +334,7 @@ export const CorporateRegistrationOptim = ZkProgram({
             
             // 5. Company status is "Active" (case insensitive)
             const isStatusActive = isCompanyStatusActive(complianceData.company_status);
+
             
             // =================================== Overall Compliance Determination ===================================
             // Company is compliant if ALL conditions are met
@@ -287,7 +342,14 @@ export const CorporateRegistrationOptim = ZkProgram({
                .and(isRegistrationNumberValid)
                .and(isCompanyNameValid)
                .and(isDateOfIncorporationValid)
-               .and(isStatusActive);
+               .and(isStatusActive)
+
+            // =================================== Oracle Signature Verification ===================================
+            // Verify oracle signed the merkle root
+            const registryPublicKey = getCorpRegSignerAccount();
+            const isValidSignature = oracleSignature.verify(registryPublicKey, [complianceData.merkle_root]);
+            isValidSignature.assertTrue();
+
 
             // =================================== Return Public Output ===================================
             return new CorporateRegistrationOptimPublicOutput({

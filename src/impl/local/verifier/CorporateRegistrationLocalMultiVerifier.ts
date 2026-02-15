@@ -29,7 +29,7 @@ if (process.argv[1] && process.argv[1].includes('CorporateRegistrationLocalMulti
 					console.log(`🚫 Error: ${result.error}`);
 				} else {
 					console.log(`✅ Status: Success`);
-					console.log(`🔢 LEI: ${result.lei}`);
+					console.log(`🔢 CIN: ${result.cin}`);
 					console.log(`📊 Compliance Score: ${result.complianceScore}%`);
 					console.log(`✓ Is Compliant: ${result.isCompliant ? 'Yes' : 'No'}`);
 					console.log(`⏰ Timestamp: ${new Date(parseInt(result.verificationTime)).toISOString()}`);

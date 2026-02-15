@@ -424,8 +424,13 @@ export function createComprehensiveCorporateRegistrationMerkleTree(
   setField('lastAnnualReturnDate', fieldIndices.lastAnnualReturnDate, record.last_annual_return_date || '');
 
   const fieldCount = Object.keys(extractedData).length;
+  const merkleRoot = tree.getRoot();
   console.log(`✅ Created Merkle tree with ${fieldCount} fields`);
-  console.log(`🌳 Merkle root: ${tree.getRoot()}`);
+  console.log(`🌳 Merkle root: ${merkleRoot}`);
+  
+  // Add merkle_root to extractedData for signature generation
+  extractedData.merkle_root = merkleRoot;
+  extractedData.fieldCount = fieldCount;
 
   return { tree, extractedData };
 }
@@ -443,7 +448,7 @@ export function createOptimizedCorporateRegistrationComplianceData(
   console.log('🔐 Preparing ZK proof data...');
   
   // Helper function to safely create CircuitString
-  function safeCircuitString(value: any, fieldName: string): any {
+  function safeCircuitString(value: any, fieldName: string,defaultValue: string = ''): any {
     try {
       if (value === null || value === undefined) {
         console.warn(`⚠️ ${fieldName} is null/undefined, using empty string`);
@@ -485,7 +490,9 @@ export function createOptimizedCorporateRegistrationComplianceData(
       suspended: safeCircuitString(extractedData.suspended, 'suspended'),
       
       // Merkle tree root
-      merkle_root: merkleRoot
+      merkle_root: merkleRoot,
+
+
     });
 
     console.log('✅ Optimized Corporate Registration compliance data created successfully');

@@ -37,7 +37,7 @@ export interface TransactionResult {
 }
 
 export class TransactionMonitor {
-  private static readonly MAX_CONFIRMATION_ATTEMPTS = 15;
+  private static readonly MAX_CONFIRMATION_ATTEMPTS = 30;
   private static readonly CONFIRMATION_INTERVAL = 3000; // 3 seconds
   private static readonly STATE_VERIFICATION_DELAY = 8000; // 8 seconds for block finality
 

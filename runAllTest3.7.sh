@@ -59,7 +59,6 @@ node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngr
 # SCF
 node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngroup1 SCF ./src/data/scf/process/EXPECTED/SCF-Expected.bpmn ./src/data/scf/process/ACTUAL/SCF-Accepted1.bpmn
 
-
 # Business Standard Data Integrity
 node ./build/impl/network/verifier/BusinessStdIntegrityNetworkMultiVerifier.js group1 BOL ./src/data/scf/BILLOFLADING/BOL-VALID-1.json
 

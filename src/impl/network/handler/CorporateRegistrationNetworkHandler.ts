@@ -378,7 +378,7 @@ export class CorporateRegistrationNetworkHandler {
       );
       const suspendedWitness = new CorporateRegistrationMerkleWitness8(
         tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.suspended))
-      );
+      );      
 
       // === ORACLE SIGNATURE ===
       console.log(`\n🔏 Generating oracle signature...`);
@@ -401,7 +401,8 @@ export class CorporateRegistrationNetworkHandler {
         classOfCompanyWitness,
         numberOfPartnersWitness,
         listedWitness,
-        suspendedWitness
+        suspendedWitness,
+        
       );
       console.log('✅ ZK proof generated successfully');
 
@@ -920,6 +921,7 @@ export class CorporateRegistrationNetworkHandler {
             tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.suspended))
           );
           
+          
           console.log('✅ All MerkleWitness8 instances created');
 
           // === ORACLE SIGNATURE ===
@@ -948,7 +950,8 @@ export class CorporateRegistrationNetworkHandler {
             classOfCompanyWitness,
             numberOfPartnersWitness,
             listedWitness,
-            suspendedWitness
+            suspendedWitness,
+            
           );
           
           console.log('✅ ZK proof generated successfully');

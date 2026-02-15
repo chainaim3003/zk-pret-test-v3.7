@@ -128,7 +128,8 @@ function createOptimizedComplianceData(
     numberOfPartners: extractedData.numberOfPartners || CircuitString.fromString(''),
     listed: extractedData.listed || CircuitString.fromString(''),
     suspended: extractedData.suspended || CircuitString.fromString(''),
-    merkle_root: merkleRoot,
+    merkle_root: merkleRoot, 
+
   });
 }
 
@@ -225,6 +226,7 @@ export async function getCorporateRegistrationOptimSingleCompanyVerificationWith
     const listedWitness = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.listed)));
     const suspendedWitness = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.suspended)));
 
+
     // =================================== Oracle Signature ===================================
     console.log('\n🔏 Generating oracle signature...');
     const registryPrivateKey = getPrivateKeyFor('MCA');
@@ -252,6 +254,8 @@ export async function getCorporateRegistrationOptimSingleCompanyVerificationWith
       numberOfPartnersWitness,
       listedWitness,
       suspendedWitness,
+
+
     );
     console.log('✅ ZK proof generated successfully');
 
