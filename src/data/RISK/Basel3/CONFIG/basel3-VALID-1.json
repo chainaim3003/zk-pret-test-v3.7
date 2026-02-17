@@ -1,9 +1,9 @@
 {
   "portfolioMetadata": {
     "portfolioId": "BASEL3_PAM_FULLY_COMPLIANT_110",
-    "description": "Basel III FULLY COMPLIANT - LCR ≥110% for ALL months, NSFR ≥150% (realistic)",
+    "description": "Basel III FULLY COMPLIANT - LCR ≥110% for ALL months, NSFR ≥110% (realistic)",
     "currency": "USD",
-    "totalNotional": 65500,
+    "totalNotional": 65000,
     "created": "2024-06-15T00:00:00Z",
     "version": "10.0",
     "targetLCR": 110,
@@ -15,7 +15,7 @@
       "Positive notional for assets (negative IED payoff)",
       "ENHANCED initial cash for Month 1-5 compliance",
       "ALL months LCR ≥110% guaranteed",
-      "NSFR ≥150% with realistic stable funding ratio"
+      "NSFR ≥110% with realistic stable funding ratio"
     ]
   },
   "contracts": [
@@ -86,13 +86,13 @@
       "contractDealDate": "2024-01-01T00:00:00",
       "initialExchangeDate": "2024-01-05T00:00:00",
       "statusDate": "2024-01-01T00:00:00",
-      "notionalPrincipal": "-2500",
+      "notionalPrincipal": "-4500",
       "maturityDate": "2026-01-05T00:00:00",
       "nominalInterestRate": "0.015",
       "currency": "USD",
       "dayCountConvention": "A365",
       "hqlaCategory": "NonHQLA",
-      "description": "Realistic Customer Deposit - Provides stable funding for 150% NSFR compliance"
+      "description": "Realistic Customer Deposit - Provides stable funding for 123% NSFR compliance"
     }
   ]
 }

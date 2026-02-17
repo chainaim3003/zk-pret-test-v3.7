@@ -1,0 +1,52 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "BASEL3_ZERO_OUTFLOWS_TEST",
+    "description": "Basel III Test Case - TRUE ZERO CASH OUTFLOWS with valid NSFR",
+    "currency": "USD",
+    "totalNotional": 52500,
+    "created": "2026-02-04T00:00:00Z",
+    "version": "1.0",
+    "targetLCR": 80,
+    "targetNSFR": 80,
+    "maxAnalysisPeriods": 6,
+    "designPrinciples": [
+      "All contracts already exist on balance sheet (IED before status date)",
+      "Analysis period: 2024-01-01 to 2024-06-30 (6 months)",
+      "Asset: IED 2023-12-15 (before), MD 2024-07-15 (after) = ZERO outflows during analysis",
+      "Liability: IED 2023-12-20 (before), MD 2027-12-20 (after) = ZERO outflows during analysis",
+      "NSFR: ASF=$10K (100% × $10K liability), RSF=$2.625K (5% × $52.5K L1 asset) = 381%"
+    ]
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "existing_asset",
+      "contractRole": "RPA",
+      "contractDealDate": "2023-12-01T00:00:00",
+      "initialExchangeDate": "2023-12-15T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "52500",
+      "maturityDate": "2024-07-15T00:00:00",
+      "nominalInterestRate": "0",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Existing L1 asset on balance sheet - IED before status date, MD after analysis period = ZERO outflows"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "existing_liability",
+      "contractRole": "RPL",
+      "contractDealDate": "2023-12-01T00:00:00",
+      "initialExchangeDate": "2023-12-20T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-10000",
+      "maturityDate": "2027-12-20T00:00:00",
+      "nominalInterestRate": "0",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Existing 4-year liability on balance sheet - IED before status date, MD after analysis period = ZERO outflows"
+    }
+  ]
+}

@@ -28,6 +28,7 @@ node ./build/impl/local/verifier/BusinessStdIntegrityLocalMultiVerifier.js group
 # Risk Liquidity
 #Basel3
 node ./build/impl/local/verifier/RiskBasel3LocalMultiVerifier.js BASEL_GROUP_001 80 80 http://34.203.247.32:8083/eventsBatch src/data/RISK/Basel3/CONFIG/basel3-VALID-1.json
+node ./build/impl/local/verifier/RiskBasel3LocalMultiVerifier.js BASEL_GROUP_001 80 80 http://34.203.247.32:8083/eventsBatch src/data/RISK/Basel3/CONFIG/basel3-ZERO-OUTFLOWS-TEST.json
 #StableCoin
 node ./build/impl/local/verifier/RiskStableCoinLocalMultiVerifier.js RISK_GROUP_001 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/StableCoin/CONFIG/US/StableCoin-VALID-2.json ultra_strict US
 #Advanced

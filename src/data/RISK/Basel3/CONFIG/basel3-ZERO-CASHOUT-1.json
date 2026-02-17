@@ -1,0 +1,99 @@
+{
+  "portfolioMetadata": {
+    "portfolioId": "BASEL3_PAM_ZERO_CASHOUT_110",
+    "description": "Basel III ZERO CASHOUT FLOW - All nominalInterestRate=0 (zero-coupon instruments), no periodic IP cashflows. LCR/NSFR targets retained from structure.",
+    "currency": "USD",
+    "totalNotional": 65500,
+    "created": "2025-02-17T00:00:00Z",
+    "version": "1.0",
+    "targetLCR": 110,
+    "targetNSFR": 110,
+    "maxAnalysisPeriods": 24,
+    "designPrinciples": [
+      "Use ONLY PAM contracts (Principal at Maturity per ACTUS taxonomy)",
+      "Negative notional for liability (positive IED payoff)",
+      "Positive notional for assets (negative IED payoff)",
+      "ALL nominalInterestRate set to 0 — ZERO periodic interest payment (IP) cashflows",
+      "Only IED and MD events produce non-zero cashflows",
+      "Zero-coupon instrument modeling per ACTUS PAM specification",
+      "HQLA categorization retained for Basel III classification"
+    ]
+  },
+  "contracts": [
+    {
+      "contractType": "PAM",
+      "contractID": "cash01_zc",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-01T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "45000",
+      "maturityDate": "2024-01-02T00:00:00",
+      "nominalInterestRate": "0",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Zero-Coupon Initial Cash - No IP cashflows, only IED and MD principal exchange"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "bond01_zc",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-02T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "10000",
+      "maturityDate": "2024-06-30T00:00:00",
+      "nominalInterestRate": "0",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Zero-Coupon Government Bond Asset - No periodic interest, principal only at maturity"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "treasury01_zc",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-03T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "6000",
+      "maturityDate": "2024-08-31T00:00:00",
+      "nominalInterestRate": "0",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L1",
+      "description": "Zero-Coupon Treasury Security Asset - No periodic interest, principal only at maturity"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "corporate01_zc",
+      "contractRole": "RPA",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-04T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "4000",
+      "maturityDate": "2024-09-30T00:00:00",
+      "nominalInterestRate": "0",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "L2A",
+      "description": "Zero-Coupon Corporate Bond Asset - No periodic interest, principal only at maturity"
+    },
+    {
+      "contractType": "PAM",
+      "contractID": "deposit01_zc",
+      "contractRole": "RPL",
+      "contractDealDate": "2024-01-01T00:00:00",
+      "initialExchangeDate": "2024-01-05T00:00:00",
+      "statusDate": "2024-01-01T00:00:00",
+      "notionalPrincipal": "-2500",
+      "maturityDate": "2026-01-05T00:00:00",
+      "nominalInterestRate": "0",
+      "currency": "USD",
+      "dayCountConvention": "A365",
+      "hqlaCategory": "NonHQLA",
+      "description": "Zero-Coupon Customer Deposit Liability - No interest expense, principal repayment only at maturity"
+    }
+  ]
+}
