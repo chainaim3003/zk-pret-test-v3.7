@@ -48,17 +48,12 @@ export class EXIMOptimSingleCompanySmartContract extends SmartContract {
 
    // =================================== Enhanced Verification Method ===================================
    @method async verifyOptimizedComplianceWithProof(proof: EXIMOptimProof) {
-      // Add required state preconditions for proper constraint generation
-      this.companyIdentifierHash.requireEquals(this.companyIdentifierHash.get());
-      this.totalVerifications.requireEquals(this.totalVerifications.get());
-      this.firstVerificationTime.requireEquals(this.firstVerificationTime.get());
-      this.eximCompliant.requireEquals(this.eximCompliant.get());
-      
-      // Get current state values
-      const currentCompliantStatus = this.eximCompliant.get();
-      const currentVerificationCount = this.totalVerifications.get();
-      const currentCompanyIdHash = this.companyIdentifierHash.get();
-      const currentFirstVerificationTime = this.firstVerificationTime.get();
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+      // This sets proper preconditions AND returns values atomically
+      const currentCompanyIdHash = this.companyIdentifierHash.getAndRequireEquals();
+      const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
+      const currentFirstVerificationTime = this.firstVerificationTime.getAndRequireEquals();
+      const currentCompliantStatus = this.eximCompliant.getAndRequireEquals();
 
       // =================================== Verify ZK Proof ===================================
       proof.verify();
@@ -281,8 +276,8 @@ export class EXIMOptimSingleCompanySmartContract extends SmartContract {
     * Reset compliance status (admin function)
     */
    @method async resetCompliance() {
-      // Add required state precondition
-      this.eximCompliant.requireEquals(this.eximCompliant.get());
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+      const currentCompliantStatus = this.eximCompliant.getAndRequireEquals();
       
       this.eximCompliant.set(Bool(false));
       this.currentComplianceScore.set(Field(0));
@@ -293,9 +288,9 @@ export class EXIMOptimSingleCompanySmartContract extends SmartContract {
     * WARNING: This erases all history
     */
    @method async resetForNewCompany() {
-      // Add required state preconditions
-      this.companyIdentifierHash.requireEquals(this.companyIdentifierHash.get());
-      this.totalVerifications.requireEquals(this.totalVerifications.get());
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+      const currentCompanyIdHash = this.companyIdentifierHash.getAndRequireEquals();
+      const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
       
       // Reset company identity hashes
       this.companyIdentifierHash.set(Field(0));

@@ -14,9 +14,9 @@ export class BusinessStandardOptimVerificationSmartContract extends SmartContrac
 
    // Method to verify compliance and update state
    @method async verifyComplianceWithProof(proof: BusinessStandardOptimProof) {
-      // Ensure the state of `risk` matches its current value
-      this.risk.requireEquals(this.risk.get());
-      const currentRisk = this.risk.get();
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+      // This sets proper preconditions AND returns values atomically
+      const currentRisk = this.risk.getAndRequireEquals();
 
       // Verify the cryptographic proof
       proof.verify();

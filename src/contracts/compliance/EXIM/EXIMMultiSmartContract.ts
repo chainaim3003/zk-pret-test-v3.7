@@ -1,9 +1,9 @@
-import { Field, SmartContract, state, State,MerkleMap, method, Bool,Provable,MerkleMapWitness, CircuitString, UInt64, Struct, MerkleWitness, MerkleTree, Poseidon } from 'o1js';
+import { Field, SmartContract, state, State, MerkleMap, method, Bool, Provable, MerkleMapWitness, CircuitString, UInt64, Struct, MerkleWitness, MerkleTree, Poseidon } from 'o1js';
 import { EXIMOptimProof } from '../../../zk-programs/compliance/EXIMZKProgram.js';
 
 // =================================== Merkle Tree Configuration ===================================
 export const COMPANY_MERKLE_HEIGHT = 8; // Height 8 for up to 256 companies
-export class CompanyMerkleWitness extends MerkleWitness(COMPANY_MERKLE_HEIGHT) {}
+export class CompanyMerkleWitness extends MerkleWitness(COMPANY_MERKLE_HEIGHT) { }
 
 // =================================== Company Record Structure ===================================
 export class EXIMCompanyRecord extends Struct({
@@ -15,7 +15,7 @@ export class EXIMCompanyRecord extends Struct({
    totalVerifications: Field,          // Number of verifications for this company
    lastVerificationTime: UInt64,       // Last verification timestamp
    firstVerificationTime: UInt64,      // First verification timestamp
-}) {}
+}) { }
 
 // =================================== Query Result Structures ===================================
 export class RegistryInfo extends Struct({
@@ -25,7 +25,7 @@ export class RegistryInfo extends Struct({
    totalVerificationsGlobal: Field,
    companiesRootHash: Field,
    registryVersion: Field,
-}) {}
+}) { }
 
 export class GlobalComplianceStats extends Struct({
    totalCompanies: Field,
@@ -33,7 +33,7 @@ export class GlobalComplianceStats extends Struct({
    compliancePercentage: Field,
    totalVerifications: Field,
    lastVerificationTime: UInt64,
-}) {}
+}) { }
 
 // =================================== Individual Company Query Results (Same as SingleCompany) ===================================
 export class CompanyInfo extends Struct({
@@ -42,20 +42,20 @@ export class CompanyInfo extends Struct({
    jurisdictionHash: Field,
    isCompliant: Bool,
    complianceScore: Field,
-}) {}
+}) { }
 
 export class CurrentCompliance extends Struct({
    isCompliant: Bool,
    lastVerificationTime: UInt64,
    complianceScore: Field,
-}) {}
+}) { }
 
 export class VerificationStats extends Struct({
    totalVerifications: Field,
    firstVerificationTime: UInt64,
    lastVerificationTime: UInt64,
    hasBeenVerified: Bool,
-}) {}
+}) { }
 
 export class CompanyKey extends Struct({
    iecHash: Field,
@@ -64,7 +64,7 @@ export class CompanyKey extends Struct({
    static create(iecHash: Field, nameHash: Field): CompanyKey {
       return new CompanyKey({ iecHash, nameHash });
    }
-   
+
    toField(): Field {
       return Poseidon.hash([this.iecHash, this.nameHash]);
    }
@@ -106,23 +106,23 @@ export class EXIMMultiSmartContract extends SmartContract {
    // =================================== Initialize Contract ===================================
    init() {
       super.init();
-      
+
       // Initialize empty company tracking
       this.companiesRootHash.set(Field(0)); // Empty merkle tree root
       this.totalCompaniesTracked.set(Field(0));
       this.compliantCompaniesCount.set(Field(0));
       this.globalComplianceScore.set(Field(0));
       this.totalVerificationsGlobal.set(Field(0));
-      
+
       // Initialize timestamps
       this.lastVerificationTime.set(UInt64.from(0));
-      
+
       // Initialize version
       this.registryVersion.set(Field(1)); // Version 1.0
 
       const emptyMap = new MerkleMap();
       this.companiesMapRoot.set(emptyMap.getRoot());
-      
+
    }
 
    // =================================== Main Verification Method ===================================
@@ -130,22 +130,15 @@ export class EXIMMultiSmartContract extends SmartContract {
       proof: EXIMOptimProof,
       companyWitness: CompanyMerkleWitness,
       companyRecord: EXIMCompanyRecord,
-      companiesMapWitness:MerkleMapWitness
+      companiesMapWitness: MerkleMapWitness
    ) {
-
-      // Add required state preconditions for proper constraint generation
-      this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
-      this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
-      this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
-      this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
-      
-      // Get current state values
-      const currentRootHash = this.companiesRootHash.get();
-      const currentTotalCompanies = this.totalCompaniesTracked.get();
-      const currentCompliantCount = this.compliantCompaniesCount.get();
-      const currentTotalVerifications = this.totalVerificationsGlobal.get();
-      const currentMapRoot = this.companiesMapRoot.get();
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+      // This sets proper preconditions AND returns values atomically
+      const currentRootHash = this.companiesRootHash.getAndRequireEquals();
+      const currentTotalCompanies = this.totalCompaniesTracked.getAndRequireEquals();
+      const currentCompliantCount = this.compliantCompaniesCount.getAndRequireEquals();
+      const currentTotalVerifications = this.totalVerificationsGlobal.getAndRequireEquals();
+      const currentMapRoot = this.companiesMapRoot.getAndRequireEquals();
 
       // =================================== Verify ZK Proof ===================================
       proof.verify();
@@ -154,18 +147,18 @@ export class EXIMMultiSmartContract extends SmartContract {
       const publicOutput = proof.publicOutput;
       const isCompliant = publicOutput.isEXIMCompliant;
       const verificationTimestamp = publicOutput.verification_timestamp;
-      
+
       // Extract company identification from proof and hash them
       const proofIEC = publicOutput.iec;
       const proofEntityName = publicOutput.entityName;
       const proofJurisdiction = CircuitString.fromString('India'); // EXIM is India-specific
-      
+
       // Create hashes for comparison and storage
       const proofIECHash = proofIEC.hash();
       const proofEntityNameHash = proofEntityName.hash();
       const proofJurisdictionHash = proofJurisdiction.hash();
 
-      const companyKey = CompanyKey.create(proofIECHash,proofEntityNameHash);
+      const companyKey = CompanyKey.create(proofIECHash, proofEntityNameHash);
       const companyKeyField = companyKey.toField();
       // =================================== Verify Company Record Consistency ===================================
       // Ensure the company record matches the proof data
@@ -188,7 +181,7 @@ export class EXIMMultiSmartContract extends SmartContract {
          lastVerificationTime: verificationTimestamp,
          firstVerificationTime: verificationTimestamp,
       });
-      
+
       const companyRecordHash = Poseidon.hash([
          enhancedCompanyRecord.entityNameHash,
          enhancedCompanyRecord.iecHash,
@@ -221,13 +214,13 @@ export class EXIMMultiSmartContract extends SmartContract {
 
       const isNewCompany = hasNoCompanies;
       const companyExists = hasNoCompanies.not();
-      
+
       Provable.log('🔍 Has No Companies:', hasNoCompanies);
       Provable.log('🔍 Company Exists:', companyExists);
       Provable.log('🔍 Is New Company:', isNewCompany);
       Provable.log('🔍 Current Total Companies:', currentTotalCompanies);
       Provable.log('🔍 Is Compliant:', isCompliant);
-      
+
       // Only increment total companies for NEW companies
       const newTotalCompanies: Field = Provable.if(
          isNewCompany,
@@ -236,7 +229,7 @@ export class EXIMMultiSmartContract extends SmartContract {
       );
 
       // =================================== Update Global Statistics ===================================
-      
+
       // Update global verification count
       const newTotalVerifications = currentTotalVerifications.add(1);
 
@@ -245,16 +238,16 @@ export class EXIMMultiSmartContract extends SmartContract {
          currentCompliantCount.add(Field(1)),
          currentCompliantCount
       );
-      
+
       Provable.log('🔍 NEW Total Companies:', newTotalCompanies);
       Provable.log('🔍 NEW Compliant Count:', newCompliantCount);
       Provable.log('🔍 NEW Total Verifications:', newTotalVerifications);
-      
+
       // Update all state fields
       this.totalCompaniesTracked.set(newTotalCompanies);
       this.compliantCompaniesCount.set(newCompliantCount);
       this.totalVerificationsGlobal.set(newTotalVerifications);
-      
+
       // Update last verification time
       this.lastVerificationTime.set(verificationTimestamp);
 
@@ -266,15 +259,15 @@ export class EXIMMultiSmartContract extends SmartContract {
       this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
       this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
       this.lastVerificationTime.requireEquals(this.lastVerificationTime.get());
-      
+
       const totalCompanies = this.totalCompaniesTracked.get();
       const compliantCompanies = this.compliantCompaniesCount.get();
-      
+
       // Calculate compliance percentage
       const compliancePercentage = totalCompanies.equals(Field(0)).toField().equals(Field(1))
          ? Field(0)
          : compliantCompanies.mul(100).div(totalCompanies);
-      
+
       return new GlobalComplianceStats({
          totalCompanies: totalCompanies,
          compliantCompanies: compliantCompanies,
@@ -285,7 +278,7 @@ export class EXIMMultiSmartContract extends SmartContract {
    }
 
    // =================================== Query Methods ===================================
-   
+
    /**
     * Get registry information
     */
@@ -297,7 +290,7 @@ export class EXIMMultiSmartContract extends SmartContract {
       this.globalComplianceScore.requireEquals(this.globalComplianceScore.get());
       this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
-      
+
       return new RegistryInfo({
          totalCompaniesTracked: this.totalCompaniesTracked.get(),
          compliantCompaniesCount: this.compliantCompaniesCount.get(),
@@ -308,50 +301,50 @@ export class EXIMMultiSmartContract extends SmartContract {
       });
    }
 
-async getCompanyByIEC(iec: CircuitString, mapWitness: MerkleMapWitness): Promise<{
+   async getCompanyByIEC(iec: CircuitString, mapWitness: MerkleMapWitness): Promise<{
       exists: Bool;
       record: EXIMCompanyRecord;
       merkleRoot: Field;
       isValid: Bool;
    }> {
-         // State preconditions for o1js compliance
-         this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
-         
-         // Create LEI-based company key
-         const iecHash: Field = iec.hash();
-         const companyKey = CompanyKey.create(iecHash, iecHash);
-         const companyKeyField: Field = companyKey.toField();
-         
-         // MerkleMap witness verification
-         const currentMapRoot: Field = this.companiesMapRoot.get();
-         const [witnessRoot, witnessKey] = mapWitness.computeRootAndKey(Field(0));
-         
-         // Bool operations for existence check
-         const isValidWitness: Bool = witnessRoot.equals(currentMapRoot);
-         const isCorrectKey: Bool = witnessKey.equals(companyKeyField);
-         // If witness verification passes, it proves non-existence (maps to Field(0))
-         const companyExists: Bool = Bool(false);
-         
-         // Create default record structure
-         const existingRecord = new EXIMCompanyRecord({
-            iecHash: iecHash,
-            entityNameHash: iecHash, 
-            jurisdictionHash: CircuitString.fromString('Global').hash(),
-            isCompliant: Bool(true), 
-            complianceScore: Field(0),
-            totalVerifications: Field(0),
-            lastVerificationTime: UInt64.from(0),
-            firstVerificationTime: UInt64.from(0),
-         });
-         
-         return {
-            exists: companyExists,
-            record: existingRecord,
-            merkleRoot: currentMapRoot,
-            isValid: isValidWitness.and(isCorrectKey)
-         };
-      }
-getCompanyDataWithWitness(
+      // State preconditions for o1js compliance
+      this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
+
+      // Create LEI-based company key
+      const iecHash: Field = iec.hash();
+      const companyKey = CompanyKey.create(iecHash, iecHash);
+      const companyKeyField: Field = companyKey.toField();
+
+      // MerkleMap witness verification
+      const currentMapRoot: Field = this.companiesMapRoot.get();
+      const [witnessRoot, witnessKey] = mapWitness.computeRootAndKey(Field(0));
+
+      // Bool operations for existence check
+      const isValidWitness: Bool = witnessRoot.equals(currentMapRoot);
+      const isCorrectKey: Bool = witnessKey.equals(companyKeyField);
+      // If witness verification passes, it proves non-existence (maps to Field(0))
+      const companyExists: Bool = Bool(false);
+
+      // Create default record structure
+      const existingRecord = new EXIMCompanyRecord({
+         iecHash: iecHash,
+         entityNameHash: iecHash,
+         jurisdictionHash: CircuitString.fromString('Global').hash(),
+         isCompliant: Bool(true),
+         complianceScore: Field(0),
+         totalVerifications: Field(0),
+         lastVerificationTime: UInt64.from(0),
+         firstVerificationTime: UInt64.from(0),
+      });
+
+      return {
+         exists: companyExists,
+         record: existingRecord,
+         merkleRoot: currentMapRoot,
+         isValid: isValidWitness.and(isCorrectKey)
+      };
+   }
+   getCompanyDataWithWitness(
       iec: CircuitString,
       companyName: CircuitString,
       mapWitness: MerkleMapWitness
@@ -363,23 +356,23 @@ getCompanyDataWithWitness(
       // State preconditions for o1js compliance
       this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
-      
+
       const iecHash = iec.hash();
       const nameHash = companyName.hash();
       const companyKey = Poseidon.hash([iecHash, nameHash]);
-      
+
       // Verify witness against current state
       const currentMapRoot = this.companiesMapRoot.get();
       const [witnessRoot, witnessKey] = mapWitness.computeRootAndKey(Field(0));
-      
+
       // Validate witness
       const validWitness = witnessRoot.equals(currentMapRoot);
       const correctKey = witnessKey.equals(companyKey);
       const isValid = validWitness.and(correctKey);
-      
+
       // For demonstration, company exists if we have a valid witness
       const companyExists = isValid;
-      
+
       // Create a default record structure
       const defaultRecord = new EXIMCompanyRecord({
          iecHash,
@@ -391,7 +384,7 @@ getCompanyDataWithWitness(
          lastVerificationTime: UInt64.from(0),
          firstVerificationTime: UInt64.from(0),
       });
-      
+
       return {
          exists: companyExists,
          record: defaultRecord,
@@ -400,7 +393,7 @@ getCompanyDataWithWitness(
    }
 
    // =================================== Individual Company Query Methods (Same as SingleCompany) ===================================
-   
+
    /**
     * Get complete company information for a specific company (requires merkle proof)
     */
@@ -410,7 +403,7 @@ getCompanyDataWithWitness(
    ): CompanyInfo {
       // Add required state precondition
       this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      
+
       // Verify the company record exists in the merkle tree
       const companyRecordHash = Poseidon.hash([
          companyRecord.iecHash,
@@ -422,10 +415,10 @@ getCompanyDataWithWitness(
          companyRecord.lastVerificationTime.value,
          companyRecord.firstVerificationTime.value
       ]);
-      
+
       const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       calculatedRoot.assertEquals(this.companiesRootHash.get());
-      
+
       return new CompanyInfo({
          companyIdentifierHash: companyRecord.iecHash,
          companyNameHash: companyRecord.entityNameHash,
@@ -444,7 +437,7 @@ getCompanyDataWithWitness(
    ): CurrentCompliance {
       // Add required state precondition
       this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      
+
       // Verify the company record exists in the merkle tree
       const companyRecordHash = Poseidon.hash([
          companyRecord.iecHash,
@@ -456,10 +449,10 @@ getCompanyDataWithWitness(
          companyRecord.lastVerificationTime.value,
          companyRecord.firstVerificationTime.value
       ]);
-      
+
       const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       calculatedRoot.assertEquals(this.companiesRootHash.get());
-      
+
       return new CurrentCompliance({
          isCompliant: companyRecord.isCompliant,
          lastVerificationTime: companyRecord.lastVerificationTime,
@@ -476,7 +469,7 @@ getCompanyDataWithWitness(
    ): VerificationStats {
       // Add required state precondition
       this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      
+
       // Verify the company record exists in the merkle tree
       const companyRecordHash = Poseidon.hash([
          companyRecord.iecHash,
@@ -488,12 +481,12 @@ getCompanyDataWithWitness(
          companyRecord.lastVerificationTime.value,
          companyRecord.firstVerificationTime.value
       ]);
-      
+
       const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       calculatedRoot.assertEquals(this.companiesRootHash.get());
-      
+
       const hasBeenVerified = companyRecord.totalVerifications.greaterThan(Field(0));
-      
+
       return new VerificationStats({
          totalVerifications: companyRecord.totalVerifications,
          firstVerificationTime: companyRecord.firstVerificationTime,
@@ -512,11 +505,11 @@ getCompanyDataWithWitness(
    ): Bool {
       // Add required state precondition
       this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      
+
       // Check if the provided company name hash matches the record
       const providedNameHash = companyName.hash();
       const nameMatches = companyRecord.entityNameHash.equals(providedNameHash);
-      
+
       // Verify the company record exists in the merkle tree
       const companyRecordHash = Poseidon.hash([
          companyRecord.iecHash,
@@ -528,10 +521,10 @@ getCompanyDataWithWitness(
          companyRecord.lastVerificationTime.value,
          companyRecord.firstVerificationTime.value
       ]);
-      
+
       const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       const recordExists = calculatedRoot.equals(this.companiesRootHash.get());
-      
+
       return nameMatches.and(recordExists);
    }
 
@@ -545,11 +538,11 @@ getCompanyDataWithWitness(
    ): Bool {
       // Add required state precondition
       this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      
+
       // Verify the company name matches
       const providedNameHash = companyName.hash();
       companyRecord.entityNameHash.assertEquals(providedNameHash);
-      
+
       // Verify the company record exists in the merkle tree
       const companyRecordHash = Poseidon.hash([
          companyRecord.iecHash,
@@ -561,10 +554,10 @@ getCompanyDataWithWitness(
          companyRecord.lastVerificationTime.value,
          companyRecord.firstVerificationTime.value
       ]);
-      
+
       const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       calculatedRoot.assertEquals(this.companiesRootHash.get());
-      
+
       // Return the compliance status
       return companyRecord.isCompliant;
    }
@@ -579,10 +572,10 @@ getCompanyDataWithWitness(
    ): Bool {
       // Add required state precondition
       this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      
+
       // Check if the provided IEC hash matches the record
       const iecMatches = companyRecord.iecHash.equals(iecHash);
-      
+
       // Verify the company record exists in the merkle tree
       const companyRecordHash = Poseidon.hash([
          companyRecord.iecHash,
@@ -594,15 +587,15 @@ getCompanyDataWithWitness(
          companyRecord.lastVerificationTime.value,
          companyRecord.firstVerificationTime.value
       ]);
-      
+
       const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       const recordExists = calculatedRoot.equals(this.companiesRootHash.get());
-      
+
       return iecMatches.and(recordExists);
    }
 
    // =================================== Administrative Methods (Enhanced to match SingleCompany) ===================================
-    
+
    /**
     * Reset compliance status for a specific company (admin function)
     */
@@ -610,10 +603,10 @@ getCompanyDataWithWitness(
       companyWitness: CompanyMerkleWitness,
       companyRecord: EXIMCompanyRecord
    ) {
-      // Add required state preconditions
-      this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
-      
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+      const currentRootHash = this.companiesRootHash.getAndRequireEquals();
+      const currentCompliantCount = this.compliantCompaniesCount.getAndRequireEquals();
+
       // Verify the company record exists in the merkle tree
       const companyRecordHash = Poseidon.hash([
          companyRecord.iecHash,
@@ -625,10 +618,10 @@ getCompanyDataWithWitness(
          companyRecord.lastVerificationTime.value,
          companyRecord.firstVerificationTime.value
       ]);
-      
+
       const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       calculatedRoot.assertEquals(this.companiesRootHash.get());
-      
+
       // Create updated company record with reset compliance
       const updatedRecord = new EXIMCompanyRecord({
          iecHash: companyRecord.iecHash,
@@ -640,7 +633,7 @@ getCompanyDataWithWitness(
          lastVerificationTime: companyRecord.lastVerificationTime,
          firstVerificationTime: companyRecord.firstVerificationTime
       });
-      
+
       // Calculate new record hash
       const newRecordHash = Poseidon.hash([
          updatedRecord.iecHash,
@@ -652,14 +645,13 @@ getCompanyDataWithWitness(
          updatedRecord.lastVerificationTime.value,
          updatedRecord.firstVerificationTime.value
       ]);
-      
+
       // Update merkle tree
       const newRoot = companyWitness.calculateRoot(newRecordHash);
       this.companiesRootHash.set(newRoot);
-      
+
       // Update global compliance count if company was previously compliant
       const wasCompliant = companyRecord.isCompliant;
-      const currentCompliantCount = this.compliantCompaniesCount.get();
       const newCompliantCount = wasCompliant.toField().equals(Field(1))
          ? currentCompliantCount.sub(1)
          : currentCompliantCount;
@@ -670,11 +662,11 @@ getCompanyDataWithWitness(
     * Reset registry (admin function)
     */
    @method async resetRegistry() {
-      // Add required state preconditions
-      this.companiesRootHash.requireEquals(this.companiesRootHash.get());
-      this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
-      this.registryVersion.requireEquals(this.registryVersion.get());
-      
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+      const currentRootHash = this.companiesRootHash.getAndRequireEquals();
+      const currentTotal = this.totalCompaniesTracked.getAndRequireEquals();
+      const currentVersion = this.registryVersion.getAndRequireEquals();
+
       // Reset all state to initial values
       this.companiesRootHash.set(Field(0));
       this.totalCompaniesTracked.set(Field(0));
@@ -682,7 +674,7 @@ getCompanyDataWithWitness(
       this.globalComplianceScore.set(Field(0));
       this.totalVerificationsGlobal.set(Field(0));
       this.lastVerificationTime.set(UInt64.from(0));
-      this.registryVersion.set(this.registryVersion.get().add(1));
+      this.registryVersion.set(currentVersion.add(1)); // ✅ Use the variable
    }
 
    /**
@@ -701,7 +693,7 @@ getCompanyDataWithWitness(
       this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
       this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
-      
+
       return {
          companiesRootHash: this.companiesRootHash.get(),
          totalCompanies: this.totalCompaniesTracked.get(),
@@ -712,7 +704,7 @@ getCompanyDataWithWitness(
    }
 
    // =================================== Helper Methods for Company Name Queries ===================================
-   
+
    /**
     * Helper method: Get company compliance info by name (off-chain usage)
     * Note: This requires the caller to provide the correct witness and record
@@ -730,7 +722,7 @@ getCompanyDataWithWitness(
       // Verify company name matches record
       const providedNameHash = companyName.hash();
       const nameMatches = companyRecord.entityNameHash.equals(providedNameHash);
-      
+
       // Verify the company record exists in the merkle tree
       const companyRecordHash = Poseidon.hash([
          companyRecord.iecHash,
@@ -742,12 +734,12 @@ getCompanyDataWithWitness(
          companyRecord.lastVerificationTime.value,
          companyRecord.firstVerificationTime.value
       ]);
-      
+
       const calculatedRoot = companyWitness.calculateRoot(companyRecordHash);
       const recordExists = calculatedRoot.equals(this.companiesRootHash.get());
-      
+
       const isTracked = nameMatches.and(recordExists);
-      
+
       return {
          isTracked,
          isCompliant: companyRecord.isCompliant,

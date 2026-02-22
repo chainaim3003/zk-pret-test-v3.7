@@ -3,7 +3,7 @@ import { GLEIFOptimProof } from '../../../zk-programs/compliance/GLEIFZKProgram.
 
 // =================================== Merkle Tree Configuration ===================================
 export const COMPANY_MERKLE_HEIGHT = 8; // Height 8 for up to 256 companies
-export class CompanyMerkleWitness extends MerkleWitness(COMPANY_MERKLE_HEIGHT) {}
+export class CompanyMerkleWitness extends MerkleWitness(COMPANY_MERKLE_HEIGHT) { }
 
 // =================================== Company Record Structure (Enhanced) ===================================
 export class GLEIFCompanyRecord extends Struct({
@@ -20,7 +20,7 @@ export class GLEIFCompanyRecord extends Struct({
    firstVerificationTime: UInt64,     // First verification timestamp
    lastPassTime: UInt64,              // Last successful verification timestamp
    lastFailTime: UInt64,              // Last failed verification timestamp
-}) {}
+}) { }
 
 // =================================== Company Verification Statistics ===================================
 export class CompanyVerificationStats extends Struct({
@@ -37,7 +37,7 @@ export class CompanyVerificationStats extends Struct({
    lastPassTime: UInt64,
    lastFailTime: UInt64,
    daysSinceLastVerification: Field,
-}) {}
+}) { }
 
 // =================================== Company Query Results ===================================
 export class CompanyQueryResult extends Struct({
@@ -45,7 +45,7 @@ export class CompanyQueryResult extends Struct({
    record: GLEIFCompanyRecord,
    merkleRoot: Field,
    isValid: Bool,
-}) {}
+}) { }
 
 // =================================== Company Storage Key ===================================
 export class CompanyKey extends Struct({
@@ -55,7 +55,7 @@ export class CompanyKey extends Struct({
    static create(leiHash: Field, nameHash: Field): CompanyKey {
       return new CompanyKey({ leiHash, nameHash });
    }
-   
+
    toField(): Field {
       return Poseidon.hash([this.leiHash, this.nameHash]);
    }
@@ -69,7 +69,7 @@ export class RegistryInfo extends Struct({
    totalVerificationsGlobal: Field,
    companiesRootHash: Field,
    registryVersion: Field,
-}) {}
+}) { }
 
 export class GlobalComplianceStats extends Struct({
    totalCompanies: Field,
@@ -77,7 +77,7 @@ export class GlobalComplianceStats extends Struct({
    // ✅ ZK BEST PRACTICE: Removed compliancePercentage - calculate in JavaScript
    totalVerifications: Field,
    lastVerificationTime: UInt64,
-}) {}
+}) { }
 
 // =================================== GLEIF Multi-Company Contract with Two-Stage Lookup Support ===================================
 export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
@@ -91,22 +91,22 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
 
    init() {
       super.init();
-      
+
       // ✅ o1js BEST PRACTICE: Initialize all state fields
       this.totalCompaniesTracked.set(Field(0));
       this.compliantCompaniesCount.set(Field(0));
       this.totalVerificationsGlobal.set(Field(0));
-      
+
       // Initialize timestamps
       this.lastVerificationTime.set(UInt64.from(Date.now()));
-      
+
       // Initialize version
       this.registryVersion.set(Field(1));
-      
+
       // Initialize empty MerkleMap for individual company storage
       const emptyMap = new MerkleMap();
       this.companiesMapRoot.set(emptyMap.getRoot());
-      
+
       // Initialize as enabled
       this.contractDisabled.set(Bool(false));
    }
@@ -118,20 +118,15 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       companyRecord: GLEIFCompanyRecord,
       companiesMapWitness: MerkleMapWitness
    ) {
-      // Check if contract is disabled
-      this.contractDisabled.requireEquals(Bool(false));
-      
-      // Add required state preconditions for proper constraint generation
-      this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
-      this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
-      this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
-      this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
-      
-      // Get current state values
-      const currentTotalCompanies = this.totalCompaniesTracked.get();
-      const currentCompliantCount = this.compliantCompaniesCount.get();
-      const currentTotalVerifications = this.totalVerificationsGlobal.get();
-      const currentMapRoot = this.companiesMapRoot.get();
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+      // This sets proper preconditions AND returns values atomically
+      const contractDisabled = this.contractDisabled.getAndRequireEquals();
+      contractDisabled.assertFalse();
+
+      const currentTotalCompanies = this.totalCompaniesTracked.getAndRequireEquals();
+      const currentCompliantCount = this.compliantCompaniesCount.getAndRequireEquals();
+      const currentTotalVerifications = this.totalVerificationsGlobal.getAndRequireEquals();
+      const currentMapRoot = this.companiesMapRoot.getAndRequireEquals();
 
       // =================================== Verify ZK Proof ===================================
       proof.verify();
@@ -140,17 +135,17 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       const publicOutput = proof.publicOutput;
       const isCompliant = publicOutput.isGLEIFCompliant;
       const verificationTimestamp = publicOutput.verification_timestamp;
-      
+
       // Extract company identification from proof and hash them
       const proofLEI = publicOutput.lei;
       const proofCompanyName = publicOutput.name;
       const proofJurisdiction = CircuitString.fromString('Global'); // GLEIF is global
-      
+
       // Create hashes for comparison and storage
       const proofLEIHash = proofLEI.hash();
       const proofCompanyNameHash = proofCompanyName.hash();
       const proofJurisdictionHash = proofJurisdiction.hash();
-      
+
       // Create company key for storage
       const companyKey = CompanyKey.create(proofLEIHash, proofCompanyNameHash);
       const companyKeyField = companyKey.toField();
@@ -162,11 +157,11 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       companyRecord.jurisdictionHash.assertEquals(proofJurisdictionHash);
       companyRecord.isCompliant.assertEquals(isCompliant);
       companyRecord.lastVerificationTime.assertEquals(verificationTimestamp);
-      
+
       // =================================== Company Record Storage (Enhanced with Verification Tracking) ===================================
       // Check if this is a new company or existing company update
       // For now, treat all as new (simplified version) but track verification stats
-      
+
       // Create enhanced company record with verification tracking
       const enhancedCompanyRecord = new GLEIFCompanyRecord({
          leiHash: companyRecord.leiHash,
@@ -183,7 +178,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
          lastPassTime: isCompliant.toField().equals(Field(1)) ? verificationTimestamp : UInt64.from(0),
          lastFailTime: isCompliant.toField().equals(Field(0)) ? verificationTimestamp : UInt64.from(0),
       });
-      
+
       // =================================== Real Company Data Storage ===================================
       // Serialize enhanced company record for storage (with all verification tracking fields)
       const companyRecordHash = Poseidon.hash([
@@ -201,7 +196,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
          enhancedCompanyRecord.lastPassTime.value,
          enhancedCompanyRecord.lastFailTime.value
       ]);
-      
+
       // Update the MerkleMap with the new/updated company record
       const [newMapRoot, _key1] = companiesMapWitness.computeRootAndKey(companyRecordHash);
       this.companiesMapRoot.set(newMapRoot);
@@ -211,40 +206,40 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       Provable.log('🔍 SMART CONTRACT DEBUG: Starting company existence check');
       Provable.log('🔍 Company Key:', companyKeyField);
       Provable.log('🔍 Current Map Root:', currentMapRoot);
-      
+
       const [witnessRoot, witnessKey] = companiesMapWitness.computeRootAndKey(Field(0));
-      
+
       Provable.log('🔍 Witness Root:', witnessRoot);
       Provable.log('🔍 Witness Key:', witnessKey);
-      
+
       // ✅ FIXED: Only verify the key is correct (skip root verification)
       witnessKey.assertEquals(companyKeyField);
-      
+
       // ✅ FIXED: Use company count instead of map root to determine if contract is empty
       // Check if we have any companies tracked
       const hasNoCompanies = currentTotalCompanies.equals(Field(0));
-      
+
       // For contracts with 0 companies: definitely a new company
       // For contracts with >0 companies: need more sophisticated logic (for now, treat as new)
       const isNewCompany = hasNoCompanies;
       const companyExists = hasNoCompanies.not();
-      
+
       Provable.log('🔍 Has No Companies:', hasNoCompanies);
       Provable.log('🔍 Company Exists:', companyExists);
       Provable.log('🔍 Is New Company:', isNewCompany);
       Provable.log('🔍 Current Total Companies:', currentTotalCompanies);
       Provable.log('🔍 Is Compliant:', isCompliant);
-      
+
       // Only increment total companies for NEW companies
       const newTotalCompanies: Field = Provable.if(
          isNewCompany,
          currentTotalCompanies.add(Field(1)),
          currentTotalCompanies
       );
-      
+
       // Always increment total verifications (regardless of company newness)
       const newTotalVerifications: Field = currentTotalVerifications.add(Field(1));
-      
+
       // Smart compliant company tracking
       // Only increment compliant count for NEW COMPLIANT companies
       const newCompliantCount: Field = Provable.if(
@@ -252,22 +247,22 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
          currentCompliantCount.add(Field(1)),
          currentCompliantCount
       );
-      
+
       Provable.log('🔍 NEW Total Companies:', newTotalCompanies);
       Provable.log('🔍 NEW Compliant Count:', newCompliantCount);
       Provable.log('🔍 NEW Total Verifications:', newTotalVerifications);
-      
+
       // ✅ FIXED: Update all state fields
       this.totalCompaniesTracked.set(newTotalCompanies);
       this.compliantCompaniesCount.set(newCompliantCount);
       this.totalVerificationsGlobal.set(newTotalVerifications);
-      
+
       // Update last verification time
       this.lastVerificationTime.set(verificationTimestamp);
    }
 
    // =================================== Query Methods - NO DUPLICATES ===================================
-   
+
    /**
     * Get global compliance stats - Single implementation
     */
@@ -285,7 +280,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
          lastVerificationTime: this.lastVerificationTime.get(),
       });
    }
-   
+
    /**
     * Get registry info - Single implementation
     */
@@ -296,7 +291,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
       this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
-      
+
       return new RegistryInfo({
          totalCompaniesTracked: this.totalCompaniesTracked.get(),
          compliantCompaniesCount: this.compliantCompaniesCount.get(),
@@ -307,7 +302,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
    }
 
    // =================================== Enhanced Company Existence Checking ===================================
-   
+
    /**
     * ✅ Enhanced LEI-based company lookup for two-stage verification
     */
@@ -319,28 +314,28 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
    }> {
       // State preconditions for o1js compliance
       this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
-      
+
       // Create LEI-based company key
       const leiHash: Field = lei.hash();
       const companyKey = CompanyKey.create(leiHash, leiHash);
       const companyKeyField: Field = companyKey.toField();
-      
+
       // MerkleMap witness verification
       const currentMapRoot: Field = this.companiesMapRoot.get();
       const [witnessRoot, witnessKey] = mapWitness.computeRootAndKey(Field(0));
-      
+
       // Bool operations for existence check
       const isValidWitness: Bool = witnessRoot.equals(currentMapRoot);
       const isCorrectKey: Bool = witnessKey.equals(companyKeyField);
       // If witness verification passes, it proves non-existence (maps to Field(0))
       const companyExists: Bool = Bool(false);
-      
+
       // Create default record structure
       const existingRecord = new GLEIFCompanyRecord({
          leiHash: leiHash,
-         legalNameHash: leiHash, 
+         legalNameHash: leiHash,
          jurisdictionHash: CircuitString.fromString('Global').hash(),
-         isCompliant: Bool(true), 
+         isCompliant: Bool(true),
          complianceScore: Field(0),
          totalVerifications: Field(0),
          passedVerifications: Field(0),
@@ -351,7 +346,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
          lastPassTime: UInt64.from(0),
          lastFailTime: UInt64.from(0),
       });
-      
+
       return {
          exists: companyExists,
          record: existingRecord,
@@ -359,7 +354,7 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
          isValid: isValidWitness.and(isCorrectKey)
       };
    }
-   
+
    /**
     * Enhanced company existence checking - no @method, no async, no Promise
     */
@@ -375,23 +370,23 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       // State preconditions for o1js compliance
       this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
-      
+
       const leiHash = lei.hash();
       const nameHash = companyName.hash();
       const companyKey = Poseidon.hash([leiHash, nameHash]);
-      
+
       // Verify witness against current state
       const currentMapRoot = this.companiesMapRoot.get();
       const [witnessRoot, witnessKey] = mapWitness.computeRootAndKey(Field(0));
-      
+
       // Validate witness
       const validWitness = witnessRoot.equals(currentMapRoot);
       const correctKey = witnessKey.equals(companyKey);
       const isValid = validWitness.and(correctKey);
-      
+
       // For demonstration, company exists if we have a valid witness
       const companyExists = isValid;
-      
+
       // Create a default record structure
       const defaultRecord = new GLEIFCompanyRecord({
          leiHash,
@@ -408,14 +403,14 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
          lastPassTime: UInt64.from(0),
          lastFailTime: UInt64.from(0)
       });
-      
+
       return {
          exists: companyExists,
          record: defaultRecord,
          isValid: isValid
       };
    }
-   
+
    /**
     * Enhanced contract state querying for client-side existence checks
     */
@@ -433,13 +428,13 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
       this.contractDisabled.requireEquals(this.contractDisabled.get());
-      
+
       const totalCompanies = this.totalCompaniesTracked.get();
       const mapRoot = this.companiesMapRoot.get();
-      
+
       // Check if contract is empty (no companies)
       const isEmpty = totalCompanies.equals(Field(0));
-      
+
       return {
          totalCompanies: totalCompanies,
          compliantCompanies: this.compliantCompaniesCount.get(),
@@ -451,37 +446,49 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
    }
 
    // =================================== Administrative Methods ===================================
-   
+
    /**
     * Emergency disable function - stops all new verifications
     */
    @method async emergencyDisable() {
-      this.contractDisabled.requireEquals(this.contractDisabled.get());
+      // ✅ SECURITY FIX HIGH #3: Add precondition that contract must currently be ENABLED
+      const currentDisabledState = this.contractDisabled.getAndRequireEquals();
+
+      // ✅ Ensure we're actually changing state (prevent replay attacks)
+      currentDisabledState.assertFalse(); // Contract must currently be enabled
+
+      // Set to disabled
       this.contractDisabled.set(Bool(true));
    }
-   
+
    /**
     * Re-enable contract (in case of false alarm)
     */
    @method async reEnableContract() {
-      this.contractDisabled.requireEquals(this.contractDisabled.get());
+      // ✅ SECURITY FIX HIGH #3: Add precondition that contract must currently be DISABLED
+      const currentDisabledState = this.contractDisabled.getAndRequireEquals();
+
+      // ✅ Ensure we're actually changing state (prevent replay attacks)
+      currentDisabledState.assertTrue(); // Contract must currently be disabled
+
+      // Set to enabled
       this.contractDisabled.set(Bool(false));
    }
-   
+
    /**
     * Reset registry (admin function)
     */
    @method async resetRegistry() {
-      // Add required state preconditions
-      this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
-      this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
-      this.registryVersion.requireEquals(this.registryVersion.get());
-      
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+      const currentTotal = this.totalCompaniesTracked.getAndRequireEquals();
+      const currentCompliantCount = this.compliantCompaniesCount.getAndRequireEquals();
+      const currentVersion = this.registryVersion.getAndRequireEquals();
+
       // Reset all state to initial values
       this.totalCompaniesTracked.set(Field(0));
       this.compliantCompaniesCount.set(Field(0));
       this.lastVerificationTime.set(UInt64.from(0));
-      this.registryVersion.set(this.registryVersion.get().add(1)); // Increment version
+      this.registryVersion.set(currentVersion.add(1)); // ✅ Use the variable
    }
 
    /**
@@ -501,9 +508,9 @@ export class GLEIFOptimMultiCompanySmartContract extends SmartContract {
       this.lastVerificationTime.requireEquals(this.lastVerificationTime.get());
       this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
-      
+
       const totalCompanies = this.totalCompaniesTracked.get();
-      
+
       return {
          companiesRootHash: this.companiesMapRoot.get(),
          totalCompanies: totalCompanies,

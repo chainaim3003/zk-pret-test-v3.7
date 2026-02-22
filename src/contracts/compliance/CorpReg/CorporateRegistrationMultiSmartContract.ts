@@ -120,154 +120,134 @@ export class CorporateRegistrationMultiSmartContract extends SmartContract {
    // =================================== ✅ ENHANCED: Main Verification Method ===================================
    // 🆕 Added companiesMapWitness parameter (line 210)
    @method async verifyOptimizedComplianceWithProof(
-      proof: CorporateRegistrationOptimProof,
-      companyWitness: CompanyMerkleWitness,
-      companyRecord: CorporateRegistrationCompanyRecord,
-      companiesMapWitness: MerkleMapWitness  // 🆕 Added MerkleMapWitness
-   ) {
-      // 🆕 Check if contract is disabled (emergency shutdown)
-      this.contractDisabled.requireEquals(Bool(false));
-      
-      // Add required state preconditions for proper constraint generation
-      this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
-      this.compliantCompaniesCount.requireEquals(this.compliantCompaniesCount.get());
-      this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
-      this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());  // 🆕 Changed from companiesRootHash
-      
-      // Get current state values
-      const currentTotalCompanies = this.totalCompaniesTracked.get();
-      const currentCompliantCount = this.compliantCompaniesCount.get();
-      const currentTotalVerifications = this.totalVerificationsGlobal.get();
-      const currentMapRoot = this.companiesMapRoot.get();  // 🆕 Changed from currentRootHash
+   proof: CorporateRegistrationOptimProof,
+   companyWitness: CompanyMerkleWitness,
+   companyRecord: CorporateRegistrationCompanyRecord,
+   companiesMapWitness: MerkleMapWitness
+) {
+   // ✅ Check if contract is disabled (emergency shutdown)
+   const contractDisabled = this.contractDisabled.getAndRequireEquals();
+   contractDisabled.assertFalse();
+   
+   // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+   // This sets proper preconditions AND returns values atomically
+   const currentTotalCompanies = this.totalCompaniesTracked.getAndRequireEquals();
+   const currentCompliantCount = this.compliantCompaniesCount.getAndRequireEquals();
+   const currentTotalVerifications = this.totalVerificationsGlobal.getAndRequireEquals();
+   const currentMapRoot = this.companiesMapRoot.getAndRequireEquals();
 
-      // =================================== Verify ZK Proof ===================================
-      proof.verify();
+   // =================================== Verify ZK Proof ===================================
+   proof.verify();
 
-      // =================================== Extract Proof Data ===================================
-      const publicOutput = proof.publicOutput;
-      const isCompliant = publicOutput.isCorpRegCompliant;
-      const verificationTimestamp = publicOutput.verification_timestamp;
-      
-      // Extract company identification from proof and hash them
-      const proofCIN = publicOutput.CIN;
-      const proofCompanyName = publicOutput.companyName;
-      const proofJurisdiction = CircuitString.fromString('IN'); // Corporate Registration is India-specific
-      
-      // Create hashes for comparison and storage
-      const proofCINHash = proofCIN.hash();
-      const proofCompanyNameHash = proofCompanyName.hash();
-      const proofJurisdictionHash = proofJurisdiction.hash();
-      
-      // 🆕 Create company key for storage (line 178)
-      const companyKey = CompanyKey.create(proofCINHash, proofCompanyNameHash);
-      const companyKeyField = companyKey.toField();
+   // =================================== Extract Proof Data ===================================
+   const publicOutput = proof.publicOutput;
+   const isCompliant = publicOutput.isCorpRegCompliant;
+   const verificationTimestamp = publicOutput.verification_timestamp;
+   
+   // Extract company identification from proof and hash them
+   const proofCIN = publicOutput.CIN;
+   const proofCompanyName = publicOutput.companyName;
+   const proofJurisdiction = CircuitString.fromString('IN');
+   
+   // Create hashes for comparison and storage
+   const proofCINHash = proofCIN.hash();
+   const proofCompanyNameHash = proofCompanyName.hash();
+   const proofJurisdictionHash = proofJurisdiction.hash();
+   
+   // Create company key for storage
+   const companyKey = CompanyKey.create(proofCINHash, proofCompanyNameHash);
+   const companyKeyField = companyKey.toField();
 
-      // =================================== Verify Company Record Consistency ===================================
-      // Ensure the company record matches the proof data
-      companyRecord.cinHash.assertEquals(proofCINHash);
-      companyRecord.companyNameHash.assertEquals(proofCompanyNameHash);
-      companyRecord.jurisdictionHash.assertEquals(proofJurisdictionHash);
-      companyRecord.isCompliant.assertEquals(isCompliant);
-      companyRecord.lastVerificationTime.assertEquals(verificationTimestamp);
-      
-      // =================================== 🆕 ENHANCED: Company Record Storage (lines 173-189) ===================================
-      // Create enhanced company record with verification tracking
-      const enhancedCompanyRecord = new CorporateRegistrationCompanyRecord({
-         cinHash: companyRecord.cinHash,
-         companyNameHash: companyRecord.companyNameHash,
-         jurisdictionHash: companyRecord.jurisdictionHash,
-         isCompliant: companyRecord.isCompliant,
-         complianceScore: companyRecord.complianceScore,
-         totalVerifications: Field(1),                    // Start with 1 verification
-         passedVerifications: isCompliant.toField(),      // 1 if passed, 0 if failed
-         failedVerifications: isCompliant.not().toField(), // 1 if failed, 0 if passed
-         consecutiveFailures: isCompliant.not().toField(), // 1 if this verification failed, 0 if passed
-         lastVerificationTime: verificationTimestamp,
-         firstVerificationTime: verificationTimestamp,
-         // 🆕 Conditional timestamp logic - only one should be set to current time
-         lastPassTime: Provable.if(isCompliant, verificationTimestamp, UInt64.from(0)),
-         lastFailTime: Provable.if(isCompliant.not(), verificationTimestamp, UInt64.from(0)),
-      });
+   // =================================== Verify Company Record Consistency ===================================
+   companyRecord.cinHash.assertEquals(proofCINHash);
+   companyRecord.companyNameHash.assertEquals(proofCompanyNameHash);
+   companyRecord.jurisdictionHash.assertEquals(proofJurisdictionHash);
+   companyRecord.isCompliant.assertEquals(isCompliant);
+   companyRecord.lastVerificationTime.assertEquals(verificationTimestamp);
+   
+   // =================================== ENHANCED: Company Record Storage ===================================
+   const enhancedCompanyRecord = new CorporateRegistrationCompanyRecord({
+      cinHash: companyRecord.cinHash,
+      companyNameHash: companyRecord.companyNameHash,
+      jurisdictionHash: companyRecord.jurisdictionHash,
+      isCompliant: companyRecord.isCompliant,
+      complianceScore: companyRecord.complianceScore,
+      totalVerifications: Field(1),
+      passedVerifications: isCompliant.toField(),
+      failedVerifications: isCompliant.not().toField(),
+      consecutiveFailures: isCompliant.not().toField(),
+      lastVerificationTime: verificationTimestamp,
+      firstVerificationTime: verificationTimestamp,
+      lastPassTime: Provable.if(isCompliant, verificationTimestamp, UInt64.from(0)),
+      lastFailTime: Provable.if(isCompliant.not(), verificationTimestamp, UInt64.from(0)),
+   });
 
-      // =================================== 🆕 Real Company Data Storage with MerkleMap ===================================
-      // Serialize enhanced company record for storage (with all verification tracking fields)
-      const companyRecordHash = Poseidon.hash([
-         enhancedCompanyRecord.cinHash,
-         enhancedCompanyRecord.companyNameHash,
-         enhancedCompanyRecord.jurisdictionHash,
-         enhancedCompanyRecord.isCompliant.toField(),
-         enhancedCompanyRecord.complianceScore,
-         enhancedCompanyRecord.totalVerifications,
-         enhancedCompanyRecord.passedVerifications,
-         enhancedCompanyRecord.failedVerifications,
-         enhancedCompanyRecord.consecutiveFailures,
-         enhancedCompanyRecord.lastVerificationTime.value,
-         enhancedCompanyRecord.firstVerificationTime.value,
-         enhancedCompanyRecord.lastPassTime.value,
-         enhancedCompanyRecord.lastFailTime.value
-      ]);
-      
-      // 🆕 Update the MerkleMap with the new/updated company record (line 210)
-      const [newMapRoot, _key1] = companiesMapWitness.computeRootAndKey(companyRecordHash);
-      this.companiesMapRoot.set(newMapRoot);
+   // =================================== Real Company Data Storage with MerkleMap ===================================
+   const companyRecordHash = Poseidon.hash([
+      enhancedCompanyRecord.cinHash,
+      enhancedCompanyRecord.companyNameHash,
+      enhancedCompanyRecord.jurisdictionHash,
+      enhancedCompanyRecord.isCompliant.toField(),
+      enhancedCompanyRecord.complianceScore,
+      enhancedCompanyRecord.totalVerifications,
+      enhancedCompanyRecord.passedVerifications,
+      enhancedCompanyRecord.failedVerifications,
+      enhancedCompanyRecord.consecutiveFailures,
+      enhancedCompanyRecord.lastVerificationTime.value,
+      enhancedCompanyRecord.firstVerificationTime.value,
+      enhancedCompanyRecord.lastPassTime.value,
+      enhancedCompanyRecord.lastFailTime.value
+   ]);
+   
+   const [newMapRoot, _key1] = companiesMapWitness.computeRootAndKey(companyRecordHash);
+   this.companiesMapRoot.set(newMapRoot);
 
-      // =================================== 🆕 FIXED: Proper Company Counting Logic (lines 304-318) ===================================
-      // 🆕 Debug logging with Provable.log
-      Provable.log('🔍 SMART CONTRACT DEBUG: Starting company existence check');
-      Provable.log('🔍 Company Key:', companyKeyField);
-      Provable.log('🔍 Current Map Root:', currentMapRoot);
-      
-      const [witnessRoot, witnessKey] = companiesMapWitness.computeRootAndKey(Field(0));
-      
-      Provable.log('🔍 Witness Root:', witnessRoot);
-      Provable.log('🔍 Witness Key:', witnessKey);
-      
-      // 🆕 Verify the key is correct
-      witnessKey.assertEquals(companyKeyField);
-      
-      // 🆕 Use company count instead of map root to determine if contract is empty
-      const hasNoCompanies = currentTotalCompanies.equals(Field(0));
-      
-      // For contracts with 0 companies: definitely a new company
-      // For contracts with >0 companies: need more sophisticated logic (for now, treat as new)
-      const isNewCompany = hasNoCompanies;
-      const companyExists = hasNoCompanies.not();
-      
-      Provable.log('🔍 Has No Companies:', hasNoCompanies);
-      Provable.log('🔍 Company Exists:', companyExists);
-      Provable.log('🔍 Is New Company:', isNewCompany);
-      Provable.log('🔍 Current Total Companies:', currentTotalCompanies);
-      Provable.log('🔍 Is Compliant:', isCompliant);
-      
-      // 🆕 Only increment total companies for NEW companies (using Provable.if)
-      const newTotalCompanies: Field = Provable.if(
-         isNewCompany,
-         currentTotalCompanies.add(Field(1)),
-         currentTotalCompanies
-      );
-      
-      // Always increment total verifications (regardless of company newness)
-      const newTotalVerifications: Field = currentTotalVerifications.add(Field(1));
-      
-      // 🆕 Smart compliant company tracking - only increment for NEW COMPLIANT companies
-      const newCompliantCount: Field = Provable.if(
-         isNewCompany.and(isCompliant),
-         currentCompliantCount.add(Field(1)),
-         currentCompliantCount
-      );
-      
-      Provable.log('🔍 NEW Total Companies:', newTotalCompanies);
-      Provable.log('🔍 NEW Compliant Count:', newCompliantCount);
-      Provable.log('🔍 NEW Total Verifications:', newTotalVerifications);
-      
-      // 🆕 Update all state fields with corrected logic
-      this.totalCompaniesTracked.set(newTotalCompanies);
-      this.compliantCompaniesCount.set(newCompliantCount);
-      this.totalVerificationsGlobal.set(newTotalVerifications);
-      
-      // Update last verification time
-      this.lastVerificationTime.set(verificationTimestamp);
-   }
+   // =================================== FIXED: Proper Company Counting Logic ===================================
+   Provable.log('🔍 SMART CONTRACT DEBUG: Starting company existence check');
+   Provable.log('🔍 Company Key:', companyKeyField);
+   Provable.log('🔍 Current Map Root:', currentMapRoot);
+   
+   const [witnessRoot, witnessKey] = companiesMapWitness.computeRootAndKey(Field(0));
+   
+   Provable.log('🔍 Witness Root:', witnessRoot);
+   Provable.log('🔍 Witness Key:', witnessKey);
+   
+   witnessKey.assertEquals(companyKeyField);
+   
+   const hasNoCompanies = currentTotalCompanies.equals(Field(0));
+   const isNewCompany = hasNoCompanies;
+   const companyExists = hasNoCompanies.not();
+   
+   Provable.log('🔍 Has No Companies:', hasNoCompanies);
+   Provable.log('🔍 Company Exists:', companyExists);
+   Provable.log('🔍 Is New Company:', isNewCompany);
+   Provable.log('🔍 Current Total Companies:', currentTotalCompanies);
+   Provable.log('🔍 Is Compliant:', isCompliant);
+   
+   const newTotalCompanies: Field = Provable.if(
+      isNewCompany,
+      currentTotalCompanies.add(Field(1)),
+      currentTotalCompanies
+   );
+   
+   const newTotalVerifications: Field = currentTotalVerifications.add(Field(1));
+   
+   const newCompliantCount: Field = Provable.if(
+      isNewCompany.and(isCompliant),
+      currentCompliantCount.add(Field(1)),
+      currentCompliantCount
+   );
+   
+   Provable.log('🔍 NEW Total Companies:', newTotalCompanies);
+   Provable.log('🔍 NEW Compliant Count:', newCompliantCount);
+   Provable.log('🔍 NEW Total Verifications:', newTotalVerifications);
+   
+   // ✅ Update all state fields with corrected logic
+   this.totalCompaniesTracked.set(newTotalCompanies);
+   this.compliantCompaniesCount.set(newCompliantCount);
+   this.totalVerificationsGlobal.set(newTotalVerifications);
+   this.lastVerificationTime.set(verificationTimestamp);
+}
 
    // =================================== ✅ ENHANCED: Query Methods ===================================
    
@@ -467,39 +447,45 @@ export class CorporateRegistrationMultiSmartContract extends SmartContract {
 
    // =================================== 🆕 NEW: Administrative Methods ===================================
    
-   /**
-    * 🆕 Emergency disable function - stops all new verifications
-    */
+
    @method async emergencyDisable() {
-      this.contractDisabled.requireEquals(this.contractDisabled.get());
-      this.contractDisabled.set(Bool(true));
-   }
+   // ✅ SECURITY FIX: Add precondition that contract must currently be ENABLED
+   const currentDisabledState = this.contractDisabled.getAndRequireEquals();
    
-   /**
-    * 🆕 Re-enable contract (in case of false alarm)
-    */
+   // ✅ Ensure we're actually changing state (prevent replay attacks)
+   currentDisabledState.assertFalse(); // Contract must currently be enabled
+   
+   // Set to disabled
+   this.contractDisabled.set(Bool(true));
+  }
+   
+
    @method async reEnableContract() {
-      this.contractDisabled.requireEquals(this.contractDisabled.get());
-      this.contractDisabled.set(Bool(false));
-   }
+   // ✅ SECURITY FIX: Add precondition that contract must currently be DISABLED
+   const currentDisabledState = this.contractDisabled.getAndRequireEquals();
    
-   /**
-    * Reset registry (admin function)
-    */
+   // ✅ Ensure we're actually changing state (prevent replay attacks)
+   currentDisabledState.assertTrue(); // Contract must currently be disabled
+   
+   // Set to enabled
+   this.contractDisabled.set(Bool(false));
+  }
+   
+
    @method async resetRegistry() {
-      // Add required state preconditions
-      this.companiesMapRoot.requireEquals(this.companiesMapRoot.get());
-      this.totalCompaniesTracked.requireEquals(this.totalCompaniesTracked.get());
-      this.registryVersion.requireEquals(this.registryVersion.get());
-      
-      // Reset all state to initial values
-      this.companiesMapRoot.set(Field(0));
-      this.totalCompaniesTracked.set(Field(0));
-      this.compliantCompaniesCount.set(Field(0));
-      this.totalVerificationsGlobal.set(Field(0));
-      this.lastVerificationTime.set(UInt64.from(0));
-      this.registryVersion.set(this.registryVersion.get().add(1));
-   }
+   // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+   const currentMapRoot = this.companiesMapRoot.getAndRequireEquals();
+   const currentTotal = this.totalCompaniesTracked.getAndRequireEquals();
+   const currentVersion = this.registryVersion.getAndRequireEquals();
+   
+   // Reset all state to initial values
+   this.companiesMapRoot.set(Field(0));
+   this.totalCompaniesTracked.set(Field(0));
+   this.compliantCompaniesCount.set(Field(0));
+   this.totalVerificationsGlobal.set(Field(0));
+   this.lastVerificationTime.set(UInt64.from(0));
+   this.registryVersion.set(currentVersion.add(1)); // ✅ Use the variable
+}
 
    /**
     * Get contract metadata

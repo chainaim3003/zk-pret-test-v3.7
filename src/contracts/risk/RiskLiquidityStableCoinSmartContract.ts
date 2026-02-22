@@ -14,7 +14,7 @@ import { RiskLiquidityStableCoinOptimMerkleProof } from '../../zk-programs/risk/
 
 // =================================== Merkle Tree Configuration (Following BPMN Pattern) ===================================
 export const RISK_GROUP_MERKLE_HEIGHT = 8; // Height 8 for up to 256 risk groups
-export class RiskGroupMerkleWitness extends MerkleWitness(RISK_GROUP_MERKLE_HEIGHT) {}
+export class RiskGroupMerkleWitness extends MerkleWitness(RISK_GROUP_MERKLE_HEIGHT) { }
 
 // =================================== Risk Group Record Structure (Following BPMN Pattern) ===================================
 export class RiskGroupRecord extends Struct({
@@ -29,7 +29,7 @@ export class RiskGroupRecord extends Struct({
     firstVerificationTime: UInt64,         // First verification timestamp
     lastPassTime: UInt64,                  // Last successful verification timestamp
     lastFailTime: UInt64,                  // Last failed verification timestamp
-}) {}
+}) { }
 
 // =================================== Risk Group Storage Key (Following BPMN Pattern) ===================================
 export class RiskGroupKey extends Struct({
@@ -38,7 +38,7 @@ export class RiskGroupKey extends Struct({
     static create(groupIDHash: Field): RiskGroupKey {
         return new RiskGroupKey({ groupIDHash });
     }
-    
+
     toField(): Field {
         return Poseidon.hash([this.groupIDHash]);
     }
@@ -56,7 +56,7 @@ export class RiskGroupVerificationStats extends Struct({
     firstVerificationTime: UInt64,
     lastVerificationTime: UInt64,
     daysSinceLastVerification: Field,
-}) {}
+}) { }
 
 // =================================== Risk Group Query Results ===================================
 export class RiskGroupQueryResult extends Struct({
@@ -64,7 +64,7 @@ export class RiskGroupQueryResult extends Struct({
     record: RiskGroupRecord,
     merkleRoot: Field,
     isValid: Bool,
-}) {}
+}) { }
 
 // =================================== Query Result Structures ===================================
 export class RiskRegistryInfo extends Struct({
@@ -73,14 +73,14 @@ export class RiskRegistryInfo extends Struct({
     totalVerificationsGlobal: Field,
     riskGroupRootHash: Field,
     registryVersion: Field,
-}) {}
+}) { }
 
 export class RiskGlobalComplianceStats extends Struct({
     totalRiskGroup: Field,
     validRisk: Field,
     totalVerifications: Field,
     lastVerificationTime: Field,
-}) {}
+}) { }
 
 export class RiskLiquidityStableCoinSmartContract extends SmartContract {
     // =================================== STATE FIELDS (Following BPMN Pattern - 7 Fields) ===================================
@@ -96,22 +96,22 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
     // Initialize the contract state
     init() {
         super.init();
-        
+
         // Initialize all state fields
         this.totalRiskGroupTracked.set(Field(0));
         this.validRiskCount.set(Field(0));
         this.totalVerificationsGlobal.set(Field(0));
-        
+
         // Initialize timestamps
         this.lastVerificationTime.set(Field.from(Date.now()));
-        
+
         // Initialize version
         this.registryVersion.set(Field(1));
-        
+
         // Initialize empty MerkleMap for individual risk group storage
         const emptyMap = new MerkleMap();
         this.riskGroupMapRoot.set(emptyMap.getRoot());
-        
+
         // Initialize as enabled
         this.contractDisabled.set(Bool(false));
     }
@@ -127,20 +127,14 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
         riskGroupRecord: RiskGroupRecord,
         riskGroupMapWitness: MerkleMapWitness
     ) {
-        // Check if contract is disabled
-        this.contractDisabled.requireEquals(Bool(false));
-        
-        // Add required state preconditions for proper constraint generation
-        this.totalRiskGroupTracked.requireEquals(this.totalRiskGroupTracked.get());
-        this.validRiskCount.requireEquals(this.validRiskCount.get());
-        this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
-        this.riskGroupMapRoot.requireEquals(this.riskGroupMapRoot.get());
-        
-        // Get current state values
-        const currentTotalRiskGroup = this.totalRiskGroupTracked.get();
-        const currentValidCount = this.validRiskCount.get();
-        const currentTotalVerifications = this.totalVerificationsGlobal.get();
-        const currentMapRoot = this.riskGroupMapRoot.get();
+        // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+        const contractDisabled = this.contractDisabled.getAndRequireEquals();
+        contractDisabled.assertFalse();
+
+        const currentTotalRiskGroup = this.totalRiskGroupTracked.getAndRequireEquals();
+        const currentValidCount = this.validRiskCount.getAndRequireEquals();
+        const currentTotalVerifications = this.totalVerificationsGlobal.getAndRequireEquals();
+        const currentMapRoot = this.riskGroupMapRoot.getAndRequireEquals();
 
         // =================================== Verify ZK Proof ===================================
         proof.verify();
@@ -149,15 +143,15 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
         const publicOutput = proof.publicOutput;
         const isValid = publicOutput.stableCoinCompliant;
         const verificationTimestamp = publicOutput.verificationTimestamp;  // Keep as UInt64
-        
+
         // Extract risk group identification from proof
         // NOTE: Risk group ID should come from proof, but if not available in current ZK program,
         // use scenarioID as the group identifier for now
         const proofRiskGroupID = publicOutput.scenarioID;
-        
+
         // Create hash for comparison and storage
         const proofRiskGroupIDHash = proofRiskGroupID.hash();
-        
+
         // Create risk group key for storage
         const riskGroupKey = RiskGroupKey.create(proofRiskGroupIDHash);
         const riskGroupKeyField = riskGroupKey.toField();
@@ -167,7 +161,7 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
         riskGroupRecord.groupIDHash.assertEquals(proofRiskGroupIDHash);
         riskGroupRecord.isValid.assertEquals(isValid);
         riskGroupRecord.lastVerificationTime.assertEquals(verificationTimestamp);  // Direct UInt64 comparison
-        
+
         // =================================== Risk Group Record Storage (Enhanced with Verification Tracking) ===================================
         // Create enhanced risk group record with verification tracking
         const enhancedGroupRecord = new RiskGroupRecord({
@@ -183,7 +177,7 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
             lastPassTime: UInt64.from(0),
             lastFailTime: UInt64.from(0),
         });
-        
+
         // =================================== Real Risk Group Data Storage ===================================
         // Serialize enhanced risk group record for storage (with all verification tracking fields)
         const riskGroupRecordHash = Poseidon.hash([
@@ -199,7 +193,7 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
             enhancedGroupRecord.lastPassTime.value,
             enhancedGroupRecord.lastFailTime.value
         ]);
-        
+
         // Update the MerkleMap with the new/updated risk group record
         const [newMapRoot, _key1] = riskGroupMapWitness.computeRootAndKey(riskGroupRecordHash);
         this.riskGroupMapRoot.set(newMapRoot);
@@ -208,40 +202,40 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
         Provable.log('🔍 SMART CONTRACT DEBUG: Starting risk group existence check');
         Provable.log('🔍 Risk Group Key:', riskGroupKeyField);
         Provable.log('🔍 Current Map Root:', currentMapRoot);
-        
+
         const [witnessRoot, witnessKey] = riskGroupMapWitness.computeRootAndKey(Field(0));
-        
+
         Provable.log('🔍 Witness Root:', witnessRoot);
         Provable.log('🔍 Witness Key:', witnessKey);
-        
+
         // Only verify the key is correct (skip root verification)
         witnessKey.assertEquals(riskGroupKeyField);
-        
+
         // Use risk group count instead of map root to determine if contract is empty
         // Check if we have any risk groups tracked
         const hasNoRiskGroup = currentTotalRiskGroup.equals(Field(0));
-        
+
         // For contracts with 0 risk groups: definitely a new risk group
         // For contracts with >0 risk groups: need more sophisticated logic (for now, treat as new)
         const isNewRiskGroup = hasNoRiskGroup;
         const riskGroupExists = hasNoRiskGroup.not();
-        
+
         Provable.log('🔍 Has No Risk Groups:', hasNoRiskGroup);
         Provable.log('🔍 Risk Group Exists:', riskGroupExists);
         Provable.log('🔍 Is New Risk Group:', isNewRiskGroup);
         Provable.log('🔍 Current Total Risk Groups:', currentTotalRiskGroup);
         Provable.log('🔍 Is Compliant:', isValid);
-        
+
         // Only increment total risk groups for NEW risk groups
         const newTotalRiskGroup: Field = Provable.if(
             isNewRiskGroup,
             currentTotalRiskGroup.add(Field(1)),
             currentTotalRiskGroup
         );
-        
+
         // Always increment total verifications (regardless of risk group newness)
         const newTotalVerifications: Field = currentTotalVerifications.add(Field(1));
-        
+
         // Smart compliant risk group tracking
         // Only increment compliant count for NEW COMPLIANT risk groups
         const newValidCount: Field = Provable.if(
@@ -249,22 +243,22 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
             currentValidCount.add(Field(1)),
             currentValidCount
         );
-        
+
         Provable.log('🔍 NEW Total Risk Groups:', newTotalRiskGroup);
         Provable.log('🔍 NEW Compliant Count:', newValidCount);
         Provable.log('🔍 NEW Total Verifications:', newTotalVerifications);
-        
+
         // Update all state fields
         this.totalRiskGroupTracked.set(newTotalRiskGroup);
         this.validRiskCount.set(newValidCount);
         this.totalVerificationsGlobal.set(newTotalVerifications);
-        
+
         // Update last verification time (convert UInt64 to Field for state)
         this.lastVerificationTime.set(verificationTimestamp.value);
     }
 
     // =================================== Query Methods (Following BPMN Pattern) ===================================
-    
+
     /**
      * Get global compliance stats
      */
@@ -282,7 +276,7 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
             lastVerificationTime: this.lastVerificationTime.get(),
         });
     }
-    
+
     /**
      * Get registry info
      */
@@ -293,7 +287,7 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
         this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
         this.riskGroupMapRoot.requireEquals(this.riskGroupMapRoot.get());
         this.registryVersion.requireEquals(this.registryVersion.get());
-        
+
         return new RiskRegistryInfo({
             totalRiskGroupTracked: this.totalRiskGroupTracked.get(),
             validRiskCount: this.validRiskCount.get(),
@@ -320,13 +314,13 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
         this.riskGroupMapRoot.requireEquals(this.riskGroupMapRoot.get());
         this.registryVersion.requireEquals(this.registryVersion.get());
         this.contractDisabled.requireEquals(this.contractDisabled.get());
-        
+
         const totalRiskGroups = this.totalRiskGroupTracked.get();
         const mapRoot = this.riskGroupMapRoot.get();
-        
+
         // Check if contract is empty (no risk groups)
         const isEmpty = totalRiskGroups.equals(Field(0));
-        
+
         return {
             totalRiskGroups: totalRiskGroups,
             validRiskGroups: this.validRiskCount.get(),
@@ -338,37 +332,41 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
     }
 
     // =================================== Administrative Methods (Following BPMN Pattern) ===================================
-    
+
     /**
      * Emergency disable function - stops all new verifications
      */
     @method async emergencyDisable() {
-        this.contractDisabled.requireEquals(this.contractDisabled.get());
+        // ✅ SECURITY FIX HIGH #3: Add precondition that contract must currently be ENABLED
+        const currentDisabledState = this.contractDisabled.getAndRequireEquals();
+        currentDisabledState.assertFalse();
         this.contractDisabled.set(Bool(true));
     }
-    
+
     /**
      * Re-enable contract (in case of false alarm)
      */
     @method async reEnableContract() {
-        this.contractDisabled.requireEquals(this.contractDisabled.get());
+        // ✅ SECURITY FIX HIGH #3: Add precondition that contract must currently be DISABLED
+        const currentDisabledState = this.contractDisabled.getAndRequireEquals();
+        currentDisabledState.assertTrue();
         this.contractDisabled.set(Bool(false));
     }
-    
+
     /**
      * Reset registry (admin function)
      */
     @method async resetRegistry() {
-        // Add required state preconditions
-        this.totalRiskGroupTracked.requireEquals(this.totalRiskGroupTracked.get());
-        this.validRiskCount.requireEquals(this.validRiskCount.get());
-        this.registryVersion.requireEquals(this.registryVersion.get());
-        
+        // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+        const currentTotal = this.totalRiskGroupTracked.getAndRequireEquals();
+        const currentValidCount = this.validRiskCount.getAndRequireEquals();
+        const currentVersion = this.registryVersion.getAndRequireEquals();
+
         // Reset all state to initial values
         this.totalRiskGroupTracked.set(Field(0));
         this.validRiskCount.set(Field(0));
         this.lastVerificationTime.set(Field.from(0));
-        this.registryVersion.set(this.registryVersion.get().add(1)); // Increment version
+        this.registryVersion.set(currentVersion.add(1)); // ✅ Use the variable
     }
 
     /**
@@ -388,9 +386,9 @@ export class RiskLiquidityStableCoinSmartContract extends SmartContract {
         this.lastVerificationTime.requireEquals(this.lastVerificationTime.get());
         this.riskGroupMapRoot.requireEquals(this.riskGroupMapRoot.get());
         this.registryVersion.requireEquals(this.registryVersion.get());
-        
+
         const totalRiskGroups = this.totalRiskGroupTracked.get();
-        
+
         return {
             riskGroupsRootHash: this.riskGroupMapRoot.get(),
             totalRiskGroups: totalRiskGroups,

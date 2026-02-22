@@ -19,15 +19,11 @@ export class CorporateRegistrationOptimSmartContract extends SmartContract {
 
    // =================================== Main Verification Method ===================================
    @method async verifyOptimizedComplianceWithProof(proof: CorporateRegistrationOptimProof) {
-      // Ensure the state values match their current values (following the working pattern)
-      this.corpRegCompliant.requireEquals(this.corpRegCompliant.get());
-      this.totalVerifications.requireEquals(this.totalVerifications.get());
-      this.totalCompaniesVerified.requireEquals(this.totalCompaniesVerified.get());
-      
-      // Get current state values
-      const currentCompliantStatus = this.corpRegCompliant.get();
-      const currentVerificationCount = this.totalVerifications.get();
-      const currentCompaniesCount = this.totalCompaniesVerified.get();
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+      // This sets proper preconditions AND returns values atomically
+      const currentCompliantStatus = this.corpRegCompliant.getAndRequireEquals();
+      const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
+      const currentCompaniesCount = this.totalCompaniesVerified.getAndRequireEquals();
 
       // =================================== Verify ZK Proof ===================================
       proof.verify();
@@ -82,7 +78,8 @@ export class CorporateRegistrationOptimSmartContract extends SmartContract {
     * Reset compliance status (admin function)
     */
    @method async resetCompliance() {
-      this.corpRegCompliant.requireEquals(this.corpRegCompliant.get());
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+      const currentCompliantStatus = this.corpRegCompliant.getAndRequireEquals();
       this.corpRegCompliant.set(Bool(false));
    }
 
@@ -90,8 +87,9 @@ export class CorporateRegistrationOptimSmartContract extends SmartContract {
     * Reset all counters (admin function)
     */
    @method async resetCounters() {
-      this.totalVerifications.requireEquals(this.totalVerifications.get());
-      this.totalCompaniesVerified.requireEquals(this.totalCompaniesVerified.get());
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+      const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
+      const currentCompaniesCount = this.totalCompaniesVerified.getAndRequireEquals();
       
       this.totalVerifications.set(Field(0));
       this.totalCompaniesVerified.set(Field(0));

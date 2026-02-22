@@ -441,26 +441,4 @@ export class RiskLiquidityBasel3SmartContract extends SmartContract {
       version: this.registryVersion.get(),
     };
   }
-
-  /* ==================== LEGACY CODE - COMMENTED OUT ====================
-   * OLD Pattern (before group structure implementation)
-   * These methods have been replaced by the new group structure pattern above
-   *
-   * @state(Field) riskComplianceStatus = State<Field>();           // OLD: Main compliance status (100 = not verified, 90 = verified)
-   * @state(Field) totalVerifications = State<Field>();             // OLD: Count of successful verifications
-   *
-   * OLD init():
-   *   this.riskComplianceStatus.set(Field(100));
-   *   this.totalVerifications.set(Field(0));
-   *
-   * OLD verifyBasel3RiskComplianceWithProof():
-   *   proof.verify();
-   *   const publicOutput = proof.publicOutput;
-   *   const isBasel3Compliant = publicOutput.basel3Compliant;
-   *   isBasel3Compliant.assertTrue('Basel3 compliance verification failed - both LCR and NSFR thresholds must be met');
-   *   this.riskComplianceStatus.set(Field(90));
-   *   const newVerificationCount = currentVerificationCount.add(Field(1));
-   *   this.totalVerifications.set(newVerificationCount);
-   *
-   * ===== END LEGACY CODE ===== */
 }

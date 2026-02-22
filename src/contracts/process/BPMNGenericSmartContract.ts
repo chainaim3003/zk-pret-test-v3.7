@@ -4,22 +4,22 @@ import { isValid } from 'zod';
 
 // =================================== Merkle Tree Configuration ===================================
 export const BPMN_GROUP_MERKLE_HEIGHT = 8; // Height 8 for up to 256 companies
-export class BPMNGroupMerkleWitness extends MerkleWitness(BPMN_GROUP_MERKLE_HEIGHT) {}
+export class BPMNGroupMerkleWitness extends MerkleWitness(BPMN_GROUP_MERKLE_HEIGHT) { }
 
 // =================================== Company Record Structure (Enhanced) ===================================
 export class BPMNGroupRecord extends Struct({
-      groupIDHash: Field,                    // Hash of Group ID for privacy (FIXED: changed from groupidHash)
-      isValid: Bool,                         // Current validity status
-      complianceScore: Field,                // 0-100 score
-      totalVerifications: Field,             // Total verification attempts
-      passedVerifications: Field,            // Number of passed verifications
-      failedVerifications: Field,            // Number of failed verifications
-      consecutiveFailures: Field,            // Current streak of consecutive failures
-      lastVerificationTime: UInt64,          // Last verification timestamp (FIXED: changed from Field to UInt64)
-      firstVerificationTime: UInt64,         // First verification timestamp (FIXED: changed from Field to UInt64)
-      lastPassTime: UInt64,                  // Last successful verification timestamp (FIXED: uncommented and set to UInt64)
-      lastFailTime: UInt64,                  // Last failed verification timestamp (FIXED: uncommented and set to UInt64)
-}) {}
+   groupIDHash: Field,                    // Hash of Group ID for privacy (FIXED: changed from groupidHash)
+   isValid: Bool,                         // Current validity status
+   complianceScore: Field,                // 0-100 score
+   totalVerifications: Field,             // Total verification attempts
+   passedVerifications: Field,            // Number of passed verifications
+   failedVerifications: Field,            // Number of failed verifications
+   consecutiveFailures: Field,            // Current streak of consecutive failures
+   lastVerificationTime: UInt64,          // Last verification timestamp (FIXED: changed from Field to UInt64)
+   firstVerificationTime: UInt64,         // First verification timestamp (FIXED: changed from Field to UInt64)
+   lastPassTime: UInt64,                  // Last successful verification timestamp (FIXED: uncommented and set to UInt64)
+   lastFailTime: UInt64,                  // Last failed verification timestamp (FIXED: uncommented and set to UInt64)
+}) { }
 
 // =================================== Company Verification Statistics ===================================
 export class BPMNGroupVerificationStats extends Struct({
@@ -33,24 +33,24 @@ export class BPMNGroupVerificationStats extends Struct({
    firstVerificationTime: UInt64,
    lastVerificationTime: UInt64,
    daysSinceLastVerification: Field,
-}) {}
+}) { }
 
 // =================================== Company Query Results ===================================
 export class BPMNGroupQueryResult extends Struct({
    exists: Bool,
-   record: BPMNGroupRecord ,
+   record: BPMNGroupRecord,
    merkleRoot: Field,
    isValid: Bool,
-}) {}
+}) { }
 
 // =================================== Company Storage Key ===================================
 export class BPMNGroupKey extends Struct({
    groupIDHash: Field,                     // FIXED: changed from groupidHash to groupIDHash
 }) {
    static create(groupIDHash: Field): BPMNGroupKey {
-      return new BPMNGroupKey({groupIDHash});
+      return new BPMNGroupKey({ groupIDHash });
    }
-   
+
    toField(): Field {
       return Poseidon.hash([this.groupIDHash]);
    }
@@ -64,7 +64,7 @@ export class RegistryInfo extends Struct({
    totalVerificationsGlobal: Field,
    bpmnGroupRootHash: Field,
    registryVersion: Field,
-}) {}
+}) { }
 
 export class GlobalComplianceStats extends Struct({
    totalBPMNGroup: Field,
@@ -72,7 +72,7 @@ export class GlobalComplianceStats extends Struct({
    // ✅ ZK BEST PRACTICE: Removed compliancePercentage - calculate in JavaScript
    totalVerifications: Field,
    lastVerificationTime: Field,
-}) {}
+}) { }
 
 // =================================== GLEIF Multi-Company Contract with Two-Stage Lookup Support ===================================
 export class BPMNGenericSmartContract extends SmartContract {
@@ -89,22 +89,22 @@ export class BPMNGenericSmartContract extends SmartContract {
    // ✅ o1js COMPLIANT: Initialize Contract with proper state
    init() {
       super.init();
-      
+
       // ✅ o1js BEST PRACTICE: Initialize all state fields
       this.totalBPMNGroupTracked.set(Field(0));
       this.validBPMNCount.set(Field(0));
       this.totalVerificationsGlobal.set(Field(0));
-      
+
       // Initialize timestamps
       this.lastVerificationTime.set(Field.from(Date.now()));
-      
+
       // Initialize version
       this.registryVersion.set(Field(1));
-      
+
       // Initialize empty MerkleMap for individual company storage
       const emptyMap = new MerkleMap();
       this.bpmnGroupMapRoot.set(emptyMap.getRoot());
-      
+
       // Initialize as enabled
       this.contractDisabled.set(Bool(false));
    }
@@ -116,20 +116,15 @@ export class BPMNGenericSmartContract extends SmartContract {
       bpmnGroupRecord: BPMNGroupRecord,
       bpmnGroupMapWitness: MerkleMapWitness
    ) {
-      // Check if contract is disabled
-      this.contractDisabled.requireEquals(Bool(false));
-      
-      // Add required state preconditions for proper constraint generation
-      this.totalBPMNGroupTracked.requireEquals(this.totalBPMNGroupTracked.get());
-      this.validBPMNCount.requireEquals(this.validBPMNCount.get());
-      this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
-      this.bpmnGroupMapRoot.requireEquals(this.bpmnGroupMapRoot.get());
-      
-      // Get current state values
-      const currentTotalBPMNGroup = this.totalBPMNGroupTracked.get();
-      const currentValidCount = this.validBPMNCount.get();
-      const currentTotalVerifications = this.totalVerificationsGlobal.get();
-      const currentMapRoot = this.bpmnGroupMapRoot.get();
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+      // This sets proper preconditions AND returns values atomically
+      const contractDisabled = this.contractDisabled.getAndRequireEquals();
+      contractDisabled.assertFalse();
+
+      const currentTotalBPMNGroup = this.totalBPMNGroupTracked.getAndRequireEquals();
+      const currentValidCount = this.validBPMNCount.getAndRequireEquals();
+      const currentTotalVerifications = this.totalVerificationsGlobal.getAndRequireEquals();
+      const currentMapRoot = this.bpmnGroupMapRoot.getAndRequireEquals();
 
       // =================================== Verify ZK Proof ===================================
       proof.verify();
@@ -138,13 +133,13 @@ export class BPMNGenericSmartContract extends SmartContract {
       const publicOutput = proof.publicOutput;
       const isValid = publicOutput.out;
       const verificationTimestamp = publicOutput.timestamp;
-      
+
       // Extract company identification from proof and hash them
       const proofGroupID = publicOutput.bpmnGroupID;
-      
+
       // Create hashes for comparison and storage
-      const proofGroupIDHash =proofGroupID.hash();
-      
+      const proofGroupIDHash = proofGroupID.hash();
+
       // Create company key for storage
       const bpmnGroupKey = BPMNGroupKey.create(proofGroupIDHash);
       const bpmnGroupKeyField = bpmnGroupKey.toField();
@@ -154,11 +149,11 @@ export class BPMNGenericSmartContract extends SmartContract {
       bpmnGroupRecord.groupIDHash.assertEquals(proofGroupIDHash);  // FIXED: changed from groupidHash to groupIDHash
       bpmnGroupRecord.isValid.assertEquals(isValid);
       bpmnGroupRecord.lastVerificationTime.assertEquals(UInt64.fromFields([verificationTimestamp]));  // FIXED: Convert Field to UInt64
-      
+
       // =================================== Company Record Storage (Enhanced with Verification Tracking) ===================================
       // Check if this is a new company or existing company update
       // For now, treat all as new (simplified version) but track verification stats
-      
+
       // Create enhanced company record with verification tracking
       const enhancedGroupRecord = new BPMNGroupRecord({
          groupIDHash: bpmnGroupRecord.groupIDHash,  // FIXED: changed from groupidHash to groupIDHash
@@ -173,7 +168,7 @@ export class BPMNGenericSmartContract extends SmartContract {
          lastPassTime: UInt64.from(0),  // FIXED: Add required field with proper type
          lastFailTime: UInt64.from(0),  // FIXED: Add required field with proper type
       });
-      
+
       // =================================== Real Company Data Storage ===================================
       // Serialize enhanced company record for storage (with all verification tracking fields)
       const bpmnGroupRecordHash = Poseidon.hash([
@@ -189,7 +184,7 @@ export class BPMNGenericSmartContract extends SmartContract {
          enhancedGroupRecord.lastPassTime.value,          // FIXED: Add .value for UInt64
          enhancedGroupRecord.lastFailTime.value           // FIXED: Add .value for UInt64
       ]);
-      
+
       // Update the MerkleMap with the new/updated company record
       const [newMapRoot, _key1] = bpmnGroupMapWitness.computeRootAndKey(bpmnGroupRecordHash);
       this.bpmnGroupMapRoot.set(newMapRoot);
@@ -199,40 +194,40 @@ export class BPMNGenericSmartContract extends SmartContract {
       Provable.log('🔍 SMART CONTRACT DEBUG: Starting company existence check');
       Provable.log('🔍 BPMN Group Key:', bpmnGroupKeyField);
       Provable.log('🔍 Current Map Root:', currentMapRoot);
-      
+
       const [witnessRoot, witnessKey] = bpmnGroupMapWitness.computeRootAndKey(Field(0));
-      
+
       Provable.log('🔍 Witness Root:', witnessRoot);
       Provable.log('🔍 Witness Key:', witnessKey);
-      
+
       // ✅ FIXED: Only verify the key is correct (skip root verification)
       witnessKey.assertEquals(bpmnGroupKeyField);
-      
+
       // ✅ FIXED: Use company count instead of map root to determine if contract is empty
       // Check if we have any companies tracked
       const hasNoGroup = currentTotalBPMNGroup.equals(Field(0));
-      
+
       // For contracts with 0 companies: definitely a new company
       // For contracts with >0 companies: need more sophisticated logic (for now, treat as new)
       const isNewGroup = hasNoGroup;
       const bpmnGroupExists = hasNoGroup.not();
-      
+
       Provable.log('🔍 Has No Companies:', hasNoGroup);
       Provable.log('🔍 BPMN Group Exists:', bpmnGroupExists);
       Provable.log('🔍 Is New Group:', isNewGroup);
       Provable.log('🔍 Current Total Companies:', currentTotalBPMNGroup);
       Provable.log('🔍 Is Compliant:', isValid);
-      
+
       // Only increment total companies for NEW companies
       const newTotalBPMNGroup: Field = Provable.if(
          isNewGroup,
          currentTotalBPMNGroup.add(Field(1)),
          currentTotalBPMNGroup
       );
-      
+
       // Always increment total verifications (regardless of company newness)
       const newTotalVerifications: Field = currentTotalVerifications.add(Field(1));
-      
+
       // ✅ FIXED: Smart compliant company tracking
       // Only increment compliant count for NEW COMPLIANT companies
       const newValidCount: Field = Provable.if(
@@ -240,22 +235,22 @@ export class BPMNGenericSmartContract extends SmartContract {
          currentTotalBPMNGroup.add(Field(1)),
          currentTotalBPMNGroup
       );
-      
+
       Provable.log('🔍 NEW Total Companies:', newTotalBPMNGroup);
       Provable.log('🔍 NEW Compliant Count:', newValidCount);
       Provable.log('🔍 NEW Total Verifications:', newTotalVerifications);
-      
+
       // ✅ FIXED: Update all state fields
       this.totalBPMNGroupTracked.set(newTotalBPMNGroup);
       this.validBPMNCount.set(newValidCount);
       this.totalVerificationsGlobal.set(newTotalVerifications);
-      
+
       // Update last verification time
       this.lastVerificationTime.set(verificationTimestamp);
    }
 
    // =================================== Query Methods - NO DUPLICATES ===================================
-   
+
    /**
     * Get global compliance stats - Single implementation
     */
@@ -273,7 +268,7 @@ export class BPMNGenericSmartContract extends SmartContract {
          lastVerificationTime: this.lastVerificationTime.get(),
       });
    }
-   
+
    /**
     * Get registry info - Single implementation
     */
@@ -284,7 +279,7 @@ export class BPMNGenericSmartContract extends SmartContract {
       this.totalVerificationsGlobal.requireEquals(this.totalVerificationsGlobal.get());
       this.bpmnGroupMapRoot.requireEquals(this.bpmnGroupMapRoot.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
-      
+
       return new RegistryInfo({
          totalBPMNGroupTracked: this.totalBPMNGroupTracked.get(),
          validBPMNCount: this.validBPMNCount.get(),
@@ -295,7 +290,7 @@ export class BPMNGenericSmartContract extends SmartContract {
    }
 
    // =================================== Enhanced Company Existence Checking ===================================
-   
+
    /**
     * Enhanced contract state querying for client-side existence checks
     */
@@ -313,13 +308,13 @@ export class BPMNGenericSmartContract extends SmartContract {
       this.bpmnGroupMapRoot.requireEquals(this.bpmnGroupMapRoot.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
       this.contractDisabled.requireEquals(this.contractDisabled.get());
-      
+
       const totalCompanies = this.totalBPMNGroupTracked.get();
       const mapRoot = this.bpmnGroupMapRoot.get();
-      
+
       // Check if contract is empty (no companies)
       const isEmpty = totalCompanies.equals(Field(0));
-      
+
       return {
          totalBPMNGroups: totalCompanies,
          validBPMNGroups: this.validBPMNCount.get(),
@@ -331,37 +326,41 @@ export class BPMNGenericSmartContract extends SmartContract {
    }
 
    // =================================== Administrative Methods ===================================
-   
+
    /**
     * Emergency disable function - stops all new verifications
     */
    @method async emergencyDisable() {
-      this.contractDisabled.requireEquals(this.contractDisabled.get());
+      // ✅ SECURITY FIX HIGH #3: Add precondition that contract must currently be ENABLED
+      const currentDisabledState = this.contractDisabled.getAndRequireEquals();
+      currentDisabledState.assertFalse();
       this.contractDisabled.set(Bool(true));
    }
-   
+
    /**
     * Re-enable contract (in case of false alarm)
     */
    @method async reEnableContract() {
-      this.contractDisabled.requireEquals(this.contractDisabled.get());
+      // ✅ SECURITY FIX HIGH #3: Add precondition that contract must currently be DISABLED
+      const currentDisabledState = this.contractDisabled.getAndRequireEquals();
+      currentDisabledState.assertTrue();
       this.contractDisabled.set(Bool(false));
    }
-   
+
    /**
     * Reset registry (admin function)
     */
    @method async resetRegistry() {
-      // Add required state preconditions
-      this.totalBPMNGroupTracked.requireEquals(this.totalBPMNGroupTracked.get());
-      this.validBPMNCount.requireEquals(this.validBPMNCount.get());
-      this.registryVersion.requireEquals(this.registryVersion.get());
-      
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+      const currentTotal = this.totalBPMNGroupTracked.getAndRequireEquals();
+      const currentValidCount = this.validBPMNCount.getAndRequireEquals();
+      const currentVersion = this.registryVersion.getAndRequireEquals();
+
       // Reset all state to initial values
       this.totalBPMNGroupTracked.set(Field(0));
       this.validBPMNCount.set(Field(0));
       this.lastVerificationTime.set(Field.from(0));
-      this.registryVersion.set(this.registryVersion.get().add(1)); // Increment version
+      this.registryVersion.set(currentVersion.add(1)); // ✅ Use the variable
    }
 
    /**
@@ -381,9 +380,9 @@ export class BPMNGenericSmartContract extends SmartContract {
       this.lastVerificationTime.requireEquals(this.lastVerificationTime.get());
       this.bpmnGroupMapRoot.requireEquals(this.bpmnGroupMapRoot.get());
       this.registryVersion.requireEquals(this.registryVersion.get());
-      
+
       const totalCompanies = this.totalBPMNGroupTracked.get();
-      
+
       return {
          bpmnGroupsRootHash: this.bpmnGroupMapRoot.get(),
          totalBPMNGroups: totalCompanies,

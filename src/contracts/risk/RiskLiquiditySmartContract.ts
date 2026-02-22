@@ -26,12 +26,10 @@ export class RiskLiquidityOptimMerkleSmartContract extends SmartContract {
 
     // =================================== Advanced Risk Verification ===================================
     @method async verifyAdvancedRiskComplianceWithProof(proof: RiskLiquidityAdvancedOptimMerkleProof) {
-        // Ensure the state variables match their current values
-        this.riskComplianceStatus.requireEquals(this.riskComplianceStatus.get());
-        this.totalVerifications.requireEquals(this.totalVerifications.get());
-        
-        // Get current state values
-        const currentVerificationCount = this.totalVerifications.get();
+        // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+        // This sets proper preconditions AND returns values atomically
+        const currentStatus = this.riskComplianceStatus.getAndRequireEquals();
+        const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
 
         // =================================== Verify ZK Proof ===================================
         proof.verify();
@@ -51,12 +49,10 @@ export class RiskLiquidityOptimMerkleSmartContract extends SmartContract {
 
     // =================================== Basel3 Risk Verification ===================================
     @method async verifyBasel3RiskComplianceWithProof(proof: RiskLiquidityBasel3OptimMerkleProof) {
-        // Ensure the state variables match their current values
-        this.riskComplianceStatus.requireEquals(this.riskComplianceStatus.get());
-        this.totalVerifications.requireEquals(this.totalVerifications.get());
-        
-        // Get current state values
-        const currentVerificationCount = this.totalVerifications.get();
+        // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+        // This sets proper preconditions AND returns values atomically
+        const currentStatus = this.riskComplianceStatus.getAndRequireEquals();
+        const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
 
         // =================================== Verify ZK Proof ===================================
         proof.verify();
@@ -76,12 +72,10 @@ export class RiskLiquidityOptimMerkleSmartContract extends SmartContract {
 
     // =================================== StableCoin Risk Verification ===================================
     @method async verifyStableCoinRiskComplianceWithProof(proof: RiskLiquidityStableCoinOptimMerkleProof) {
-        // Ensure the state variables match their current values
-        this.riskComplianceStatus.requireEquals(this.riskComplianceStatus.get());
-        this.totalVerifications.requireEquals(this.totalVerifications.get());
-        
-        // Get current state values
-        const currentVerificationCount = this.totalVerifications.get();
+        // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+        // This sets proper preconditions AND returns values atomically
+        const currentStatus = this.riskComplianceStatus.getAndRequireEquals();
+        const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
 
         // =================================== Verify ZK Proof ===================================
         proof.verify();
@@ -105,7 +99,8 @@ export class RiskLiquidityOptimMerkleSmartContract extends SmartContract {
      * Reset compliance status to unverified state (admin function)
      */
     @method async resetRiskCompliance() {
-        this.riskComplianceStatus.requireEquals(this.riskComplianceStatus.get());
+        // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+        const currentStatus = this.riskComplianceStatus.getAndRequireEquals();
         this.riskComplianceStatus.set(Field(100)); // Reset to unverified
     }
 }

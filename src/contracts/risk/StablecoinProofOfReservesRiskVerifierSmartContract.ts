@@ -1,11 +1,11 @@
-import { Field, SmartContract, state, State, method , Bool,} from 'o1js';
+import { Field, SmartContract, state, State, method, Bool, } from 'o1js';
 import { LiquidityRatioProof } from '../../zk-programs/risk/StablecoinProofOfReservesRiskZKProgramWithSign.js';
 
 
 export class LiquidityRatioVerifierSmartContract extends SmartContract {
    @state(Field) risk = State<Field>(); // State variable to hold a number
    @state(Bool) reservesProved = State<Bool>(); // State variable to hold a boolean value
-   
+
    // Initialize the contract state
    init() {
       super.init(); // Call the parent class initializer
@@ -17,10 +17,8 @@ export class LiquidityRatioVerifierSmartContract extends SmartContract {
    // Method to verify compliance and update state
    @method async verifyComplianceWithProof(proof: LiquidityRatioProof) {
 
-
-      // Ensure the state of `num` matches its current value
-      this.risk.requireEquals(this.risk.get());
-      const currentRisk = this.risk.get();
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+      const currentRisk = this.risk.getAndRequireEquals();
 
       proof.verify();
       const out = proof.publicOutput.out;
@@ -30,7 +28,7 @@ export class LiquidityRatioVerifierSmartContract extends SmartContract {
       // Update the state
       const updatedRisk = currentRisk.sub(10);
       this.risk.set(updatedRisk);
-      
+
       this.reservesProved.set(Bool(true)); // Set reservesProved to true
 
    }

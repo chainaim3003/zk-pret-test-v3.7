@@ -10,16 +10,22 @@ export class bpmnCircuit extends SmartContract {
   }
 
   @method async verifyTraceSCF(trace : Bytes50) {
+    // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+    const currentState = this.accepted.getAndRequireEquals();
     let out = verifyProcessSCF(trace.bytes);
     this.accepted.set(out)
   }
 
   @method async verifyTraceSTABLECOIN(trace : Bytes50) {
+    // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+    const currentState = this.accepted.getAndRequireEquals();
     let out = verifyProcessSTABLECOIN(trace.bytes);
     this.accepted.set(out)
   }
 
   @method async verifyTraceDVP(trace : Bytes50) {
+    // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+    const currentState = this.accepted.getAndRequireEquals();
     let out = verifyProcessDVP(trace.bytes);
     this.accepted.set(out)
   }

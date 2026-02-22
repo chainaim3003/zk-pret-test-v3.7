@@ -47,17 +47,12 @@ export class CorporateRegistrationOptimSingleCompanySmartContract extends SmartC
 
    // =================================== Enhanced Verification Method ===================================
    @method async verifyOptimizedComplianceWithProof(proof: CorporateRegistrationOptimProof) {
-      // Add required state preconditions for proper constraint generation
-      this.companyIdentifierHash.requireEquals(this.companyIdentifierHash.get());
-      this.totalVerifications.requireEquals(this.totalVerifications.get());
-      this.firstVerificationTime.requireEquals(this.firstVerificationTime.get());
-      this.corpRegCompliant.requireEquals(this.corpRegCompliant.get());
-      
-      // Get current state values
-      const currentCompliantStatus = this.corpRegCompliant.get();
-      const currentVerificationCount = this.totalVerifications.get();
-      const currentCompanyIdHash = this.companyIdentifierHash.get();
-      const currentFirstVerificationTime = this.firstVerificationTime.get();
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for ALL state reads
+      // This sets proper preconditions AND returns values atomically
+      const currentCompanyIdHash = this.companyIdentifierHash.getAndRequireEquals();
+      const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
+      const currentFirstVerificationTime = this.firstVerificationTime.getAndRequireEquals();
+      const currentCompliantStatus = this.corpRegCompliant.getAndRequireEquals();
 
       // =================================== Verify ZK Proof ===================================
       proof.verify();
@@ -210,8 +205,8 @@ export class CorporateRegistrationOptimSingleCompanySmartContract extends SmartC
     * Reset compliance status (admin function)
     */
    @method async resetCompliance() {
-      // Add required state precondition
-      this.corpRegCompliant.requireEquals(this.corpRegCompliant.get());
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic read
+      const currentCompliantStatus = this.corpRegCompliant.getAndRequireEquals();
       
       this.corpRegCompliant.set(Bool(false));
       this.currentComplianceScore.set(Field(0));
@@ -222,9 +217,9 @@ export class CorporateRegistrationOptimSingleCompanySmartContract extends SmartC
     * WARNING: This erases all history
     */
    @method async resetForNewCompany() {
-      // Add required state preconditions
-      this.companyIdentifierHash.requireEquals(this.companyIdentifierHash.get());
-      this.totalVerifications.requireEquals(this.totalVerifications.get());
+      // ✅ SECURITY FIX HIGH #3: Use getAndRequireEquals() for atomic reads
+      const currentCompanyIdHash = this.companyIdentifierHash.getAndRequireEquals();
+      const currentVerificationCount = this.totalVerifications.getAndRequireEquals();
       
       // Reset company identity hashes
       this.companyIdentifierHash.set(Field(0));
