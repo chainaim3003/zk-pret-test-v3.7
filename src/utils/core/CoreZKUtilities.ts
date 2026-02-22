@@ -19,9 +19,9 @@ import {
 } from 'o1js';
 
 // Define specific MerkleWitness classes following project patterns
-export class MerkleWitness8 extends MerkleWitness(8) {}
-export class MerkleWitness9 extends MerkleWitness(9) {}
-export class MerkleWitness10 extends MerkleWitness(10) {}
+export class MerkleWitness8 extends MerkleWitness(8) { }
+export class MerkleWitness9 extends MerkleWitness(9) { }
+export class MerkleWitness10 extends MerkleWitness(10) { }
 
 // Type alias for flexibility in function signatures
 export type AnyMerkleWitness = MerkleWitness8 | MerkleWitness9 | MerkleWitness10;
@@ -83,12 +83,12 @@ export function buildMerkleTreeZK(leaves: Field[]): MerkleTree {
     // Use fixed height of 8 to match MerkleWitness8 class
     const height = 8;
     const tree = new MerkleTree(height);
-    
+
     // Add leaves to the tree
     leaves.forEach((leaf, index) => {
         tree.setLeaf(BigInt(index), leaf);
     });
-    
+
     return tree;
 }
 
@@ -107,20 +107,61 @@ export function verifyMultipleMerkleWitnessesZK(
 }
 
 /**
- * Safe Field creation that handles decimal values
- * Automatically rounds decimals to integers before Field creation
+ * Maximum value safely representable as a Field from a JS number.
+ * Field prime is ~2^254; JS integers are safe up to 2^53-1 (Number.MAX_SAFE_INTEGER).
+ * We enforce the JS safe-integer boundary here so that BigInt promotion in Field.from()
+ * always receives an exact value with no floating-point drift.
  */
-export function safeFieldFrom(value: number): Field {
-    return Field.from(Math.round(value));
+const MAX_SAFE_FIELD_INPUT = Number.MAX_SAFE_INTEGER; // 2^53 - 1
+
+/**
+ * Convert a JS number to a Field with proper range validation.
+ *
+ * Checks performed before conversion:
+ *  1. Value must be finite (rejects NaN / Infinity)
+ *  2. Value must be non-negative (Field arithmetic is modular; negatives wrap)
+ *  3. Value must not exceed Number.MAX_SAFE_INTEGER (prevents silent precision loss)
+ *
+ * @param value - The number to convert (decimals are rounded first)
+ * @param label - Optional field name used in error messages
+ */
+export function safeFieldFromNumber(value: number, label = 'value'): Field {
+    if (!Number.isFinite(value)) {
+        throw new Error(
+            `safeFieldFromNumber: ${label} must be finite, got ${value}`
+        );
+    }
+    const rounded = Math.round(value);
+    if (rounded < 0) {
+        throw new Error(
+            `safeFieldFromNumber: ${label} must be non-negative for Field conversion, got ${rounded}. ` +
+            `Negative numbers wrap around the field prime and silently corrupt ZK proofs.`
+        );
+    }
+    if (rounded > MAX_SAFE_FIELD_INPUT) {
+        throw new Error(
+            `safeFieldFromNumber: ${label} exceeds Number.MAX_SAFE_INTEGER (${MAX_SAFE_FIELD_INPUT}), got ${rounded}. ` +
+            `Use BigInt arithmetic or scale down the value before Field conversion.`
+        );
+    }
+    return Field.from(rounded);
 }
 
 /**
- * Safe array sum that returns a Field
- * Handles decimal totals automatically
+ * Legacy alias kept for backward compatibility.
+ * Prefer safeFieldFromNumber for new code.
+ */
+export function safeFieldFrom(value: number, label?: string): Field {
+    return safeFieldFromNumber(value, label);
+}
+
+/**
+ * Safe array sum that returns a Field.
+ * Validates the summed total before Field conversion.
  */
 export function safeArraySumToField(array: number[]): Field {
     const total = array.reduce((sum, val) => sum + val, 0);
-    return Field.from(Math.round(total));
+    return safeFieldFromNumber(total, 'array sum');
 }
 
 /**
@@ -136,7 +177,7 @@ export function stringArrayToFieldsZK(strings: string[]): Field[] {
  * Common utility for numerical data
  */
 export function numberArrayToFieldsZK(numbers: number[]): Field[] {
-    return numbers.map(num => Field(Math.round(num)));
+    return numbers.map((num, i) => safeFieldFromNumber(num, `array[${i}]`));
 }
 
 /**
@@ -146,7 +187,7 @@ export function numberArrayToFieldsZK(numbers: number[]): Field[] {
 export function safeDivideZK(numerator: Field, denominator: Field): Field {
     // Assert denominator is not zero to prevent division by zero
     denominator.assertGreaterThan(Field(0), 'Division by zero is not allowed in ZK arithmetic');
-    
+
     // Perform safe division using Field.div
     return numerator.div(denominator);
 }

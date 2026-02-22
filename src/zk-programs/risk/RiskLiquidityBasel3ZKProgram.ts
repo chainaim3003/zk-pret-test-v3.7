@@ -23,7 +23,8 @@ import {
     verifyOracleSignatureZK,
     verifyMerkleWitnessZK,
     safeDivideZK,
-    multiplyFieldsZK
+    multiplyFieldsZK,
+    safeFieldFromNumber
 } from '../../utils/core/CoreZKUtilities.js';
 import {
     calculatePercentageZK,
@@ -346,31 +347,31 @@ export function createBasel3RiskComplianceData(
         scenarioName: CircuitString.fromString(scenarioName),
         riskEvaluated: Field(1),
 
-        // ✅ Convert to Fields using Field.from() for proper type safety
-        hqlaLevel1Total: Field.from(Math.round(hqlaComponents.level1Total)),
-        hqlaLevel2ATotal: Field.from(Math.round(hqlaComponents.level2ATotal)),
-        hqlaLevel2BTotal: Field.from(Math.round(hqlaComponents.level2BTotal)),
-        netCashOutflowsTotal: Field.from(Math.round(hqlaComponents.netCashOutflowsTotal)),
+        // ✅ safeFieldFromNumber validates non-negative + safe-integer bounds before Field conversion
+        hqlaLevel1Total: safeFieldFromNumber(hqlaComponents.level1Total, 'hqlaLevel1Total'),
+        hqlaLevel2ATotal: safeFieldFromNumber(hqlaComponents.level2ATotal, 'hqlaLevel2ATotal'),
+        hqlaLevel2BTotal: safeFieldFromNumber(hqlaComponents.level2BTotal, 'hqlaLevel2BTotal'),
+        netCashOutflowsTotal: safeFieldFromNumber(hqlaComponents.netCashOutflowsTotal, 'netCashOutflowsTotal'),
 
-        availableStableFundingTotal: Field.from(Math.round(nsfrComponents.availableStableFundingTotal)),
-        requiredStableFundingTotal: Field.from(Math.round(nsfrComponents.requiredStableFundingTotal)),
+        availableStableFundingTotal: safeFieldFromNumber(nsfrComponents.availableStableFundingTotal, 'availableStableFundingTotal'),
+        requiredStableFundingTotal: safeFieldFromNumber(nsfrComponents.requiredStableFundingTotal, 'requiredStableFundingTotal'),
 
         // ✅ MINA BEST PRACTICE: Use calculated metrics as-is, let ZK circuit validate
-        lcrRatio: Field.from(Math.round(calculatedMetrics.lcrRatio)),
-        nsfrRatio: Field.from(Math.round(calculatedMetrics.nsfrRatio)),
+        lcrRatio: safeFieldFromNumber(calculatedMetrics.lcrRatio, 'lcrRatio'),
+        nsfrRatio: safeFieldFromNumber(calculatedMetrics.nsfrRatio, 'nsfrRatio'),
 
-        lcrThreshold: Field.from(Math.round(thresholds.lcrThreshold)),
-        nsfrThreshold: Field.from(Math.round(thresholds.nsfrThreshold)),
+        lcrThreshold: safeFieldFromNumber(thresholds.lcrThreshold, 'lcrThreshold'),
+        nsfrThreshold: safeFieldFromNumber(thresholds.nsfrThreshold, 'nsfrThreshold'),
 
         // ✅ MINA BEST PRACTICE: Use Bool.from() for boolean conversion
         lcrCompliant: Bool(calculatedMetrics.lcrCompliant),
         nsfrCompliant: Bool(calculatedMetrics.nsfrCompliant),
         basel3Compliant: Bool(calculatedMetrics.basel3Compliant),
 
-        periodsCount: Field.from(additionalParams.periodsCount),
-        liquidityThreshold: Field.from(Math.round(additionalParams.liquidityThreshold)),
-        newInvoiceAmount: Field.from(additionalParams.newInvoiceAmount),
-        newInvoiceEvaluationMonth: Field.from(additionalParams.newInvoiceEvaluationMonth),
+        periodsCount: safeFieldFromNumber(additionalParams.periodsCount, 'periodsCount'),
+        liquidityThreshold: safeFieldFromNumber(additionalParams.liquidityThreshold, 'liquidityThreshold'),
+        newInvoiceAmount: safeFieldFromNumber(additionalParams.newInvoiceAmount, 'newInvoiceAmount'),
+        newInvoiceEvaluationMonth: safeFieldFromNumber(additionalParams.newInvoiceEvaluationMonth, 'newInvoiceEvaluationMonth'),
 
         merkleRoot,
         verificationTimestamp: UInt64.from(Date.now()),
