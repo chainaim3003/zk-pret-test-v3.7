@@ -1027,8 +1027,15 @@ export class CorporateRegistrationNetworkHandler {
           console.log('✅ Transaction proof generated successfully');
           
           // Sign and send the transaction with proof authorization
-          await verifyTxn.sign([senderKey]).send();
-          console.log('✅ Smart contract transaction completed');
+          const pendingTxn = await verifyTxn.sign([senderKey]).send();
+          console.log('✅ Transaction sent, waiting for inclusion in block...');
+          try {
+            await pendingTxn.wait();
+            console.log('✅ Smart contract transaction confirmed on chain');
+          } catch (waitError: any) {
+            console.warn(`⚠️ Transaction wait polling failed (transaction may still be included): ${waitError.message}`);
+            console.log('⏳ Continuing - transaction was sent successfully, state will update on next fetch...');
+          }
 
           // ✅ COMPOSITION: Use complianceBase for state changes WITH SAFE FETCHING
           const stateAfter = await this.complianceBase.logSmartContractState(zkApp, zkAppAddress, 'AFTER');

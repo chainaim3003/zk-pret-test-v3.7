@@ -236,7 +236,7 @@ export class CorpRegVerificationBase {
       console.log(`  📋 Registration Status: "${registrationNumber}" → ${analysis.isRegistrationIssued ? '✅ ISSUED (Pass)' : '❌ NOT ISSUED (Fail)'}`);
       console.log(`  🔍 Conformity Flag: "${category}" → ${analysis.isCategoryOk ? '✅ ACCEPTABLE (Pass)' : '❌ NON-CONFORMING (Fail)'}`);
       console.log(`  📅 Date Validation: Last Update "${dateOfIncorporation}", → ${analysis.hasValidDates ? '✅ VALID DATES (Pass)' : '❌ INVALID DATES (Fail)'}`);
-      console.log(`  🆔 LEI Validation: "${cin}" → ${analysis.hasValidCIN ? '✅ VALID LEI (Pass)' : '❌ EMPTY LEI (Fail)'}`);
+      console.log(`  🆔 CIN Validation: "${cin}" → ${analysis.hasValidCIN ? '✅ VALID CIN (Pass)' : '❌ EMPTY CIN (Fail)'}`);
       
       // Safe Bool conversion
       let isCompliantValue = false;
@@ -262,7 +262,7 @@ export class CorpRegVerificationBase {
         if (!analysis.isRegistrationIssued) console.log(`    - Registration Status must be "ISSUED", got "${registrationNumber}"`);
         if (!analysis.isCategoryOk) console.log(`    - Conformity Flag must be "CONFORMING", "UNKNOWN" or empty, got "${category}"`);
         if (!analysis.hasValidDates) console.log(`    - Last Update and Next Renewal dates must not be empty`);
-        if (!analysis.hasValidCIN) console.log(`    - LEI must not be empty`);
+        if (!analysis.hasValidCIN) console.log(`    - CIN must not be empty`);
       }
       
     } catch (error) {

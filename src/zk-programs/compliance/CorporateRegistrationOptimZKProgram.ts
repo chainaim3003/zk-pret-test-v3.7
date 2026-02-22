@@ -320,7 +320,7 @@ export const CorporateRegistrationOptim = ZkProgram({
             // 1. CIN validation (not empty AND exactly 21 characters)
             const isCINValid = isCINValidCheck(complianceData.cin);
             
-            // 2. Registration number validation (not empty AND minimum 4 characters)
+            // 2. Registration number validation (not empty AND minimum 6 characters)
             const isRegistrationNumberValid = isRegistrationNumberValidCheck(complianceData.registration_number);
             
             // 3. Company name is not empty
