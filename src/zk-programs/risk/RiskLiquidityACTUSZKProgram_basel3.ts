@@ -17,6 +17,54 @@ import {
 } from 'o1js';
 import { getPublicKeyFor } from '../../core/OracleRegistry.js'
 // import axios from 'axios';
+import { safeFieldFromNumber } from '../../utils/core/CoreZKUtilities.js';
+
+// =============================================================================
+// FIX — Input Sanitization
+// =============================================================================
+// Official o1js source (node_modules/o1js/src/lib/provable/field.ts, line ~100):
+//   constructor(x) { this.value = FieldVar.constant(Fp.mod(BigInt(x))); }
+//
+// What each bad JS number does when passed to Field():
+//   BigInt(NaN)       → throws TypeError  ("not an integer")     — crash
+//   BigInt(Infinity)  → throws TypeError  ("not an integer")     — crash
+//   BigInt(-n)        → Fp.mod wraps to p-n ≈ 2^254             — SILENT WRONG VALUE
+//
+// Official docs state: "Creating a Field from a negative number can result in
+// unexpected behavior if you are not familiar with modular arithmetic."
+//
+// safeFieldFromNumber() in CoreZKUtilities.ts guards all three cases:
+//   1. !Number.isFinite(value) → rejects NaN and ±Infinity
+//   2. rounded < 0             → rejects negatives (prevents silent modulus wrap)
+//   3. rounded > MAX_SAFE_INTEGER → rejects precision-loss values
+//
+// toMinaFieldSafe() replaces the original toMinaField() which had NO guard:
+//   Original: Field(Math.abs(Math.round(value)))
+//     Math.abs(NaN) = NaN, Math.round(NaN) = NaN → BigInt(NaN) throws (crash)
+//   Fixed: validate isFinite first, then abs+round via safeFieldFromNumber.
+//
+// All bare Field(Math.round(val)) calls inside proveCompliance are replaced with
+// safeFieldFromNumber() which performs the same rounding but with validation first.
+// =============================================================================
+
+/**
+ * Safe replacement for the original toMinaField().
+ * Original intent: treat HQLA values as magnitudes (take abs value).
+ * Added: validate that the raw value is finite before any Math.abs/Math.round.
+ */
+function toMinaFieldSafe(value: number, label: string): Field {
+   if (!Number.isFinite(value)) {
+      throw new RangeError(
+         `"${label}" is ${value}. ` +
+         `NaN and Infinity cannot be passed to Field() — ` +
+         `o1js internally calls BigInt(x) which throws for non-integer values. ` +
+         `Check upstream ACTUS contract data for missing or overflow values.`
+      );
+   }
+   // Math.abs preserves original intent: HQLA amounts are always magnitudes.
+   // Result is ≥ 0 so safeFieldFromNumber's negative-guard does not block it.
+   return safeFieldFromNumber(Math.abs(value), label);
+}
 const MAX_LENGTH = 120; // Define a maximum length for cash flows
 
 export class ACTUSDatao1 extends Struct({
@@ -124,24 +172,41 @@ export const LiquidityRatioZkprogram = ZkProgram({
             isValidSignature.assertTrue();
             //========================================================================================================
 
-            // Apply Math.round before converting to Field
-            const cashInfl = LiquidityRatioData.cashInflows.map(val => Field(Math.round(val)));
-            const cashOutfl = LiquidityRatioData.cashOutflows.map(val => Field(Math.round(val)));
+            // ── FIX ─────────────────────────────────────────────────────────
+            // Previously: Field(Math.round(val)) with no guard for NaN / Infinity.
+            // Now: safeFieldFromNumber() validates before Field construction.
+            //
+            // cashInflows / cashOutflows may legitimately be 0 but must be finite
+            // and non-negative after rounding (a negative rounded cash-flow value
+            // would silently wrap around the field prime ≈ 2^254 per o1js docs).
+            const cashInfl = LiquidityRatioData.cashInflows.map((val, i) => {
+               if (!Number.isFinite(val)) throw new RangeError(
+                  `[MEDIUM#5] cashInflows[${i}] is ${val}. Must be a finite number.`);
+               const r = Math.round(val);
+               if (r < 0) throw new RangeError(
+                  `[MEDIUM#5] cashInflows[${i}] rounded to ${r}. Negative values silently wrap the field prime.`);
+               return safeFieldFromNumber(r, `cashInflows[${i}]`);
+            });
+            const cashOutfl = LiquidityRatioData.cashOutflows.map((val, i) => {
+               if (!Number.isFinite(val)) throw new RangeError(
+                  `[MEDIUM#5] cashOutflows[${i}] is ${val}. Must be a finite number.`);
+               const r = Math.round(val);
+               if (r < 0) throw new RangeError(
+                  `[MEDIUM#5] cashOutflows[${i}] rounded to ${r}. Negative values silently wrap the field prime.`);
+               return safeFieldFromNumber(r, `cashOutflows[${i}]`);
+            });
 
-            const monthsCount = Field(LiquidityRatioData.outflowLength);
-            const newInvoiceAmount = Field(Math.round(LiquidityRatioData.newInvoiceAmount));
-            const newInvoiceEvaluationMonth = Field(LiquidityRatioData.newInvoiceEvaluationMonth);
-            const liquidityThreshold = Field(Math.round(LiquidityRatioData.liquidityThreshold));
-            const liquidityThreshold_LCR = Field(Math.round(LiquidityRatioData.liquidityThreshold_LCR));
+            const monthsCount             = safeFieldFromNumber(LiquidityRatioData.outflowLength,                       'outflowLength');
+            const newInvoiceAmount        = safeFieldFromNumber(Math.round(LiquidityRatioData.newInvoiceAmount),         'newInvoiceAmount');
+            const newInvoiceEvaluationMonth = safeFieldFromNumber(LiquidityRatioData.newInvoiceEvaluationMonth,          'newInvoiceEvaluationMonth');
+            const liquidityThreshold      = safeFieldFromNumber(Math.round(LiquidityRatioData.liquidityThreshold),       'liquidityThreshold');
+            const liquidityThreshold_LCR  = safeFieldFromNumber(Math.round(LiquidityRatioData.liquidityThreshold_LCR),  'liquidityThreshold_LCR');
 
-            function toMinaField(value: number): Field {
-               return Field(Math.abs(Math.round(value)));  // Convert negative to positive
-            }
-
-            const totalHQLA_L1 = LiquidityRatioData.totalHQLA_L1.map(val => toMinaField(val));
-            const totalHQLA_L2A = LiquidityRatioData.totalHQLA_L2A.map(val => toMinaField(val));
-            const totalHQLA_L2B = LiquidityRatioData.totalHQLA_L2B.map(val => toMinaField(val));
-            const totalNonHQLA = LiquidityRatioData.totalNonHQLA.map(val => toMinaField(val));
+            // toMinaFieldSafe replaces toMinaField — validates isFinite before Math.abs/Math.round.
+            const totalHQLA_L1  = LiquidityRatioData.totalHQLA_L1.map( (val, i) => toMinaFieldSafe(val, `totalHQLA_L1[${i}]`));
+            const totalHQLA_L2A = LiquidityRatioData.totalHQLA_L2A.map((val, i) => toMinaFieldSafe(val, `totalHQLA_L2A[${i}]`));
+            const totalHQLA_L2B = LiquidityRatioData.totalHQLA_L2B.map((val, i) => toMinaFieldSafe(val, `totalHQLA_L2B[${i}]`));
+            const totalNonHQLA  = LiquidityRatioData.totalNonHQLA.map( (val, i) => toMinaFieldSafe(val, `totalNonHQLA[${i}]`));
 
             console.log("===== Liquidity Ratio Data =====");
             console.log("Cash Inflows:", cashInfl.map(val => val.toString()));

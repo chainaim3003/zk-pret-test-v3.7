@@ -27,6 +27,17 @@ import {
     calculateNetCashFlowZK
 } from '../../utils/domain/risk/ComplianceZKUtilities.js';
 
+// import sanitization helpers
+import {
+    validateAllFieldInputs,
+    assertValidFieldInput,
+    safeMonetaryField,
+    safePercentageField,
+    safeThresholdField,
+    safePeriodCountField,
+    safeFieldFromNumber,
+} from '../../utils/core/InputSanitization.js';
+
 // =================================== Merkle Tree Configuration ===================================
 export const MERKLE_TREE_HEIGHT = 8;
 export class MerkleWitness8 extends MerkleWitness(MERKLE_TREE_HEIGHT) {}
@@ -204,6 +215,18 @@ export class RiskLiquidityAdvancedOptimMerkleProof extends ZkProgram.Proof(RiskL
 // =================================== Utility Functions ===================================
 
 /**
+ * Convert a number array to a single Field using Poseidon hash.
+ *
+ * ✅ FIX — MEDIUM #5 (array element sanitization)
+ *   Previously: Field(Math.floor(Math.abs(num))) with no NaN/Infinity guard.
+ *   • Math.abs(NaN)      = NaN       → Field(NaN) = error
+ *   • Math.abs(Infinity) = Infinity  → Field(Infinity) = error
+ *   • Math.floor(NaN)    = NaN       → Field(NaN) = error
+ *
+ *   Fixed: assertValidFieldInput() checks every element before Field().
+ *   Invalid values throw a descriptive error identifying which element failed.
+ */
+/**
  * ✅ ZK-COMPLIANT: Convert arrays to Field representation using Poseidon hash (no division)
  */
 export function encodeArrayToField(numbers: number[]): Field {
@@ -214,14 +237,26 @@ export function encodeArrayToField(numbers: number[]): Field {
     }
     
     // ✅ ZK-COMPLIANT: Use Poseidon hash for deterministic array encoding
-    const fieldsArray = numbers.slice(0, 8).map(num => { // Limit to 8 elements for Poseidon
-        // Scale large values down using integer operations only (no division)
-        const scaled = Math.floor(Math.abs(num)); // No division, just floor
+    // const fieldsArray = numbers.slice(0, 8).map(num => { // Limit to 8 elements for Poseidon
+    //     // Scale large values down using integer operations only (no division)
+    //     const scaled = Math.floor(Math.abs(num)); // No division, just floor
         
-        // Ensure value fits in Field (conservative limit)
-        const maxSafeInt = 2n ** 200n; // Conservative limit for Field arithmetic
+    //     // Ensure value fits in Field (conservative limit)
+    //     const maxSafeInt = 2n ** 200n; // Conservative limit for Field arithmetic
+    //     const boundedValue = Math.min(scaled, Number(maxSafeInt));
+        
+    //     return Field(boundedValue);
+    // });
+    const fieldsArray = numbers.slice(0, 8).map((num, index) => {
+        // FIX MEDIUM #5: validate each element before Field construction
+        assertValidFieldInput(num, `encodeArrayToField[${index}]`, {
+            allowNegative: true,   // arrays may contain negative cash-flow values
+        });
+
+        // Take absolute value and floor (existing logic) — now safe because NaN/Infinity are caught above
+        const scaled = Math.floor(Math.abs(num));
+        const maxSafeInt = 2n ** 200n;
         const boundedValue = Math.min(scaled, Number(maxSafeInt));
-        
         return Field(boundedValue);
     });
     
@@ -235,6 +270,25 @@ export function encodeArrayToField(numbers: number[]): Field {
 
 /**
  * ✅ ZK-COMPLIANT: Helper function to create compliance data structure
+ */
+/**
+ * Helper function to create Advanced risk compliance data structure.
+ *
+ * FIX — MEDIUM #5: Missing Input Sanitization
+ *
+ * Previously:
+ *   const safeThreshold = Math.max(0, Math.min(10000, Math.round(liquidityThreshold)));
+ *   Field(safeThreshold)
+ *
+ * PROBLEM: Math.max(0, Math.min(10000, Math.round(NaN))) returns NaN — the
+ * clamp idiom does NOT protect against NaN because NaN comparisons always
+ * return false, making Math.max/Math.min pass NaN through silently.
+ * Then Field(NaN) throws a cryptic runtime error deep inside the ZK circuit.
+ *
+ * FIX:
+ *   1. validateAllFieldInputs() validates all raw numbers FIRST and throws
+ *      a clear error identifying the exact offending field.
+ *   2. Safe typed helpers replace bare Field(Math.round/max/min) calls.
  */
 export function createAdvancedRiskComplianceData(
     scenarioID: string,
@@ -253,11 +307,37 @@ export function createAdvancedRiskComplianceData(
 ): RiskLiquidityAdvancedOptimMerkleComplianceData {
     
     // ✅ ZK-COMPLIANT: Ensure all numeric values are within safe bounds
-    const safeThreshold = Math.max(0, Math.min(10000, Math.round(liquidityThreshold)));
-    const safeAvgRatio = Math.max(0, Math.min(50000, Math.round(liquidityMetrics.averageLiquidityRatio)));
-    const safeWorstRatio = Math.max(0, Math.min(50000, Math.round(liquidityMetrics.worstCaseLiquidityRatio)));
-    const safeInvoiceAmount = Math.max(0, Math.min(1000000000, newInvoiceAmount)); // 1B max
-    const safeEvalMonth = Math.max(1, Math.min(120, newInvoiceEvaluationMonth)); // 1-120 range
+    // const safeThreshold = Math.max(0, Math.min(10000, Math.round(liquidityThreshold)));
+    // const safeAvgRatio = Math.max(0, Math.min(50000, Math.round(liquidityMetrics.averageLiquidityRatio)));
+    // const safeWorstRatio = Math.max(0, Math.min(50000, Math.round(liquidityMetrics.worstCaseLiquidityRatio)));
+    // const safeInvoiceAmount = Math.max(0, Math.min(1000000000, newInvoiceAmount)); // 1B max
+    // const safeEvalMonth = Math.max(1, Math.min(120, newInvoiceEvaluationMonth)); // 1-120 range
+
+    // =========================================================
+    // FIX MEDIUM #5 — Step 1: Validate ALL raw numeric inputs
+    // =========================================================
+    validateAllFieldInputs([
+        { value: newInvoiceAmount,          name: 'newInvoiceAmount',          options: { allowNegative: false } },
+        { value: newInvoiceEvaluationMonth, name: 'newInvoiceEvaluationMonth', options: { allowNegative: false, min: 1, max: 120 } },
+        { value: liquidityThreshold,        name: 'liquidityThreshold',        options: { allowNegative: false, min: 1, max: 10000 } },
+
+        // Ratios — large numbers are valid (e.g. 500% = 500), but must be finite non-negative
+        { value: liquidityMetrics.averageLiquidityRatio,    name: 'liquidityMetrics.averageLiquidityRatio',    options: { allowNegative: false, max: 50000 } },
+        { value: liquidityMetrics.worstCaseLiquidityRatio,  name: 'liquidityMetrics.worstCaseLiquidityRatio',  options: { allowNegative: false, max: 50000 } },
+    ]);
+
+    // Validate cashInflows.length is a usable periods count
+    const periodsCount = cashInflows.length;
+    assertValidFieldInput(periodsCount, 'cashInflows.length (periodsCount)', { allowNegative: false, min: 1, max: 120 });
+
+    console.log(`🔧 Creating Advanced Risk compliance data (with input sanitization):`);
+    console.log(`   - periodsCount: ${periodsCount}, liquidityThreshold: ${liquidityThreshold}`);
+    console.log(`   - All inputs validated: no NaN, Infinity, or out-of-range values`);
+
+    // =========================================================
+    // FIX MEDIUM #5 — Step 2: Safe typed Field conversions
+    //    (replaces bare Field(Math.max(0, Math.min(10000, Math.round(x))))
+    // =========================================================
     
     return new RiskLiquidityAdvancedOptimMerkleComplianceData({
         scenarioID: CircuitString.fromString(scenarioID),
@@ -265,13 +345,22 @@ export function createAdvancedRiskComplianceData(
         riskEvaluated: Field(1),
         cashInflowsHash: encodeArrayToField(cashInflows),
         cashOutflowsHash: encodeArrayToField(cashOutflows),
-        periodsCount: Field(cashInflows.length),
-        newInvoiceAmount: Field(safeInvoiceAmount),
-        newInvoiceEvaluationMonth: Field(safeEvalMonth),
-        liquidityThreshold: Field(safeThreshold),
-        liquidityCompliant: Bool(liquidityMetrics.liquidityCompliant),
-        averageLiquidityRatio: Field(safeAvgRatio),
-        worstCaseLiquidityRatio: Field(safeWorstRatio),
+        // periodsCount: Field(cashInflows.length),
+        // newInvoiceAmount: Field(safeInvoiceAmount),
+        // newInvoiceEvaluationMonth: Field(safeEvalMonth),
+        // liquidityThreshold: Field(safeThreshold),
+        // liquidityCompliant: Bool(liquidityMetrics.liquidityCompliant),
+        // averageLiquidityRatio: Field(safeAvgRatio),
+        // worstCaseLiquidityRatio: Field(safeWorstRatio),
+        periodsCount: safePeriodCountField(periodsCount, 'periodsCount', 120),
+
+        newInvoiceAmount:          safeMonetaryField(newInvoiceAmount,          'newInvoiceAmount'),
+        newInvoiceEvaluationMonth: safeFieldFromNumber(newInvoiceEvaluationMonth, 'newInvoiceEvaluationMonth', { allowNegative: false, min: 1, max: 120 }),
+        liquidityThreshold:        safePercentageField(liquidityThreshold,       'liquidityThreshold', 10000),
+
+        liquidityCompliant:      Bool(liquidityMetrics.liquidityCompliant),
+        averageLiquidityRatio:   safePercentageField(liquidityMetrics.averageLiquidityRatio,   'averageLiquidityRatio',   50000),
+        worstCaseLiquidityRatio: safePercentageField(liquidityMetrics.worstCaseLiquidityRatio, 'worstCaseLiquidityRatio', 50000),
         merkleRoot,
         verificationTimestamp: UInt64.from(Date.now()),
     });

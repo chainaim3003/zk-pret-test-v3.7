@@ -22,6 +22,16 @@ import {
     calculateConcentrationRiskZK,
     validateAssetQualityZK
 } from '../../utils/domain/risk/ComplianceZKUtilities.js';
+// import sanitization helpers
+import {
+    validateAllFieldInputs,
+    safeMonetaryField,
+    safePercentageField,
+    safeThresholdField,
+    safePeriodCountField,
+    safeScoreField,
+    safeFieldFromNumber,
+} from '../../utils/core/InputSanitization.js';
 
 // =================================== Merkle Tree Configuration ===================================
 export const MERKLE_TREE_HEIGHT = 8;
@@ -340,6 +350,24 @@ export class RiskLiquidityStableCoinOptimMerkleProof extends ZkProgram.Proof(Ris
 
 // =================================== Utility Functions ===================================
 
+/**
+ * Helper to create StableCoin risk compliance data structure.
+ *
+ * ✅ FIX — MEDIUM #5: Missing Input Sanitization
+ *
+ * Previously ALL numeric values were converted with bare:
+ *   Field(Math.round(reserveComponents.cashReservesTotal))
+ *
+ * PROBLEM:
+ *   • Math.round(NaN)      = NaN       → Field(NaN) = runtime error
+ *   • Math.round(Infinity) = Infinity  → Field(Infinity) = runtime error
+ *   • Math.round(-500)     = -500      → Field(-500) wraps mod p silently
+ *
+ * FIX:
+ *   1. validateAllFieldInputs() validates every raw number up-front.
+ *   2. Safe typed helpers replace each bare Field(Math.round(x)).
+ */
+
 export function createStableCoinRiskComplianceData(
     scenarioID: string,
     scenarioName: string,
@@ -390,41 +418,136 @@ export function createStableCoinRiskComplianceData(
     },
     currentTimestamp: number = Date.now()  // ✅ FIXED: Pass timestamp as parameter
 ): RiskLiquidityStableCoinOptimMerkleComplianceData {
+    // =========================================================
+    // FIX MEDIUM #5 — Step 1: Validate ALL raw numeric inputs
+    // =========================================================
+    validateAllFieldInputs([
+        // Reserve amounts — non-negative, max 1B per component
+        { value: reserveComponents.cashReservesTotal,      name: 'reserveComponents.cashReservesTotal',      options: { allowNegative: false, max: 1_000_000_000 } },
+        { value: reserveComponents.treasuryReservesTotal,  name: 'reserveComponents.treasuryReservesTotal',  options: { allowNegative: false, max: 1_000_000_000 } },
+        { value: reserveComponents.corporateReservesTotal, name: 'reserveComponents.corporateReservesTotal', options: { allowNegative: false, max: 1_000_000_000 } },
+        { value: reserveComponents.otherReservesTotal,     name: 'reserveComponents.otherReservesTotal',     options: { allowNegative: false, max: 1_000_000_000 } },
+
+        // Token info
+        { value: tokenInfo.outstandingTokensTotal, name: 'tokenInfo.outstandingTokensTotal', options: { allowNegative: false, min: 1, max: 1_000_000_000 } },
+        { value: tokenInfo.tokenValue,             name: 'tokenInfo.tokenValue',             options: { allowNegative: false, min: 0 } },
+
+        // Quality metrics — scores [0, 100], maturity [0, 3650 days]
+        { value: qualityMetrics.averageLiquidityScore, name: 'qualityMetrics.averageLiquidityScore', options: { allowNegative: false, max: 100 } },
+        { value: qualityMetrics.averageCreditRating,   name: 'qualityMetrics.averageCreditRating',   options: { allowNegative: false, max: 100 } },
+        { value: qualityMetrics.averageMaturity,       name: 'qualityMetrics.averageMaturity',       options: { allowNegative: false, max: 3650 } },
+        { value: qualityMetrics.assetQualityScore,     name: 'qualityMetrics.assetQualityScore',     options: { allowNegative: false, max: 100 } },
+
+        // Thresholds
+        { value: thresholds.backingRatioThreshold,   name: 'thresholds.backingRatioThreshold',   options: { allowNegative: false, min: 1, max: 50000 } },
+        { value: thresholds.liquidityRatioThreshold, name: 'thresholds.liquidityRatioThreshold', options: { allowNegative: false, max: 10000 } },
+        { value: thresholds.concentrationLimit,      name: 'thresholds.concentrationLimit',      options: { allowNegative: false, min: 1, max: 10000 } },
+        { value: thresholds.qualityThreshold,        name: 'thresholds.qualityThreshold',        options: { allowNegative: false, max: 100 } },
+
+        // Additional params
+        { value: additionalParams.periodsCount,              name: 'additionalParams.periodsCount',              options: { allowNegative: false, min: 1, max: 120 } },
+        { value: additionalParams.liquidityThreshold,        name: 'additionalParams.liquidityThreshold',        options: { allowNegative: false, max: 10000 } },
+        { value: additionalParams.newInvoiceAmount,          name: 'additionalParams.newInvoiceAmount',          options: { allowNegative: false } },
+        { value: additionalParams.newInvoiceEvaluationMonth, name: 'additionalParams.newInvoiceEvaluationMonth', options: { allowNegative: false, min: 1 } },
+
+        // Calculated metrics
+        { value: calculatedMetrics.backingRatio,      name: 'calculatedMetrics.backingRatio',      options: { allowNegative: false, max: 50000 } },
+        { value: calculatedMetrics.liquidityRatio,    name: 'calculatedMetrics.liquidityRatio',    options: { allowNegative: false, max: 10000 } },
+        { value: calculatedMetrics.concentrationRisk, name: 'calculatedMetrics.concentrationRisk', options: { allowNegative: false, max: 10000 } },
+
+        // Regulatory data
+        { value: regulatoryData.score,     name: 'regulatoryData.score',     options: { allowNegative: false, max: 100 } },
+        { value: regulatoryData.threshold, name: 'regulatoryData.threshold', options: { allowNegative: false, max: 100 } },
+    ]);
+
+    console.log(`🔧 Creating StableCoin compliance data (with input sanitization):`);
+    console.log(`   - All inputs validated: no NaN, Infinity, or out-of-range values`);
+
+    // =========================================================
+    // ✅ FIX MEDIUM #5 — Step 2: Safe typed Field conversions
+    //    (replaces every bare Field(Math.round(x)))
+    // =========================================================
+
     return new RiskLiquidityStableCoinOptimMerkleComplianceData({
         scenarioID: CircuitString.fromString(scenarioID),
         scenarioName: CircuitString.fromString(scenarioName),
         riskEvaluated: Field(1),
-        cashReservesTotal: Field(Math.round(reserveComponents.cashReservesTotal)),
-        treasuryReservesTotal: Field(Math.round(reserveComponents.treasuryReservesTotal)),
-        corporateReservesTotal: Field(Math.round(reserveComponents.corporateReservesTotal)),
-        otherReservesTotal: Field(Math.round(reserveComponents.otherReservesTotal)),
-        outstandingTokensTotal: Field(Math.round(tokenInfo.outstandingTokensTotal)),
-        tokenValue: Field(Math.round(tokenInfo.tokenValue * 100)),
-        averageLiquidityScore: Field(Math.round(qualityMetrics.averageLiquidityScore)),
-        averageCreditRating: Field(Math.round(qualityMetrics.averageCreditRating)),
-        averageMaturity: Field(Math.round(qualityMetrics.averageMaturity)),
-        assetQualityScore: Field(Math.round(qualityMetrics.assetQualityScore)),
-        backingRatio: Field(Math.round(calculatedMetrics.backingRatio)),
-        liquidityRatio: Field(Math.round(calculatedMetrics.liquidityRatio)),
-        concentrationRisk: Field(Math.round(calculatedMetrics.concentrationRisk)),
-        // 🚨 NEW: Regulatory compliance fields
+        // cashReservesTotal: Field(Math.round(reserveComponents.cashReservesTotal)),
+        // treasuryReservesTotal: Field(Math.round(reserveComponents.treasuryReservesTotal)),
+        // corporateReservesTotal: Field(Math.round(reserveComponents.corporateReservesTotal)),
+        // otherReservesTotal: Field(Math.round(reserveComponents.otherReservesTotal)),
+        // outstandingTokensTotal: Field(Math.round(tokenInfo.outstandingTokensTotal)),
+        // tokenValue: Field(Math.round(tokenInfo.tokenValue * 100)),
+        // averageLiquidityScore: Field(Math.round(qualityMetrics.averageLiquidityScore)),
+        // averageCreditRating: Field(Math.round(qualityMetrics.averageCreditRating)),
+        // averageMaturity: Field(Math.round(qualityMetrics.averageMaturity)),
+        // assetQualityScore: Field(Math.round(qualityMetrics.assetQualityScore)),
+        // backingRatio: Field(Math.round(calculatedMetrics.backingRatio)),
+        // liquidityRatio: Field(Math.round(calculatedMetrics.liquidityRatio)),
+        // concentrationRisk: Field(Math.round(calculatedMetrics.concentrationRisk)),
+        // // 🚨 NEW: Regulatory compliance fields
+        // regulatoryJurisdiction: CircuitString.fromString(regulatoryData.jurisdiction),
+        // regulatoryScore: Field(Math.round(regulatoryData.score)),
+        // regulatoryThreshold: Field(Math.round(regulatoryData.threshold)),
+        // regulatoryCompliant: Bool(regulatoryData.compliant),
+        // backingRatioThreshold: Field(Math.round(thresholds.backingRatioThreshold)),
+        // liquidityRatioThreshold: Field(Math.round(thresholds.liquidityRatioThreshold)),
+        // concentrationLimit: Field(Math.round(thresholds.concentrationLimit)),
+        // qualityThreshold: Field(Math.round(thresholds.qualityThreshold)),
+        // backingCompliant: Bool(calculatedMetrics.backingCompliant),
+        // liquidityCompliant: Bool(calculatedMetrics.liquidityCompliant),
+        // concentrationCompliant: Bool(calculatedMetrics.concentrationCompliant),
+        // qualityCompliant: Bool(calculatedMetrics.qualityCompliant),
+        // stableCoinCompliant: Bool(calculatedMetrics.stableCoinCompliant),
+        // periodsCount: Field(additionalParams.periodsCount),
+        // liquidityThreshold: Field(Math.round(additionalParams.liquidityThreshold)),
+        // newInvoiceAmount: Field(additionalParams.newInvoiceAmount),
+        // newInvoiceEvaluationMonth: Field(additionalParams.newInvoiceEvaluationMonth),
+        // Reserve amounts
+        cashReservesTotal:      safeMonetaryField(reserveComponents.cashReservesTotal,      'cashReservesTotal'),
+        treasuryReservesTotal:  safeMonetaryField(reserveComponents.treasuryReservesTotal,  'treasuryReservesTotal'),
+        corporateReservesTotal: safeMonetaryField(reserveComponents.corporateReservesTotal, 'corporateReservesTotal'),
+        otherReservesTotal:     safeMonetaryField(reserveComponents.otherReservesTotal,     'otherReservesTotal'),
+
+        // Token info — tokenValue stored scaled ×100 as before
+        outstandingTokensTotal: safeMonetaryField(tokenInfo.outstandingTokensTotal, 'outstandingTokensTotal'),
+        tokenValue:             safeFieldFromNumber(tokenInfo.tokenValue * 100, 'tokenValue (×100)', { allowNegative: false, min: 0, max: 10000 }),
+
+        // Quality metrics
+        averageLiquidityScore: safeScoreField(qualityMetrics.averageLiquidityScore, 'averageLiquidityScore'),
+        averageCreditRating:   safeScoreField(qualityMetrics.averageCreditRating,   'averageCreditRating'),
+        averageMaturity:       safeFieldFromNumber(qualityMetrics.averageMaturity,   'averageMaturity',       { allowNegative: false, max: 3650 }),
+        assetQualityScore:     safeScoreField(qualityMetrics.assetQualityScore,     'assetQualityScore'),
+
+        // Calculated metrics
+        backingRatio:      safePercentageField(calculatedMetrics.backingRatio,      'backingRatio',      50000),
+        liquidityRatio:    safePercentageField(calculatedMetrics.liquidityRatio,    'liquidityRatio',    10000),
+        concentrationRisk: safePercentageField(calculatedMetrics.concentrationRisk, 'concentrationRisk', 10000),
+
+        // Regulatory data
         regulatoryJurisdiction: CircuitString.fromString(regulatoryData.jurisdiction),
-        regulatoryScore: Field(Math.round(regulatoryData.score)),
-        regulatoryThreshold: Field(Math.round(regulatoryData.threshold)),
+        regulatoryScore:    safeScoreField(regulatoryData.score,     'regulatoryScore'),
+        regulatoryThreshold:safeScoreField(regulatoryData.threshold, 'regulatoryThreshold'),
         regulatoryCompliant: Bool(regulatoryData.compliant),
-        backingRatioThreshold: Field(Math.round(thresholds.backingRatioThreshold)),
-        liquidityRatioThreshold: Field(Math.round(thresholds.liquidityRatioThreshold)),
-        concentrationLimit: Field(Math.round(thresholds.concentrationLimit)),
-        qualityThreshold: Field(Math.round(thresholds.qualityThreshold)),
-        backingCompliant: Bool(calculatedMetrics.backingCompliant),
-        liquidityCompliant: Bool(calculatedMetrics.liquidityCompliant),
+
+        // Thresholds
+        backingRatioThreshold:   safePercentageField(thresholds.backingRatioThreshold,   'backingRatioThreshold',   50000),
+        liquidityRatioThreshold: safePercentageField(thresholds.liquidityRatioThreshold, 'liquidityRatioThreshold', 10000),
+        concentrationLimit:      safePercentageField(thresholds.concentrationLimit,      'concentrationLimit',      10000),
+        qualityThreshold:        safeScoreField(thresholds.qualityThreshold,             'qualityThreshold'),
+
+        // Compliance booleans
+        backingCompliant:       Bool(calculatedMetrics.backingCompliant),
+        liquidityCompliant:     Bool(calculatedMetrics.liquidityCompliant),
         concentrationCompliant: Bool(calculatedMetrics.concentrationCompliant),
-        qualityCompliant: Bool(calculatedMetrics.qualityCompliant),
-        stableCoinCompliant: Bool(calculatedMetrics.stableCoinCompliant),
-        periodsCount: Field(additionalParams.periodsCount),
-        liquidityThreshold: Field(Math.round(additionalParams.liquidityThreshold)),
-        newInvoiceAmount: Field(additionalParams.newInvoiceAmount),
-        newInvoiceEvaluationMonth: Field(additionalParams.newInvoiceEvaluationMonth),
+        qualityCompliant:       Bool(calculatedMetrics.qualityCompliant),
+        stableCoinCompliant:    Bool(calculatedMetrics.stableCoinCompliant),
+
+        // Additional params
+        periodsCount:              safePeriodCountField(additionalParams.periodsCount,              'periodsCount', 120),
+        liquidityThreshold:        safePercentageField(additionalParams.liquidityThreshold,         'liquidityThreshold', 10000),
+        newInvoiceAmount:          safeMonetaryField(additionalParams.newInvoiceAmount,             'newInvoiceAmount'),
+        newInvoiceEvaluationMonth: safeFieldFromNumber(additionalParams.newInvoiceEvaluationMonth,  'newInvoiceEvaluationMonth', { allowNegative: false, min: 1 }),
         merkleRoot,
         verificationTimestamp: UInt64.from(currentTimestamp), // ✅ FIXED: Use parameter instead of Date.now()
     });
