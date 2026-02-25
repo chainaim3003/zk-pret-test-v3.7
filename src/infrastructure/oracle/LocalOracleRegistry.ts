@@ -19,7 +19,8 @@ export class LocalOracleRegistry implements OracleRegistry {
     'EXIM': { deployer: 4, sender: 5 },
     'BPMN': { deployer: 6, sender: 7 },
     'RISK': { deployer: 8, sender: 9 },
-    'BSDI': { deployer: 6, sender: 7 } // Reuse BPMN accounts
+    'BSDI': { deployer: 6, sender: 7 }, // Reuse BPMN accounts
+    'COMPOSED': { deployer: 2, sender: 3 } 
   };
 
   async initialize(): Promise<void> {

@@ -16,6 +16,7 @@ import {
     Poseidon,
     UInt64,
     PublicKey,
+    CircuitString,
 } from 'o1js';
 
 // Define specific MerkleWitness classes following project patterns
@@ -230,4 +231,89 @@ export function calculatePercentageZK(numerator: Field, denominator: Field): Fie
  */
 export function calculateRatioZK(numerator: Field, denominator: Field): Field {
     return safeDivideZK(numerator, denominator);
+}
+
+export const CIRCUIT_STRING_MAX_LENGTHS = {
+    SHORT: 32,    
+    MEDIUM: 128,    
+    LONG: 255,         
+    MAX_CIRCUIT: 255, 
+} as const;
+
+function validateMaxLength(maxLength: number, fieldName?: string): void {
+    if (maxLength > CIRCUIT_STRING_MAX_LENGTHS.MAX_CIRCUIT) {
+        throw new Error(
+            `${fieldName ? fieldName + ': ' : ''}Circuit constraint violation: ` +
+            `maxLength ${maxLength} exceeds circuit maximum ${CIRCUIT_STRING_MAX_LENGTHS.MAX_CIRCUIT}. ` +
+            `Please reduce to ≤255 characters.`
+        );
+    }
+}
+
+export function safeCircuitString(
+    str: string,
+    maxLength: number = CIRCUIT_STRING_MAX_LENGTHS.MEDIUM,
+    fieldName?: string
+): CircuitString {
+    if (typeof str !== 'string') {
+        throw new Error(
+            `${fieldName ? fieldName + ': ' : ''}Expected string but got ${typeof str}`
+        );
+    }
+
+    // Enforce circuit constraint
+    validateMaxLength(maxLength, fieldName);
+
+    // Check length constraint
+    if (str.length > maxLength) {
+        throw new Error(
+            `${fieldName ? fieldName + ': ' : ''}String length ${str.length} exceeds maximum ${maxLength} characters. ` +
+            `This protects against circuit size explosion attacks.`
+        );
+    }
+
+    return CircuitString.fromString(str);
+}
+
+export function safeCircuitStringTruncate(
+    str: string,
+    maxLength: number = CIRCUIT_STRING_MAX_LENGTHS.MEDIUM,
+    fieldName?: string
+): CircuitString {
+    if (typeof str !== 'string') {
+        throw new Error(
+            `${fieldName ? fieldName + ': ' : ''}Expected string but got ${typeof str}`
+        );
+    }
+
+    // Enforce circuit constraint
+    validateMaxLength(maxLength, fieldName);
+
+    // Truncate if necessary
+    let finalStr = str;
+    if (str.length > maxLength) {
+        console.warn(
+            `${fieldName ? fieldName + ': ' : ''}String truncated from ${str.length} to ${maxLength} characters`
+        );
+        finalStr = str.substring(0, maxLength);
+    }
+
+    return CircuitString.fromString(finalStr);
+}
+
+export function safeCircuitStringArray(
+    strings: string[],
+    maxLength: number = CIRCUIT_STRING_MAX_LENGTHS.MEDIUM,
+    fieldPrefix?: string
+): CircuitString[] {
+    // Enforce circuit constraint
+    validateMaxLength(maxLength, fieldPrefix);
+    
+    return strings.map((str, index) => 
+        safeCircuitString(
+            str,
+            maxLength,
+            fieldPrefix ? `${fieldPrefix}[${index}]` : undefined
+        )
+    );
 }

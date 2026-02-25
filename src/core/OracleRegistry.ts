@@ -25,7 +25,8 @@ const LOCAL_ORACLE_MAPPING = {
   'BPMN': { deployer: 6, sender: 7 },
   'RISK': { deployer: 8, sender: 9 },
   //'BASEL3': { deployer: 8, sender: 9 }, // Reuse RISK accounts for Basel3
-  'BSDI': { deployer: 6, sender: 7 } // Reuse BPMN accounts
+  'BSDI': { deployer: 6, sender: 7 }, // Reuse BPMN accounts
+  'COMPOSED': { deployer: 2, sender: 3 } // Reuse GLEIF accounts for Composed
 } as const;
 
 // ===== ENVIRONMENT-SPECIFIC ACCOUNT MANAGEMENT =====
@@ -575,4 +576,20 @@ if (detectedEnvironment === 'LOCAL') {
   }
 } else {
   console.log(`🌐 Network environment - using real blockchain connections`);
+}
+// ===== COMPOSED ORACLE FUNCTIONS =====
+export function COMPOSEDdeployerKey(): PrivateKey {
+  return getPrivateKeyFor('COMPOSED');
+}
+
+export function COMPOSEDsenderKey(): PrivateKey {
+  return getPrivateKeyFor('COMPOSED');
+}
+
+export function COMPOSEDdeployerAccount(): PublicKey {
+  return getPublicKeyFor('COMPOSED');
+}
+
+export function COMPOSEDsenderAccount(): PublicKey {
+  return getPublicKeyFor('COMPOSED');
 }
