@@ -13,6 +13,7 @@ import { getEXIMOptimSingleCompanyVerificationWithSignUtils } from '../../../../
 import { getGLEIFLocalMultiVerifierUtils} from '../../../../impl/local/handler/GLEIFLocalHandler.js';
 
 import { MCAdeployerAccount, MCAsenderAccount, MCAdeployerKey, MCAsenderKey } from '../../../../core/OracleRegistry.js';
+import { safeCircuitString, CIRCUIT_STRING_MAX_LENGTHS } from '../../../core/CoreZKUtilities.js';
 
 // =================================== Proof Storage and Lineage Management ===================================
 
@@ -60,9 +61,9 @@ class ComposedProofRegistry {
     companyProofs.push(lineage);
     
     const proofHash = Poseidon.hash([
-      CircuitString.fromString(lineage.composedProofHash).hash(),
+      safeCircuitString(lineage.composedProofHash, CIRCUIT_STRING_MAX_LENGTHS.MEDIUM, "composedProofHash").hash(),
       Field(lineage.timestamp),
-      CircuitString.fromString(companyId).hash()
+      safeCircuitString(companyId, CIRCUIT_STRING_MAX_LENGTHS.MEDIUM, "companyId").hash()
     ]);
     
     const index = this.nextIndex++;
@@ -213,7 +214,7 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
     const proofRegistry = new ComposedProofRegistry();
     let companyResult: CompanyResult = {
       companyName,
-      companyIdentifier: CircuitString.fromString(companyName).hash().toString(),
+      companyIdentifier: safeCircuitString(companyName, CIRCUIT_STRING_MAX_LENGTHS.MEDIUM, "companyName").hash().toString(),
       iterations: [],
       successfulProofs: 0,
       failedProofs: 0,
@@ -235,7 +236,7 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
     let failedVerifications = 0;
 
     // =================================== Process Company Multiple Times ===================================
-    const companyIdentifier = CircuitString.fromString(companyName).hash().toString();
+    const companyIdentifier = safeCircuitString(companyName, CIRCUIT_STRING_MAX_LENGTHS.MEDIUM, "companyName").hash().toString();
     
     console.log(`\\n${'='.repeat(100)}`);
     console.log(`🏢 Processing Company: ${companyName} (CIN: ${companyCIN})`);
@@ -276,19 +277,19 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
         // =================================== Compose Proofs in 3 Levels ===================================
         console.log(`\\n🔗 Composing proofs in 3 levels for ${companyName}...`);
         
-        const currentTimestamp = Field.from(Date.now());
+        const timestamp = Field.from(Date.now());
         
         // Level 1: Corporate Registration
         console.log(`🔸 Level 1: Composing Corporate Registration proof...`);
         const level1Proof = await ComposedOptimCompliance.level1(
-          currentTimestamp,
+          timestamp,
           corpRegProof as any
         );
         
         // Level 2: Level1 + EXIM
         console.log(`🔸 Level 2: Composing Level1 + EXIM proof...`);
         const level2Proof = await ComposedOptimCompliance.level2(
-          currentTimestamp,
+          timestamp,
           level1Proof as any,
           eximProof as any
         );
@@ -296,7 +297,7 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
         // Level 3: Level2 + GLEIF (Final composed proof)
         console.log(`🔸 Level 3: Composing Level2 + GLEIF proof (Final)...`);
         const finalComposedProof = await ComposedOptimCompliance.level3(
-          currentTimestamp,
+          timestamp,
           level2Proof as any,
           gleifProof as any
         );
@@ -349,8 +350,9 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
           async () => {
             await zkApp.verifyAndStoreComposedProof(
               finalComposedProof as any,
-              CircuitString.fromString(companyCIN),
-              composedWitness
+              safeCircuitString(companyCIN, CIRCUIT_STRING_MAX_LENGTHS.SHORT, "companyCIN"),
+              composedWitness,
+              timestamp 
             );
           }
         );
@@ -420,7 +422,7 @@ export async function getComposedRecursiveOptim3LevelVerificationWithSignUtils(
     console.log(`\n🔍 Demonstrating proof retrieval capabilities...`);
     const retrievalExamples = [];
     
-    const companyId = CircuitString.fromString(companyName).hash().toString();
+    const companyId = safeCircuitString(companyName, CIRCUIT_STRING_MAX_LENGTHS.MEDIUM, "companyName").hash().toString();
     
     // Try to retrieve latest proof
     const latestProof = proofRegistry.getLatestProof(companyId);

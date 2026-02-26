@@ -1,5 +1,6 @@
 import { SmartContract, method, State, state, Field, CircuitString, UInt64, Bool, MerkleWitness, Struct, PrivateKey, Mina, AccountUpdate, Poseidon } from 'o1js';
 import { ComposedOptimProof, ComposedOptimCompliancePublicOutput } from '../../../zk-programs/compliance/ComposedRecursiveOptim3LevelZKProgramWithSign.js';
+import { safeCircuitString, CIRCUIT_STRING_MAX_LENGTHS } from '../../../utils/core/CoreZKUtilities.js';
 
 /**
  * Merkle witness for proof storage tree (16 levels = 65k proofs max)
@@ -13,7 +14,7 @@ export class ComposedProofMerkleWitness extends MerkleWitness(16) {}
 export class ContractStateInfo extends Struct({
   totalProofsStored: Field,
   proofsRootHash: Field,
-  lastUpdateTimestamp: UInt64
+  lastUpdateTimestamp: Field
 }) {}
 
 /**
@@ -44,7 +45,7 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
    * Timestamp of last proof addition
    * Used for tracking contract activity
    */
-  @state(UInt64) lastUpdateTimestamp = State<UInt64>();
+  @state(Field) lastUpdateTimestamp = State<Field>();
 
   // =================================== Contract Initialization ===================================
   
@@ -52,7 +53,7 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
     super.init();
     this.proofsRoot.set(Field(0)); // Empty merkle tree root
     this.totalProofsStored.set(Field(0));
-    this.lastUpdateTimestamp.set(UInt64.from(0));
+    this.lastUpdateTimestamp.set(Field(0));
   }
 
   // =================================== Core Verification Methods ===================================
@@ -64,7 +65,9 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
   @method async verifyAndStoreComposedProof(
     composedProof: ComposedOptimProof,
     companyIdentifier: CircuitString,
-    proofWitness: ComposedProofMerkleWitness
+    proofWitness: ComposedProofMerkleWitness,
+    timestamp: Field  // ✅ ADDED: Accept timestamp as parameter
+
   ): Promise<void> {
     // Verify the composed proof cryptographically
     composedProof.verify();
@@ -72,21 +75,34 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
     // Get current contract state
     const currentRoot = this.proofsRoot.getAndRequireEquals();
     const currentTotal = this.totalProofsStored.getAndRequireEquals();
-    const currentTimestamp = UInt64.from(Date.now());
+    // const currentTimestamp = UInt64.from(Date.now());
+    // const currentTimestamp = Field(Date.now());
+
     
+
     // Extract proof data
     const proofOutput = composedProof.publicOutput;
     
     // Verify company identifier matches proof
     const expectedCompanyHash = companyIdentifier.hash();
     proofOutput.companyIdentifierHash.assertEquals(expectedCompanyHash);
+
+    // ✅ FIX: Verify timestamp matches what was used in proof generation
+    proofOutput.verificationTimestamp.assertEquals(timestamp);
     
     // Ensure this is a complete 3-level composed proof
     proofOutput.servicesIncluded.assertEquals(Field(7)); // Must include all services (1+2+4=7)
     proofOutput.composedProofVersion.assertEquals(Field(3)); // Must be level 3
     
     // Create proof storage entry
-    const proofHash = Field.random(); // Simplified for demo
+    // const proofHash = Field.random(); // Simplified for demo
+    // Create proof storage entry
+  const proofHash = Poseidon.hash([
+    proofOutput.underlyingProofsHash,
+    proofOutput.companyNameHash,
+    proofOutput.companyIdentifierHash,
+    timestamp
+  ]);
     const sequenceNumber = currentTotal.add(Field(1));
     
     // Create leaf for merkle tree: hash(companyId + sequence + proofHash + timestamp)
@@ -94,7 +110,7 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
       expectedCompanyHash,
       sequenceNumber,
       proofHash,
-      currentTimestamp.value
+      timestamp                           // ✅ FIXED - Use Field directly, no .value
     ]);
     
     // Verify merkle witness for new proof position
@@ -103,7 +119,11 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
     // Update contract state
     this.proofsRoot.set(calculatedRoot);
     this.totalProofsStored.set(sequenceNumber);
-    this.lastUpdateTimestamp.set(currentTimestamp);
+    // this.lastUpdateTimestamp.set(currentTimestamp);
+    // ✅ FIX: Store timestamp as Field converted to UInt64 for state
+    // this.lastUpdateTimestamp.set(UInt64.from(currentTimestamp.toBigInt()));
+    // ✅ Store timestamp as Field converted to UInt64 for state
+    this.lastUpdateTimestamp.set(timestamp);
     
     // Event emission disabled to avoid o1js constraint issues
     // In production, events would be emitted here for off-chain indexing
@@ -117,7 +137,7 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
     companyIdentifier: CircuitString,
     sequenceNumber: Field,
     proofHash: Field,
-    timestamp: UInt64,
+    timestamp: Field,
     proofWitness: ComposedProofMerkleWitness
   ): Promise<void> {
     // Get current merkle root
@@ -129,7 +149,7 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
       expectedCompanyHash,
       sequenceNumber,
       proofHash,
-      timestamp.value
+      timestamp
     ]);
     
     // Verify the merkle witness
@@ -191,7 +211,7 @@ export class ComposedOptimComplianceVerifierSC extends SmartContract {
     companyIdentifier: CircuitString,
     latestSequenceNumber: Field,
     latestProofHash: Field,
-    latestTimestamp: UInt64,
+    latestTimestamp: Field,
     proofWitness: ComposedProofMerkleWitness
   ): Promise<void> {
     await this.verifyProofExists(

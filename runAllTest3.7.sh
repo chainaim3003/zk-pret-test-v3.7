@@ -11,6 +11,8 @@ npm run test:local-complete-EXIM "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
 # GLEIF Optimized 
 npm run test:local-complete-GLEIF "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
 
+# COMPOSED Optimized 
+npm run test:local-complete-Composed "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" "U01112TZ2022PTC039493"
 
 #BusinessProcess
 # STABLECOIN
@@ -53,6 +55,10 @@ node ./build/impl/network/verifier/EXIMNetworkMultiVerifier.js "SREE PALANI ANDA
 # GLEIF Optimized 
 node ./build/impl/network/verifier/GLEIFNetworkMultiVerifier.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
 
+# COMPOSED Optimized 
+node ./build/impl/network/verifier/ComposedNetworkMultiVerifier.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" "U01112TZ2022PTC039493" 
+
+
 #BusinessProcess
 # STABLECOIN
 node ./build/impl/network/verifier/BusinessProcessNetworkMultiVerifier.js bpmngroup1 STABLECOIN ./src/data/STABLECOIN/process/EXPECTED/STABLECOIN-Expected.bpmn ./src/data/STABLECOIN/process/ACTUAL/STABLECOIN-Accepted1.bpmn
@@ -77,9 +83,3 @@ node ./build/impl/network/verifier/RiskStableCoinNetworkMultiVerifier.js RISK_GR
 #Advanced
 node ./build/impl/network/verifier/RiskAdvancedNetworkMultiVerifier.js RISK_GROUP_001 100 http://34.203.247.32:8083/eventsBatch src/data/RISK/Advanced/CONFIG/Advanced-VALID-1.json
 
-#======================
-# Composed
-#======================
-# Composed Recursive 3 Level Verification Test
-
-node ./build/impl/test/ComposedRecursive3LevelVerificationTest.js "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" "U01112TZ2022PTC039493"
