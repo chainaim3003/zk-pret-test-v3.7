@@ -1293,6 +1293,28 @@ app.post('/zkpret/compliance/global/lei/', async (req: express.Request, res: exp
         const result = await zkToolExecutor.executeTool('get-GLEIF-verification-with-sign', { companyName });
         const executionTime = Date.now() - startTime;
 
+        // Check stderr for blockchain transaction failures
+        const stderr = (result as any)?.result?.stderr || '';
+        const hasBlockchainError = stderr.includes('Transaction failed') || 
+                                stderr.includes('Invalid_proof') || 
+                                stderr.includes('❌ Error processing');
+
+        if (hasBlockchainError) {
+            return res.status(500).json({
+                success: false,
+                error: `Blockchain transaction failed: ${stderr}`,
+                data: result,
+                metadata: {
+                    companyName,
+                    executionTimeMs: executionTime,
+                    timestamp: new Date().toISOString(),
+                    endpoint: '/zkpret/compliance/global/lei/',
+                    service: 'GLEIF LEI Verification',
+                    mode: 'direct-execution'
+                }
+            });
+        }
+
         return res.json({
             success: true,
             data: result,
@@ -1341,6 +1363,27 @@ app.post('/zkpret/compliance/global/exim/', async (req: express.Request, res: ex
         const result = await zkToolExecutor.executeTool('get-EXIM-verification-with-sign', { companyName });
         const executionTime = Date.now() - startTime;
 
+        const stderr = (result as any)?.result?.stderr || '';
+        const hasBlockchainError = stderr.includes('Transaction failed') ||
+                                   stderr.includes('Invalid_proof') ||
+                                   stderr.includes('❌ Error processing');
+
+        if (hasBlockchainError) {
+            return res.status(500).json({
+                success: false,
+                error: `Blockchain transaction failed: ${stderr}`,
+                data: result,
+                metadata: {
+                    companyName,
+                    executionTimeMs: executionTime,
+                    timestamp: new Date().toISOString(),
+                    endpoint: '/zkpret/compliance/global/exim/',
+                    service: 'EXIM Compliance Verification',
+                    mode: 'direct-execution'
+                }
+            });
+        }
+
         return res.json({
             success: true,
             data: result,
@@ -1388,6 +1431,27 @@ app.post('/zkpret/compliance/global/corporate/', async (req: express.Request, re
         const startTime = Date.now();
         const result = await zkToolExecutor.executeTool('get-CorporateRegistration-data', { cin });
         const executionTime = Date.now() - startTime;
+
+        const stderr = (result as any)?.result?.stderr || '';
+        const hasBlockchainError = stderr.includes('Transaction failed') ||
+                                   stderr.includes('Invalid_proof') ||
+                                   stderr.includes('❌ Error processing');
+
+        if (hasBlockchainError) {
+            return res.status(500).json({
+                success: false,
+                error: `Blockchain transaction failed: ${stderr}`,
+                data: result,
+                metadata: {
+                    cin,
+                    executionTimeMs: executionTime,
+                    timestamp: new Date().toISOString(),
+                    endpoint: '/zkpret/compliance/global/corporate/',
+                    service: 'Corporate Registration Verification',
+                    mode: 'direct-execution'
+                }
+            });
+        }
 
         return res.json({
             success: true,

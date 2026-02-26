@@ -69,7 +69,7 @@ export class BusinessStdMerkleTree {
         for (let j = 0; j < chunk.length; j++) {
           value = value * 256n + BigInt(chunk[j]);
         }
-        fields.push(safeFieldFrom(Number(value)));
+        fields.push(Field.from(value));
       }
       
       // If no content, add a zero field

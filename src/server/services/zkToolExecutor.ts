@@ -27,6 +27,7 @@ const ENVIRONMENT_SCRIPT_MAP: Record<string, Record<string, string>> = {
     'LOCAL': {
         'get-GLEIF-verification-with-sign': 'GLEIFLocalMultiVerifier.js',
         'get-Corporate-Registration-verification-with-sign': 'CorporateRegistrationLocalMultiVerifier.js',
+        'get-CorporateRegistration-data': 'CorporateRegistrationLocalMultiVerifier.js',
         'get-EXIM-verification-with-sign': 'EXIMLocalMultiVerifier.js',
         'get-Composed-Compliance-verification-with-sign': 'ComposedRecursiveOptim3LevelVerificationTestLocalWithSign.js',
         'get-ComposedProof-verification': 'ComposedRecursiveOptim3LevelVerificationTestLocalWithSign.js',
@@ -45,16 +46,21 @@ const ENVIRONMENT_SCRIPT_MAP: Record<string, Record<string, string>> = {
     'TESTNET': {
         'get-GLEIF-verification-with-sign': 'GLEIFNetworkMultiVerifier.js',
         'get-Corporate-Registration-verification-with-sign': 'CorporateRegistrationNetworkMultiVerifier.js',
+        'get-CorporateRegistration-data': 'CorporateRegistrationNetworkMultiVerifier.js',
         'get-EXIM-verification-with-sign': 'EXIMNetworkMultiVerifier.js',
         'get-Composed-Compliance-verification-with-sign': 'ComposedRecursiveOptim3LevelVerificationTestTestnetWithSign.js',
         'get-ComposedProof-verification': 'ComposedRecursiveOptim3LevelVerificationTestTestnetWithSign.js',
-        'get-BSDI-compliance-verification': 'BusinessStdIntegrityTestnetMultiVerifier.js',
+        // 'get-BSDI-compliance-verification': 'BusinessStdIntegrityTestnetMultiVerifier.js',
+        'get-BSDI-compliance-verification': 'BusinessStdIntegrityNetworkMultiVerifier.js',
         'get-BPI-compliance-verification': 'BusinessProcessNetworkMultiVerifier.js',
         'get-RiskLiquidityACTUS-Verifier-Test_adv_zk': 'RiskLiquidityAdvancedOptimMerkleVerificationTestTestnetWithSign.js',
         'get-RiskLiquidityACTUS-Verifier-Test_Basel3_Withsign': 'RiskLiquidityBasel3OptimMerkleVerificationTestTestnetWithSign.js',
-        'get-RiskLiquidityBasel3Optim-Merkle-verification-with-sign': 'RiskBasel3TestnetMultiVerifier.js',
-        'get-RiskLiquidityAdvancedOptimMerkle-verification-with-sign': 'RiskAdvancedTestnetMultiVerifier.js',
-        'get-StablecoinProofOfReservesRisk-verification-with-sign': 'RiskStableCoinTestnetMultiVerifier.js',
+        // 'get-RiskLiquidityBasel3Optim-Merkle-verification-with-sign': 'RiskBasel3TestnetMultiVerifier.js',
+        // 'get-RiskLiquidityAdvancedOptimMerkle-verification-with-sign': 'RiskAdvancedTestnetMultiVerifier.js',
+        // 'get-StablecoinProofOfReservesRisk-verification-with-sign': 'RiskStableCoinTestnetMultiVerifier.js',
+        'get-RiskLiquidityBasel3Optim-Merkle-verification-with-sign': 'RiskBasel3NetworkMultiVerifier.js',
+        'get-RiskLiquidityAdvancedOptimMerkle-verification-with-sign': 'RiskAdvancedNetworkMultiVerifier.js',
+        'get-StablecoinProofOfReservesRisk-verification-with-sign': 'RiskStableCoinNetworkMultiVerifier.js',
         'execute-composed-proof-full-kyc': 'ComposedRecursiveOptim3LevelVerificationTestTestnetWithSign.js',
         'execute-composed-proof-financial-risk': 'ComposedRecursiveOptim3LevelVerificationTestTestnetWithSign.js',
         'execute-composed-proof-business-integrity': 'ComposedRecursiveOptim3LevelVerificationTestTestnetWithSign.js',
@@ -63,6 +69,7 @@ const ENVIRONMENT_SCRIPT_MAP: Record<string, Record<string, string>> = {
     'MAINNET': {
         'get-GLEIF-verification-with-sign': 'GLEIFMainnetMultiVerifier.js',
         'get-Corporate-Registration-verification-with-sign': 'CorporateRegistrationMainnetMultiVerifier.js',
+        'get-CorporateRegistration-data': 'CorporateRegistrationMainnetMultiVerifier.js',
         'get-EXIM-verification-with-sign': 'EXIMMainnetMultiVerifier.js',
         'get-Composed-Compliance-verification-with-sign': 'ComposedRecursiveOptim3LevelVerificationTestMainnetWithSign.js',
         'get-ComposedProof-verification': 'ComposedRecursiveOptim3LevelVerificationTestMainnetWithSign.js',
@@ -316,6 +323,7 @@ export class ZKToolExecutor {
         return [
             'get-GLEIF-verification-with-sign',
             'get-Corporate-Registration-verification-with-sign',
+            'get-CorporateRegistration-data',
             'get-EXIM-verification-with-sign',
             'get-Composed-Compliance-verification-with-sign',
             'get-ComposedProof-verification',
@@ -383,10 +391,17 @@ export class ZKToolExecutor {
                 return [];
 
             case 'get-Corporate-Registration-verification-with-sign':
-                const corpCompany = parameters.companyName;
-                const corpArgs = corpCompany ? [corpCompany] : [];
+                // const corpCompany = parameters.companyName;
+                // const corpArgs = corpCompany ? [corpCompany] : [];
+                // console.log(`Corporate Registration args prepared:`, corpArgs);
+                // return corpArgs;
+            case 'get-CorporateRegistration-data': {
+                // Accept either cin or companyName as the identifier
+                const corpInput = parameters.cin || parameters.companyName;
+                const corpArgs = corpInput ? [corpInput] : [];
                 console.log(`Corporate Registration args prepared:`, corpArgs);
                 return corpArgs;
+            }   
 
             case 'get-EXIM-verification-with-sign':
                 const eximCompany = parameters.companyName;
@@ -420,10 +435,20 @@ export class ZKToolExecutor {
                 console.log(`Config File: ${configFilePath || 'default'}`);
 
                 // Build arguments array: [lcrThreshold, nsfrThreshold, actusUrl, portfolioPath]
+                // const basel3Args = [
+                //     lcrThreshold.toString(),
+                //     nsfrThreshold.toString(),
+                //     actusUrl
+                // ];
+
                 const basel3Args = [
-                    lcrThreshold.toString(),
-                    nsfrThreshold.toString(),
-                    actusUrl
+                    'BASEL3_GROUP_001',          // args[0]: basel3GroupID (required)
+                    lcrThreshold.toString(),     // args[1]: lcrThreshold
+                    nsfrThreshold.toString(),    // args[2]: nsfrThreshold
+                    actusUrl,                    // args[3]: actusUrl
+                    configFilePath || '',        // args[4]: portfolioPath
+                    'ultra_strict',              // args[5]: executionMode
+                    'US'                         // args[6]: jurisdiction (required)
                 ];
 
                 // Add config file path if provided (optional parameter)
@@ -463,16 +488,24 @@ export class ZKToolExecutor {
                 console.log(`Execution Mode: ${advExecutionMode || 'default'}`);
 
                 // Build arguments array: [liquidityThreshold, actusUrl, configFilePath, executionMode]
-                const advancedArgs = [
-                    advLiquidityThreshold.toString(),
-                    advActusUrl,
-                    advConfigFilePath
-                ];
+                // const advancedArgs = [
+                //     advLiquidityThreshold.toString(),
+                //     advActusUrl,
+                //     advConfigFilePath
+                // ];
 
-                // Add execution mode if provided
-                if (advExecutionMode) {
-                    advancedArgs.push(advExecutionMode);
-                }
+                // // Add execution mode if provided
+                // if (advExecutionMode) {
+                //     advancedArgs.push(advExecutionMode);
+                // }
+
+                const advancedArgs = [
+                    'ADVANCED_GROUP_001',            // args[0]: riskGroupID (required)
+                    advLiquidityThreshold.toString(), // args[1]: liquidityThreshold
+                    advActusUrl,                      // args[2]: actusUrl
+                    advConfigFilePath,                // args[3]: portfolioPath
+                    advExecutionMode || 'ultra_strict' // args[4]: executionMode
+                ];
 
                 console.log(`Advanced Risk args prepared:`, advancedArgs);
                 return advancedArgs;
@@ -508,20 +541,28 @@ export class ZKToolExecutor {
                 console.log(`Config File: ${stableConfigFilePath || 'constructed'}`);
 
                 // Build arguments array: [liquidityThreshold, actusUrl, configFilePath, executionMode, jurisdiction]
+                // const stablecoinArgs = [
+                //     stableLiquidityThreshold.toString(),
+                //     'http://34.203.247.32:8083/eventsBatch', // Default ACTUS URL for stablecoin
+                //     stableConfigFilePath || `src/data/RISK/StableCoin/CONFIG/${stableJurisdiction}/${stableSituation}`
+                // ];
+
+                // // Add execution mode and jurisdiction if provided
+                // if (stableExecutionMode) {
+                //     stablecoinArgs.push(stableExecutionMode);
+                // }
+
+                // if (stableJurisdiction) {
+                //     stablecoinArgs.push(stableJurisdiction);
+                // }
                 const stablecoinArgs = [
-                    stableLiquidityThreshold.toString(),
-                    'http://34.203.247.32:8083/eventsBatch', // Default ACTUS URL for stablecoin
-                    stableConfigFilePath || `src/data/RISK/StableCoin/CONFIG/${stableJurisdiction}/${stableSituation}`
+                    'STABLECOIN_GROUP_001',                                                                    // args[0]: riskGroupID (required)
+                    stableLiquidityThreshold.toString(),                                                       // args[1]: backingRatioThreshold
+                    parameters.actusUrl || 'http://34.203.247.32:8083/eventsBatch',                           // args[2]: actusUrl
+                    stableConfigFilePath || `src/data/RISK/StableCoin/CONFIG/${stableJurisdiction}/${stableSituation}`, // args[3]: portfolioPath
+                    stableExecutionMode || 'ultra_strict',                                                     // args[4]: executionMode
+                    stableJurisdiction                                                                         // args[5]: jurisdictionCLI (required)
                 ];
-
-                // Add execution mode and jurisdiction if provided
-                if (stableExecutionMode) {
-                    stablecoinArgs.push(stableExecutionMode);
-                }
-
-                if (stableJurisdiction) {
-                    stablecoinArgs.push(stableJurisdiction);
-                }
 
                 console.log(`Stablecoin Risk args prepared:`, stablecoinArgs);
                 return stablecoinArgs;
@@ -616,7 +657,7 @@ export class ZKToolExecutor {
                 console.log(`Data Type: ${dataType} -> Document Type: ${docType}`);
                 console.log(`File Path: ${filePath}`);
 
-                const bsdiArgs = [docType, filePath];
+                const bsdiArgs = [docType, docType, filePath];
                 console.log(`BSDI args prepared:`, bsdiArgs);
                 return bsdiArgs;
 
