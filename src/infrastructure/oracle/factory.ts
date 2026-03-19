@@ -334,5 +334,11 @@ export async function getCompatibilityAccounts() {
     RiskProverdeployerKey: currentRegistry.getDeployerKey('RISK'),
     RiskProversenderAccount: currentRegistry.getSenderAccount('RISK'),
     RiskProversenderKey: currentRegistry.getSenderKey('RISK'),
+
+    // Composed accounts
+    ComposeddeployerAccount: currentRegistry.getDeployerAccount('COMPOSED'),
+    ComposeddeployerKey: currentRegistry.getDeployerKey('COMPOSED'),
+    ComposedsenderAccount: currentRegistry.getSenderAccount('COMPOSED'),
+    ComposedsenderKey: currentRegistry.getSenderKey('COMPOSED'),
   };
 }

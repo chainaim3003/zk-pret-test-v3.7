@@ -108,6 +108,23 @@
         "privateKey": "EKEwfu89JeerQ1ViP9SNs91GMLHmmKshL2qFBVFYqT61vsy5W1AW",
         "deployerAccountIndex": 10,
         "senderAccountIndex": 11
+      },
+      "COMPOSED": {
+        "role": "COMPOSED_ORACLE",
+        "deployer": {
+          "privateKey": "EKFDXcYPdBbeWqi3why3zsV2f4Lja6LiqvhzTfVvZCMahzeGfTPf",
+          "publicKey": "B62qosF7dD9PAM94iG7UM5ot9BUJyuE6yGVLdk2NDRsneoYvhYjkGWX",
+          "index": 12
+        },
+        "sender": {
+          "privateKey": "EKEZ3x1tpepS4gzvbMmcvqmek3YMDWaMimqLVoSk2nJZSzv9vGUM",
+          "publicKey": "B62qkTSyqTJozscp8p7fYia1pKpV9ZAy68eeabQpPLeJZ5LqQTQER5K",
+          "index": 13
+        },
+        "publicKey": "B62qosF7dD9PAM94iG7UM5ot9BUJyuE6yGVLdk2NDRsneoYvhYjkGWX",
+        "privateKey": "EKFDXcYPdBbeWqi3why3zsV2f4Lja6LiqvhzTfVvZCMahzeGfTPf",
+        "deployerAccountIndex": 12,
+        "senderAccountIndex": 13
       }
     }
   },
@@ -272,6 +289,27 @@
       "contractName": "RiskLiquidityBasel3SmartContract",
       "oracle": "RISK",
       "description": "Force deployment - used when deployer knows there are contract changes that need redeployment"
+    },
+    "testnet-composed": {
+      "name": "testnet-composed",
+      "environment": "TESTNET",
+      "contractName": "ComposedOptimComplianceVerifierSC",
+      "oracle": "COMPOSED",
+      "description": "Stable testnet Composed deployment"
+    },
+    "testnet-composed-dev": {
+      "name": "testnet-composed-dev",
+      "environment": "TESTNET",
+      "contractName": "ComposedOptimComplianceVerifierSC",
+      "oracle": "COMPOSED",
+      "description": "Development iteration testing"
+    },
+    "testnet-composed-force": {
+      "name": "testnet-composed-force",
+      "environment": "TESTNET",
+      "contractName": "ComposedOptimComplianceVerifierSC",
+      "oracle": "COMPOSED",
+      "description": "Force deployment - used when there are contract changes that need redeployment"
     }
   },
   "deprecatedDeployments": {
@@ -288,30 +326,30 @@
   "deployments": {
     "contracts": {
       "GLEIFOptimMultiCompanySmartContract": {
-        "address": "B62qqTMTF4KVhFZ82Fkrqakgt1uYE1vi78gjooEiq2Fgo3wyPqd1P5q",
+        "address": "B62qrCmKoiahTF9YZbY6wpk5sD8pvnzhbaS7bgNi8vYCJ8TzRy4nEWu",
         "status": "DEPLOYED",
-        "deployedAt": "2025-07-13T15:30:31.407Z",
-        "transactionHash": "5JuoyHokJiBSvkdAiT6ZQUYxQfh6AAkkceschrrxKmaCz1eZ1ruL",
+        "deployedAt": "2026-03-07T17:44:04.690Z",
+        "transactionHash": "5JuAw6x4giJnnPYa37TBgsMzvcD5zVZtJyp8czr49jQtcibZcbwq",
         "alias": "testnet-gleif-force",
         "oracle": "GLEIF",
         "contractName": "GLEIFOptimMultiCompanySmartContract",
-        "zkAppPrivateKey": "EKEkwZugCuWigyR3Y9saRBdA83MebBCu9v1TC7fMxTvr7XFmiMQV",
+        "zkAppPrivateKey": "EKEuDwyGsnv38FMAoRZJRYDoPgrM3eXMSopfEvhqx7N11THpzmYL",
         "verificationKey": {
-          "data": "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",
-          "hash": "3010257958662559828778354607411141767391133002250136560275684449581744254096"
+          "data": "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",
+          "hash": "3716003731540540443356337431182295407905599233642054825721926529757654669918"
         },
         "deploymentMetrics": {
-          "proofTime": 2,
-          "broadcastTime": 245,
+          "proofTime": 3,
+          "broadcastTime": 537,
           "totalDeploymentTime": 3
         },
         "deploymentLineage": {
           "originalAlias": "testnet-gleif-force",
-          "originalAddress": "B62qoXYoMdd5GgNHDnNSRenN7R6Th25bhgUobPgTaQuyLHfBnmW9yHK",
-          "originalDeployedAt": "2025-07-13T15:00:40.617Z",
+          "originalAddress": "B62qm9yNhe7szch1uV2XZRgovrt7EXD7T8SD1T26Dh52vt9rX6yKgQj",
+          "originalDeployedAt": "2026-03-03T13:47:31.286Z",
           "promotedFrom": "testnet-gleif-force",
-          "promotedAt": "2025-07-13T15:30:31.408Z",
-          "replacedVkHash": "4952224239868628201440587358456029510280413757257962482608799479787250946515"
+          "promotedAt": "2026-03-07T17:44:04.691Z",
+          "replacedVkHash": "3716003731540540443356337431182295407905599233642054825721926529757654669918"
         },
         "deploymentScope": {
           "type": "FORCE_PROMOTED",
@@ -1667,6 +1705,257 @@
           "reason": "Critical contract update via force deployment",
           "sourceAlias": "testnet-risksc-force"
         }
+      },
+      "ComposedOptimComplianceVerifierSC": {
+        "address": "B62qik34sTDuT1QX4uhcANo5kEhqirELdfgxHdbua6VdJNr8D1CKkR9",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-03-10T13:02:35.771Z",
+        "transactionHash": "5Jv1qwMZ4qNosDRmRVpoABUwDrLuwePjQbeu32JcimxcwZyfD4Xe",
+        "alias": "testnet-composed-force",
+        "oracle": "COMPOSED",
+        "contractName": "ComposedOptimComplianceVerifierSC",
+        "zkAppPrivateKey": "EKDvcBjEBZs8GDZ5GK7RXskvch4RngEJ3WMp2scUTBKf5kVQe665",
+        "verificationKey": {
+          "data": "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",
+          "hash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentMetrics": {
+          "proofTime": 1,
+          "broadcastTime": 391,
+          "totalDeploymentTime": 3
+        },
+        "deploymentLineage": {
+          "originalAlias": "testnet-composed-force",
+          "originalAddress": "B62qmxoqkgLuYqRW2GzTKdA1JMPDQjDKypskXnbqqt7VBuEpkcM4cR2",
+          "originalDeployedAt": "2026-03-10T08:58:37.714Z",
+          "promotedFrom": "testnet-composed-force",
+          "promotedAt": "2026-03-10T13:02:35.772Z",
+          "replacedVkHash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentScope": {
+          "type": "FORCE_PROMOTED",
+          "servingAliases": [
+            "testnet-composed",
+            "testnet-composed-dev",
+            "testnet-composed-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-composed-force"
+        }
+      },
+      "ComposedOptimComplianceVerifierSC_FORCE_1772257907431": {
+        "address": "B62qqAHL9mRfuy7NDT2PTApHc58UAcW2DTPpV1n2ZEZ9gRDmXmSzrxx",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-02-28T05:51:47.430Z",
+        "transactionHash": "5JuBqcU8cqto5b9CUZuH6k5pr1JrgqUDAAm3Gq6svChsACgZVu1v",
+        "alias": "testnet-composed-force",
+        "oracle": "COMPOSED",
+        "contractName": "ComposedOptimComplianceVerifierSC",
+        "zkAppPrivateKey": "EKDsQKkHsL6qMoTkNXud9dDVhkL23b4jpRASdexNg4G94ErBe4D1",
+        "verificationKey": {
+          "data": "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",
+          "hash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentMetrics": {
+          "proofTime": 1,
+          "broadcastTime": 520,
+          "totalDeploymentTime": 4
+        },
+        "deploymentScope": {
+          "type": "FORCE_AUDIT_RECORD",
+          "servingAliases": [
+            "testnet-composed",
+            "testnet-composed-dev",
+            "testnet-composed-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-composed-force"
+        }
+      },
+      "ComposedOptimComplianceVerifierSC_FORCE_1772544368239": {
+        "address": "B62qpFH655kEpVDA3UBrvZfxiHhJKvm2QLw1PchY21s8nnPMtqPv7x8",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-03-03T13:26:08.237Z",
+        "transactionHash": "5JuckRpeCmgbQoRb1qoofd25nicbqeLZ7cNJ3rcDpU9SxsF4FPuf",
+        "alias": "testnet-composed-force",
+        "oracle": "COMPOSED",
+        "contractName": "ComposedOptimComplianceVerifierSC",
+        "zkAppPrivateKey": "EKE3mQTZbq3GWWCXKRwfYmJy6NdWiXksgrKW5fkqfSy339PrxGYL",
+        "verificationKey": {
+          "data": "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",
+          "hash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentMetrics": {
+          "proofTime": 2,
+          "broadcastTime": 388,
+          "totalDeploymentTime": 7
+        },
+        "deploymentLineage": {
+          "originalAlias": "testnet-composed-force",
+          "originalAddress": "B62qqAHL9mRfuy7NDT2PTApHc58UAcW2DTPpV1n2ZEZ9gRDmXmSzrxx",
+          "originalDeployedAt": "2026-02-28T05:51:47.430Z",
+          "promotedFrom": "testnet-composed-force",
+          "promotedAt": "2026-03-03T13:26:08.238Z",
+          "replacedVkHash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentScope": {
+          "type": "FORCE_AUDIT_RECORD",
+          "servingAliases": [
+            "testnet-composed",
+            "testnet-composed-dev",
+            "testnet-composed-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-composed-force"
+        }
+      },
+      "GLEIFOptimMultiCompanySmartContract_FORCE_1772545651290": {
+        "address": "B62qm9yNhe7szch1uV2XZRgovrt7EXD7T8SD1T26Dh52vt9rX6yKgQj",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-03-03T13:47:31.286Z",
+        "transactionHash": "5JtgroZBcr5VuRTagUQXqJCQMPDHBFPWksU6f8dZZMCUPK6SM6tu",
+        "alias": "testnet-gleif-force",
+        "oracle": "GLEIF",
+        "contractName": "GLEIFOptimMultiCompanySmartContract",
+        "zkAppPrivateKey": "EKEa5yer8tZpt1BaLvVJ6fP434Fvwdi4eMAfQ6e7XKFLXYtFBkmB",
+        "verificationKey": {
+          "data": "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",
+          "hash": "3716003731540540443356337431182295407905599233642054825721926529757654669918"
+        },
+        "deploymentMetrics": {
+          "proofTime": 11,
+          "broadcastTime": 361,
+          "totalDeploymentTime": 4
+        },
+        "deploymentLineage": {
+          "originalAlias": "testnet-gleif-force",
+          "originalAddress": "B62qqTMTF4KVhFZ82Fkrqakgt1uYE1vi78gjooEiq2Fgo3wyPqd1P5q",
+          "originalDeployedAt": "2025-07-13T15:30:31.407Z",
+          "promotedFrom": "testnet-gleif-force",
+          "promotedAt": "2026-03-03T13:47:31.286Z",
+          "replacedVkHash": "3010257958662559828778354607411141767391133002250136560275684449581744254096"
+        },
+        "deploymentScope": {
+          "type": "FORCE_AUDIT_RECORD",
+          "servingAliases": [
+            "testnet-gleif",
+            "testnet-gleif-dev",
+            "testnet-gleif-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-gleif-force"
+        }
+      },
+      "GLEIFOptimMultiCompanySmartContract_FORCE_1772905444705": {
+        "address": "B62qrCmKoiahTF9YZbY6wpk5sD8pvnzhbaS7bgNi8vYCJ8TzRy4nEWu",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-03-07T17:44:04.690Z",
+        "transactionHash": "5JuAw6x4giJnnPYa37TBgsMzvcD5zVZtJyp8czr49jQtcibZcbwq",
+        "alias": "testnet-gleif-force",
+        "oracle": "GLEIF",
+        "contractName": "GLEIFOptimMultiCompanySmartContract",
+        "zkAppPrivateKey": "EKEuDwyGsnv38FMAoRZJRYDoPgrM3eXMSopfEvhqx7N11THpzmYL",
+        "verificationKey": {
+          "data": "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",
+          "hash": "3716003731540540443356337431182295407905599233642054825721926529757654669918"
+        },
+        "deploymentMetrics": {
+          "proofTime": 3,
+          "broadcastTime": 537,
+          "totalDeploymentTime": 3
+        },
+        "deploymentLineage": {
+          "originalAlias": "testnet-gleif-force",
+          "originalAddress": "B62qm9yNhe7szch1uV2XZRgovrt7EXD7T8SD1T26Dh52vt9rX6yKgQj",
+          "originalDeployedAt": "2026-03-03T13:47:31.286Z",
+          "promotedFrom": "testnet-gleif-force",
+          "promotedAt": "2026-03-07T17:44:04.691Z",
+          "replacedVkHash": "3716003731540540443356337431182295407905599233642054825721926529757654669918"
+        },
+        "deploymentScope": {
+          "type": "FORCE_AUDIT_RECORD",
+          "servingAliases": [
+            "testnet-gleif",
+            "testnet-gleif-dev",
+            "testnet-gleif-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-gleif-force"
+        }
+      },
+      "ComposedOptimComplianceVerifierSC_FORCE_1773133117715": {
+        "address": "B62qmxoqkgLuYqRW2GzTKdA1JMPDQjDKypskXnbqqt7VBuEpkcM4cR2",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-03-10T08:58:37.714Z",
+        "transactionHash": "5JvKF1vGfVVKJ5F3zg1jAVinQUuG8ChncDePz4fFEtttMMjH8zXa",
+        "alias": "testnet-composed-force",
+        "oracle": "COMPOSED",
+        "contractName": "ComposedOptimComplianceVerifierSC",
+        "zkAppPrivateKey": "EKEDXBJLrb4mLuatiVFuDPceazpzTZuv8xYkunf1cHEtEcm15TXT",
+        "verificationKey": {
+          "data": "AQGKKoc9NyqORL0S9pfoTel12R492otiO+fvhSmGzNCTNnDuf2t1IvWfsQ9S5jes25VjzSRClz28j4uXEvRQOW8iVfRDr8ufYJ3TW02QOnLRjQCeWctnACxRJ9ZKL0wi0TKwq6RZSTCZNsNCZz+kpl2qsRD7zMR5sP0jyFOjF/U6J/U36PMD5ICww6AyaT52lRpxJ8O+NJU9ZnG9Ry6HpBUDfnil9Zj7/g1eGm4HIfyME0ZGUSepYh+50qtQ2C/WuDvly3JKJuvmrzwBwKVSd9E1boYfx0orpiDBIGDgCpKYJdM8aSI4IHQOJWMTjSbBmWXkBhV2iAXy6eHdvL81YxIZMSHUhUA+7YQK8clzOKJsXUlVQzx8rNdLL1IiUjI+9TU+wNQ0DZSIn+b4zhhz6sWrr7tIDB7khnqm4q/m17XaPgvCpI+h5axcVvhTZFFyUSkUFS/gs3bOycvi6Ue8F+sNWITUidF3kzgsxAXYXVB70vMJmRfNhpG6RAh5txUcqQWGx3rgTHan5k/7sAABwBTplX6+qxIgC59UTa7YbAgTHko1ZkX1BcOboyK/pZH1FtNJm6S3XlBxdtoLsHuv+5ASAKH68/L1JVsv9EtsQAROiYb6MW89j8SMqV53nqVH0Y4R9sAQJ72b/8sJadNMntZLoJ3EFH/ioqCEb+eXpsVWaRS8jMHp1JO5Qp7htF/CgAR4tgnjEWD02lyNd4bd1DwkNH0arFZPG4WLnNpo1DK1N5xR2J5SedK24pBoK6zckikFClfOlQZuNg7AaRfhMbEvBabsiNscagnNxAIl4wOGfRvp1wsMhIiVluW9qN6m5++hK7QzQLpKc2dkNp1OgATqEhc8cyHPvAiVGsHl1DUYpyK5nTkiaiisJFOtwmN3ZOgQkd2sekjqBWcL4ytbN3iZur/ChnWaeAnnas4acRkhkCLCtGa+6rsOqWHC93iWe2zh5sTMaLHCxf+Jz4mBL4+xOaDK9a0uCkKQsPg47I+nEVDJQ8flHc/UKucY6uHUx4Yk/vQdRkLeKH3jze9XV4+R2q/VArdNkMYa0TtcxE5spwdrMjsFt4kn4crcUik2IG8Wp+LcH3TII91/i04mcPMTIR7TNTgpN6Fq72ykSVN915aaoAHE/Aje3msrP/bleL4FtVTr5PnI8Xw8paucsfROUuQGTO/NOJDBwDkKzb8GcRSO3giH6gtxZ4bM5xFmY8g/5XE1UjmrypNFT36ZAK0uLv2Vplmn4Ot0sVKbyZtu9IOHdAfD/kBkMHC/+C4VgfQiIeNa0y57qgkhfLzYTl/Enb9rwCoYsnfzDrmEazeGGBqLjLeAY8REQ1pGo0/Du/TV42IsEoMbHIRbUrKR4GB+DoQKEA/ilZ04IOdD1Pm19e/86xn6lYl5oDEs/s02hMo0vU6B8TRyB3IavXi2Cu9Ebh3SYsHu3qR80Vnqworm0A+3JINhiLHX/c7qTLGusaFdK/gjHuYZvFLTpUXft2cuKz3Z2DIk2hIwKO4MxKbFsbXaBSuaji87BFwWBbizc40BXqOT+Bk2uLInYSYKo2VGeyyn1MlgMmGZm15PzTfL4jqF5pQ7ldRjNSHe0V/6ur1VpJaX3RDcPoa0x4P8F/BiJe1zmD1VZn71eyFMNtR1HiAHwDr+P2vEifAMWuWf8pQnASBfKD4eko17x9ptf1CxCYjdzpuNYIl8blfwmyEEQyyjkEzZISGG5t0WQT2YdVJnIu00zFySnUY8CYU5rhgpLgs4MIxVTzytVkhaxt1Ywq6dRJzFGTlkKBICzRne8+AibApXqh0Nwx37jyvBIvtOMqEaiPRA3waNeQSS6OMdVDj3gXva+0+MccU4pLf+hazFhz7cBxZXF+INwkFK1U4CCACv23RIPPUBVwL1R7Ze8g+CxdXIZe0iX8LPoeFjagmpNlDO31p7zS90+36pmDJVE3sPXyydFZdd6StjJ2dDCIMA05BKenCFOWdcb9ZGzKmf2imNc1ueYGuyhw6jL1VzUhlIRMLSYIwDzqz7YlH9UP07QBxZiTgR7gYK/R/3bE3IJBRVXqBozxNHWYz4cTHEXBos1RBydFXYUvsEX/dv34kVMbU/pmPF4t/r4mzwExS8IkPI1OswBFKcUGvlizlylDMqRfMavUFbW8jYBv/srOWTr2cYn7iv35uoU/nmThCNG9SWuGdxZFxQl2QHrjby2viPczVSbnydGYHjVUbOq0Ez7U+ZHuMypsXzS2u58ahqCHftsocLz8i4wj/n7MLwPz1hebKjmIH5YJXwu1Axc3DbtsLTtxv3DsOdogzL8BwaHg+5nCP3xLj37vZ7dD2Z5PA7t5EranJKO9RamE8fdHU32N52WYkjd1/O7zeofwPINPQA1Qsg6rg7u7XSZVmrVgU=",
+          "hash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentMetrics": {
+          "proofTime": 2,
+          "broadcastTime": 459,
+          "totalDeploymentTime": 4
+        },
+        "deploymentLineage": {
+          "originalAlias": "testnet-composed-force",
+          "originalAddress": "B62qpFH655kEpVDA3UBrvZfxiHhJKvm2QLw1PchY21s8nnPMtqPv7x8",
+          "originalDeployedAt": "2026-03-03T13:26:08.237Z",
+          "promotedFrom": "testnet-composed-force",
+          "promotedAt": "2026-03-10T08:58:37.714Z",
+          "replacedVkHash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentScope": {
+          "type": "FORCE_AUDIT_RECORD",
+          "servingAliases": [
+            "testnet-composed",
+            "testnet-composed-dev",
+            "testnet-composed-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-composed-force"
+        }
+      },
+      "ComposedOptimComplianceVerifierSC_FORCE_1773147755772": {
+        "address": "B62qik34sTDuT1QX4uhcANo5kEhqirELdfgxHdbua6VdJNr8D1CKkR9",
+        "status": "DEPLOYED",
+        "deployedAt": "2026-03-10T13:02:35.771Z",
+        "transactionHash": "5Jv1qwMZ4qNosDRmRVpoABUwDrLuwePjQbeu32JcimxcwZyfD4Xe",
+        "alias": "testnet-composed-force",
+        "oracle": "COMPOSED",
+        "contractName": "ComposedOptimComplianceVerifierSC",
+        "zkAppPrivateKey": "EKDvcBjEBZs8GDZ5GK7RXskvch4RngEJ3WMp2scUTBKf5kVQe665",
+        "verificationKey": {
+          "data": "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",
+          "hash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentMetrics": {
+          "proofTime": 1,
+          "broadcastTime": 391,
+          "totalDeploymentTime": 3
+        },
+        "deploymentLineage": {
+          "originalAlias": "testnet-composed-force",
+          "originalAddress": "B62qmxoqkgLuYqRW2GzTKdA1JMPDQjDKypskXnbqqt7VBuEpkcM4cR2",
+          "originalDeployedAt": "2026-03-10T08:58:37.714Z",
+          "promotedFrom": "testnet-composed-force",
+          "promotedAt": "2026-03-10T13:02:35.772Z",
+          "replacedVkHash": "16199640497799774486306027569085127532640170123062241316488324152440851049951"
+        },
+        "deploymentScope": {
+          "type": "FORCE_AUDIT_RECORD",
+          "servingAliases": [
+            "testnet-composed",
+            "testnet-composed-dev",
+            "testnet-composed-force"
+          ],
+          "reason": "Critical contract update via force deployment",
+          "sourceAlias": "testnet-composed-force"
+        }
       }
     }
   },
@@ -1674,21 +1963,25 @@
   "metadata": {
     "generated": "2025-07-06T23:00:00.000Z",
     "timestamp": "2025-07-06T23-00-00",
-    "accountCount": 12,
+    "accountCount": 14,
     "oracleTypes": [
       "MCA",
       "GLEIF",
       "EXIM",
       "BPMN",
       "RISK",
-      "BL_REGISTRY"
+      "BL_REGISTRY",
+      "COMPOSED"
     ],
-    "version": "3.6.23",
+    "version": "3.7.0",
     "separateAccounts": true,
     "deploymentAliases": [
       "testnet-gleif",
       "testnet-gleif-dev",
-      "testnet-gleif-force"
+      "testnet-gleif-force",
+      "testnet-composed",
+      "testnet-composed-dev",
+      "testnet-composed-force"
     ]
   }
 }

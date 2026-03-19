@@ -15,6 +15,45 @@ import { getGleifSignerAccount } from '../../core/OracleRegistry.js';
 export const MERKLE_TREE_HEIGHT = 8; // Height 8 for up to 256 fields
 export class MerkleWitness8 extends MerkleWitness(MERKLE_TREE_HEIGHT) {}
 
+// =================================== Field Indices for GLEIF Merkle Tree ===================================
+// MUST match GLEIFCoreAPIUtils.ts GLEIF_FIELD_INDICES exactly — both the key names
+// and numeric positions must align so the Merkle tree builder (createComprehensiveGLEIFMerkleTree)
+// and the witness generation in ComposedNetworkHandler/GLEIFNetworkHandler set the same leaves
+// that the ZK proof verifies.
+export const GLEIF_FIELD_INDICES = {
+  // Core entity fields
+  legalName: 0,          // entity.legalName.name
+  lei: 1,                // attributes.lei
+  entityStatus: 2,       // entity.status  — used by createComprehensiveGLEIFMerkleTree
+  entity_status: 2,      // alias — used by ComposedNetworkHandler witness lookup
+  legalForm: 3,          // entity.legalForm.id
+  jurisdiction: 4,       // entity.jurisdiction
+  legalAddress: 5,       // entity.legalAddress.addressLines[0]
+  legalCity: 6,          // entity.legalAddress.city
+  legalCountry: 7,       // entity.legalAddress.country
+
+  // Registration / authority fields
+  registrationAuthority: 8,        // entity.registeredAt.id
+  entityCategory: 9,               // entity.category
+  businessRegisterEntityId: 10,    // entity.registeredAs  (= CIN)
+  leiStatus: 11,                   // registration.status (copy for status checks)
+
+  // Temporal / date fields
+  initialRegistrationDate: 12,     // registration.initialRegistrationDate
+  lastUpdateDate: 13,              // registration.lastUpdateDate
+  nextRenewalDate: 14,             // registration.nextRenewalDate
+
+  // Compliance flags
+  registration_status: 15,         // registration.status  — verified in ZK proof
+  conformity_flag: 16,             // attributes.conformityFlag — verified in ZK proof
+  conformityFlag: 16,              // alias — used by ComposedNetworkHandler witness lookup
+
+  // Identifier codes
+  bic_codes: 17,                   // attributes.bic
+  mic_codes: 18,                   // attributes.mic
+  managingLou: 19,                 // registration.managingLou
+}as const;
+
 // =================================== Optimized GLEIF Data Structure ===================================
 export class GLEIFOptimComplianceData extends Struct({
    // Core identifiers

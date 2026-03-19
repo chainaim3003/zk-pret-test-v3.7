@@ -155,7 +155,11 @@ export const Registry = new Map<string, {
   ['BL_REGISTRY', {
     get publicKey() { return getPublicKeyFor('BPMN'); },
     get privateKey() { return getPrivateKeyFor('BPMN'); }
-  }]
+  }],
+  ['COMPOSED', {
+  get publicKey() { return getPublicKeyFor('COMPOSED'); },
+  get privateKey() { return getPrivateKeyFor('COMPOSED'); }
+}]
 ]);
 
 // ===== BACKWARD COMPATIBLE LEGACY EXPORTS =====
@@ -169,6 +173,7 @@ let eximDeployerAccount: any, eximDeployerKey: any, eximSenderAccount: any, exim
 let businessProverDeployerAccount: any, businessProverDeployerKey: any, businessProverSenderAccount: any, businessProverSenderKey: any;
 let riskProverDeployerAccount: any, riskProverDeployerKey: any, riskProverSenderAccount: any, riskProverSenderKey: any;
 let businessStdIntegrityDeployerAccount: any, businessStdIntegrityDeployerKey: any, businessStdIntegritySenderAccount: any, businessStdIntegritySenderKey: any;
+let composedDeployerAccount: any, composedDeployerKey: any, composedSenderAccount: any, composedSenderKey: any;
 
 function initializeLegacyAccounts() {
   if (legacyAccountsInitialized) return;
@@ -228,6 +233,15 @@ function initializeLegacyAccounts() {
     businessStdIntegritySenderKey = BlockchainManager.isLocalBlockchainReady() ? 
       BlockchainManager.getTestAccount(LOCAL_ORACLE_MAPPING.BSDI.sender).key : 
       getLocalOraclePrivateKey('BSDI');
+
+    composedDeployerAccount = getLocalOraclePublicKey('COMPOSED');
+    composedDeployerKey = getLocalOraclePrivateKey('COMPOSED');
+    composedSenderAccount = BlockchainManager.isLocalBlockchainReady() ? 
+      BlockchainManager.getTestAccount(LOCAL_ORACLE_MAPPING.COMPOSED.sender) : 
+      getLocalOraclePublicKey('COMPOSED');
+    composedSenderKey = BlockchainManager.isLocalBlockchainReady() ? 
+      BlockchainManager.getTestAccount(LOCAL_ORACLE_MAPPING.COMPOSED.sender).key : 
+      getLocalOraclePrivateKey('COMPOSED'); 
   } else {
     // For TESTNET/MAINNET, use network oracle keys
     try {
@@ -260,6 +274,12 @@ function initializeLegacyAccounts() {
       businessStdIntegrityDeployerKey = getNetworkOraclePrivateKey('BSDI');
       businessStdIntegritySenderAccount = getNetworkOraclePublicKey('BSDI');
       businessStdIntegritySenderKey = getNetworkOraclePrivateKey('BSDI');
+
+      composedDeployerAccount = getNetworkOraclePublicKey('COMPOSED');    
+      composedDeployerKey = getNetworkOraclePrivateKey('COMPOSED'); 
+      composedSenderAccount = getNetworkOraclePublicKey('COMPOSED');
+      composedSenderKey = getNetworkOraclePrivateKey('COMPOSED');
+      
     } catch (error) {
       console.warn(`Failed to initialize network oracle accounts: ${error}`);
       // Set to null for safety
@@ -269,6 +289,7 @@ function initializeLegacyAccounts() {
       businessProverDeployerAccount = null; businessProverDeployerKey = null; businessProverSenderAccount = null; businessProverSenderKey = null;
       riskProverDeployerAccount = null; riskProverDeployerKey = null; riskProverSenderAccount = null; riskProverSenderKey = null;
       businessStdIntegrityDeployerAccount = null; businessStdIntegrityDeployerKey = null; businessStdIntegritySenderAccount = null; businessStdIntegritySenderKey = null;
+      composedDeployerAccount = null; composedDeployerKey = null; composedSenderAccount = null; composedSenderKey = null;
     }
   }
   
@@ -300,6 +321,10 @@ function getBusinessStdIntegritydeployerAccount() { initializeLegacyAccounts(); 
 function getBusinessStdIntegritydeployerKey() { initializeLegacyAccounts(); return businessStdIntegrityDeployerKey; }
 function getBusinessStdIntegritysenderAccount() { initializeLegacyAccounts(); return businessStdIntegritySenderAccount; }
 function getBusinessStdIntegritysenderKey() { initializeLegacyAccounts(); return businessStdIntegritySenderKey; }
+function getComposeddeployerAccount() { initializeLegacyAccounts(); return composedDeployerAccount; }
+function getComposeddeployerKey() { initializeLegacyAccounts(); return composedDeployerKey; }
+function getComposedsenderAccount() { initializeLegacyAccounts(); return composedSenderAccount; }
+function getComposedsenderKey() { initializeLegacyAccounts(); return composedSenderKey; } 
 
 // Export with original names for backward compatibility (removed to avoid conflicts)
 export { getGLEIFdeployerAccount as GLEIFdeployerAccount, getGLEIFdeployerKey as GLEIFdeployerKey };
@@ -312,6 +337,7 @@ export { getRiskProverdeployerAccount as RiskProverdeployerAccount, getRiskProve
 export { getRiskProversenderAccount as RiskProversenderAccount, getRiskProversenderKey as RiskProversenderKey };
 export { getBusinessStdIntegritydeployerAccount as BusinessStdIntegritydeployerAccount, getBusinessStdIntegritydeployerKey as BusinessStdIntegritydeployerKey };
 export { getBusinessStdIntegritysenderAccount as BusinessStdIntegritysenderAccount, getBusinessStdIntegritysenderKey as BusinessStdIntegritysenderKey };
+export { getComposeddeployerAccount as ComposeddeployerAccount, getComposeddeployerKey as ComposeddeployerKey };
 // ===== SEMANTIC ORACLE ACCESS FUNCTIONS =====
 // These provide type-safe, semantic access to oracle accounts
 
@@ -401,6 +427,26 @@ export function getRiskDeployerAccount(): PublicKey {
 
 export function getRiskSenderAccount(): PublicKey {
   return getPublicKeyFor('RISK');
+}
+
+export function getComposedSignerKey(): PrivateKey {
+  return getPrivateKeyFor('COMPOSED');
+}
+
+export function getComposedDeployerKey(): PrivateKey {
+  return getPrivateKeyFor('COMPOSED');
+}
+
+export function getComposedSenderKey(): PrivateKey {
+  return getPrivateKeyFor('COMPOSED');
+}
+
+export function getComposedDeployerAccount(): PublicKey {
+  return getPublicKeyFor('COMPOSED');
+}
+
+export function getComposedSenderAccount(): PublicKey {
+  return getPublicKeyFor('COMPOSED');
 }
 
 // ===== GENERIC ORACLE ACCESS BY ROLE =====
@@ -514,6 +560,23 @@ export function MCAdeployerAccount(): PublicKey {
   return getPublicKeyFor('MCA');
 }
 
+// ===== COMPOSED ORACLE FUNCTIONS =====
+export function COMPOSEDdeployerKey(): PrivateKey {
+  return getPrivateKeyFor('COMPOSED');
+}
+
+export function COMPOSEDsenderKey(): PrivateKey {
+  return getPrivateKeyFor('COMPOSED');
+}
+
+export function COMPOSEDdeployerAccount(): PublicKey {
+  return getPublicKeyFor('COMPOSED');
+}
+
+export function COMPOSEDsenderAccount(): PublicKey {
+  return getPublicKeyFor('COMPOSED');
+}
+
 export function MCAsenderAccount(): PublicKey {
   return getPublicKeyFor('MCA');
 }
@@ -576,20 +639,4 @@ if (detectedEnvironment === 'LOCAL') {
   }
 } else {
   console.log(`🌐 Network environment - using real blockchain connections`);
-}
-// ===== COMPOSED ORACLE FUNCTIONS =====
-export function COMPOSEDdeployerKey(): PrivateKey {
-  return getPrivateKeyFor('COMPOSED');
-}
-
-export function COMPOSEDsenderKey(): PrivateKey {
-  return getPrivateKeyFor('COMPOSED');
-}
-
-export function COMPOSEDdeployerAccount(): PublicKey {
-  return getPublicKeyFor('COMPOSED');
-}
-
-export function COMPOSEDsenderAccount(): PublicKey {
-  return getPublicKeyFor('COMPOSED');
 }

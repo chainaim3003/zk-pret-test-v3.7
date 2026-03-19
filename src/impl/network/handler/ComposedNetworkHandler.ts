@@ -4,326 +4,654 @@ dotenv.config();
 import {
   Field,
   Mina,
-  PrivateKey,
   PublicKey,
-  AccountUpdate,
   UInt64,
+  CircuitString,
   MerkleTree,
+  Signature,
+  Poseidon,
+  fetchAccount,
 } from 'o1js';
 
-// Composed ZK Programs and Contracts
+// ─── Base classes (mirrors GLEIFNetworkHandler) ─────────────────────────────
+import { BaseVerificationCore } from '../../base/BaseVerificationCore.js';
+
+// ─── Composed ZK Program & Smart Contract ───────────────────────────────────
 import { ComposedOptimCompliance } from '../../../zk-programs/compliance/ComposedRecursiveOptim3LevelZKProgramWithSign.js';
 import {
   ComposedOptimComplianceVerifierSC,
   ComposedProofMerkleWitness,
 } from '../../../contracts/compliance/composed/ComposedRecursiveOptim3LevelSmartContractWithSign.js';
 
-// Infrastructure imports
+// ─── Individual ZK Programs ──────────────────────────────────────────────────
+import {
+  CorporateRegistrationOptim,
+  CorporateRegistrationOptimComplianceData,
+  CorporateRegistrationMerkleWitness8,
+  CORP_REG_FIELD_INDICES,
+} from '../../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js';
+
+import {
+  EXIM,
+  EXIMOptimComplianceData,
+  EXIMMerkleWitness8,
+  EXIM_FIELD_INDICES,
+} from '../../../zk-programs/compliance/EXIMZKProgram.js';
+
+import {
+  GLEIFOptim,
+  GLEIFOptimComplianceData,
+  MerkleWitness8,
+  GLEIF_FIELD_INDICES,
+} from '../../../zk-programs/compliance/GLEIFZKProgram.js';
+
+// ─── Infrastructure ──────────────────────────────────────────────────────────
 import {
   initializeOracleRegistry,
-  getDeployerAccount,
-  getDeployerKey,
   environmentManager,
+  compilationManager,
   getSenderAccount,
   getSenderKey,
 } from '../../../infrastructure/index.js';
 
-// FIXED: Correct import for network handlers
-import { CorporateRegistrationNetworkHandler } from './CorporateRegistrationNetworkHandler.js';
-import { EXIMNetworkHandler } from './EXIMNetworkHandler.js';
-import { GLEIFNetworkHandler } from './GLEIFNetworkHandler.js';
+// ─── API Utilities ────────────────────────────────────────────────────────────
+import {
+  fetchCorporateRegistrationDataWithFullLogging,
+  CorporateRegistrationAPIResponse,
+  analyzeCorporateRegistrationCompliance,
+  createComprehensiveCorporateRegistrationMerkleTree,
+  createOptimizedCorporateRegistrationComplianceData,
+} from '../../../utils/domain/compliance/CorpReg/CorporateRegistrationCoreAPIUtils.js';
 
-import { safeCircuitString, CIRCUIT_STRING_MAX_LENGTHS } from '../../../utils/core/CoreZKUtilities.js';
+import {
+  fetchEXIMDataWithFullLogging,
+  EXIMAPIResponse,
+  analyzeEXIMCompliance,
+  createComprehensiveEXIMMerkleTree,
+  createOptimizedEXIMComplianceData,
+} from '../../../utils/domain/compliance/EXIM/EXIMCoreAPIUtils.js';
+
+import {
+  fetchGLEIFDataWithFullLogging,
+  GLEIFAPIResponse,
+  analyzeGLEIFCompliance,
+  createComprehensiveGLEIFMerkleTree,
+  createOptimizedGLEIFComplianceData,
+} from '../../../utils/domain/compliance/GLEIF/GLEIFCoreAPIUtils.js';
+
+// ─── Oracle Keys ──────────────────────────────────────────────────────────────
+import {
+  getCorpRegSignerKey,
+  getEximSignerKey,
+  getGleifSignerKey,
+} from '../../../core/OracleRegistry.js';
+
+
+async function generateCorpRegProof(
+  companyNameOrCIN: string,
+  jurisdiction: string = 'IN',
+  timestamp: UInt64
+): Promise<{
+  proof: Awaited<ReturnType<typeof CorporateRegistrationOptim.proveOptimizedCompliance>>;
+  companyCINString: string;
+  companyCINCircuit: CircuitString;
+  complianceAnalysis: ReturnType<typeof analyzeCorporateRegistrationCompliance>;
+}> {
+  console.log(`\n🏛️  Generating Corporate Registration proof for: ${companyNameOrCIN}`);
+
+  const apiResponse: CorporateRegistrationAPIResponse =
+    await fetchCorporateRegistrationDataWithFullLogging(companyNameOrCIN, jurisdiction);
+
+  const resolvedCIN: string = apiResponse.data?.company_master_data?.cin ?? '';
+  if (!resolvedCIN) {
+    throw new Error(`No CIN found in API response for: "${companyNameOrCIN}"`);
+  }
+  console.log(`✅ Corp Reg CIN resolved from API: ${resolvedCIN}`);
+
+  const complianceAnalysis = analyzeCorporateRegistrationCompliance(apiResponse);
+  console.log(
+    `📊 Corp Reg Compliance: ${complianceAnalysis.complianceScore}% — ` +
+      `${complianceAnalysis.isCompliant ? '✅ COMPLIANT' : '❌ NON-COMPLIANT'}`
+  );
+
+  const { tree, extractedData } = createComprehensiveCorporateRegistrationMerkleTree(
+    apiResponse, MerkleTree, CircuitString, 8, CORP_REG_FIELD_INDICES
+  );
+  const merkleRoot = tree.getRoot();
+
+  const complianceData = createOptimizedCorporateRegistrationComplianceData(
+    extractedData, merkleRoot, CircuitString, CorporateRegistrationOptimComplianceData
+  );
+
+  const companyNameWitness        = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.companyName)));
+  const cinWitness                = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.CIN)));
+  const registrationNumberWitness = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.registrationNumber)));
+  const companyStatusWitness      = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.companyStatus)));
+  const dateOfIncorporationWitness= new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.dateOfIncorporation)));
+  const categoryWitness           = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.category)));
+  const classOfCompanyWitness     = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.classOfCompany)));
+  const numberOfPartnersWitness   = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.numberOfPartners)));
+  const listedWitness             = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.listed)));
+  const suspendedWitness          = new CorporateRegistrationMerkleWitness8(tree.getWitness(BigInt(CORP_REG_FIELD_INDICES.suspended)));
+  console.log('✅ All Corp Reg MerkleWitness8 instances created');
+
+  const oracleSignature = Signature.create(getCorpRegSignerKey(), [merkleRoot]);
+  console.log('✅ Corp Reg oracle signature generated');
+
+  console.log('⚡ Generating Corp Reg ZK proof...');
+  const proof = await CorporateRegistrationOptim.proveOptimizedCompliance(
+    timestamp, complianceData, oracleSignature,
+    companyNameWitness, cinWitness, registrationNumberWitness,
+    companyStatusWitness, dateOfIncorporationWitness, categoryWitness,
+    classOfCompanyWitness, numberOfPartnersWitness, listedWitness, suspendedWitness
+  );
+  console.log('✅ Corp Reg ZK proof generated successfully');
+
+  const companyCINCircuit: CircuitString = proof.publicOutput.CIN;
+  const companyCINString: string = companyCINCircuit.toString();
+
+  console.log(`📌 companyIdentifier will be taken from proof.publicOutput.CIN: "${companyCINString}"`);
+  if (companyCINString !== resolvedCIN) {
+    console.warn(`   ⚠️  API CIN "${resolvedCIN}" ≠ proof CIN "${companyCINString}". Using proof CIN.`);
+  }
+
+  return { proof, companyCINString, companyCINCircuit, complianceAnalysis };
+}
+
+async function generateEXIMProof(
+  companyName: string,
+  timestamp: UInt64
+): Promise<{
+  proof: Awaited<ReturnType<typeof EXIM.proveOptimizedCompliance>>;
+  complianceAnalysis: ReturnType<typeof analyzeEXIMCompliance>;
+}> {
+  console.log(`\n🚢 Generating EXIM proof for: ${companyName}`);
+
+  const apiResponse: EXIMAPIResponse = await fetchEXIMDataWithFullLogging(companyName);
+  const complianceAnalysis = analyzeEXIMCompliance(apiResponse);
+  console.log(
+    `📊 EXIM Compliance: ${complianceAnalysis.complianceScore}% — ` +
+      `${complianceAnalysis.isCompliant ? '✅ COMPLIANT' : '❌ NON-COMPLIANT'}`
+  );
+
+  const { tree, extractedData } = createComprehensiveEXIMMerkleTree(
+    apiResponse, MerkleTree, CircuitString, 8, EXIM_FIELD_INDICES
+  );
+  const merkleRoot = tree.getRoot();
+
+  const complianceData = createOptimizedEXIMComplianceData(
+    extractedData, merkleRoot, CircuitString, EXIMOptimComplianceData
+  );
+
+  const iecWitness                 = new EXIMMerkleWitness8(tree.getWitness(BigInt(EXIM_FIELD_INDICES.iec)));
+  const entityNameWitness          = new EXIMMerkleWitness8(tree.getWitness(BigInt(EXIM_FIELD_INDICES.entityName)));
+  const iecIssueDateWitness        = new EXIMMerkleWitness8(tree.getWitness(BigInt(EXIM_FIELD_INDICES.iecIssueDate)));
+  const panWitness                 = new EXIMMerkleWitness8(tree.getWitness(BigInt(EXIM_FIELD_INDICES.pan)));
+  const iecStatusWitness           = new EXIMMerkleWitness8(tree.getWitness(BigInt(EXIM_FIELD_INDICES.iecStatus)));
+  const iecModificationDateWitness = new EXIMMerkleWitness8(tree.getWitness(BigInt(EXIM_FIELD_INDICES.iecModificationDate)));
+  const dataAsOnWitness            = new EXIMMerkleWitness8(tree.getWitness(BigInt(EXIM_FIELD_INDICES.dataAsOn)));
+  console.log('✅ All EXIM EXIMMerkleWitness8 instances created');
+
+  const oracleSignature = Signature.create(getEximSignerKey(), [merkleRoot]);
+  console.log('✅ EXIM oracle signature generated');
+
+  console.log('⚡ Generating EXIM ZK proof...');
+  const proof = await EXIM.proveOptimizedCompliance(
+    timestamp, complianceData, oracleSignature,
+    iecWitness, entityNameWitness, iecIssueDateWitness,
+    panWitness, iecStatusWitness, iecModificationDateWitness, dataAsOnWitness
+  );
+  console.log('✅ EXIM ZK proof generated successfully');
+
+  return { proof, complianceAnalysis };
+}
+
+async function generateGLEIFProof(
+  companyName: string,
+  timestamp: UInt64
+): Promise<{
+  proof: Awaited<ReturnType<typeof GLEIFOptim.proveOptimizedCompliance>>;
+  companyLei: string;
+  complianceAnalysis: ReturnType<typeof analyzeGLEIFCompliance>;
+}> {
+  console.log(`\n🌍 Generating GLEIF proof for: ${companyName}`);
+
+  const apiResponse: GLEIFAPIResponse = await fetchGLEIFDataWithFullLogging(companyName);
+  const companyLei: string = apiResponse.data[0].attributes.lei;
+  if (!companyLei) throw new Error(`No LEI found for: "${companyName}"`);
+  console.log(`✅ GLEIF LEI resolved: ${companyLei}`);
+
+  const complianceAnalysis = analyzeGLEIFCompliance(apiResponse);
+  console.log(
+    `📊 GLEIF Compliance: ${complianceAnalysis.complianceScore}% — ` +
+      `${complianceAnalysis.isCompliant ? '✅ COMPLIANT' : '❌ NON-COMPLIANT'}`
+  );
+
+  const { tree, extractedData } = createComprehensiveGLEIFMerkleTree(
+    apiResponse, MerkleTree, CircuitString, 8, GLEIF_FIELD_INDICES
+  );
+  const merkleRoot = tree.getRoot();
+
+  const complianceData = createOptimizedGLEIFComplianceData(
+    extractedData, merkleRoot, CircuitString, GLEIFOptimComplianceData
+  );
+
+  const entityStatusWitness       = new MerkleWitness8(tree.getWitness(BigInt(GLEIF_FIELD_INDICES.entity_status)));
+  const registrationStatusWitness = new MerkleWitness8(tree.getWitness(BigInt(GLEIF_FIELD_INDICES.registration_status)));
+  const conformityFlagWitness     = new MerkleWitness8(tree.getWitness(BigInt(GLEIF_FIELD_INDICES.conformityFlag)));
+  const lastUpdateWitness         = new MerkleWitness8(tree.getWitness(BigInt(GLEIF_FIELD_INDICES.lastUpdateDate)));
+  const nextRenewalWitness        = new MerkleWitness8(tree.getWitness(BigInt(GLEIF_FIELD_INDICES.nextRenewalDate)));
+  const leiWitness                = new MerkleWitness8(tree.getWitness(BigInt(GLEIF_FIELD_INDICES.lei)));
+  const bicWitness                = new MerkleWitness8(tree.getWitness(BigInt(GLEIF_FIELD_INDICES.bic_codes)));
+  const micWitness                = new MerkleWitness8(tree.getWitness(BigInt(GLEIF_FIELD_INDICES.mic_codes)));
+  console.log('✅ All GLEIF MerkleWitness8 instances created');
+
+  const oracleSignature = Signature.create(getGleifSignerKey(), [merkleRoot]);
+  console.log('✅ GLEIF oracle signature generated');
+
+  console.log('⚡ Generating GLEIF ZK proof...');
+  const proof = await GLEIFOptim.proveOptimizedCompliance(
+    timestamp, complianceData, oracleSignature,
+    entityStatusWitness, registrationStatusWitness, conformityFlagWitness,
+    lastUpdateWitness, nextRenewalWitness, leiWitness, bicWitness, micWitness
+  );
+  console.log('✅ GLEIF ZK proof generated successfully');
+
+  return { proof, companyLei, complianceAnalysis };
+}
+
+
+export class ComposedNetworkHandler {
+  private baseCore: BaseVerificationCore;
+
+  constructor() {
+    this.baseCore = new BaseVerificationCore();
+  }
+
+  private static readonly TRANSACTION_FEES = {
+    LOCAL:   UInt64.from(1_000_000),
+    TESTNET: UInt64.from(100_000_000),
+    DEVNET:  UInt64.from(100_000_000),
+    MAINNET: UInt64.from(300_000_000),
+  };
+
+  private getTransactionFee(environment: string): UInt64 {
+    switch (environment.toUpperCase()) {
+      case 'LOCAL':   return ComposedNetworkHandler.TRANSACTION_FEES.LOCAL;
+      case 'TESTNET':
+      case 'DEVNET':  return ComposedNetworkHandler.TRANSACTION_FEES.TESTNET;
+      case 'MAINNET': return ComposedNetworkHandler.TRANSACTION_FEES.MAINNET;
+      default:
+        console.warn(`Unknown environment ${environment}, using TESTNET fee`);
+        return ComposedNetworkHandler.TRANSACTION_FEES.TESTNET;
+    }
+  }
+
+  public async runComposedTestWithFundedAccounts(
+    companyName: string,
+    companyCIN: string,
+    testIterations: number = 1
+  ): Promise<any> {
+    console.log('\n🔧 COMPOSED NETWORK TEST — ORACLE MODE');
+    console.log('='.repeat(70));
+
+    try {
+      await initializeOracleRegistry();
+
+      const currentEnv = environmentManager.getCurrentEnvironment();
+      const shouldConnectToDevnet = environmentManager.shouldConnectToDevnet();
+
+      console.log(`🌐 Environment: ${currentEnv}`);
+      console.log(`🔗 Connect to DEVNET: ${shouldConnectToDevnet}`);
+
+      if (shouldConnectToDevnet) {
+        console.log('✅ CONFIRMED: Oracle Registry initialised for DEVNET with funded accounts');
+        console.log(`🌐 Network: ${this.baseCore.getEnvironmentDisplayName()}`);
+        console.log('✅ DEVNET Oracle accounts accessible');
+      } else if (currentEnv === 'LOCAL') {
+        console.log('✅ LOCAL environment confirmed — will use local blockchain');
+      }
+
+      const result = await this.getComposedNetworkMultiVerifierUtils(
+        companyName, companyCIN, testIterations
+      );
+
+      console.log('\n✅ COMPOSED NETWORK TEST COMPLETED SUCCESSFULLY!');
+      if (shouldConnectToDevnet) {
+        console.log('🔗 Check: https://minascan.io/devnet/');
+      }
+
+      return result;
+    } catch (error) {
+      console.error('\n❌ COMPOSED NETWORK TEST FAILED');
+      if (error instanceof Error) console.error('Error:', error.message);
+      throw error;
+    }
+  }
+
+  public async getComposedNetworkMultiVerifierUtils(
+    companyName: string,
+    companyCIN: string,
+    testIterations: number = 1
+  ): Promise<any> {
+    console.log(`\n🚀 Composed Recursive Optim 3-Level Verification Started (NETWORK)`);
+    console.log(`🏢 Company:    ${companyName}`);
+    console.log(`🆔 CIN input:  ${companyCIN}`);
+    console.log(`🔄 Iterations: ${testIterations}`);
+    console.log('='.repeat(80));
+
+    try {
+      // ── 1. INFRASTRUCTURE INITIALIZATION ─────────────────────────────────
+      console.log('\n🔧 Initialising infrastructure system...');
+      await initializeOracleRegistry();
+
+      const currentEnvironment = environmentManager.getCurrentEnvironment();
+      console.log(`✅ Environment Manager: ${currentEnvironment}`);
+
+      await compilationManager.initialize();
+      console.log('✅ Compilation Manager initialised');
+
+      // ── 2. BLOCKCHAIN ENVIRONMENT ─────────────────────────────────────────
+      console.log('\n📋 Setting up blockchain environment...');
+      const shouldConnectToDevnet = environmentManager.shouldConnectToDevnet();
+
+      let senderAccount: PublicKey;
+      let senderKey: any;
+
+      if (shouldConnectToDevnet) {
+        console.log('🌐 DEVNET environment detected — using funded Oracle accounts');
+
+        const connected = this.baseCore.setupNetworkConnection();
+        if (!connected) {
+          throw new Error('Failed to establish DEVNET connection via BaseVerificationCore');
+        }
+        console.log('✅ Network connection established via BaseVerificationCore');
+
+        senderAccount = getSenderAccount('COMPOSED');
+        senderKey     = getSenderKey('COMPOSED');
+        console.log('✅ Blockchain environment initialised with DEVNET Oracle accounts');
+
+      } else {
+        console.log(`🔧 ${currentEnvironment} environment — creating LocalBlockchain`);
+        const Local = await Mina.LocalBlockchain({ proofsEnabled: false });
+        Mina.setActiveInstance(Local);
+        senderAccount = Local.testAccounts[1];
+        senderKey     = Local.testAccounts[1].key;
+        console.log('✅ Local blockchain initialised');
+      }
+
+      // ── 3. COMPILE ALL ZK PROGRAMS ────────────────────────────────────────
+      console.log('\n📝 Compiling ZK programs...');
+
+      await CorporateRegistrationOptim.compile();
+      console.log('✅ CorporateRegistrationOptim compiled');
+
+      await EXIM.compile();
+      console.log('✅ EXIM compiled');
+
+      await GLEIFOptim.compile();
+      console.log('✅ GLEIFOptim compiled');
+
+      await ComposedOptimCompliance.compile();
+      console.log('✅ ComposedOptimCompliance compiled');
+
+      const { verificationKey } = await ComposedOptimComplianceVerifierSC.compile();
+      console.log('✅ ComposedOptimComplianceVerifierSC compiled');
+
+      // ── 4. SMART CONTRACT LOOKUP ──────────────────────────────────────────
+      console.log('\n🚀 Looking up smart contract address...');
+
+      const contractAddress = await environmentManager.getDeployedContractAddress(
+        'ComposedOptimComplianceVerifierSC'
+      );
+      if (!contractAddress) {
+        throw new Error(
+          `ComposedOptimComplianceVerifierSC address not found in ` +
+            `${currentEnvironment.toLowerCase()}.json`
+        );
+      }
+
+      if (!environmentManager.validateContractAddress(contractAddress)) {
+        throw new Error(
+          `Invalid contract address format for ComposedOptimComplianceVerifierSC: ${contractAddress}`
+        );
+      }
+
+      console.log(`✅ Contract address found: ${contractAddress}`);
+      console.log(`📋 Source: config/environments/${currentEnvironment.toLowerCase()}.json`);
+
+      const zkAppAddress = PublicKey.fromBase58(contractAddress);
+      const zkApp        = new ComposedOptimComplianceVerifierSC(zkAppAddress);
+      const fee          = this.getTransactionFee(currentEnvironment);
+
+      // ── 5. ITERATION LOOP ─────────────────────────────────────────────────
+      const proofs: any[]              = [];
+      const verificationResults: any[] = [];
+
+      for (let iteration = 1; iteration <= testIterations; iteration++) {
+        console.log(`\n${'='.repeat(80)}`);
+        console.log(`🔄 Iteration ${iteration}/${testIterations} for ${companyName}`);
+        console.log(`${'='.repeat(80)}`);
+
+        try {
+          // Single timestamp: one Date.now() for everything
+          const nowMs          = Date.now();
+          const timestamp      = UInt64.from(nowMs);
+          const timestampField = Field.from(nowMs);
+
+          // ── A. Generate individual service proofs ───────────────────────────
+          console.log(`\n📡 Generating individual service proofs for ${companyName}...`);
+
+          const corpRegResult = await generateCorpRegProof(companyCIN, 'IN', timestamp);
+          const eximResult    = await generateEXIMProof(companyName, timestamp);
+          const gleifResult   = await generateGLEIFProof(companyName, timestamp);
+
+          console.log(`\n✅ All 3 individual ZK proofs generated for ${companyName}`);
+
+          // ── B. Compose in 3 levels ──────────────────────────────────────────
+          console.log(`\n🔗 Composing proofs in 3 levels for ${companyName}...`);
+
+          console.log('  📊 Level 1: Corporate Registration');
+          const level1Proof = await ComposedOptimCompliance.level1(
+            timestampField, corpRegResult.proof
+          );
+
+          console.log('  📊 Level 2: Level 1 + EXIM');
+          const level2Proof = await ComposedOptimCompliance.level2(
+            timestampField, level1Proof, eximResult.proof
+          );
+
+          console.log('  📊 Level 3: Level 2 + GLEIF (Final)');
+          const level3Proof = await ComposedOptimCompliance.level3(
+            timestampField, level2Proof, gleifResult.proof
+          );
+
+          console.log(`✅ 3-level proof composition completed for ${companyName}`);
+
+          // Guard: verify contract requirements before spending devnet fees
+          const servicesVal = level3Proof.publicOutput.servicesIncluded.toBigInt();
+          if (servicesVal !== 7n) {
+            throw new Error(
+              `servicesIncluded=${servicesVal} but contract requires Field(7).`
+            );
+          }
+          const versionVal = level3Proof.publicOutput.composedProofVersion.toBigInt();
+          if (versionVal !== 3n) {
+            throw new Error(
+              `composedProofVersion=${versionVal} but contract requires Field(3).`
+            );
+          }
+
+          // ── C. fetchAccount immediately before transaction (stale nonce fix) ──
+          console.log('\n🔄 Fetching fresh account state immediately before transaction...');
+          await fetchAccount({ publicKey: senderAccount });
+          await fetchAccount({ publicKey: zkAppAddress });
+          console.log('✅ Account state refreshed');
+
+          const totalBefore = zkApp.totalProofsStored.get();
+          const rootBefore  = zkApp.proofsRoot.get();
+          const tsBefore    = zkApp.lastUpdateTimestamp.get();
+          console.log('\n🔍 Smart Contract State BEFORE Verification:');
+          console.log(`  totalProofsStored:   ${totalBefore.toString()}`);
+          console.log(`  proofsRoot:          ${rootBefore.toString()}`);
+          console.log(`  lastUpdateTimestamp: ${tsBefore.toString()}`);
+
+          const currentTotal = zkApp.totalProofsStored.get();
+
+          // ── D. companyIdentifier from proof, not external param ─────────────
+          const companyIdentifier: CircuitString = corpRegResult.companyCINCircuit;
+          console.log(`📌 companyIdentifier: "${companyIdentifier.toString()}" (from CorpReg proof)`);
+
+          // ── E. Build Merkle witness — leaf formula mirrors contract exactly ──
+          console.log('\n💾 Building Merkle witness for composed proof storage...');
+
+          const sequenceNumber   = currentTotal.add(Field(1));
+          const companyIdentHash = companyIdentifier.hash();
+
+          const proofHash = Poseidon.hash([
+            level3Proof.publicOutput.underlyingProofsHash,
+            level3Proof.publicOutput.companyNameHash,
+            level3Proof.publicOutput.companyIdentifierHash,
+            timestampField,
+          ]);
+          const leafData = Poseidon.hash([
+            companyIdentHash,
+            sequenceNumber,
+            proofHash,
+            timestampField,
+          ]);
+
+          const proofsTree  = new MerkleTree(16);
+          const proofIndex  = currentTotal.toBigInt();
+          proofsTree.setLeaf(proofIndex, leafData);
+          const composedWitness = new ComposedProofMerkleWitness(proofsTree.getWitness(proofIndex));
+          console.log('✅ ComposedProofMerkleWitness created');
+
+          // ── F. Build transaction ────────────────────────────────────────────
+          console.log(`\n⚡ Executing smart contract verification transaction...`);
+
+          const verifyTxn = await Mina.transaction(
+            { sender: senderAccount, fee },
+            async () => {
+              await zkApp.verifyAndStoreComposedProof(
+                level3Proof,
+                companyIdentifier,
+                composedWitness,
+                timestampField
+              );
+            }
+          );
+
+          console.log('⚡ Generating transaction proof...');
+          const proveStart = Date.now();
+          await verifyTxn.prove();
+          console.log(`✅ Transaction proof generated (${((Date.now() - proveStart) / 1000).toFixed(2)}s)`);
+
+          console.log('📤 Signing and sending transaction...');
+          const pendingTxn = await verifyTxn.sign([senderKey]).send();
+          console.log('✅ Smart contract transaction completed');
+          console.log(`📤 Transaction hash: ${pendingTxn.hash}`);
+          console.log(`🔍 Track: https://minascan.io/devnet/tx/${pendingTxn.hash}`);
+
+          await fetchAccount({ publicKey: zkAppAddress });
+          const totalAfter = zkApp.totalProofsStored.get();
+          const rootAfter  = zkApp.proofsRoot.get();
+          const tsAfter    = zkApp.lastUpdateTimestamp.get();
+          console.log('\n🔍 Contract state AFTER verification:');
+          console.log(`  totalProofsStored:   ${totalAfter.toString()}`);
+          console.log(`  proofsRoot:          ${rootAfter.toString()}`);
+          console.log(`  lastUpdateTimestamp: ${tsAfter.toString()}`);
+          console.log('\n📈 STATE CHANGES:');
+          console.log(`  totalProofsStored:   ${totalBefore.toString()} → ${totalAfter.toString()}`);
+          console.log(`  proofsRoot:          ${rootBefore.toString()} → ${rootAfter.toString()}`);
+          console.log(`  lastUpdateTimestamp: ${tsBefore.toString()} → ${tsAfter.toString()}`);
+
+          proofs.push(level3Proof);
+          verificationResults.push({
+            companyName,
+            companyCIN_input:  companyCIN,
+            companyCIN_proof:  companyIdentifier.toString(),
+            iteration,
+            timestamp: nowMs,
+            isCompliant:
+              corpRegResult.complianceAnalysis.isCompliant &&
+              eximResult.complianceAnalysis.isCompliant &&
+              gleifResult.complianceAnalysis.isCompliant,
+            serviceCompliance: {
+              corpReg: {
+                score:     corpRegResult.complianceAnalysis.complianceScore,
+                compliant: corpRegResult.complianceAnalysis.isCompliant,
+                cin:       corpRegResult.companyCINString,
+              },
+              exim: {
+                score:     eximResult.complianceAnalysis.complianceScore,
+                compliant: eximResult.complianceAnalysis.isCompliant,
+              },
+              gleif: {
+                score:     gleifResult.complianceAnalysis.complianceScore,
+                compliant: gleifResult.complianceAnalysis.isCompliant,
+                lei:       gleifResult.companyLei,
+              },
+            },
+            transactionHash: pendingTxn?.hash ?? 'unknown',
+          });
+
+          console.log(`🎯 Iteration ${iteration} completed successfully for ${companyName}`);
+
+        } catch (iterError: any) {
+          console.error(
+            `❌ Error in iteration ${iteration} for ${companyName}:`,
+            iterError.message
+          );
+          verificationResults.push({
+            companyName,
+            companyCIN,
+            iteration,
+            error: iterError.message,
+          });
+        }
+      }
+
+      // ── 6. FINAL STATISTICS ────────────────────────────────────────────────
+      const successCount = verificationResults.filter((r) => !r.error).length;
+      const failCount    = verificationResults.filter((r) => r.error).length;
+
+
+      return {
+        company:                  companyName,
+        totalComposedProofs:      testIterations,
+        successfulVerifications:  successCount,
+        failedVerifications:      failCount,
+        proofs,
+        verificationResults,
+        environment:              currentEnvironment,
+      };
+
+    } catch (error: any) {
+      console.error('❌ Fatal error in Composed verification:', error);
+      throw error;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BACKWARD-COMPATIBLE EXPORTED FUNCTIONS (matches GLEIF pattern)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function runComposedTestWithFundedAccounts(
+  companyName: string,
+  companyCIN: string,
+  testIterations: number = 1
+): Promise<any> {
+  const handler = new ComposedNetworkHandler();
+  return handler.runComposedTestWithFundedAccounts(companyName, companyCIN, testIterations);
+}
 
 export async function getComposedNetworkMultiVerifierUtils(
   companyName: string,
   companyCIN: string,
   testIterations: number = 1
-) {
-  console.log(`\n🚀 Composed Recursive Optim 3-Level Verification Started (NETWORK)`);
-  console.log(`🏢 Company: ${companyName}`);
-  console.log(`🆔 CIN: ${companyCIN}`);
-  console.log(`🔄 Iterations: ${testIterations}`);
-
-  try {
-    // === INFRASTRUCTURE INITIALIZATION ===
-    console.log('\n🔧 Initializing infrastructure system...');
-
-    await initializeOracleRegistry();
-
-    const currentEnvironment = environmentManager.getCurrentEnvironment();
-    console.log(`✅ Environment Manager: ${currentEnvironment}`);
-
-    // === BLOCKCHAIN ENVIRONMENT SETUP ===
-    console.log('\n📋 Setting up blockchain environment...');
-
-    const shouldConnectToDevnet = environmentManager.shouldConnectToDevnet();
-
-    let deployerAccount: any;
-    let deployerKey: any;
-    let senderAccount: any;
-    let senderKey: any;
-
-    if (shouldConnectToDevnet) {
-      console.log('🌐 DEVNET environment detected - using funded Oracle accounts');
-
-      const network = Mina.Network('https://api.minascan.io/node/devnet/v1/graphql');
-      Mina.setActiveInstance(network);
-      console.log('✅ Connected to DEVNET');
-
-      deployerAccount = getDeployerAccount('MCA');
-      deployerKey = getDeployerKey('MCA');
-      senderAccount = getSenderAccount('MCA');
-      senderKey = getSenderKey('MCA');
-
-      console.log('✅ Blockchain environment initialized with DEVNET Oracle accounts');
-    } else {
-      console.log(`🔧 ${currentEnvironment} environment - creating LocalBlockchain`);
-
-      const Local = await Mina.LocalBlockchain({ proofsEnabled: false });
-      Mina.setActiveInstance(Local);
-
-      deployerAccount = Local.testAccounts[0];
-      deployerKey = Local.testAccounts[0].key;
-      senderAccount = Local.testAccounts[1];
-      senderKey = Local.testAccounts[1].key;
-
-      console.log('✅ Local blockchain initialized');
-    }
-
-    // === ZK COMPILATION ===
-    console.log('\n📝 Compiling ZK programs...');
-
-    const { CorporateRegistrationOptim } = await import(
-      '../../../zk-programs/compliance/CorporateRegistrationOptimZKProgram.js'
-    );
-    const { EXIM } = await import('../../../zk-programs/compliance/EXIMZKProgram.js');
-    const { GLEIFOptim } = await import('../../../zk-programs/compliance/GLEIFZKProgram.js');
-
-    await CorporateRegistrationOptim.compile();
-    console.log('✅ CorporateRegistrationOptim ZK program compiled');
-
-    await EXIM.compile();
-    console.log('✅ EXIM ZK program compiled');
-
-    await GLEIFOptim.compile();
-    console.log('✅ GLEIFOptim ZK program compiled');
-
-    await ComposedOptimCompliance.compile();
-    console.log('✅ ComposedOptimCompliance ZK program compiled');
-
-    const { verificationKey } = await ComposedOptimComplianceVerifierSC.compile();
-    console.log('✅ ComposedOptimComplianceVerifierSC compiled');
-
-    // === SMART CONTRACT LOOKUP OR DEPLOY ===
-    console.log('\n🚀 Looking up smart contract address...');
-
-    let contractAddress = await environmentManager.getDeployedContractAddress('ComposedOptimComplianceVerifierSC');
-
-    if (!contractAddress) {
-      if (currentEnvironment !== 'MAINNET') {
-        console.log('⚠️ Contract not found, deploying new instance...');
-
-        const zkAppKey = PrivateKey.random();
-        const zkAppAddress = zkAppKey.toPublicKey();
-        const zkApp = new ComposedOptimComplianceVerifierSC(zkAppAddress);
-
-        const fee = UInt64.from(100000000); // 0.1 MINA
-
-    const deployTxn = await Mina.transaction({ sender: deployerAccount, fee }, async () => {
-      AccountUpdate.fundNewAccount(deployerAccount);
-      await zkApp.deploy({ verificationKey });
-    });
-
-    await deployTxn.prove();
-    console.log('✅ Deployment transaction proven');
-
-    const pendingTx = await deployTxn.sign([deployerKey, zkAppKey]).send();
-    console.log(`📤 Transaction hash: ${pendingTx.hash}`);
-    console.log(`🔍 Track at: https://minascan.io/devnet/tx/${pendingTx.hash}`);
-
-    console.log('⏳ Waiting for transaction confirmation (may take 3-5 minutes)...');
-    await pendingTx.wait({ maxAttempts: 90, interval: 20000 });
-    console.log('✅ Deployment transaction confirmed!');
-
-    contractAddress = zkAppAddress.toBase58();
-    console.log(`✅ Contract deployed to: ${contractAddress}`);
-      } else {
-        throw new Error(`ComposedOptimComplianceVerifierSC address not found in ${currentEnvironment.toLowerCase()}.json`);
-      }
-    }
-
-    console.log(`✅ Contract address: ${contractAddress}`);
-
-    const zkAppAddress = PublicKey.fromBase58(contractAddress);
-    const zkApp = new ComposedOptimComplianceVerifierSC(zkAppAddress);
-
-    const fee = UInt64.from(100000000); // 0.1 MINA
-
-    // === PROCESSING ===
-    const proofs: any[] = [];
-    const verificationResults: any[] = [];
-
-    for (let iteration = 1; iteration <= testIterations; iteration++) {
-      console.log(`\n${'='.repeat(80)}`);
-      console.log(`🔄 Iteration ${iteration}/${testIterations} for ${companyName} (NETWORK)`);
-      console.log(`${'='.repeat(80)}`);
-
-      try {
-        // === GENERATE INDIVIDUAL SERVICE PROOFS ===
-        console.log(`\n📡 Generating individual service proofs for ${companyName}...`);
-
-        // FIXED: Use handler classes correctly
-        console.log(`🏛️ Generating Corporate Registration proof for company: ${companyName}...`);
-        const corpRegHandler = new CorporateRegistrationNetworkHandler();
-        const corpRegResult = await corpRegHandler.getCorporateRegistrationNetworkMultiVerifierUtils([companyName]);
-        if (!corpRegResult?.proofs?.[0]) {
-          throw new Error(`Failed to generate Corporate Registration proof for ${companyCIN}`);
-        }
-        const corpRegProof = corpRegResult.proofs[0];
-
-        console.log(`🚢 Generating EXIM proof with Company Name: ${companyName}...`);
-        const eximHandler = new EXIMNetworkHandler();
-        const eximResult = await eximHandler.getEXIMNetworkMultiVerifierUtils([companyName]);
-        if (!eximResult?.proofs?.[0]) {
-          throw new Error(`Failed to generate EXIM proof for ${companyName}`);
-        }
-        const eximProof = eximResult.proofs[0];
-
-        console.log(`🌍 Generating GLEIF proof with Company Name: ${companyName}...`);
-        const gleifHandler = new GLEIFNetworkHandler();
-        const gleifResult = await gleifHandler.getGLEIFNetworkMultiVerifierUtils([companyName]);
-        if (!gleifResult?.proofs?.[0]) {
-          throw new Error(`Failed to generate GLEIF proof for ${companyName}`);
-        }
-        const gleifProof = gleifResult.proofs[0];
-
-        console.log(`✅ All individual service proofs generated for ${companyName}`);
-
-        // === COMPOSE PROOFS IN 3 LEVELS ===
-        console.log(`\n🔗 Composing proofs in 3 levels for ${companyName}...`);
-
-        const timestamp = Field.from(Date.now());
-
-        console.log(`  📊 Level 1: Corporate Registration`);
-        const level1Proof = await ComposedOptimCompliance.level1(timestamp, corpRegProof);
-
-        console.log(`  📊 Level 2: Level 1 + EXIM`);
-        const level2Proof = await ComposedOptimCompliance.level2(timestamp, level1Proof, eximProof);
-
-        console.log(`  📊 Level 3: Level 2 + GLEIF (Final)`);
-        const level3Proof = await ComposedOptimCompliance.level3(timestamp, level2Proof, gleifProof);
-
-        console.log(`✅ 3-level proof composition completed for ${companyName}`);
-
-        // === STORE IN CONTRACT ===
-        console.log(`\n💾 Storing proof in contract...`);
-
-        const proofsTree = new MerkleTree(16);
-        const proofIndex = BigInt(iteration - 1);
-        const proofHash = Field.random();
-        proofsTree.setLeaf(proofIndex, proofHash);
-        const witness = proofsTree.getWitness(proofIndex);
-        const composedWitness = new ComposedProofMerkleWitness(witness);
-
-        const verifyTxn = await Mina.transaction({ sender: senderAccount, fee }, async () => {
-          await zkApp.verifyAndStoreComposedProof(
-            level3Proof,
-            safeCircuitString(companyCIN, CIRCUIT_STRING_MAX_LENGTHS.SHORT, 'companyCIN'),
-            composedWitness,
-            timestamp
-          );
-        });
-
-        console.log('⚡ Generating transaction proof (this may take 1-2 minutes)...');
-        
-        try {
-          const startProveTime = Date.now();
-          console.log('→ Starting prove() at', new Date().toISOString());
-          
-          await verifyTxn.prove();
-          
-          const proveTime = ((Date.now() - startProveTime) / 1000).toFixed(2);
-          console.log(`✅ Transaction proof generated successfully (${proveTime}s)`);
-          
-          // CRITICAL: Wait for proof object to stabilize before sending
-          // This prevents "Invalid_proof In progress" errors
-          console.log('⏳ Stabilizing proof object (2s delay)...');
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          console.log('✅ Proof object ready');
-        } catch (proveError: any) {
-          console.error('❌ Transaction proof generation failed!');
-          console.error('Error Type:', proveError.name);
-          console.error('Error Message:', proveError.message);
-          console.error('Full Error:', JSON.stringify(proveError, null, 2));
-          throw new Error(`prove() failed: ${proveError.message}`);
-        }
-
-          console.log('📤 Signing and sending transaction...');
-          try {
-            const pendingTx = await verifyTxn.sign([senderKey]).send();
-            console.log(`📤 Transaction hash: ${pendingTx.hash}`);
-            console.log(`🔍 Track at: https://minascan.io/devnet/tx/${pendingTx.hash}`);
-            
-            console.log('⏳ Waiting for transaction confirmation (may take 3-5 minutes)...');
-            await pendingTx.wait({ maxAttempts: 90, interval: 20000 });
-            console.log(`✅ Composed proof verified and stored on-chain for ${companyName}!`);
-          } catch (sendError: any) {
-            console.error('❌ Transaction send failed!');
-            console.error('Error Type:', sendError.name);
-            console.error('Error Message:', sendError.message);
-            if (sendError.errors) {
-              console.error('zkApp Errors:', JSON.stringify(sendError.errors, null, 2));
-            }
-            throw new Error(`send() failed: ${sendError.message}`);
-          }
-
-        proofs.push(level3Proof);
-        verificationResults.push({
-          companyName,
-          companyCIN,
-          iteration,
-          timestamp: Date.now(),
-          isCompliant: true,
-        });
-
-        console.log(`🎯 Iteration ${iteration} completed successfully for ${companyName}`);
-      } catch (error: any) {
-        console.error(`❌ Error in iteration ${iteration} for ${companyName}:`, error.message);
-        verificationResults.push({
-          companyName,
-          companyCIN,
-          iteration,
-          error: error.message,
-        });
-      }
-    }
-
-    // === FINAL STATISTICS ===
-    console.log(`\n${'='.repeat(80)}`);
-    console.log(`🎉 NETWORK Composed Verification Completed!`);
-    console.log(`${'='.repeat(80)}`);
-
-    const successCount = verificationResults.filter((r) => !r.error).length;
-    const failCount = verificationResults.filter((r) => r.error).length;
-
-    console.log(`\n📈 Final Statistics:`);
-    console.log(`  • Total Iterations: ${testIterations}`);
-    console.log(`  • Successful: ${successCount}`);
-    console.log(`  • Failed: ${failCount}`);
-
-    console.log(`\n✅ Composed verification completed!`);
-    return {
-      company: companyName,
-      totalComposedProofs: testIterations,
-      successfulVerifications: successCount,
-      failedVerifications: failCount,
-      proofs,
-      verificationResults,
-      environment: currentEnvironment,
-    };
-  } catch (error: any) {
-    console.error('❌ Error in Composed verification:', error);
-    throw error;
-  }
+): Promise<any> {
+  const handler = new ComposedNetworkHandler();
+  return handler.getComposedNetworkMultiVerifierUtils(companyName, companyCIN, testIterations);
 }

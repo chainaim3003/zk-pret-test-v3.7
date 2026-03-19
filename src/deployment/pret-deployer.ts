@@ -15,11 +15,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-// ===== CONTRACT REGISTRY: Single Source of Truth =====
 interface ContractRegistryEntry {
-  path: string;              // Contract file path (e.g., "complaince/CorpReg" or "process")
-  zkProgram: string;          // ZK Program name (e.g., "CorporateRegistrationOptimZKProgram")
-  zkProgramCategory: string;  // ZK Program category folder (e.g., "compliance" or "process")
+  path: string;
+  zkProgram: string;
+  zkProgramCategory: string;
+  fileName?: string;
+  exportName?: string;  // actual export name in the file, if different from derived name
+  dependencies?: Array<{
+    file: string;       // filename without .js
+    exportName: string; // exact exported const name
+    category: string;   // subfolder under zk-programs/
+  }>;
 }
 const CONTRACT_REGISTRY: { [contractName: string]: ContractRegistryEntry } = {
   // ===== Compliance / Corporate Registration =====
@@ -30,10 +36,12 @@ const CONTRACT_REGISTRY: { [contractName: string]: ContractRegistryEntry } = {
   },
   
   // ===== Compliance / GLEIF =====
-  'GLEIFMultiSmartContract': {
+  'GLEIFOptimMultiCompanySmartContract': {
     path: 'compliance/GLEIF', // or complaince/GLEIF if you move it
     zkProgram: 'GLEIFZKProgram',
-    zkProgramCategory: 'compliance'
+    zkProgramCategory: 'compliance',
+    fileName: 'GLEIFMultiSmartContract',
+    exportName: 'GLEIFOptim'  
   },
   
   // ===== Compliance / EXIM =====
@@ -74,15 +82,22 @@ const CONTRACT_REGISTRY: { [contractName: string]: ContractRegistryEntry } = {
     path: 'risk',
     zkProgram: 'RiskLiquidityBasel3ZKProgram',
     zkProgramCategory: 'risk'
-  }
+  },
 
-  
-  // ===== ADD NEW CONTRACTS HERE =====
-  // 'YourNewContract': {
-  //   path: 'process', // or 'complaince/CorpReg', 'risk', etc.
-  //   zkProgram: 'YourZKProgram',
-  //   zkProgramCategory: 'process' // or 'compliance', 'risk', etc.
-  // }
+  // Compliance - Composed Optimized 3-Level Recursive Proof
+'ComposedOptimComplianceVerifierSC': {
+  path: 'compliance/composed',
+  zkProgram: 'ComposedRecursiveOptim3LevelZKProgramWithSign',
+  zkProgramCategory: 'compliance',
+  fileName: 'ComposedRecursiveOptim3LevelSmartContractWithSign',
+  exportName: 'ComposedOptimCompliance',
+  dependencies: [
+    { file: 'CorporateRegistrationOptimZKProgram', exportName: 'CorporateRegistrationOptim', category: 'compliance' },
+    { file: 'EXIMZKProgram',                       exportName: 'EXIM',                       category: 'compliance' },
+    { file: 'GLEIFZKProgram',                      exportName: 'GLEIFOptim',                 category: 'compliance' }
+  ]
+}
+
 };
 
 
@@ -732,7 +747,7 @@ export class PRETDeployer {
     return entry;
   });
     const contractLoading = await this.addMicroStepAsync(step, 'LOAD_CONTRACT_CLASS', async () => {
-      const contractPath = `../contracts/${registryEntry.path}/${contractName}.js`;
+      const contractPath = `../contracts/${registryEntry.path}/${registryEntry.fileName || contractName}.js`;
 
       try {
         const contractModule = await import(contractPath);
@@ -741,7 +756,7 @@ export class PRETDeployer {
         if (!ContractClass) {
           throw new Error(`Contract class '${contractName}' not found in ${contractPath}`);
         }
-
+      
         return { ContractClass, contractPath };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -750,38 +765,49 @@ export class PRETDeployer {
     });
 
     // Compile dependencies first - Dynamic dependency resolution
-    await this.addMicroStepAsync(step, 'COMPILE_DEPENDENCIES', async () => {
-      // Map contract names to their ZK program dependencies
-
-      const zkProgramName = registryEntry.zkProgram;
-      const zkProgramCategory = registryEntry.zkProgramCategory;
-        console.log(`   🔄 Compiling dependencies... (${zkProgramName})`);
-        
-        try {
-
-          // Construct ZK program path
-        const zkProgramPath = `../zk-programs/${zkProgramCategory}/${zkProgramName}.js`;
-        const zkProgramModule = await import(zkProgramPath);
-          
-          // Extract program name from file name (remove 'ZKProgram' suffix)
-          const programName = zkProgramName.replace('ZKProgram', '');
-          const ZKProgram = zkProgramModule[programName];
-          
-          if (!ZKProgram) {
-            throw new Error(`ZK Program '${programName}' not found in ${zkProgramName}`);
-          }
-          
-          const dependencyStart = Date.now();
-          await ZKProgram.compile();
-          const dependencyTime = Date.now() - dependencyStart;
-          
-          console.log(`   ✅ ${programName} ZK program compiled in ${dependencyTime}ms`);
-          return { dependencyTime, programName };
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : String(error);
-          throw new Error(`Failed to compile dependencies: ${errorMessage}`);
+await this.addMicroStepAsync(step, 'COMPILE_DEPENDENCIES', async () => {
+  try {
+    // Step A: Compile prerequisite dependencies in order (if any)
+    if (registryEntry.dependencies && registryEntry.dependencies.length > 0) {
+      console.log(`   🔄 Compiling ${registryEntry.dependencies.length} prerequisite(s) in order...`);
+      for (const dep of registryEntry.dependencies) {
+        const depPath = `../zk-programs/${dep.category}/${dep.file}.js`;
+        const depModule = await import(depPath);
+        const DepProgram = depModule[dep.exportName];
+        if (!DepProgram) {
+          throw new Error(`Export '${dep.exportName}' not found in ${dep.file}.js`);
         }
-    });
+        const depStart = Date.now();
+        await DepProgram.compile();
+        console.log(`   ✅ ${dep.exportName} compiled in ${Date.now() - depStart}ms`);
+      }
+    }
+
+    // Step B: Compile the main ZK program
+    const zkProgramName = registryEntry.zkProgram;
+    const zkProgramCategory = registryEntry.zkProgramCategory;
+    const mainExportName = registryEntry.exportName || zkProgramName.replace('ZKProgram', '');
+    console.log(`   🔄 Compiling main ZK program: ${mainExportName}`);
+
+    const zkProgramPath = `../zk-programs/${zkProgramCategory}/${zkProgramName}.js`;
+    const zkProgramModule = await import(zkProgramPath);
+    const MainProgram = zkProgramModule[mainExportName];
+
+    if (!MainProgram) {
+      throw new Error(`Export '${mainExportName}' not found in ${zkProgramName}.js`);
+    }
+
+    const mainStart = Date.now();
+    await MainProgram.compile();
+    const mainTime = Date.now() - mainStart;
+    console.log(`   ✅ ${mainExportName} compiled in ${mainTime}ms`);
+
+    return { mainExportName, mainTime };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to compile dependencies: ${errorMessage}`);
+  }
+});
 
     const compilation = await this.addMicroStepAsync(step, 'COMPILE_CONTRACT', async () => {
       const { ContractClass } = contractLoading;
@@ -885,7 +911,7 @@ export class PRETDeployer {
         {
           sender: senderPublicKey,
           fee: 100_000_000, // 0.1 MINA
-          memo: `Deploy via ${aliasName}`
+          memo: aliasName.substring(0, 32)
         },
         async () => {
           AccountUpdate.fundNewAccount(senderPublicKey);
