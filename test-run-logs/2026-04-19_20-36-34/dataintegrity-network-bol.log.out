@@ -1,0 +1,162 @@
+🔍 Environment Detection Debug:
+  BUILD_ENV: TESTNET
+  NODE_ENV: undefined
+  MINA_ENV: undefined
+🎯 Selected environment value: "TESTNET"
+✅ Environment "TESTNET" mapped to: TESTNET
+🔍 Environment Validation:
+  Current Environment: TESTNET
+  Should use NetworkOracleRegistry: true
+  Should connect to DEVNET: true
+🌍 Oracle Registry: Detected environment: TESTNET
+✅ Oracle Registry: Clean architecture initialized for TESTNET environment
+🌐 Network environment - using real blockchain connections
+
+🌐 Business Standard Integrity NETWORK Multi-Verifier Started
+======================================================================
+✅ REAL ZK Proofs: Uses actual BusinessStdIntegrityOptimMerkleVerifier
+✅ REAL Network: Submits to actual MINA blockchain
+✅ REAL Merkle Trees: All cryptographic operations are genuine
+
+🔍 DEBUG: Network verifier started
+📋 Arguments received: 3
+📂 Args: ["group1","BOL","./src/data/scf/BILLOFLADING/BOL-VALID-1.json"]
+📊 Mode: Single Document
+📋 Document Count: 1
+🌍 Network: TESTNET
+======================================================================
+
+🚀 Starting enhanced business standard integrity verification...
+📂 Single Document: BOL (./src/data/scf/BILLOFLADING/BOL-VALID-1.json)
+
+🔧 DEBUG: About to call runBusinessStdIntegrityTestWithFundedAccounts...
+⚠️  If hanging occurs after this message, the issue is in NetworkHandler
+
+🌐 Starting Business Standard Integrity NETWORK Verification
+======================================================================
+📄 Document Type: BOL
+📂 Document File: ./src/data/scf/BILLOFLADING/BOL-VALID-1.json
+🌍 Network: TESTNET
+✅ REAL ZK Proofs: Using actual BusinessStdIntegrityOptimMerkleVerifier
+✅ REAL Network: Submitting to actual MINA blockchain
+
+📂 Loading document data from: ./src/data/scf/BILLOFLADING/BOL-VALID-1.json
+✅ Document data loaded successfully
+
+🔧 Setting up TESTNET network connection...
+
+📋 Step 1: Initializing Oracle Registry
+
+🚀 Starting Enhanced Oracle Registry Initialization...
+
+📊 Pre-initialization Status:
+  Environment: TESTNET
+  Should use NetworkOracleRegistry: true
+  Should connect to DEVNET: true
+  Expected blockchain: MINA DEVNET
+
+🏗️ Creating Oracle Registry...
+🏭 Oracle Registry Factory:
+  Environment: TESTNET
+  Expected Registry Type: NetworkOracleRegistry
+🌐 Creating NetworkOracleRegistry for TESTNET (DEVNET connection)
+🔗 This WILL connect to real MINA DEVNET blockchain
+🚀 Initializing NetworkOracleRegistry...
+
+🚀 Initializing TESTNET Oracle Registry...
+============================================================
+🌐 Setting up network connection for TESTNET...
+✅ Environment config loaded: config\environments\testnet.json
+✅ Loaded existing config for TESTNET
+🎯 Target: MINA DEVNET
+📡 Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+🆔 Network ID: testnet
+📊 Connection setup:
+   Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+   Target: DEVNET
+✅ Network instance configured for DEVNET
+🔗 Ready to connect to DEVNET blockchain
+📋 Loading pre-funded DEVNET accounts from config/environments/testnet.json...
+📁 Found 7 account groups in config/environments/testnet.json
+✅ MCA:
+   Deployer: B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA
+   Sender:   B62qkojT9M5HGT3ydaWVmw3tX6ZeZyd5Nb2ABUY49kGQFgZkcHgkDW1
+   Deployer Balance: 246.200 MINA
+✅ GLEIF:
+   Deployer: B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3
+   Sender:   B62qofi6mojnWf1MQwL94C7Fgy91Hn9zzojbppYmKHdeVYrsHXnJJ5U
+   Deployer Balance: 241.100 MINA
+✅ EXIM:
+   Deployer: B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL
+   Sender:   B62qiux4fhjCR2tQrEo6iLoKVEaFSDoG2uxsj8Z23JfsJA61KENDB55
+   Deployer Balance: 297.900 MINA
+✅ BPMN:
+   Deployer: B62qrpRopAxfDFkAjyHkxTcWysHnv36YKAjh7TK3nirEEvTMhKrfSVx
+   Sender:   B62qnpF1AWj3ePCZsXKotRuqbi1Y6Fv69YZ7XJGcq88u7ZGyZbu9Mvm
+   Deployer Balance: 299.000 MINA
+✅ RISK:
+   Deployer: B62qiciGYeA6nKQumL45veZ6xeQQQ3p8anUNSEXmU3G8iqL1Pc6DtCE
+   Sender:   B62qioTkbviE6J4BjQPac9UNcTVkSKzicNGWjynh5jK3fXoymScVRny
+   Deployer Balance: 258.200 MINA
+✅ BSDI:
+   Deployer: B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi
+   Sender:   B62qrWCSiE9AruxBbxVHKg4z31dDGaCoUXxHVwQ71Uuo1AkkTuLFrYg
+   Deployer Balance: 299.000 MINA
+✅ COMPOSED:
+   Deployer: B62qosF7dD9PAM94iG7UM5ot9BUJyuE6yGVLdk2NDRsneoYvhYjkGWX
+   Sender:   B62qkTSyqTJozscp8p7fYia1pKpV9ZAy68eeabQpPLeJZ5LqQTQER5K
+   Deployer Balance: 295.700 MINA
+✅ Loaded 7 deployer accounts from config/environments/testnet.json
+📋 Available roles: MCA, GLEIF, EXIM, BPMN, RISK, BSDI, COMPOSED
+🔍 Verifying setup...
+✅ Setup verification passed
+   Deployer accounts: 7
+   Sender accounts: 7
+✅ TESTNET Oracle Registry initialized successfully!
+🎯 Ready to deploy to DEVNET using pre-funded accounts
+🔗 Transactions will appear at: https://minascan.io/devnet/
+============================================================
+🔍 Registry Validation:
+  Expected: NetworkOracleRegistry
+  Actual: NetworkOracleRegistry
+✅ VERIFIED: NetworkOracleRegistry confirmed for TESTNET - will connect to DEVNET
+✅ Registry validation passed
+
+🔍 Verifying Network Connection...
+🔍 Network Connection Verification:
+  Environment: TESTNET
+  Registry Type: NetworkOracleRegistry
+  Registry Instance: NetworkOracleRegistry
+✅ DEVNET Connection Verified: NetworkOracleRegistry active
+🌐 Transactions will appear in DEVNET explorer
+
+✅ Oracle Registry Initialization Complete!
+📡 Blockchain Target: MINA DEVNET
+🔗 Registry Type: NetworkOracleRegistry
+🎯 Transactions will be visible at:
+   • https://minascan.io/devnet/
+   • https://devnet.minaexplorer.com/
+
+================================================================================
+
+✅ Connected to TESTNET network
+
+📋 Step 2: Setting up environment
+🌐 Environment: TESTNET
+🔗 Connect to DEVNET: true
+
+📋 Step 3: Setting up accounts
+🌐 DEVNET environment detected - using funded Oracle accounts
+🌍 Current environment: TESTNET
+🧪 Using DEVNET endpoint for TESTNET environment
+🔗 Connecting to DEVNET via https://api.minascan.io/node/devnet/v1/graphql
+✅ Network connection established for DEVNET
+✅ Network connection established via BaseVerificationCore
+💰 Verifying DEVNET account balances...
+💰 Sender Balance: 289.500 MINA
+✅ Blockchain environment initialized with DEVNET Oracle accounts
+🏦 Deployer Account: B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi
+💸 Sender Account: B62qrWCSiE9AruxBbxVHKg4z31dDGaCoUXxHVwQ71Uuo1AkkTuLFrYg
+
+📋 Step 4: Compiling ZK programs...
+🔧 Compiling ZK Program...

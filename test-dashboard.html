@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZK-PRET Test Dashboard</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #22263a;
+  --border: rgba(255,255,255,0.08);
+  --text: #e8eaf0;
+  --muted: #7a7f9a;
+  --pass: #4ade80;
+  --pass-bg: rgba(74,222,128,0.12);
+  --fail: #f87171;
+  --fail-bg: rgba(248,113,113,0.12);
+  --err: #fb923c;
+  --err-bg: rgba(251,146,60,0.12);
+  --blue: #60a5fa;
+  --blue-bg: rgba(96,165,250,0.12);
+  --radius: 10px;
+  --mono: 'Cascadia Code','Fira Code','Courier New',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.6}
+
+/* HEADER */
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:15px;font-weight:600;letter-spacing:-.2px}
+.logo span{color:var(--muted);font-weight:400}
+.header-right{display:flex;align-items:center;gap:10px}
+#status-badge{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
+.btn{padding:7px 14px;border:1px solid var(--border);border-radius:7px;background:var(--surface2);color:var(--text);font-size:13px;cursor:pointer;transition:all .15s}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn-load{background:var(--blue-bg);color:var(--blue);border-color:var(--blue)}
+
+/* LAYOUT */
+.main{max-width:1280px;margin:0 auto;padding:24px}
+
+/* TABS */
+.tab-bar{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.tab{padding:9px 18px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .15s;border-radius:6px 6px 0 0}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--blue-bg)}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.card-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.card-val{font-size:28px;font-weight:600;line-height:1}
+.card-val.pass{color:var(--pass)}
+.card-val.fail{color:var(--fail)}
+.card-val.err{color:var(--err)}
+.card-val.blue{color:var(--blue)}
+
+/* WEEK STRIP */
+.week-nav{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.week-label{font-size:13px;font-weight:500;min-width:200px;text-align:center;color:var(--text)}
+.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:24px}
+.day-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 8px;text-align:center;cursor:pointer;transition:all .15s;min-height:80px}
+.day-cell:hover{border-color:var(--blue)}
+.day-cell.active{border-color:var(--blue);background:var(--blue-bg)}
+.day-cell.empty{opacity:.3;pointer-events:none}
+.day-name{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.day-date{font-size:12px;font-weight:500;margin-bottom:8px}
+.dots{display:flex;flex-wrap:wrap;gap:3px;justify-content:center}
+.dot{width:9px;height:9px;border-radius:50%}
+.dot.pass{background:var(--pass)}
+.dot.fail{background:var(--fail)}
+.dot.none{background:var(--border)}
+
+/* RUN LIST */
+.run-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.run-row{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.run-row:hover{border-color:var(--blue)}
+.run-row.selected{border-color:var(--blue);background:var(--blue-bg)}
+.run-title{font-size:13px;font-weight:500}
+.run-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.run-stats{font-size:12px;color:var(--muted);white-space:nowrap;margin-left:auto}
+
+/* BADGE / PILL */
+.badge{display:inline-block;padding:2px 9px;border-radius:5px;font-size:11px;font-weight:600;letter-spacing:.03em}
+.badge.PASSED,.pill.PASSED{color:var(--pass);background:var(--pass-bg);border:1px solid rgba(74,222,128,.25)}
+.badge.FAILED,.pill.FAILED{color:var(--fail);background:var(--fail-bg);border:1px solid rgba(248,113,113,.25)}
+.badge.ERROR,.pill.ERROR{color:var(--err);background:var(--err-bg);border:1px solid rgba(251,146,60,.25)}
+.pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500}
+.mode-tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px;color:var(--muted);border:1px solid var(--border)}
+
+/* TEST TABLE */
+.tbl-wrap{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 12px;text-align:left;background:var(--surface2);border-bottom:1px solid var(--border)}
+thead th:first-child{border-radius:8px 0 0 0}
+thead th:last-child{border-radius:0 8px 0 0}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+tbody tr:hover{background:var(--surface2)}
+tbody tr.row-sel{background:var(--blue-bg)}
+tbody td{padding:9px 12px;font-size:13px}
+
+/* LOG PANEL */
+.log-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:16px;margin-bottom:24px}
+.log-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)}
+.log-title{font-size:13px;font-weight:500}
+.log-body{padding:16px;font-family:var(--mono);font-size:12px;white-space:pre-wrap;word-break:break-all;max-height:520px;overflow-y:auto;line-height:1.7}
+.log-body .le{color:var(--fail)}
+.log-body .lp{color:var(--pass)}
+.log-body .lh{color:var(--blue);font-weight:700}
+.log-empty{padding:28px;text-align:center;color:var(--muted);font-size:13px}
+
+/* FILTER PILLS */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.fp{padding:4px 12px;border-radius:20px;border:1px solid var(--border);font-size:12px;cursor:pointer;color:var(--muted);transition:all .15s}
+.fp:hover,.fp.active{background:var(--blue-bg);color:var(--blue);border-color:var(--blue)}
+
+/* PROGRESS BAR */
+.bar-wrap{display:flex;align-items:center;gap:8px}
+.bar-bg{flex:1;background:var(--border);border-radius:4px;height:6px;min-width:60px}
+.bar-fill{height:100%;border-radius:4px}
+
+/* EMPTY / SETUP STATE */
+.setup{background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);padding:40px 32px;margin-bottom:24px}
+.setup h2{font-size:16px;font-weight:600;margin-bottom:16px}
+.setup-steps{counter-reset:step;display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.step-body{font-size:13px;color:var(--muted);line-height:1.7}
+.step-body strong{color:var(--text)}
+code{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--mono);font-size:12px;color:var(--blue)}
+
+/* SECTION TITLE */
+.sec{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">ZK-PRET <span>Test Dashboard</span></div>
+  <div class="header-right">
+    <span id="status-badge">No data loaded</span>
+    <label class="btn btn-load" style="cursor:pointer">
+      📂 Load logs folder
+      <input type="file" id="folder-input" webkitdirectory multiple style="display:none" onchange="handleFiles(this.files)">
+    </label>
+  </div>
+</header>
+
+<div class="main">
+
+<!-- ===== SETUP STATE (shown when no data) ===== -->
+<div id="setup-panel" class="setup">
+  <h2>👋 Welcome — here's how to get started</h2>
+  <div class="setup-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Open PowerShell</strong> in your project folder:<br>
+        Right-click inside the folder → "Open in Terminal" or "Open PowerShell window here"
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Run the test script</strong> (copy-paste this exactly):<br>
+        <code>powershell -ExecutionPolicy Bypass -File .\run-tests-and-log.ps1</code><br>
+        <br>
+        To run only one category:<br>
+        <code>powershell -ExecutionPolicy Bypass -File .\run-tests-and-log.ps1 -Suite compliance</code><br>
+        <code>powershell -ExecutionPolicy Bypass -File .\run-tests-and-log.ps1 -Suite risk</code>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>After the script finishes</strong>, a folder called <code>test-run-logs</code> will appear next to this HTML file.
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Load the logs</strong>: Click <strong>📂 Load logs folder</strong> above → select the <code>test-run-logs</code> folder → click "Upload" / "Open".
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN APP (hidden until data is loaded) ===== -->
+<div id="app" style="display:none">
+
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab('week')">📅 Weekly View</div>
+    <div class="tab" onclick="switchTab('runs')">📋 All Runs</div>
+    <div class="tab" onclick="switchTab('summary')">📊 Week Summary</div>
+  </div>
+
+  <!-- ======= TAB: WEEK VIEW ======= -->
+  <div id="tab-week">
+    <div class="week-nav">
+      <button class="btn" onclick="shiftWeek(-1)">← Prev week</button>
+      <span class="week-label" id="week-label"></span>
+      <button class="btn" onclick="shiftWeek(1)">Next week →</button>
+    </div>
+    <div class="week-strip" id="week-strip"></div>
+    <div id="day-detail" style="display:none">
+      <div class="sec" id="day-detail-title"></div>
+      <div class="run-list" id="day-run-list"></div>
+      <div id="day-run-detail"></div>
+    </div>
+  </div>
+
+  <!-- ======= TAB: ALL RUNS ======= -->
+  <div id="tab-runs" style="display:none">
+    <div class="cards" id="global-cards"></div>
+    <div class="filters" id="cat-filters"></div>
+    <div class="run-list" id="all-run-list"></div>
+    <div id="all-run-detail"></div>
+  </div>
+
+  <!-- ======= TAB: WEEK SUMMARY ======= -->
+  <div id="tab-summary" style="display:none">
+    <div id="summary-content"></div>
+  </div>
+
+</div><!-- /#app -->
+</div><!-- /.main -->
+
+<script>
+// ========== STATE ==========
+let allRuns = [];
+let logMap  = {};    // { runId: { testId: logText } }
+let weekStart = null;
+let activeTab = 'week';
+let selRunId  = null;
+let selTestKey = null;  // "testId::runId"
+let catFilter = 'All';
+
+// ========== FILE LOADING ==========
+function handleFiles(files) {
+  const summaries = [];
+  const logs = {};
+  const readers = [];
+
+  for (const file of files) {
+    readers.push(new Promise(resolve => {
+      const rel = file.webkitRelativePath || file.name;
+      // Normalize separators
+      const parts = rel.replace(/\\/g, '/').split('/');
+      // Find the segment that looks like a run timestamp: YYYY-MM-DD_HH-mm-ss
+      const tsIdx = parts.findIndex(p => /^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}$/.test(p));
+      if (tsIdx === -1) { resolve(); return; }
+
+      const runId = parts[tsIdx];
+      const fname = parts[tsIdx + 1];
+      if (!fname) { resolve(); return; }
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        const text = e.target.result;
+        if (fname === 'summary.json') {
+          try { summaries.push(JSON.parse(text)); } catch(err) { console.warn('Bad JSON:', fname, err); }
+        } else if (fname.endsWith('.log')) {
+          const tid = fname.slice(0, -4);
+          if (!logs[runId]) logs[runId] = {};
+          logs[runId][tid] = text;
+        }
+        resolve();
+      };
+      reader.onerror = () => resolve();
+      reader.readAsText(file);
+    }));
+  }
+
+  Promise.all(readers).then(() => {
+    if (!summaries.length) {
+      alert('No summary.json files found.\n\nMake sure you:\n1. Ran the PowerShell script first\n2. Selected the "test-run-logs" folder (not the project root)');
+      return;
+    }
+    allRuns = summaries.sort((a, b) => a.runId.localeCompare(b.runId));
+    logMap  = logs;
+
+    const latestDate = parseRunDate(allRuns[allRuns.length - 1].runId);
+    weekStart = getMonday(latestDate);
+
+    document.getElementById('setup-panel').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('status-badge').textContent = allRuns.length + ' run(s) loaded';
+    document.getElementById('status-badge').style.color = 'var(--pass)';
+
+    renderAll();
+  });
+}
+
+// ========== DATE HELPERS ==========
+function parseRunDate(runId) {
+  // "2026-04-07_14-30-00"
+  const [d, t] = runId.split('_');
+  const [h, m, s] = t.split('-');
+  return new Date(`${d}T${h}:${m}:${s}`);
+}
+function getMonday(d) {
+  const x = new Date(d);
+  const day = x.getDay();
+  x.setDate(x.getDate() - (day === 0 ? 6 : day - 1));
+  x.setHours(0, 0, 0, 0);
+  return x;
+}
+function addDays(d, n) { return new Date(d.getTime() + n * 86400000); }
+function fmtShort(d) { return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }); }
+function fmtTime(d)  { return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }); }
+function fmtFull(runId) {
+  try { const d = parseRunDate(runId); return fmtShort(d) + ' ' + fmtTime(d); }
+  catch { return runId; }
+}
+function dayStr(d) { return d.toISOString().slice(0, 10); }
+
+// ========== TAB SWITCHING ==========
+function switchTab(tab) {
+  activeTab = tab;
+  ['week','runs','summary'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.toggle('active', ['week','runs','summary'][i] === tab);
+  });
+  renderAll();
+}
+function renderAll() {
+  if (activeTab === 'week')    renderWeekTab();
+  if (activeTab === 'runs')    renderRunsTab();
+  if (activeTab === 'summary') renderSummaryTab();
+}
+
+// ========== WEEK TAB ==========
+function shiftWeek(d) { weekStart = addDays(weekStart, d * 7); renderWeekTab(); }
+
+function renderWeekTab() {
+  const ws = weekStart;
+  const we = addDays(ws, 6);
+  document.getElementById('week-label').textContent = fmtShort(ws) + '  →  ' + fmtShort(we);
+
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const strip = document.getElementById('week-strip');
+  strip.innerHTML = '';
+
+  for (let i = 0; i < 7; i++) {
+    const day = addDays(ws, i);
+    const ds  = dayStr(day);
+    const runs = allRuns.filter(r => r.runId.startsWith(ds));
+
+    const cell = document.createElement('div');
+    cell.className = 'day-cell' + (runs.length === 0 ? ' empty' : '');
+    cell.innerHTML = `
+      <div class="day-name">${days[i]}</div>
+      <div class="day-date">${fmtShort(day)}</div>
+      <div class="dots">${
+        runs.length === 0
+          ? '<div class="dot none"></div>'
+          : runs.map(r => `<div class="dot ${r.overallStatus === 'PASSED' ? 'pass' : 'fail'}" title="${r.runId}: ${r.overallStatus}"></div>`).join('')
+      }</div>
+    `;
+    if (runs.length > 0) cell.onclick = () => showDayDetail(ds, runs);
+    strip.appendChild(cell);
+  }
+}
+
+function showDayDetail(ds, runs) {
+  document.getElementById('day-detail').style.display = '';
+  document.getElementById('day-detail-title').textContent =
+    'Runs on ' + ds + '  (' + runs.length + ' run' + (runs.length > 1 ? 's' : '') + ')';
+
+  const list = document.getElementById('day-run-list');
+  list.innerHTML = '';
+  runs.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'run-row' + (selRunId === r.runId ? ' selected' : '');
+    row.innerHTML = runRowHTML(r);
+    row.onclick = () => { selRunId = r.runId; selTestKey = null; showDayDetail(ds, runs); showRunDetail(r, 'day-run-detail'); };
+    list.appendChild(row);
+  });
+
+  if (selRunId) {
+    const run = runs.find(r => r.runId === selRunId);
+    if (run) showRunDetail(run, 'day-run-detail');
+  }
+}
+
+// ========== ALL RUNS TAB ==========
+function renderRunsTab() {
+  const total  = allRuns.reduce((s,r) => s + r.total, 0);
+  const passed = allRuns.reduce((s,r) => s + r.passed, 0);
+  const failed = allRuns.reduce((s,r) => s + r.failed, 0);
+  const errors = allRuns.reduce((s,r) => s + (r.errored||0), 0);
+
+  document.getElementById('global-cards').innerHTML = `
+    <div class="card"><div class="card-label">Total Runs</div><div class="card-val blue">${allRuns.length}</div></div>
+    <div class="card"><div class="card-label">Tests Run</div><div class="card-val">${total}</div></div>
+    <div class="card"><div class="card-label">Passed</div><div class="card-val pass">${passed}</div></div>
+    <div class="card"><div class="card-label">Failed</div><div class="card-val fail">${failed}</div></div>
+    <div class="card"><div class="card-label">Errors</div><div class="card-val err">${errors}</div></div>
+    <div class="card"><div class="card-label">Pass Rate</div><div class="card-val ${passed===total?'pass':'fail'}">${total?Math.round(passed/total*100):0}%</div></div>
+  `;
+
+  const cats = ['All', ...new Set(allRuns.flatMap(r => r.tests.map(t => t.category)))];
+  document.getElementById('cat-filters').innerHTML = cats.map(c =>
+    `<div class="fp ${catFilter===c?'active':''}" onclick="setCat('${c}')">${c}</div>`
+  ).join('');
+
+  const list = document.getElementById('all-run-list');
+  list.innerHTML = '';
+  [...allRuns].reverse().forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'run-row' + (selRunId === r.runId ? ' selected' : '');
+    row.innerHTML = runRowHTML(r);
+    row.onclick = () => { selRunId = r.runId; selTestKey = null; renderRunsTab(); showRunDetail(r, 'all-run-detail'); };
+    list.appendChild(row);
+  });
+
+  if (selRunId) {
+    const run = allRuns.find(r => r.runId === selRunId);
+    if (run) showRunDetail(run, 'all-run-detail');
+  }
+}
+
+function setCat(c) { catFilter = c; renderRunsTab(); }
+
+function runRowHTML(r) {
+  return `
+    <span class="badge ${r.overallStatus}">${r.overallStatus}</span>
+    <div style="flex:1;min-width:0">
+      <div class="run-title">${fmtFull(r.runId)}</div>
+      <div class="run-sub">Suite: ${r.suite || 'all'}  ·  Run ID: ${r.runId}</div>
+    </div>
+    <div class="run-stats">${r.passed}/${r.total} passed${r.failed?'  · <span style="color:var(--fail)">'+r.failed+' failed</span>':''}</div>
+  `;
+}
+
+// ========== RUN DETAIL (shared between tabs) ==========
+function showRunDetail(run, containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+  let tests = run.tests;
+  if (catFilter !== 'All') tests = tests.filter(t => t.category === catFilter);
+
+  let html = `
+    <div class="cards" style="margin-top:0;margin-bottom:16px">
+      <div class="card"><div class="card-label">Overall</div>
+        <div class="card-val ${run.overallStatus==='PASSED'?'pass':'fail'}" style="font-size:18px">${run.overallStatus}</div></div>
+      <div class="card"><div class="card-label">Passed</div><div class="card-val pass">${run.passed}</div></div>
+      <div class="card"><div class="card-label">Failed</div><div class="card-val fail">${run.failed}</div></div>
+      <div class="card"><div class="card-label">Errors</div><div class="card-val err">${run.errored||0}</div></div>
+      <div class="card"><div class="card-label">Total</div><div class="card-val">${run.total}</div></div>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Status</th><th>Test Description</th><th>Category</th>
+        <th>Mode</th><th>Duration</th><th>Exit</th>
+      </tr></thead><tbody>
+  `;
+
+  tests.forEach(t => {
+    const key = t.testId + '::' + run.runId;
+    const sel = selTestKey === key;
+    html += `<tr class="${sel?'row-sel':''}" onclick="selectTest('${t.testId}','${run.runId}','${containerId}')">
+      <td><span class="pill ${t.status}">${t.status}</span></td>
+      <td>${esc(t.description)}</td>
+      <td>${esc(t.category)}</td>
+      <td><span class="mode-tag">${esc(t.mode)}</span></td>
+      <td>${t.durationSec}s</td>
+      <td style="color:${t.exitCode===0?'var(--pass)':'var(--fail)'}">${t.exitCode}</td>
+    </tr>`;
+  });
+
+  html += `</tbody></table></div><div id="logviewer-${containerId}"></div>`;
+  el.innerHTML = html;
+
+  // Re-render log if a test was already selected for this run
+  if (selTestKey && selTestKey.endsWith('::' + run.runId)) {
+    const tid = selTestKey.split('::')[0];
+    renderLog(tid, run.runId, containerId);
+  }
+}
+
+function selectTest(testId, runId, containerId) {
+  selTestKey = testId + '::' + runId;
+  const run = allRuns.find(r => r.runId === runId);
+  if (run) showRunDetail(run, containerId);
+  renderLog(testId, runId, containerId);
+}
+
+function renderLog(testId, runId, containerId) {
+  const el = document.getElementById('logviewer-' + containerId);
+  if (!el) return;
+
+  const runLogs = logMap[runId] || {};
+  const text = runLogs[testId];
+
+  const run  = allRuns.find(r => r.runId === runId);
+  const test = run && run.tests.find(t => t.testId === testId);
+
+  if (!text) {
+    el.innerHTML = `<div class="log-panel"><div class="log-empty">
+      ⚠️ Log file not found in memory.<br><br>
+      Make sure you selected the full <code>test-run-logs</code> folder (not just the run subfolder).<br>
+      The .log files must be inside a timestamp subfolder like <code>test-run-logs/2026-04-07_14-30-00/</code>
+    </div></div>`;
+    return;
+  }
+
+  const colored = text.split('\n').map(line => {
+    const lo = line.toLowerCase();
+    if (lo.includes('error') || lo.includes('failed') || lo.includes('exception'))
+      return `<span class="le">${esc(line)}</span>`;
+    if (lo.includes('success') || lo.includes('passed') || lo.includes('verified') || lo.includes('proof generated'))
+      return `<span class="lp">${esc(line)}</span>`;
+    if (line.startsWith('===') || line.startsWith('---'))
+      return `<span class="lh">${esc(line)}</span>`;
+    return esc(line);
+  }).join('\n');
+
+  el.innerHTML = `
+    <div class="log-panel">
+      <div class="log-header">
+        <span class="log-title">${test ? esc(test.description) : testId}</span>
+        ${test ? `<span class="badge ${test.status}">${test.status}</span>` : ''}
+      </div>
+      <div class="log-body">${colored}</div>
+    </div>
+  `;
+}
+
+// ========== WEEK SUMMARY TAB ==========
+function renderSummaryTab() {
+  const ws = weekStart;
+  const we = addDays(ws, 7);
+  const weekRuns = allRuns.filter(r => {
+    const d = parseRunDate(r.runId);
+    return d >= ws && d < we;
+  });
+
+  if (!weekRuns.length) {
+    document.getElementById('summary-content').innerHTML = `
+      <div style="text-align:center;padding:60px;color:var(--muted)">
+        <div style="font-size:32px;margin-bottom:12px">📭</div>
+        <div style="font-size:15px;font-weight:500;color:var(--text);margin-bottom:8px">No runs this week</div>
+        <div style="font-size:13px">Use ← Prev week in the Weekly View tab to navigate to a week that has runs.</div>
+      </div>`;
+    return;
+  }
+
+  // Aggregate per test
+  const testMap = {};
+  weekRuns.forEach(run => {
+    run.tests.forEach(t => {
+      if (!testMap[t.testId]) testMap[t.testId] = { desc: t.description, cat: t.category, mode: t.mode, results: [] };
+      testMap[t.testId].results.push({ status: t.status, runId: run.runId });
+    });
+  });
+
+  const rows = Object.entries(testMap).map(([id, data]) => {
+    const passes = data.results.filter(r => r.status === 'PASSED').length;
+    const total  = data.results.length;
+    const last   = data.results[data.results.length - 1];
+    return { id, ...data, passes, total, last };
+  });
+
+  const overallPass = rows.filter(r => r.last.status === 'PASSED').length;
+  const overallTotal = rows.length;
+
+  let html = `
+    <div class="cards" style="margin-bottom:20px">
+      <div class="card"><div class="card-label">Week</div><div class="card-val blue" style="font-size:14px;line-height:1.4">${fmtShort(ws)}<br>${fmtShort(addDays(we,-1))}</div></div>
+      <div class="card"><div class="card-label">Runs</div><div class="card-val blue">${weekRuns.length}</div></div>
+      <div class="card"><div class="card-label">Tests (last run)</div><div class="card-val">${overallTotal}</div></div>
+      <div class="card"><div class="card-label">Passing now</div><div class="card-val pass">${overallPass}</div></div>
+      <div class="card"><div class="card-label">Failing now</div><div class="card-val fail">${overallTotal - overallPass}</div></div>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Test</th><th>Category</th><th>Mode</th>
+        <th>Pass rate</th><th>Last status</th><th>Run history</th>
+      </tr></thead><tbody>
+  `;
+
+  rows.forEach(r => {
+    const pct = Math.round(r.passes / r.total * 100);
+    const barColor = pct === 100 ? 'var(--pass)' : pct >= 50 ? 'var(--err)' : 'var(--fail)';
+    const dots = r.results.map(res =>
+      `<span style="display:inline-block;width:11px;height:11px;border-radius:50%;
+       background:${res.status==='PASSED'?'var(--pass)':'var(--fail)'};margin:1px;
+       title='${fmtFull(res.runId)}: ${res.status}'"></span>`
+    ).join('');
+    html += `<tr>
+      <td>${esc(r.desc)}</td>
+      <td>${esc(r.cat)}</td>
+      <td><span class="mode-tag">${esc(r.mode)}</span></td>
+      <td>
+        <div class="bar-wrap">
+          <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+          <span style="font-size:11px;color:var(--muted);white-space:nowrap">${r.passes}/${r.total}</span>
+        </div>
+      </td>
+      <td><span class="pill ${r.last.status}">${r.last.status}</span></td>
+      <td>${dots}</td>
+    </tr>`;
+  });
+
+  html += `</tbody></table></div>`;
+  document.getElementById('summary-content').innerHTML = html;
+}
+
+// ========== UTILS ==========
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>

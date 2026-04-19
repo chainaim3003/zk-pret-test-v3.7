@@ -1,0 +1,9 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : dataintegrity-network-bol
+Category    : DataIntegrity
+Mode        : Network
+Description : Business Std Data Integrity - BOL (Network)
+Command     : node ./build/impl/network/verifier/BusinessStdIntegrityNetworkMultiVerifier.js group1 BOL ./src/data/scf/BILLOFLADING/BOL-VALID-1.json
+StartTime   : 2026-04-19T20:42:39
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---

@@ -1,0 +1,258 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : compliance-local-exim
+Category    : Compliance
+Mode        : Local
+Description : EXIM Optimized (Local)
+Command     : npm run test:local-complete-EXIM -- SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+StartTime   : 2026-04-07T19:44:40
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---
+
+EndTime     : 2026-04-07T19:47:01
+Duration    : 140.74s
+ExitCode    : 0
+Status      : PASSED
+
+=== STDOUT ===
+
+> recursion@0.1.5 test:local-complete-EXIM
+> npm run build && node build/scripts/local/local-deploy-verify-EXIM.js SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+
+
+> recursion@0.1.5 build
+> npx tsc
+
+🏠 LOCAL Deploy + Verify Pipeline - EXIM (O1JS Best Practices)
+=================================================================
+
+🔍 Verifying company "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" using consolidated local handler...
+🌍 Oracle Registry: Detected environment: LOCAL
+🔧 BlockchainManager: Creating shared LocalBlockchain instance...
+✅ Oracle Registry: Clean architecture initialized for LOCAL environment
+🔧 LocalBlockchain will be created for test compatibility
+
+🎯 Starting verification for: "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
+
+🚀 EXIM LOCAL Multi-Company Verification Test Started
+🏢 Companies: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+🏠 Environment: LOCAL (local blockchain only)
+📊 Total Companies: 1
+
+🔧 Setting up local blockchain...
+✅ BlockchainManager: LocalBlockchain initialized (proofs: true)
+
+📝 Compiling ZK programs...
+✅ EXIMOptim ZK program compiled
+✅ EXIMMultiSmartContract compiled
+
+🚀 Deploying multi-company smart contract...
+✅ Multi-company smart contract deployed successfully
+
+================================================================================
+🏢 Processing Company 1/1: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+================================================================================
+
+📡 Fetching EXIM data for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+
+🚀 Starting EXIM Data Fetch
+🔍 Company Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+Type of Network: LOCAL
+------------------------------------------------using live API for LOCAL--------------------------------------------------
+EXIM API Response: {
+  iec: 'U01112TZ2022PTC039493',
+  entityName: 'SREE PALANI ANDAVAR AGROS PRIVATE LIMITED',
+  addressLine1: 'Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)',
+  addressLine2: 'Coimbatore, Tamil Nadu',
+  city: 'Coimbatore',
+  state: 'Tamil Nadu',
+  pin: 641010,
+  contactNo: 9950000005,
+  email: 'neemspmsaravanan@gmail.com',
+  iecIssueDate: '12092018',
+  exporterType: 4,
+  pan: 'FFFCM4177LFT001',
+  activeComplianceStatusCode: 1,
+  iecStatus: 0,
+  starStatus: 3,
+  iecModificationDate: '27042021',
+  dataAsOn: '2024-08-08T12:30:06.567Z',
+  natureOfConcern: 2,
+  branches: [
+    {
+      branchCode: 6,
+      badd1: 'Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)',
+      badd2: 'Coimbatore, Tamil Nadu',
+      city: 'Coimbatore',
+      state: 'Tamil Nadu',
+      pin: 641010
+    }
+  ],
+  directors: [ { name: 'SARAVANAN ABIRAMI' }, { name: 'SUBRAMANIAN SARAVANAN' } ]
+}
+
+🚢 ===== EXIM API RESPONSE =====
+🔍 Query: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+📅 Timestamp: 2026-04-07T14:16:39.487Z
+🔄 API Response Structure Analysis:
+📋 Production API Response:
+  Success: unknown
+  Has Data: true
+
+🚢 EXIM Data Analysis:
+  Total Fields Available: 20
+
+🆔 Core Identification:
+  IEC: U01112TZ2022PTC039493
+  Entity Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  PAN: FFFCM4177LFT001
+  IEC Status: 0
+
+📅 Important Dates:
+  IEC Issue Date: 12092018
+  IEC Modification Date: 27042021
+  Data As On: 2024-08-08T12:30:06.567Z
+
+📊 Status Information:
+  IEC Status: 0
+  Exporter Type: 4
+  Active Compliance Status Code: 1
+  Star Status: 3
+  Nature of Concern: 2
+
+🏠 Address Information:
+  Address Line 1: Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)
+  Address Line 2: Coimbatore, Tamil Nadu
+  City: Coimbatore
+  State: Tamil Nadu
+  PIN: 641010
+
+📞 Contact Information:
+  Contact No: 9950000005
+  Email: neemspmsaravanan@gmail.com
+
+📋 Complete Field Inventory (All fields):
+  1. activeComplianceStatusCode: 1
+  2. addressLine1: Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)
+  3. addressLine2: Coimbatore, Tamil Nadu
+  4. branches: [Array with 1 items]
+  5. city: Coimbatore
+  6. contactNo: 9950000005
+  7. dataAsOn: 2024-08-08T12:30:06.567Z
+  8. directors: [Array with 2 items]
+  9. email: neemspmsaravanan@gmail.com
+  10. entityName: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  11. exporterType: 4
+  12. iec: U01112TZ2022PTC039493
+  13. iecIssueDate: 12092018
+  14. iecModificationDate: 27042021
+  15. iecStatus: 0
+  16. natureOfConcern: 2
+  17. pan: FFFCM4177LFT001
+  18. pin: 641010
+  19. starStatus: 3
+  20. state: Tamil Nadu
+
+✅ EXIM Response Analysis Complete
+==========================================
+
+✅ EXIM data fetched successfully for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+
+🔍 Analyzing compliance for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+📊 Compliance Score: 100%
+✅ Is Compliant: true
+
+🌳 Creating comprehensive Merkle tree for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+🌳 Creating comprehensive EXIM Merkle tree...
+📋 Processing Production API structure...
+  Set field iec (0): "U01112TZ2022PTC039493"
+  Set field entityName (1): "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
+  Set field iecIssueDate (2): "12092018"
+  Set field pan (3): "FFFCM4177LFT001"
+  Set field iecStatus (4): 0
+  Set field iecModificationDate (5): "27042021"
+  Set field dataAsOn (6): "2024-08-08T12:30:06.567Z"
+  Set field addressLine1 (7): "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, ..."
+  Set field addressLine2 (8): "Coimbatore, Tamil Nadu"
+  Set field city (9): "Coimbatore"
+  Set field state (10): "Tamil Nadu"
+  Set field email (11): "neemspmsaravanan@gmail.com"
+  Set field exporterType (12): 4
+  Set field activeComplianceStatusCode (13): 1
+  Set field starStatus (14): 3
+  Set field natureOfConcern (15): 2
+✅ Created Merkle tree with 16 fields
+🌳 Merkle root: 17806508674926557069712223933978789873337364816837513245688993916293778164717
+✅ Merkle tree created with 16 fields
+
+🔐 Preparing ZK proof data for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+
+🔏 Generating oracle signature for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+✅ Oracle signature generated
+
+⚡ Generating ZK proof for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+📊 Proving compliance for: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+🆔 IEC: U01112TZ2022PTC039493
+📋 PAN: FFFCM4177LFT001
+📍 IEC Status: 0
+✅ ZK proof generated successfully for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+
+================================================================================
+🎉 EXIM LOCAL Multi-Company Verification Completed!
+================================================================================
+
+📈 Final Registry Statistics:
+  • Total Companies Tracked: 0
+  • Compliant Companies: 0
+  • Compliance Percentage: 0%
+  • Total Verifications: 0
+
+🏢 Companies Processed:
+  1. SREE PALANI ANDAVAR AGROS PRIVATE LIMITED: ✅ COMPLIANT
+     IEC: U01112TZ2022PTC039493
+     Score: 100%
+
+📋 Enhanced Contract Features Demonstrated:
+  • Multi-Company Tracking: ✅
+  • Individual Company Queries (Same as SingleCompany): ✅
+  • Company Name-based Compliance Queries: ✅
+  • Global Compliance Metrics: ✅
+  • Company Registry Management: ✅
+  • Merkle Tree Storage: ✅
+  • Aggregate Statistics: ✅
+  • Individual Company Verification: ✅
+  • Company Info Retrieval: ✅
+  • Current Compliance Status: ✅
+  • Verification Statistics: ✅
+  • Identity-based Company Tracking: ✅
+  • Administrative Functions: ✅
+
+================================================================================
+📋 VERIFICATION RESULTS
+================================================================================
+
+🏢 Company 1: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+✅ Status: Success
+🔢 LEI: U01112TZ2022PTC039493
+📊 Compliance Score: 100%
+✓ Is Compliant: Yes
+⏰ Timestamp: 2026-04-07T14:16:39.825Z
+
+================================================================================
+📈 SUMMARY
+================================================================================
+🏢 Total Companies Processed: 0
+✅ Successful Verifications: 1
+❌ Failed Verifications: 0
+🔐 ZK Proofs Generated: 1
+
+🎉 Verification completed successfully!
+
+🎉 LOCAL Deploy + Verify completed successfully!
+✅ O1JS Best Practices followed
+✅ Consolidated local handler used
+✅ Composition pattern for shared compliance logic
+✅ No deployment conflicts
+✅ EXIM-specific verification completed
+
+=== STDERR ===
+=== END ===

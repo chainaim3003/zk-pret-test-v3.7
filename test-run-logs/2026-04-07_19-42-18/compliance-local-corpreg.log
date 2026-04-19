@@ -1,0 +1,269 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : compliance-local-corpreg
+Category    : Compliance
+Mode        : Local
+Description : Corporate Registration (Local)
+Command     : npm run test:local-complete-CorpReg -- U01112TZ2022PTC039493
+StartTime   : 2026-04-07T19:42:18
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---
+
+EndTime     : 2026-04-07T19:44:40
+Duration    : 141.82s
+ExitCode    : 0
+Status      : PASSED
+
+=== STDOUT ===
+
+> recursion@0.1.5 test:local-complete-CorpReg
+> npm run build && node build/scripts/local/local-deploy-verify-CorpReg.js U01112TZ2022PTC039493
+
+
+> recursion@0.1.5 build
+> npx tsc
+
+🏠 LOCAL Corporate Registration Deploy + Verify Pipeline
+=======================================================
+🌍 Jurisdiction: IN
+🏢 Company: U01112TZ2022PTC039493
+🔍 Environment Detection Debug:
+  BUILD_ENV: LOCAL
+  NODE_ENV: undefined
+  MINA_ENV: undefined
+🎯 Selected environment value: "LOCAL"
+✅ Environment "LOCAL" mapped to: LOCAL
+🔍 Environment Validation:
+  Current Environment: LOCAL
+  Should use NetworkOracleRegistry: false
+  Should connect to DEVNET: false
+🌍 Oracle Registry: Detected environment: LOCAL
+🔧 BlockchainManager: Creating shared LocalBlockchain instance...
+✅ Oracle Registry: Clean architecture initialized for LOCAL environment
+🔧 LocalBlockchain will be created for test compatibility
+
+🎯 Starting verification for: "U01112TZ2022PTC039493"
+
+🚀 Corporate Registration Multi-Company Verification Test Started
+🏢 Companies: U01112TZ2022PTC039493
+🌍 Jurisdiction: IN
+🏠 Environment: LOCAL blockchain
+
+🔧 Setting up local blockchain...
+✅ BlockchainManager: LocalBlockchain initialized (proofs: true)
+🔑 Using IN oracle (LOCAL mode):
+   Deployer: B62qrNsvVUDtU9sFkzX86LfnWr9CYgsGwdEnq8dzYKTBgw9BqWVwYK1
+   Sender: B62qrNsvVUDtU9sFkzX86LfnWr9CYgsGwdEnq8dzYKTBgw9BqWVwYK1
+
+⚡ Compiling ZK program and smart contract...
+✅ Compilation completed
+
+🚀 Deploying smart contract locally...
+✅ Multi-company smart contract deployed successfully
+📋 Contract Address: B62qowutMK2VTQL4QuAvJwaQhm2g7oHzQ5jjYvckpymDikz2Pqmxndi
+
+🔄 Processing 1 companies locally...
+
+================================================================================
+🏢 Processing Company 1: U01112TZ2022PTC039493 (IN)
+📥 Fetching corporate registration data...
+
+🚀 Starting Corporate Registration Data Fetch
+🔍 CIN: U01112TZ2022PTC039493
+📡 All environments now use LIVE API
+Type of Network: LOCAL
+CIN: U01112TZ2022PTC039493
++++++++++++++++++++++++++++++++++++++++++++++++++++++in sandbox++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Using sandbox API endpoint for LOCAL: https://af1dddb4-271f-47ec-9d42-8843f4cbef78.mock.pstmn.io
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+🏢 ===== CORPORATE REGISTRATION API RESPONSE =====
+🔍 Query: U01112TZ2022PTC039493
+📅 Timestamp: 2026-04-07T14:14:08.445Z
+🔄 API Response Structure Analysis:
+📋 Production API Response:
+  Success: unknown
+  Has Data: true
+  Has Company Master Data: true
+
+🏢 Company Master Data Analysis:
+  Total Fields Available: 27
+
+🆔 Core Identification:
+  CIN: U01112TZ2022PTC039493
+  Company Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  Registration Number: 039493
+  Company Status: Active
+  Date of Incorporation: 19/07/2022
+
+📊 Business Classification:
+  Company Type: N/A
+  Company Category: Company limited by shares
+  Company Subcategory: Non-government company
+  Class of Company: Private
+  Number of Partners: 0
+
+📈 Market & Regulatory Status:
+  Listing Status: N/A
+  Suspended at Stock Exchange: -
+  Compliance Status: N/A
+  Filing Status: N/A
+
+💰 Financial Information:
+  Authorized Capital: N/A
+  Paid Up Capital: N/A
+  Number of Members: N/A
+  Number of Directors: N/A
+
+🏠 Address Information:
+  Registered Address: N/A
+
+📞 Contact Information:
+  Email: N/A
+  Phone: N/A
+  Website: N/A
+
+⚖️ Regulatory Details:
+  ROC Code: ROC Coimbatore
+  Registrar of Companies: N/A
+  MCA ID: N/A
+  Jurisdiction: N/A
+  Legal Form: N/A
+
+📋 Complete Field Inventory (All 27 fields):
+  1. @entity: in.co.sandbox.kyc.mca.company.master_data
+  2. annual_returns: [object Object],[object Object]
+  3. authorised_capital(rs): 1500000
+  4. balance_sheets: [object Object],[object Object]
+  5. cin: U01112TZ2022PTC039493
+  6. class_of_company: Private
+  7. company_category: Company limited by shares
+  8. company_name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  9. company_status(for_efiling): Active
+  10. company_subcategory: Non-government company
+  11. date_of_balance_sheet: 31/03/2024
+  12. date_of_incorporation: 19/07/2022
+  13. date_of_last_agm: 30/09/2024
+  14. description_of_main_division: Agriculture and Allied Activities
+  15. email_id: neemspmsaravanan@gmail.com
+  16. main_division_of_business_activity_to_be_carried_out_in_india: 01
+  17. number_of_designated_partners: 0
+  18. number_of_partners: 0
+  19. paid_up_capital(rs): 400000
+  20. previous_firm/_company_details,_if_applicable: 0
+  21. rd_region: Southern Region
+  22. registered_address: Door No. 3/5-G, Sri Balaji Nagar,   Theethipalayam, Perur (PO) Coimbatore Coimba...
+  23. registration_number: 039493
+  24. roc_code: ROC Coimbatore
+  25. suspended_at_stock_exchange: -
+  26. total_obligation_of_contribution: 0
+  27. whether_listed_or_not: Unlisted
+
+✅ Corporate Registration Response Analysis Complete
+==========================================
+
+📊 Analyzing compliance...
+📊 Compliance Score: 100%
+✅ Is Compliant: ✅ YES
+🌳 Creating Merkle tree...
+🌳 Creating comprehensive Corporate Registration Merkle tree...
+📋 Processing live Corporate Registration API structure...
+  Set field companyName (0): "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
+  Set field CIN (6): "U01112TZ2022PTC039493"
+  Set field companyStatus (7): "Active"
+  Set field category (1): "Company limited by shares"
+  Set field classOfCompany (2): "Private"
+  Set field registrationNumber (3): "039493"
+  Set field listed (4): "Unlisted"
+  Set field suspended (5): "-"
+  Set field dateOfIncorporation (8): "19/07/2022"
+  Set field numberOfPartners (9): "0"
+  Set field companyType (10): ""
+  Set field companySubcategory (11): "Non-government company"
+  Set field rocCode (12): "ROC Coimbatore"
+  Set field registrarOfCompanies (13): ""
+  Set field email (14): ""
+  Set field phone (15): ""
+  Set field website (16): ""
+  Set field activityDescription (17): ""
+  Set field companyActivityCode (18): ""
+  Set field industrialClass (19): ""
+  Set field mcaId (20): ""
+  Set field jurisdiction (21): "IN"
+  Set field legalForm (22): ""
+  Set field llpinDetails (23): ""
+  Set field foreignCompanyDetails (24): ""
+  Set field registeredAddressLine1 (30): ""
+  Set field registeredCity (32): ""
+  Set field registeredState (33): ""
+  Set field registeredCountry (34): ""
+  Set field registeredPincode (35): ""
+  Set field authorizedCapital (50): ""
+  Set field paidUpCapital (51): ""
+  Set field numberOfMembers (52): ""
+  Set field numberOfDirectors (70): ""
+  Set field complianceStatus (72): ""
+  Set field filingStatus (73): ""
+  Set field lastAgmDate (53): ""
+  Set field lastBsDate (54): ""
+  Set field lastAnnualReturnDate (55): ""
+✅ Created Merkle tree with 39 fields
+🌳 Merkle root: 25760442713073178448044610184271868902570070332531962999555424636361294227916
+✅ Merkle tree created with 39 fields
+⚡ Generating ZK proof for U01112TZ2022PTC039493...
+   Generating LOCAL ZK proof for jurisdiction: IN
+   🔐 Oracle signature created for Merkle root
+   Creating proof structure (simplified for LOCAL testing)...
+   ✅ Real ZK proof generated with circuit execution!
+   ✅ Oracle signature verified in ZK circuit
+   📊 Compliance Result: true
+✅ ZK proof generated successfully
+
+🔍 COMPLIANCE RECONCILIATION:
+   ZK Proof Result: ✅ Compliant
+⚡ Executing smart contract verification transaction...
+   Creating LOCAL verification transaction...
+   Mock LOCAL verification for company index 0
+   Proof verified successfully on LOCAL blockchain (mock)
+   LOCAL transaction sent and confirmed
+✅ Smart contract transaction completed
+
+✅ Company 1 verification completed: COMPLIANT
+
+================================================================================
+📊 LOCAL VERIFICATION SUMMARY
+✅ Total companies processed: 1
+✅ Successful verifications: 1
+❌ Failed verifications: 0
+🏆 Compliant companies: 1
+🌍 Jurisdiction: IN
+
+================================================================================
+📋 VERIFICATION RESULTS
+================================================================================
+
+🏢 Company 1: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+✅ Status: Success
+🔢 CIN: U01112TZ2022PTC039493
+📊 Compliance Score: 100%
+✓ Is Compliant: Yes
+⏰ Timestamp: 2026-04-07T14:14:39.865Z
+
+================================================================================
+📈 SUMMARY
+================================================================================
+🏢 Total Companies Processed: 1
+✅ Successful Verifications: 1
+❌ Failed Verifications: 0
+🔐 ZK Proofs Generated: 1
+
+🎉 Verification completed successfully!
+
+🎉 LOCAL Corporate Registration Deploy + Verify completed successfully!
+✅ O1JS Best Practices followed
+✅ Jurisdiction-aware verification
+✅ Composition pattern for shared compliance logic
+✅ Parallel structure to GLEIF
+
+=== STDERR ===
+=== END ===

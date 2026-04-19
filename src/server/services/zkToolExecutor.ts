@@ -811,12 +811,34 @@ export class ZKToolExecutor {
                     });
 
                     console.log('CHILD STDOUT:', output.trim());
+                    // Log all non-empty stdout lines to combined.log
+                    const trimmed = output.trim();
+                    if (trimmed.length > 0) {
+                        const lines = trimmed.split('\n');
+                        for (const line of lines) {
+                            const l = line.trim();
+                            if (l.length > 0) {
+                                logger.info('TEST_RESULT', { tool: toolName, output: l });
+                            }
+                        }
+                    }
                 });
 
                 child.stderr.on('data', (data) => {
                     const output = data.toString();
                     stderr += output;
                     console.log('CHILD STDERR:', output.trim());
+                    // Log stderr lines to error.log
+                    const trimmed = output.trim();
+                    if (trimmed.length > 0) {
+                        const lines = trimmed.split('\n');
+                        for (const line of lines) {
+                            const l = line.trim();
+                            if (l.length > 0) {
+                                logger.error('CHILD_STDERR', { tool: toolName, output: l });
+                            }
+                        }
+                    }
                 });
 
                 child.on('close', (code) => {
@@ -872,6 +894,7 @@ export class ZKToolExecutor {
                         });
                     } else {
                         console.log('Child process failed with code:', code);
+                        logger.error('TEST_FAILED', { tool: toolName, exitCode: code, stderr: stderr.slice(-2000) });
 
                         // Broadcast execution failed
                         this.broadcastExecutionUpdate({

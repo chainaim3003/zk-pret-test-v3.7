@@ -1,0 +1,485 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : compliance-network-exim
+Category    : Compliance
+Mode        : Network
+Description : EXIM Optimized (Network)
+Command     : node ./build/impl/network/verifier/EXIMNetworkMultiVerifier.js SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+StartTime   : 2026-04-07T19:54:14
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---
+
+EndTime     : 2026-04-07T19:56:56
+Duration    : 162.91s
+ExitCode    : 0
+Status      : PASSED
+
+=== STDOUT ===
+🔍 Environment Detection Debug:
+  BUILD_ENV: TESTNET
+  NODE_ENV: undefined
+  MINA_ENV: undefined
+🎯 Selected environment value: "TESTNET"
+✅ Environment "TESTNET" mapped to: TESTNET
+🔍 Environment Validation:
+  Current Environment: TESTNET
+  Should use NetworkOracleRegistry: true
+  Should connect to DEVNET: true
+🌍 Oracle Registry: Detected environment: TESTNET
+✅ Oracle Registry: Clean architecture initialized for TESTNET environment
+🌐 Network environment - using real blockchain connections
+🔍 EXIM Multi-Company Compliance Verifier
+============================================================
+🏢 Companies to verify: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+📊 Total Companies: 1
+
+🔍 EXIM Multi-Company Compliance Verifier
+============================================================
+🏢 Companies to verify: 1
+📋 Use existing contract: YES
+✅ Using consolidated EXIMNetworkHandler + proven infrastructure
+
+📋 Step 1: Smart contract discovery with Environment-Aware Manager...
+📍 Contract address: Loaded dynamically from environment configuration
+✅ Using environment-aware contract discovery
+
+🚀 Step 2: Running EXIM verification with consolidated infrastructure...
+
+🔧 ENHANCED EXIM TEST - ENSURING FUNDED ACCOUNT USAGE
+======================================================================
+
+📋 Step 1: Initializing Oracle Registry with environment-aware accounts...
+
+🚀 Starting Enhanced Oracle Registry Initialization...
+
+📊 Pre-initialization Status:
+  Environment: TESTNET
+  Should use NetworkOracleRegistry: true
+  Should connect to DEVNET: true
+  Expected blockchain: MINA DEVNET
+
+🏗️ Creating Oracle Registry...
+🏭 Oracle Registry Factory:
+  Environment: TESTNET
+  Expected Registry Type: NetworkOracleRegistry
+🌐 Creating NetworkOracleRegistry for TESTNET (DEVNET connection)
+🔗 This WILL connect to real MINA DEVNET blockchain
+🚀 Initializing NetworkOracleRegistry...
+
+🚀 Initializing TESTNET Oracle Registry...
+============================================================
+🌐 Setting up network connection for TESTNET...
+✅ Environment config loaded: config\environments\testnet.json
+✅ Loaded existing config for TESTNET
+🎯 Target: MINA DEVNET
+📡 Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+🆔 Network ID: testnet
+📊 Connection setup:
+   Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+   Target: DEVNET
+✅ Network instance configured for DEVNET
+🔗 Ready to connect to DEVNET blockchain
+📋 Loading pre-funded DEVNET accounts from config/environments/testnet.json...
+📁 Found 7 account groups in config/environments/testnet.json
+✅ MCA:
+   Deployer: B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA
+   Sender:   B62qkojT9M5HGT3ydaWVmw3tX6ZeZyd5Nb2ABUY49kGQFgZkcHgkDW1
+   Deployer Balance: 246.200 MINA
+✅ GLEIF:
+   Deployer: B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3
+   Sender:   B62qofi6mojnWf1MQwL94C7Fgy91Hn9zzojbppYmKHdeVYrsHXnJJ5U
+   Deployer Balance: 241.100 MINA
+✅ EXIM:
+   Deployer: B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL
+   Sender:   B62qiux4fhjCR2tQrEo6iLoKVEaFSDoG2uxsj8Z23JfsJA61KENDB55
+   Deployer Balance: 297.900 MINA
+✅ BPMN:
+   Deployer: B62qrpRopAxfDFkAjyHkxTcWysHnv36YKAjh7TK3nirEEvTMhKrfSVx
+   Sender:   B62qnpF1AWj3ePCZsXKotRuqbi1Y6Fv69YZ7XJGcq88u7ZGyZbu9Mvm
+   Deployer Balance: 299.000 MINA
+✅ RISK:
+   Deployer: B62qiciGYeA6nKQumL45veZ6xeQQQ3p8anUNSEXmU3G8iqL1Pc6DtCE
+   Sender:   B62qioTkbviE6J4BjQPac9UNcTVkSKzicNGWjynh5jK3fXoymScVRny
+   Deployer Balance: 258.200 MINA
+✅ BSDI:
+   Deployer: B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi
+   Sender:   B62qrWCSiE9AruxBbxVHKg4z31dDGaCoUXxHVwQ71Uuo1AkkTuLFrYg
+   Deployer Balance: 299.000 MINA
+✅ COMPOSED:
+   Deployer: B62qosF7dD9PAM94iG7UM5ot9BUJyuE6yGVLdk2NDRsneoYvhYjkGWX
+   Sender:   B62qkTSyqTJozscp8p7fYia1pKpV9ZAy68eeabQpPLeJZ5LqQTQER5K
+   Deployer Balance: 295.700 MINA
+✅ Loaded 7 deployer accounts from config/environments/testnet.json
+📋 Available roles: MCA, GLEIF, EXIM, BPMN, RISK, BSDI, COMPOSED
+🔍 Verifying setup...
+✅ Setup verification passed
+   Deployer accounts: 7
+   Sender accounts: 7
+✅ TESTNET Oracle Registry initialized successfully!
+🎯 Ready to deploy to DEVNET using pre-funded accounts
+🔗 Transactions will appear at: https://minascan.io/devnet/
+============================================================
+🔍 Registry Validation:
+  Expected: NetworkOracleRegistry
+  Actual: NetworkOracleRegistry
+✅ VERIFIED: NetworkOracleRegistry confirmed for TESTNET - will connect to DEVNET
+✅ Registry validation passed
+
+🔍 Verifying Network Connection...
+🔍 Network Connection Verification:
+  Environment: TESTNET
+  Registry Type: NetworkOracleRegistry
+  Registry Instance: NetworkOracleRegistry
+✅ DEVNET Connection Verified: NetworkOracleRegistry active
+🌐 Transactions will appear in DEVNET explorer
+
+✅ Oracle Registry Initialization Complete!
+📡 Blockchain Target: MINA DEVNET
+🔗 Registry Type: NetworkOracleRegistry
+🎯 Transactions will be visible at:
+   • https://minascan.io/devnet/
+   • https://devnet.minaexplorer.com/
+
+================================================================================
+
+🌐 Environment: TESTNET
+🔗 Connect to DEVNET: true
+✅ CONFIRMED: Oracle Registry initialized for DEVNET with funded accounts
+🎯 EXIM Deployer Account: B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL
+🌐 Network: DEVNET
+💰 Current Balance: 297.900 MINA
+✅ DEVNET Oracle accounts accessible
+
+📋 Step 2: Running EXIM verification...
+
+🚀 EXIM Multi-Company Verification Started
+🏢 Companies: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+📊 Total Companies: 1
+
+🔧 Initializing infrastructure system...
+✅ Environment Manager: TESTNET
+🔧 Compilation Manager initialized
+✅ Compilation Manager initialized
+
+📋 Setting up blockchain environment...
+🌐 DEVNET environment detected - using funded Oracle accounts
+🌍 Current environment: TESTNET
+🧪 Using DEVNET endpoint for TESTNET environment
+🔗 Connecting to DEVNET via https://api.minascan.io/node/devnet/v1/graphql
+✅ Network connection established for DEVNET
+✅ Network connection established via BaseVerificationCore
+✅ Blockchain environment initialized with DEVNET Oracle accounts
+
+📝 Compiling ZK programs...
+✅ EXIMOptim ZK program compiled
+✅ EXIMOptimMultiCompanySmartContract compiled
+
+🚀 Looking up smart contract address...
+✅ Contract address found: B62qqpurNfRXviTkNjzqpXwrJWda78UWiwXzLXPhqVtTuuFb3J1Y24r
+📋 Source: config/environments/testnet.json
+
+================================================================================
+🏢 Processing Company 1/1: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+================================================================================
+
+🔍 STAGE 1: Resolving company name to IEC...
+
+🚀 Starting EXIM Data Fetch
+🔍 Company Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+Type of Network: TESTNET
++++++++++++++++++++++++++++++++++++++++++++++++++++++in sandbox++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIM API Response: {
+  iec: 'U01112TZ2022PTC039493',
+  entityName: 'SREE PALANI ANDAVAR AGROS PRIVATE LIMITED',
+  addressLine1: 'Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)',
+  addressLine2: 'Coimbatore, Tamil Nadu',
+  city: 'Coimbatore',
+  state: 'Tamil Nadu',
+  pin: 641010,
+  contactNo: 9950000005,
+  email: 'neemspmsaravanan@gmail.com',
+  iecIssueDate: '12092018',
+  exporterType: 4,
+  pan: 'FFFCM4177LFT001',
+  activeComplianceStatusCode: 1,
+  iecStatus: 0,
+  starStatus: 3,
+  iecModificationDate: '27042021',
+  dataAsOn: '2024-08-08T12:30:06.567Z',
+  natureOfConcern: 2,
+  branches: [
+    {
+      branchCode: 6,
+      badd1: 'Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)',
+      badd2: 'Coimbatore, Tamil Nadu',
+      city: 'Coimbatore',
+      state: 'Tamil Nadu',
+      pin: 641010
+    }
+  ],
+  directors: [ { name: 'SARAVANAN ABIRAMI' }, { name: 'SUBRAMANIAN SARAVANAN' } ]
+}
+
+🚢 ===== EXIM API RESPONSE =====
+🔍 Query: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+📅 Timestamp: 2026-04-07T14:25:58.326Z
+🔄 API Response Structure Analysis:
+📋 Production API Response:
+  Success: unknown
+  Has Data: true
+
+🚢 EXIM Data Analysis:
+  Total Fields Available: 20
+
+🆔 Core Identification:
+  IEC: U01112TZ2022PTC039493
+  Entity Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  PAN: FFFCM4177LFT001
+  IEC Status: 0
+
+📅 Important Dates:
+  IEC Issue Date: 12092018
+  IEC Modification Date: 27042021
+  Data As On: 2024-08-08T12:30:06.567Z
+
+📊 Status Information:
+  IEC Status: 0
+  Exporter Type: 4
+  Active Compliance Status Code: 1
+  Star Status: 3
+  Nature of Concern: 2
+
+🏠 Address Information:
+  Address Line 1: Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)
+  Address Line 2: Coimbatore, Tamil Nadu
+  City: Coimbatore
+  State: Tamil Nadu
+  PIN: 641010
+
+📞 Contact Information:
+  Contact No: 9950000005
+  Email: neemspmsaravanan@gmail.com
+
+📋 Complete Field Inventory (All fields):
+  1. activeComplianceStatusCode: 1
+  2. addressLine1: Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)
+  3. addressLine2: Coimbatore, Tamil Nadu
+  4. branches: [Array with 1 items]
+  5. city: Coimbatore
+  6. contactNo: 9950000005
+  7. dataAsOn: 2024-08-08T12:30:06.567Z
+  8. directors: [Array with 2 items]
+  9. email: neemspmsaravanan@gmail.com
+  10. entityName: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  11. exporterType: 4
+  12. iec: U01112TZ2022PTC039493
+  13. iecIssueDate: 12092018
+  14. iecModificationDate: 27042021
+  15. iecStatus: 0
+  16. natureOfConcern: 2
+  17. pan: FFFCM4177LFT001
+  18. pin: 641010
+  19. starStatus: 3
+  20. state: Tamil Nadu
+
+✅ EXIM Response Analysis Complete
+==========================================
+
+✅ STAGE 1 SUCCESS: "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" → IEC: U01112TZ2022PTC039493
+
+🔍 Analyzing compliance for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+📊 Compliance Score: 100%
+✅ Is Compliant: true
+
+🌳 Creating Merkle tree for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+🌳 Creating comprehensive EXIM Merkle tree...
+📋 Processing Production API structure...
+  Set field iec (0): "U01112TZ2022PTC039493"
+  Set field entityName (1): "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
+  Set field iecIssueDate (2): "12092018"
+  Set field pan (3): "FFFCM4177LFT001"
+  Set field iecStatus (4): 0
+  Set field iecModificationDate (5): "27042021"
+  Set field dataAsOn (6): "2024-08-08T12:30:06.567Z"
+  Set field addressLine1 (7): "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, ..."
+  Set field addressLine2 (8): "Coimbatore, Tamil Nadu"
+  Set field city (9): "Coimbatore"
+  Set field state (10): "Tamil Nadu"
+  Set field email (11): "neemspmsaravanan@gmail.com"
+  Set field exporterType (12): 4
+  Set field activeComplianceStatusCode (13): 1
+  Set field starStatus (14): 3
+  Set field natureOfConcern (15): 2
+✅ Created Merkle tree with 16 fields
+🌳 Merkle root: 17806508674926557069712223933978789873337364816837513245688993916293778164717
+✅ Merkle tree created with 16 fields
+
+🔐 Preparing ZK proof data for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+✅ All EXIMMerkleWitness8 instances created
+
+🔏 Generating oracle signature...
+✅ Oracle signature generated
+
+🔍 Smart Contract State BEFORE Verification:
+🔍 Fetching zkApp account with retry logic for DEVNET...
+   Attempt 1/5 - Fetching account from DEVNET...
+   ✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql
+✅ zkApp account successfully fetched on attempt 1
+🔍 Account Balance: 0 nanomina (0.0 MINA)
+✅ Account Status: ACTIVATED zkApp
+🔍 App State: 0, 1, 1, 0, 16, 1775569653492, 1, 1538724424802079206641016986913538499797052415157885521649000377413189616150
+✅ zkApp account state fetched from DEVNET
+  Total Companies: 1
+  Compliant Companies: 1
+  Global Compliance Score: 100%
+  Total Verifications: 16
+  Companies Root Hash: 0
+  Registry Version: 1
+
+🔍 COMPLIANCE FIELD ANALYSIS (Pre-Verification):
+  🏢 Entity Status: "0" → ✅ ACTIVE (Pass)
+  📋 Valid Name: "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" → ✅ ISSUED (Pass)
+  🆔 LEI Validation: "U01112TZ2022PTC039493" → ✅ VALID LEI (Pass)
+  🏆 Overall Compliance Analysis: ✅ ALL RULES PASSED → ZK Proof Shows: ✅ COMPLIANT
+  📊 Business Rules: 4/4 passed
+  📈 Compliance Percentage: 100%
+  ⏳ Chain Status: NOT YET VERIFIED - Awaiting smart contract transaction...
+
+📊 Contract state before verification...
+📋 Fetching deployed zkApp account from DEVNET...
+📋 Account Details:
+   • zkApp Address: B62qqpurNfRXviTkNjzqpXwrJWda78UWiwXzLXPhqVtTuuFb3J1Y24r
+   • Environment: DEVNET
+🌍 Current environment: TESTNET
+🧪 Using DEVNET endpoint for TESTNET environment
+   • Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+🔄 Fetching zkApp account with retry logic for DEVNET...
+🌍 Current environment: TESTNET
+🧪 Using DEVNET endpoint for TESTNET environment
+   Attempt 1/10 - Fetching account from DEVNET...
+   ✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql
+✅ zkApp account successfully fetched on attempt 1
+💵 Account Balance: 0 nanomina (0 MINA)
+✅ Account Status: ACTIVATED zkApp
+📊 App State: 0, 1, 1, 0, 16, 1775569653492, 1, 1538724424802079206641016986913538499797052415157885521649000377413189616150
+✅ Contract accessible: true
+
+⚡ Generating ZK proof for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+✅ ZK proof generated successfully
+
+⚡ Executing smart contract verification transaction...
+🔧 Creating MerkleWitness for company verification...
+🔧 Creating temporary MerkleTree for proper witness generation...
+✅ CompanyMerkleWitness created successfully using real tree witness
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Current Map Root: 1538724424802079206641016986913538499797052415157885521649000377413189616150
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 17
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Current Map Root: 1538724424802079206641016986913538499797052415157885521649000377413189616150
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 17
+⚡ Generating transaction proof...
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Current Map Root: 1538724424802079206641016986913538499797052415157885521649000377413189616150
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 17
+✅ Transaction proof generated successfully
+✅ Smart contract transaction completed
+
+🔍 Contract state AFTER verification:
+🔍 Fetching zkApp account with retry logic for DEVNET...
+   Attempt 1/5 - Fetching account from DEVNET...
+   ✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql
+✅ zkApp account successfully fetched on attempt 1
+🔍 Account Balance: 0 nanomina (0.0 MINA)
+✅ Account Status: ACTIVATED zkApp
+🔍 App State: 0, 1, 1, 0, 16, 1775569653492, 1, 1538724424802079206641016986913538499797052415157885521649000377413189616150
+✅ zkApp account state fetched from DEVNET
+  Total Companies: 1
+  Compliant Companies: 1
+  Global Compliance Score: 100%
+  Total Verifications: 16
+  Companies Root Hash: 0
+  Registry Version: 1
+
+📈 STATE CHANGES:
+  📊 Total Companies: 1 → 1
+  ✅ Compliant Companies: 1 → 1
+  📈 Global Compliance Score: 100% → 100%
+  🔢 Total Verifications: 16 → 16
+  🌳 Companies Root Hash: 0 → 0
+  📝 Registry Version: 1 → 1
+
+🔍 COMPLIANCE FIELD ANALYSIS (Post-Verification):
+  🏢 Entity Status: "0" → ✅ ACTIVE (Pass)
+  📋 Valid Name: "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" → ✅ ISSUED (Pass)
+  🆔 LEI Validation: "U01112TZ2022PTC039493" → ✅ VALID LEI (Pass)
+  🏆 Overall Compliance Analysis: ✅ ALL RULES PASSED → ZK Proof Shows: ✅ COMPLIANT
+  📊 Business Rules: 4/4 passed
+  📈 Compliance Percentage: 100%
+  ✅ Chain Status: VERIFIED AND STORED ON BLOCKCHAIN
+
+📊 Contract state after verification...
+📋 Fetching deployed zkApp account from DEVNET...
+📋 Account Details:
+   • zkApp Address: B62qqpurNfRXviTkNjzqpXwrJWda78UWiwXzLXPhqVtTuuFb3J1Y24r
+   • Environment: DEVNET
+🌍 Current environment: TESTNET
+🧪 Using DEVNET endpoint for TESTNET environment
+   • Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+🔄 Fetching zkApp account with retry logic for DEVNET...
+🌍 Current environment: TESTNET
+🧪 Using DEVNET endpoint for TESTNET environment
+   Attempt 1/10 - Fetching account from DEVNET...
+   ✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql
+✅ zkApp account successfully fetched on attempt 1
+💵 Account Balance: 0 nanomina (0 MINA)
+✅ Account Status: ACTIVATED zkApp
+📊 App State: 0, 1, 1, 0, 16, 1775569653492, 1, 1538724424802079206641016986913538499797052415157885521649000377413189616150
+✅ Contract state updated: true
+
+================================================================================
+🎉 EXIM Multi-Company Verification Completed!
+================================================================================
+
+✅ ENHANCED EXIM TEST COMPLETED SUCCESSFULLY!
+🔗 Check: https://minascan.io/devnet/
+
+🎉 VERIFICATION COMPLETED SUCCESSFULLY!
+
+✅ VERIFICATION COMPLETED - See detailed results above
+
+📋 Next Steps:
+  1. ✅ Companies verified and recorded on blockchain
+  2. 🌐 Check contract state on MinaScan or MinaExplorer
+  3. 🔄 Run additional verifications as needed
+
+=== STDERR ===
+=== END ===

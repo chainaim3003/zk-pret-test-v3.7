@@ -1,0 +1,506 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : compliance-network-corpreg
+Category    : Compliance
+Mode        : Network
+Description : Corporate Registration (Network)
+Command     : node ./build/impl/network/verifier/CorporateRegistrationNetworkMultiVerifier.js U01112TZ2022PTC039493
+StartTime   : 2026-04-07T19:49:28
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---
+
+EndTime     : 2026-04-07T19:54:13
+Duration    : 285.11s
+ExitCode    : 0
+Status      : PASSED
+
+=== STDOUT ===
+🔍 Environment Detection Debug:
+  BUILD_ENV: TESTNET
+  NODE_ENV: undefined
+  MINA_ENV: undefined
+🎯 Selected environment value: "TESTNET"
+✅ Environment "TESTNET" mapped to: TESTNET
+🔍 Environment Validation:
+  Current Environment: TESTNET
+  Should use NetworkOracleRegistry: true
+  Should connect to DEVNET: true
+🌍 Oracle Registry: Detected environment: TESTNET
+✅ Oracle Registry: Clean architecture initialized for TESTNET environment
+🌐 Network environment - using real blockchain connections
+🔍 Corporate Registration Multi-Company Compliance Verifier
+======================================================================
+🏢 Companies to verify: U01112TZ2022PTC039493
+📊 Total Companies: 1
+🌍 Jurisdiction: IN
+
+🔍 Corporate Registration Multi-Company Compliance Verifier
+======================================================================
+🏢 Companies to verify: 1
+🌍 Jurisdiction: IN
+📋 Use existing contract: YES
+✅ Using consolidated CorporateRegistrationNetworkHandler + proven infrastructure
+
+📋 Step 1: Smart contract discovery with Environment-Aware Manager...
+📍 Contract address: Loaded dynamically from environment configuration
+🌍 Jurisdiction: IN
+✅ Using environment-aware contract discovery
+
+🚀 Step 2: Running Corporate Registration verification with consolidated infrastructure...
+
+🔧 ENHANCED CORPORATE REGISTRATION TEST - ENSURING FUNDED ACCOUNT USAGE
+======================================================================
+
+📋 Step 1: Initializing Oracle Registry with environment-aware accounts...
+
+🚀 Starting Enhanced Oracle Registry Initialization...
+
+📊 Pre-initialization Status:
+  Environment: TESTNET
+  Should use NetworkOracleRegistry: true
+  Should connect to DEVNET: true
+  Expected blockchain: MINA DEVNET
+
+🏗️ Creating Oracle Registry...
+🏭 Oracle Registry Factory:
+  Environment: TESTNET
+  Expected Registry Type: NetworkOracleRegistry
+🌐 Creating NetworkOracleRegistry for TESTNET (DEVNET connection)
+🔗 This WILL connect to real MINA DEVNET blockchain
+🚀 Initializing NetworkOracleRegistry...
+
+🚀 Initializing TESTNET Oracle Registry...
+============================================================
+🌐 Setting up network connection for TESTNET...
+✅ Environment config loaded: config\environments\testnet.json
+✅ Loaded existing config for TESTNET
+🎯 Target: MINA DEVNET
+📡 Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+🆔 Network ID: testnet
+📊 Connection setup:
+   Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+   Target: DEVNET
+✅ Network instance configured for DEVNET
+🔗 Ready to connect to DEVNET blockchain
+📋 Loading pre-funded DEVNET accounts from config/environments/testnet.json...
+📁 Found 7 account groups in config/environments/testnet.json
+✅ MCA:
+   Deployer: B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA
+   Sender:   B62qkojT9M5HGT3ydaWVmw3tX6ZeZyd5Nb2ABUY49kGQFgZkcHgkDW1
+   Deployer Balance: 246.200 MINA
+✅ GLEIF:
+   Deployer: B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3
+   Sender:   B62qofi6mojnWf1MQwL94C7Fgy91Hn9zzojbppYmKHdeVYrsHXnJJ5U
+   Deployer Balance: 241.100 MINA
+✅ EXIM:
+   Deployer: B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL
+   Sender:   B62qiux4fhjCR2tQrEo6iLoKVEaFSDoG2uxsj8Z23JfsJA61KENDB55
+   Deployer Balance: 297.900 MINA
+✅ BPMN:
+   Deployer: B62qrpRopAxfDFkAjyHkxTcWysHnv36YKAjh7TK3nirEEvTMhKrfSVx
+   Sender:   B62qnpF1AWj3ePCZsXKotRuqbi1Y6Fv69YZ7XJGcq88u7ZGyZbu9Mvm
+   Deployer Balance: 299.000 MINA
+✅ RISK:
+   Deployer: B62qiciGYeA6nKQumL45veZ6xeQQQ3p8anUNSEXmU3G8iqL1Pc6DtCE
+   Sender:   B62qioTkbviE6J4BjQPac9UNcTVkSKzicNGWjynh5jK3fXoymScVRny
+   Deployer Balance: 258.200 MINA
+✅ BSDI:
+   Deployer: B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi
+   Sender:   B62qrWCSiE9AruxBbxVHKg4z31dDGaCoUXxHVwQ71Uuo1AkkTuLFrYg
+   Deployer Balance: 299.000 MINA
+✅ COMPOSED:
+   Deployer: B62qosF7dD9PAM94iG7UM5ot9BUJyuE6yGVLdk2NDRsneoYvhYjkGWX
+   Sender:   B62qkTSyqTJozscp8p7fYia1pKpV9ZAy68eeabQpPLeJZ5LqQTQER5K
+   Deployer Balance: 295.700 MINA
+✅ Loaded 7 deployer accounts from config/environments/testnet.json
+📋 Available roles: MCA, GLEIF, EXIM, BPMN, RISK, BSDI, COMPOSED
+🔍 Verifying setup...
+✅ Setup verification passed
+   Deployer accounts: 7
+   Sender accounts: 7
+✅ TESTNET Oracle Registry initialized successfully!
+🎯 Ready to deploy to DEVNET using pre-funded accounts
+🔗 Transactions will appear at: https://minascan.io/devnet/
+============================================================
+🔍 Registry Validation:
+  Expected: NetworkOracleRegistry
+  Actual: NetworkOracleRegistry
+✅ VERIFIED: NetworkOracleRegistry confirmed for TESTNET - will connect to DEVNET
+✅ Registry validation passed
+
+🔍 Verifying Network Connection...
+🔍 Network Connection Verification:
+  Environment: TESTNET
+  Registry Type: NetworkOracleRegistry
+  Registry Instance: NetworkOracleRegistry
+✅ DEVNET Connection Verified: NetworkOracleRegistry active
+🌐 Transactions will appear in DEVNET explorer
+
+✅ Oracle Registry Initialization Complete!
+📡 Blockchain Target: MINA DEVNET
+🔗 Registry Type: NetworkOracleRegistry
+🎯 Transactions will be visible at:
+   • https://minascan.io/devnet/
+   • https://devnet.minaexplorer.com/
+
+================================================================================
+
+🌐 Environment: TESTNET
+🔗 Connect to DEVNET: true
+✅ CONFIRMED: Oracle Registry initialized for DEVNET with funded accounts
+🎯 MCA Deployer Account: B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA
+🌐 Network: DEVNET
+💰 Current Balance: 246.200 MINA
+✅ DEVNET Oracle accounts accessible
+
+📋 Step 2: Running Corporate Registration verification...
+
+🚀 Corporate Registration Multi-Company Verification Started
+🏢 Companies: U01112TZ2022PTC039493
+📊 Total Companies: 1
+
+🔧 Initializing infrastructure system...
+✅ Environment Manager: TESTNET
+🔧 Compilation Manager initialized
+✅ Compilation Manager initialized
+
+📋 Setting up blockchain environment...
+🌐 DEVNET environment detected - using funded Oracle accounts
+🌍 Current environment: TESTNET
+🧪 Using DEVNET endpoint for TESTNET environment
+🔗 Connecting to DEVNET via https://api.minascan.io/node/devnet/v1/graphql
+✅ Network connection established for DEVNET
+✅ Network connection established via BaseVerificationCore
+✅ Blockchain environment initialized with DEVNET Oracle accounts
+
+📝 Compiling ZK programs...
+✅ CorporateRegistrationOptim ZK program compiled
+✅ CorporateRegistrationMultiSmartContract compiled
+
+🚀 Looking up smart contract address...
+✅ Contract address found: B62qktrFCeoidYBqYD5F5VGHB6d9WRoxZt2cWnwmw1rs7zr9w7RfBcE
+📋 Source: config/environments/testnet.json
+
+================================================================================
+🏢 Processing Company 1/1: U01112TZ2022PTC039493
+================================================================================
+
+🔍 STAGE 1: Resolving company name to CIN...
+
+🚀 Starting Corporate Registration Data Fetch
+🔍 CIN: U01112TZ2022PTC039493
+📡 All environments now use LIVE API
+Type of Network: TESTNET
+CIN: U01112TZ2022PTC039493
++++++++++++++++++++++++++++++++++++++++++++++++++++++in sandbox++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+🏢 ===== CORPORATE REGISTRATION API RESPONSE =====
+🔍 Query: U01112TZ2022PTC039493
+📅 Timestamp: 2026-04-07T14:21:16.746Z
+🔄 API Response Structure Analysis:
+📋 Production API Response:
+  Success: unknown
+  Has Data: true
+  Has Company Master Data: true
+
+🏢 Company Master Data Analysis:
+  Total Fields Available: 27
+
+🆔 Core Identification:
+  CIN: U01112TZ2022PTC039493
+  Company Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  Registration Number: 039493
+  Company Status: Active
+  Date of Incorporation: 19/07/2022
+
+📊 Business Classification:
+  Company Type: N/A
+  Company Category: Company limited by shares
+  Company Subcategory: Non-government company
+  Class of Company: Private
+  Number of Partners: 0
+
+📈 Market & Regulatory Status:
+  Listing Status: N/A
+  Suspended at Stock Exchange: -
+  Compliance Status: N/A
+  Filing Status: N/A
+
+💰 Financial Information:
+  Authorized Capital: N/A
+  Paid Up Capital: N/A
+  Number of Members: N/A
+  Number of Directors: N/A
+
+🏠 Address Information:
+  Registered Address: N/A
+
+📞 Contact Information:
+  Email: N/A
+  Phone: N/A
+  Website: N/A
+
+⚖️ Regulatory Details:
+  ROC Code: ROC Coimbatore
+  Registrar of Companies: N/A
+  MCA ID: N/A
+  Jurisdiction: N/A
+  Legal Form: N/A
+
+📋 Complete Field Inventory (All 27 fields):
+  1. @entity: in.co.sandbox.kyc.mca.company.master_data
+  2. annual_returns: [object Object],[object Object]
+  3. authorised_capital(rs): 1500000
+  4. balance_sheets: [object Object],[object Object]
+  5. cin: U01112TZ2022PTC039493
+  6. class_of_company: Private
+  7. company_category: Company limited by shares
+  8. company_name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  9. company_status(for_efiling): Active
+  10. company_subcategory: Non-government company
+  11. date_of_balance_sheet: 31/03/2024
+  12. date_of_incorporation: 19/07/2022
+  13. date_of_last_agm: 30/09/2024
+  14. description_of_main_division: Agriculture and Allied Activities
+  15. email_id: neemspmsaravanan@gmail.com
+  16. main_division_of_business_activity_to_be_carried_out_in_india: 01
+  17. number_of_designated_partners: 0
+  18. number_of_partners: 0
+  19. paid_up_capital(rs): 400000
+  20. previous_firm/_company_details,_if_applicable: 0
+  21. rd_region: Southern Region
+  22. registered_address: Door No. 3/5-G, Sri Balaji Nagar,   Theethipalayam, Perur (PO) Coimbatore Coimba...
+  23. registration_number: 039493
+  24. roc_code: ROC Coimbatore
+  25. suspended_at_stock_exchange: -
+  26. total_obligation_of_contribution: 0
+  27. whether_listed_or_not: Unlisted
+
+✅ Corporate Registration Response Analysis Complete
+==========================================
+
+✅ STAGE 1 SUCCESS: "U01112TZ2022PTC039493" → CIN: U01112TZ2022PTC039493
+
+🔍 Analyzing compliance for U01112TZ2022PTC039493...
+📊 Compliance Score: 100%
+✅ Is Compliant: true
+
+🌳 Creating Merkle tree for U01112TZ2022PTC039493...
+🌳 Creating comprehensive Corporate Registration Merkle tree...
+📋 Processing live Corporate Registration API structure...
+  Set field companyName (0): "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
+  Set field CIN (6): "U01112TZ2022PTC039493"
+  Set field companyStatus (7): "Active"
+  Set field category (1): "Company limited by shares"
+  Set field classOfCompany (2): "Private"
+  Set field registrationNumber (3): "039493"
+  Set field listed (4): "Unlisted"
+  Set field suspended (5): "-"
+  Set field dateOfIncorporation (8): "19/07/2022"
+  Set field numberOfPartners (9): "0"
+  Set field companyType (10): ""
+  Set field companySubcategory (11): "Non-government company"
+  Set field rocCode (12): "ROC Coimbatore"
+  Set field registrarOfCompanies (13): ""
+  Set field email (14): ""
+  Set field phone (15): ""
+  Set field website (16): ""
+  Set field activityDescription (17): ""
+  Set field companyActivityCode (18): ""
+  Set field industrialClass (19): ""
+  Set field mcaId (20): ""
+  Set field jurisdiction (21): "IN"
+  Set field legalForm (22): ""
+  Set field llpinDetails (23): ""
+  Set field foreignCompanyDetails (24): ""
+  Set field registeredAddressLine1 (30): ""
+  Set field registeredCity (32): ""
+  Set field registeredState (33): ""
+  Set field registeredCountry (34): ""
+  Set field registeredPincode (35): ""
+  Set field authorizedCapital (50): ""
+  Set field paidUpCapital (51): ""
+  Set field numberOfMembers (52): ""
+  Set field numberOfDirectors (70): ""
+  Set field complianceStatus (72): ""
+  Set field filingStatus (73): ""
+  Set field lastAgmDate (53): ""
+  Set field lastBsDate (54): ""
+  Set field lastAnnualReturnDate (55): ""
+✅ Created Merkle tree with 39 fields
+🌳 Merkle root: 25760442713073178448044610184271868902570070332531962999555424636361294227916
+✅ Merkle tree created with 39 fields
+
+🔐 Preparing ZK proof data for U01112TZ2022PTC039493...
+🔐 Preparing ZK proof data...
+✅ Optimized Corporate Registration compliance data created successfully
+✅ All MerkleWitness8 instances created
+
+🔏 Generating oracle signature...
+✅ Oracle signature generated
+
+🔍 Smart Contract State BEFORE Verification:
+🔍 Fetching zkApp account with retry logic for DEVNET...
+   Attempt 1/5 - Fetching account from DEVNET...
+   ✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql
+✅ zkApp account successfully fetched on attempt 1
+🔍 Account Balance: 0 nanomina (0.0 MINA)
+✅ Account Status: ACTIVATED zkApp
+🔍 App State: 1, 1, 21, 1775570274418, 17158108643850900999729795683710824145367935905279120999089260180615844971509, 1, 0, 0
+✅ zkApp account state fetched from DEVNET
+  Total Companies: 1
+  Compliant Companies: 1
+  Global Compliance Score: 100%
+  Total Verifications: 21
+  Companies Root Hash: 17158108643850900999729795683710824145367935905279120999089260180615844971509
+  Registry Version: 1
+
+🔍 COMPLIANCE FIELD ANALYSIS (Pre-Verification):
+  🏢 Entity Status: "Active" → ✅ ACTIVE (Pass)
+  📋 Registration Status: "039493" → ✅ ISSUED (Pass)
+  🔍 Conformity Flag: "Company limited by shares" → ✅ ACCEPTABLE (Pass)
+  📅 Date Validation: Last Update "19/07/2022", → ✅ VALID DATES (Pass)
+  🆔 CIN Validation: "U01112TZ2022PTC039493" → ✅ VALID CIN (Pass)
+  🏆 Overall Compliance Analysis: ✅ ALL RULES PASSED → ZK Proof Shows: ✅ COMPLIANT
+  📊 Business Rules: 5/5 passed
+  📈 Compliance Percentage: 100%
+  ⏳ Chain Status: NOT YET VERIFIED - Awaiting smart contract transaction...
+
+⚡ Generating ZK proof for U01112TZ2022PTC039493...
+✅ ZK proof generated successfully
+
+⚡ Executing smart contract verification transaction...
+    🔍 createCorporateRegistrationCompanyRecord: Validating input parameters...
+    ✅ createCorporateRegistrationCompanyRecord: All input parameters validated
+    🔄 createCorporateRegistrationCompanyRecord: Creating hashes...
+      ✅ cinHash created: 13981973430088692297307651959885012222389669200816231751055408172189785939578
+      ✅ legalNameHash created: 28135603761120405675969627330635515657827936336222765211271798090268970172410
+      ✅ jurisdictionHash created: 21202673945655101736800468854269429757453495934725324452245063896014909123378
+    🔄 createCorporateRegistrationCompanyRecord: Creating compliance score...
+      ✅ complianceScore created: 100
+    🔄 createCorporateRegistrationCompanyRecord: Creating verification counts...
+      ✅ totalVerifications created: 1
+      ✅ passedVerifications created: 1
+      ✅ failedVerifications created: 0
+      ✅ consecutiveFailures created: 0
+    🔄 createCorporateRegistrationCompanyRecord: Creating timestamp fields...
+      ✅ lastPassTime created: 1775571677892
+      ✅ lastFailTime created: 1775571677892
+    🔄 createCorporateRegistrationCompanyRecord: Creating CorporateRegistrationCompanyRecord with all 13 fields...
+    ✅ createCorporateRegistrationCompanyRecord: CorporateRegistrationCompanyRecord created successfully with all 13 fields
+🔧 Creating MerkleMapWitness for company verification...
+🔧 Creating temporary MerkleTree for proper witness generation...
+✅ CompanyMerkleWitness created successfully using real tree witness
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Current Map Root: 17158108643850900999729795683710824145367935905279120999089260180615844971509
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 22
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Current Map Root: 17158108643850900999729795683710824145367935905279120999089260180615844971509
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 22
+⚡ Generating transaction proof...
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Current Map Root: 17158108643850900999729795683710824145367935905279120999089260180615844971509
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 18287594068183366618726928299241119125642429248424225520400530257902306098620
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 22
+✅ Transaction proof generated successfully
+✅ Transaction sent, waiting for inclusion in block...
+✅ Smart contract transaction confirmed on chain
+
+🔍 Contract state AFTER verification:
+🔍 Fetching zkApp account with retry logic for DEVNET...
+   Attempt 1/5 - Fetching account from DEVNET...
+   ✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql
+✅ zkApp account successfully fetched on attempt 1
+🔍 Account Balance: 0 nanomina (0.0 MINA)
+✅ Account Status: ACTIVATED zkApp
+🔍 App State: 1, 1, 22, 1775571677892, 22036780743998154410435613903076853980375335646718299414773852639939247854921, 1, 0, 0
+✅ zkApp account state fetched from DEVNET
+  Total Companies: 1
+  Compliant Companies: 1
+  Global Compliance Score: 100%
+  Total Verifications: 22
+  Companies Root Hash: 22036780743998154410435613903076853980375335646718299414773852639939247854921
+  Registry Version: 1
+
+📈 STATE CHANGES:
+  📊 Total Companies: 1 → 1
+  ✅ Compliant Companies: 1 → 1
+  📈 Global Compliance Score: 100% → 100%
+  🔢 Total Verifications: 21 → 22
+  🌳 Companies Root Hash: 17158108643850900999729795683710824145367935905279120999089260180615844971509 → 22036780743998154410435613903076853980375335646718299414773852639939247854921
+  📝 Registry Version: 1 → 1
+
+🔍 COMPLIANCE FIELD ANALYSIS (Post-Verification):
+  🏢 Entity Status: "Active" → ✅ ACTIVE (Pass)
+  📋 Registration Status: "039493" → ✅ ISSUED (Pass)
+  🔍 Conformity Flag: "Company limited by shares" → ✅ ACCEPTABLE (Pass)
+  📅 Date Validation: Last Update "19/07/2022", → ✅ VALID DATES (Pass)
+  🆔 CIN Validation: "U01112TZ2022PTC039493" → ✅ VALID CIN (Pass)
+  🏆 Overall Compliance Analysis: ✅ ALL RULES PASSED → ZK Proof Shows: ✅ COMPLIANT
+  📊 Business Rules: 5/5 passed
+  📈 Compliance Percentage: 100%
+  ✅ Chain Status: VERIFIED AND STORED ON BLOCKCHAIN
+
+================================================================================
+🎉 Corporate Registration Multi-Company Verification Completed!
+================================================================================
+
+✅ ENHANCED CORPORATE REGISTRATION TEST COMPLETED SUCCESSFULLY!
+🔗 Check: https://minascan.io/devnet/
+
+🎉 VERIFICATION COMPLETED SUCCESSFULLY!
+
+📊 FINAL VERIFICATION SUMMARY
+======================================================================
+✅ Total companies processed: 1
+🌍 Jurisdiction: undefined
+📋 Contract Address: undefined
+📊 Global Compliance Rate: 100.00%
+✅ Compliant Companies: 1/1
+
+📋 INDIVIDUAL COMPANY RESULTS:
+----------------------------------------------------------------------
+
+1. U01112TZ2022PTC039493
+   CIN: U01112TZ2022PTC039493
+   Compliant: ✅ YES
+   Score: 100%
+
+📋 Next Steps:
+  1. ✅ Companies verified and recorded on blockchain
+  2. 🌐 Check contract state on MinaScan or MinaExplorer
+  3. 🔄 Run additional verifications as needed
+  4. 🌍 Verify jurisdiction-specific compliance for IN
+
+=== STDERR ===
+=== END ===

@@ -1,0 +1,15 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : compliance-local-corpreg
+Category    : Compliance
+Mode        : Local
+Description : Corporate Registration (Local)
+Command     : npm run test:local-complete-CorpReg -- U01112TZ2022PTC039493
+StartTime   : 2026-04-07T19:12:02
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---
+
+EndTime  : 2026-04-07T19:12:02
+Duration : 0.04s
+Status   : ERROR
+Error    : This command cannot be run due to the error: %1 is not a valid Win32 application.
+=== END ===

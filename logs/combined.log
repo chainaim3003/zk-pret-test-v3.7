@@ -1,0 +1,151 @@
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.445Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.455Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.467Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.505Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.506Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.507Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.507Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.508Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.508Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.508Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.509Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2026-03-12T04:12:08.509Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"POST","service":"zk-pret-server","timestamp":"2026-03-12T04:12:45.118Z","url":"/zkpret/compliance/data/integrity/","userAgent":"PostmanRuntime/7.51.1"}
+{"dataType":"BOL","filePath":"./src/data/scf/BILLOFLADING/BOL-VALID-1.json","level":"info","message":"Direct Business Standard Data Integrity execution started","service":"zk-pret-server","timestamp":"2026-03-12T04:12:45.120Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.747Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.758Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.770Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.806Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.806Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.807Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.808Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.808Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.808Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.809Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.810Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2026-03-12T12:43:23.810Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"POST","service":"zk-pret-server","timestamp":"2026-03-12T12:43:51.282Z","url":"/zkpret/compliance/data/integrity/","userAgent":"PostmanRuntime/7.51.1"}
+{"dataType":"BOL","filePath":"./src/data/scf/BILLOFLADING/BOL-VALID-1.json","level":"info","message":"Direct Business Standard Data Integrity execution started","service":"zk-pret-server","timestamp":"2026-03-12T12:43:51.288Z"}
+{"level":"info","message":"Async job management enabled (default execution mode)","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.056Z"}
+{"level":"info","message":"API key authentication disabled","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.062Z"}
+{"level":"info","message":"ZK Tool Executor (Multi-Path Mode) initialized successfully","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.077Z"}
+{"level":"info","message":"🚀 ZK-PRET Async-Only HTTP Server started successfully","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.107Z"}
+{"level":"info","message":"📡 Server URL: http://localhost:3001","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.108Z"}
+{"level":"info","message":"🔄 Mode: Async-Only Execution","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.109Z"}
+{"level":"info","message":"📡 WebSocket URL: ws://localhost:3001","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.109Z"}
+{"level":"info","message":"⚡ Features: Async-only execution with real-time updates","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.110Z"}
+{"level":"info","message":"🎯 Ready to process ZK-PRET tool requests asynchronously","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.110Z"}
+{"level":"info","message":"📊 Progressive State Monitoring: Enabled","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.110Z"}
+{"level":"info","message":"📂 Config Data Endpoints: Enabled","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.111Z"}
+{"level":"info","message":"📄 Process Files Endpoints: Enabled","service":"zk-pret-server","timestamp":"2026-04-02T12:27:42.111Z"}
+{"ip":"::1","level":"info","message":"HTTP Request","method":"POST","service":"zk-pret-server","timestamp":"2026-04-02T12:27:44.137Z","url":"/zkpret/compliance/global/corporate/","userAgent":"PostmanRuntime/7.52.0"}
+{"cin":"U01112TZ2022PTC039493","level":"info","message":"Direct Corporate Registration execution started","service":"zk-pret-server","timestamp":"2026-04-02T12:27:44.138Z"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Environment \"TESTNET\" mapped to: TESTNET","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.042Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Oracle Registry: Clean architecture initialized for TESTNET environment","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.042Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📊 Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.146Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Using consolidated CorporateRegistrationNetworkHandler + proven infrastructure","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.147Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Using environment-aware contract discovery","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.147Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Environment config loaded: config\\environments\\testnet.json","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.149Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Loaded existing config for TESTNET","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.150Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Network instance configured for DEVNET","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.151Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ MCA:","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.161Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ GLEIF:","service":"zk-pret-server","timestamp":"2026-04-02T12:27:45.828Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ EXIM:","service":"zk-pret-server","timestamp":"2026-04-02T12:27:46.375Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ BPMN:","service":"zk-pret-server","timestamp":"2026-04-02T12:27:46.681Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ RISK:","service":"zk-pret-server","timestamp":"2026-04-02T12:27:46.978Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ BSDI:","service":"zk-pret-server","timestamp":"2026-04-02T12:27:47.456Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ COMPOSED:","service":"zk-pret-server","timestamp":"2026-04-02T12:27:47.763Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Loaded 7 deployer accounts from config/environments/testnet.json","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.082Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Setup verification passed","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.082Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ TESTNET Oracle Registry initialized successfully!","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.083Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ VERIFIED: NetworkOracleRegistry confirmed for TESTNET - will connect to DEVNET","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.086Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Registry validation passed","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.086Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ DEVNET Connection Verified: NetworkOracleRegistry active","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.087Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Oracle Registry Initialization Complete!","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.088Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ CONFIRMED: Oracle Registry initialized for DEVNET with funded accounts","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.088Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ DEVNET Oracle accounts accessible","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.380Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📊 Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.381Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Environment Manager: TESTNET","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.381Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Compilation Manager initialized","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.383Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Network connection established for DEVNET","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.383Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Network connection established via BaseVerificationCore","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.384Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Blockchain environment initialized with DEVNET Oracle accounts","service":"zk-pret-server","timestamp":"2026-04-02T12:27:48.385Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ CorporateRegistrationOptim ZK program compiled","service":"zk-pret-server","timestamp":"2026-04-02T12:27:55.243Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ CorporateRegistrationMultiSmartContract compiled","service":"zk-pret-server","timestamp":"2026-04-02T12:28:03.288Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Contract address found: B62qktrFCeoidYBqYD5F5VGHB6d9WRoxZt2cWnwmw1rs7zr9w7RfBcE","service":"zk-pret-server","timestamp":"2026-04-02T12:28:03.289Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Corporate Registration Response Analysis Complete","service":"zk-pret-server","timestamp":"2026-04-02T12:28:04.813Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ STAGE 1 SUCCESS: \"U01112TZ2022PTC039493\" → CIN: U01112TZ2022PTC039493","service":"zk-pret-server","timestamp":"2026-04-02T12:28:04.814Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Is Compliant: true","service":"zk-pret-server","timestamp":"2026-04-02T12:28:04.817Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Created Merkle tree with 39 fields","service":"zk-pret-server","timestamp":"2026-04-02T12:28:05.906Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Merkle tree created with 39 fields","service":"zk-pret-server","timestamp":"2026-04-02T12:28:05.907Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Optimized Corporate Registration compliance data created successfully","service":"zk-pret-server","timestamp":"2026-04-02T12:28:05.908Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ All MerkleWitness8 instances created","service":"zk-pret-server","timestamp":"2026-04-02T12:28:05.908Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Oracle signature generated","service":"zk-pret-server","timestamp":"2026-04-02T12:28:05.914Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Smart Contract State BEFORE Verification:","service":"zk-pret-server","timestamp":"2026-04-02T12:28:05.915Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql","service":"zk-pret-server","timestamp":"2026-04-02T12:28:05.915Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ zkApp account successfully fetched on attempt 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.920Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Account Status: ACTIVATED zkApp","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.920Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ zkApp account state fetched from DEVNET","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.922Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.963Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"Compliant Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.963Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"Global Compliance Score: 100%","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.963Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🏢 Entity Status: \"Active\" → ✅ ACTIVE (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.964Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📋 Registration Status: \"039493\" → ✅ ISSUED (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.965Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Conformity Flag: \"Company limited by shares\" → ✅ ACCEPTABLE (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.966Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📅 Date Validation: Last Update \"19/07/2022\", → ✅ VALID DATES (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.966Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🆔 CIN Validation: \"U01112TZ2022PTC039493\" → ✅ VALID CIN (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.966Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🏆 Overall Compliance Analysis: ✅ ALL RULES PASSED → ZK Proof Shows: ✅ COMPLIANT","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.966Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📊 Business Rules: 5/5 passed","service":"zk-pret-server","timestamp":"2026-04-02T12:28:06.967Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ ZK proof generated successfully","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.904Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ createCorporateRegistrationCompanyRecord: All input parameters validated","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.907Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ cinHash created: 13981973430088692297307651959885012222389669200816231751055408172189785939578","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.933Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ legalNameHash created: 28135603761120405675969627330635515657827936336222765211271798090268970172410","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.959Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ jurisdictionHash created: 21202673945655101736800468854269429757453495934725324452245063896014909123378","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.992Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ complianceScore created: 100","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.992Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ totalVerifications created: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.992Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ passedVerifications created: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.993Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ failedVerifications created: 0","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.993Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ consecutiveFailures created: 0","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.993Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ lastPassTime created: 1775132885905","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.993Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ lastFailTime created: 1775132885905","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.993Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ createCorporateRegistrationCompanyRecord: CorporateRegistrationCompanyRecord created successfully with all 13 fields","service":"zk-pret-server","timestamp":"2026-04-02T12:28:44.994Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ CompanyMerkleWitness created successfully using real tree witness","service":"zk-pret-server","timestamp":"2026-04-02T12:28:45.003Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Current Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:45.871Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Is Compliant: true","service":"zk-pret-server","timestamp":"2026-04-02T12:28:45.872Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 NEW Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:45.872Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 NEW Compliant Count: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:45.872Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Current Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:47.441Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Is Compliant: true","service":"zk-pret-server","timestamp":"2026-04-02T12:28:47.442Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 NEW Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:47.442Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 NEW Compliant Count: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:47.442Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Current Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:50.443Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Is Compliant: true","service":"zk-pret-server","timestamp":"2026-04-02T12:28:50.443Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 NEW Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:50.444Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 NEW Compliant Count: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:28:50.444Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Transaction proof generated successfully","service":"zk-pret-server","timestamp":"2026-04-02T12:29:46.310Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Transaction sent, waiting for inclusion in block...","service":"zk-pret-server","timestamp":"2026-04-02T12:29:48.508Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Smart contract transaction confirmed on chain","service":"zk-pret-server","timestamp":"2026-04-02T12:36:27.434Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Contract state AFTER verification:","service":"zk-pret-server","timestamp":"2026-04-02T12:36:27.441Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql","service":"zk-pret-server","timestamp":"2026-04-02T12:36:27.441Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ zkApp account successfully fetched on attempt 1","service":"zk-pret-server","timestamp":"2026-04-02T12:36:27.978Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Account Status: ACTIVATED zkApp","service":"zk-pret-server","timestamp":"2026-04-02T12:36:27.981Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ zkApp account state fetched from DEVNET","service":"zk-pret-server","timestamp":"2026-04-02T12:36:27.983Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"Total Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.035Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"Compliant Companies: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.036Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"Global Compliance Score: 100%","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.036Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📊 Total Companies: 1 → 1","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.045Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Compliant Companies: 1 → 1","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.045Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📈 Global Compliance Score: 100% → 100%","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.045Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🏢 Entity Status: \"Active\" → ✅ ACTIVE (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.047Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📋 Registration Status: \"039493\" → ✅ ISSUED (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.047Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🔍 Conformity Flag: \"Company limited by shares\" → ✅ ACCEPTABLE (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.047Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📅 Date Validation: Last Update \"19/07/2022\", → ✅ VALID DATES (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.047Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🆔 CIN Validation: \"U01112TZ2022PTC039493\" → ✅ VALID CIN (Pass)","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.048Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"🏆 Overall Compliance Analysis: ✅ ALL RULES PASSED → ZK Proof Shows: ✅ COMPLIANT","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.048Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"📊 Business Rules: 5/5 passed","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.048Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Chain Status: VERIFIED AND STORED ON BLOCKCHAIN","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.049Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ ENHANCED CORPORATE REGISTRATION TEST COMPLETED SUCCESSFULLY!","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.049Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Total companies processed: 1","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.049Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"✅ Compliant Companies: 1/1","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.049Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"Compliant: ✅ YES","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.050Z","tool":"get-CorporateRegistration-data"}
+{"level":"info","message":"TEST_RESULT","output":"1. ✅ Companies verified and recorded on blockchain","service":"zk-pret-server","timestamp":"2026-04-02T12:36:28.050Z","tool":"get-CorporateRegistration-data"}

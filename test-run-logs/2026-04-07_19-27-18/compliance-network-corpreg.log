@@ -1,0 +1,9 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : compliance-network-corpreg
+Category    : Compliance
+Mode        : Network
+Description : Corporate Registration (Network)
+Command     : node ./build/impl/network/verifier/CorporateRegistrationNetworkMultiVerifier.js U01112TZ2022PTC039493
+StartTime   : 2026-04-07T19:27:18
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---

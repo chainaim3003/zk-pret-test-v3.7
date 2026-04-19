@@ -1,0 +1,15 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : compliance-local-exim
+Category    : Compliance
+Mode        : Local
+Description : EXIM Optimized (Local)
+Command     : npm run test:local-complete-EXIM -- SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+StartTime   : 2026-04-07T19:27:18
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---
+
+EndTime  : 2026-04-07T19:27:18
+Duration : 0.01s
+Status   : ERROR
+Error    : This command cannot be run due to the error: %1 is not a valid Win32 application.
+=== END ===

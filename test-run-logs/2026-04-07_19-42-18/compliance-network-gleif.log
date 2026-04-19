@@ -1,0 +1,764 @@
+﻿=== ZK-PRET Test Log ===
+TestId      : compliance-network-gleif
+Category    : Compliance
+Mode        : Network
+Description : GLEIF Optimized (Network)
+Command     : node ./build/impl/network/verifier/GLEIFNetworkMultiVerifier.js SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+StartTime   : 2026-04-07T19:56:56
+WorkingDir  : D:\asha\chainaim3003\mcp-servers\newcorrect\Arivu\chainaim\mcpserver\chainaim3003\zkpret\zk-pret-test-v3.7
+---
+
+EndTime     : 2026-04-07T20:03:15
+Duration    : 378.96s
+ExitCode    : 0
+Status      : PASSED
+
+=== STDOUT ===
+🔍 Environment Detection Debug:
+  BUILD_ENV: TESTNET
+  NODE_ENV: undefined
+  MINA_ENV: undefined
+🎯 Selected environment value: "TESTNET"
+✅ Environment "TESTNET" mapped to: TESTNET
+🔍 Environment Validation:
+  Current Environment: TESTNET
+  Should use NetworkOracleRegistry: true
+  Should connect to DEVNET: true
+🌍 Oracle Registry: Detected environment: TESTNET
+✅ Oracle Registry: Clean architecture initialized for TESTNET environment
+🌐 Network environment - using real blockchain connections
+🔍 GLEIF Multi-Company Compliance Verifier
+============================================================
+🏢 Companies to verify: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+📊 Total Companies: 1
+
+🔍 GLEIF Multi-Company Compliance Verifier
+============================================================
+🏢 Companies to verify: 1
+📋 Use existing contract: YES
+✅ Using consolidated GLEIFNetworkHandler + proven infrastructure
+
+📋 Step 1: Smart contract discovery with Environment-Aware Manager...
+📍 Contract address: Loaded dynamically from environment configuration
+✅ Using environment-aware contract discovery
+
+🚀 Step 2: Running GLEIF verification with consolidated infrastructure...
+
+🔧 ENHANCED GLEIF TEST - ENSURING FUNDED ACCOUNT USAGE
+======================================================================
+
+📋 Step 1: Initializing Oracle Registry with environment-aware accounts...
+
+🚀 Starting Enhanced Oracle Registry Initialization...
+
+📊 Pre-initialization Status:
+  Environment: TESTNET
+  Should use NetworkOracleRegistry: true
+  Should connect to DEVNET: true
+  Expected blockchain: MINA DEVNET
+
+🏗️ Creating Oracle Registry...
+🏭 Oracle Registry Factory:
+  Environment: TESTNET
+  Expected Registry Type: NetworkOracleRegistry
+🌐 Creating NetworkOracleRegistry for TESTNET (DEVNET connection)
+🔗 This WILL connect to real MINA DEVNET blockchain
+🚀 Initializing NetworkOracleRegistry...
+
+🚀 Initializing TESTNET Oracle Registry...
+============================================================
+🌐 Setting up network connection for TESTNET...
+✅ Environment config loaded: config\environments\testnet.json
+✅ Loaded existing config for TESTNET
+🎯 Target: MINA DEVNET
+📡 Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+🆔 Network ID: testnet
+📊 Connection setup:
+   Endpoint: https://api.minascan.io/node/devnet/v1/graphql
+   Target: DEVNET
+✅ Network instance configured for DEVNET
+🔗 Ready to connect to DEVNET blockchain
+📋 Loading pre-funded DEVNET accounts from config/environments/testnet.json...
+📁 Found 7 account groups in config/environments/testnet.json
+✅ MCA:
+   Deployer: B62qpNXcNPxVvNE8BPxg4nwZh58auhnDiTGGdxTVWYTgRPSP4cg7KdA
+   Sender:   B62qkojT9M5HGT3ydaWVmw3tX6ZeZyd5Nb2ABUY49kGQFgZkcHgkDW1
+   Deployer Balance: 246.200 MINA
+✅ GLEIF:
+   Deployer: B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3
+   Sender:   B62qofi6mojnWf1MQwL94C7Fgy91Hn9zzojbppYmKHdeVYrsHXnJJ5U
+   Deployer Balance: 241.100 MINA
+✅ EXIM:
+   Deployer: B62qkdP7Q8vpKAJ82h7gcv3RQRU8bkmPPYe3bNzV5v5PJGowLUpNAzL
+   Sender:   B62qiux4fhjCR2tQrEo6iLoKVEaFSDoG2uxsj8Z23JfsJA61KENDB55
+   Deployer Balance: 297.900 MINA
+✅ BPMN:
+   Deployer: B62qrpRopAxfDFkAjyHkxTcWysHnv36YKAjh7TK3nirEEvTMhKrfSVx
+   Sender:   B62qnpF1AWj3ePCZsXKotRuqbi1Y6Fv69YZ7XJGcq88u7ZGyZbu9Mvm
+   Deployer Balance: 299.000 MINA
+✅ RISK:
+   Deployer: B62qiciGYeA6nKQumL45veZ6xeQQQ3p8anUNSEXmU3G8iqL1Pc6DtCE
+   Sender:   B62qioTkbviE6J4BjQPac9UNcTVkSKzicNGWjynh5jK3fXoymScVRny
+   Deployer Balance: 258.200 MINA
+✅ BSDI:
+   Deployer: B62qqZkjQCHjzjWUfaDuAsv3kpdsxsFsPnjj1AkavZEpJziJRAYoHMi
+   Sender:   B62qrWCSiE9AruxBbxVHKg4z31dDGaCoUXxHVwQ71Uuo1AkkTuLFrYg
+   Deployer Balance: 299.000 MINA
+✅ COMPOSED:
+   Deployer: B62qosF7dD9PAM94iG7UM5ot9BUJyuE6yGVLdk2NDRsneoYvhYjkGWX
+   Sender:   B62qkTSyqTJozscp8p7fYia1pKpV9ZAy68eeabQpPLeJZ5LqQTQER5K
+   Deployer Balance: 295.700 MINA
+✅ Loaded 7 deployer accounts from config/environments/testnet.json
+📋 Available roles: MCA, GLEIF, EXIM, BPMN, RISK, BSDI, COMPOSED
+🔍 Verifying setup...
+✅ Setup verification passed
+   Deployer accounts: 7
+   Sender accounts: 7
+✅ TESTNET Oracle Registry initialized successfully!
+🎯 Ready to deploy to DEVNET using pre-funded accounts
+🔗 Transactions will appear at: https://minascan.io/devnet/
+============================================================
+🔍 Registry Validation:
+  Expected: NetworkOracleRegistry
+  Actual: NetworkOracleRegistry
+✅ VERIFIED: NetworkOracleRegistry confirmed for TESTNET - will connect to DEVNET
+✅ Registry validation passed
+
+🔍 Verifying Network Connection...
+🔍 Network Connection Verification:
+  Environment: TESTNET
+  Registry Type: NetworkOracleRegistry
+  Registry Instance: NetworkOracleRegistry
+✅ DEVNET Connection Verified: NetworkOracleRegistry active
+🌐 Transactions will appear in DEVNET explorer
+
+✅ Oracle Registry Initialization Complete!
+📡 Blockchain Target: MINA DEVNET
+🔗 Registry Type: NetworkOracleRegistry
+🎯 Transactions will be visible at:
+   • https://minascan.io/devnet/
+   • https://devnet.minaexplorer.com/
+
+================================================================================
+
+🌐 Environment: TESTNET
+🔗 Connect to DEVNET: true
+✅ CONFIRMED: Oracle Registry initialized for DEVNET with funded accounts
+🎯 GLEIF Deployer Account: B62qjusDqJsqnh9hunqT2yRzxnxWn52XAbwUQM3o4vocn3WfTjoREP3
+🌐 Network: DEVNET
+💰 Current Balance: 241.100 MINA
+✅ DEVNET Oracle accounts accessible
+
+📋 Step 2: Running GLEIF verification...
+
+🚀 GLEIF Multi-Company Verification Started
+🏢 Companies: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+📊 Total Companies: 1
+
+🔧 Initializing infrastructure system...
+✅ Environment Manager: TESTNET
+🔧 Compilation Manager initialized
+✅ Compilation Manager initialized
+
+📋 Setting up blockchain environment...
+🌐 DEVNET environment detected - using funded Oracle accounts
+🌍 Current environment: TESTNET
+🧪 Using DEVNET endpoint for TESTNET environment
+🔗 Connecting to DEVNET via https://api.minascan.io/node/devnet/v1/graphql
+✅ Network connection established for DEVNET
+✅ Network connection established via BaseVerificationCore
+✅ Blockchain environment initialized with DEVNET Oracle accounts
+
+📝 Compiling ZK programs...
+✅ GLEIFOptim ZK program compiled
+✅ GLEIFOptimMultiCompanySmartContract compiled
+
+🚀 Looking up smart contract address...
+✅ Contract address found: B62qrCmKoiahTF9YZbY6wpk5sD8pvnzhbaS7bgNi8vYCJ8TzRy4nEWu
+📋 Source: config/environments/testnet.json
+
+================================================================================
+🏢 Processing Company 1/1: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+================================================================================
+
+🔍 STAGE 1: Resolving company name to LEI...
+🔍 STAGE 1: Two-Stage Lookup - Resolving company name to LEI
+📋 Company Name: "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
+🧹 Normalized: "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
+Company Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+Type of Network: TESTNET
++++++++++++++++++++++++++++++++++++++++++++++++++++++in sandbox++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+🔍 COMPLETE GLEIF API RESPONSE:
+====================================================================================================
+{
+  "meta": {
+    "goldenCopy": {
+      "publishDate": "2026-04-07T00:00:00Z"
+    },
+    "pagination": {
+      "currentPage": 1,
+      "perPage": 15,
+      "from": 1,
+      "to": 1,
+      "total": 1,
+      "lastPage": 1
+    }
+  },
+  "links": {
+    "first": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalName%5D=SREE+PALANI+ANDAVAR+AGROS+PRIVATE+LIMITED&page%5Bnumber%5D=1&page%5Bsize%5D=15",
+    "last": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalName%5D=SREE+PALANI+ANDAVAR+AGROS+PRIVATE+LIMITED&page%5Bnumber%5D=1&page%5Bsize%5D=15"
+  },
+  "data": [
+    {
+      "type": "lei-records",
+      "id": "894500Q32QG6KKGMMI95",
+      "attributes": {
+        "lei": "894500Q32QG6KKGMMI95",
+        "entity": {
+          "legalName": {
+            "name": "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED",
+            "language": "en"
+          },
+          "otherNames": [],
+          "transliteratedOtherNames": [],
+          "legalAddress": {
+            "language": "en",
+            "addressLines": [
+              "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)"
+            ],
+            "addressNumber": null,
+            "addressNumberWithinBuilding": null,
+            "mailRouting": null,
+            "city": "Coimbatore",
+            "region": "IN-TN",
+            "country": "IN",
+            "postalCode": "641010"
+          },
+          "headquartersAddress": {
+            "language": "en",
+            "addressLines": [
+              "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)"
+            ],
+            "addressNumber": null,
+            "addressNumberWithinBuilding": null,
+            "mailRouting": null,
+            "city": "Coimbatore",
+            "region": "IN-TN",
+            "country": "IN",
+            "postalCode": "641010"
+          },
+          "registeredAt": {
+            "id": "RA000394",
+            "other": null
+          },
+          "registeredAs": "U01112TZ2022PTC039493",
+          "jurisdiction": "IN",
+          "category": "GENERAL",
+          "legalForm": {
+            "id": "YSP9",
+            "other": null
+          },
+          "associatedEntity": {
+            "lei": null,
+            "name": null
+          },
+          "status": "ACTIVE",
+          "expiration": {
+            "date": null,
+            "reason": null
+          },
+          "successorEntity": {
+            "lei": null,
+            "name": null
+          },
+          "successorEntities": [],
+          "creationDate": "2022-07-18T21:00:00Z",
+          "subCategory": null,
+          "otherAddresses": [],
+          "eventGroups": []
+        },
+        "registration": {
+          "initialRegistrationDate": "2025-05-22T12:25:39Z",
+          "lastUpdateDate": "2025-05-22T12:25:40Z",
+          "status": "ISSUED",
+          "nextRenewalDate": "2026-05-22T12:25:40Z",
+          "managingLou": "529900F6BNUR3RJ2WH29",
+          "corroborationLevel": "FULLY_CORROBORATED",
+          "validatedAt": {
+            "id": "RA000394",
+            "other": null
+          },
+          "validatedAs": "U01112TZ2022PTC039493",
+          "otherValidationAuthorities": []
+        },
+        "bic": null,
+        "mic": null,
+        "ocid": "in/U01112TZ2022PTC039493",
+        "qcc": "QINDAD21MX",
+        "spglobal": [
+          "1944713700"
+        ],
+        "conformityFlag": "CONFORMING"
+      },
+      "relationships": {
+        "managing-lou": {
+          "links": {
+            "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/managing-lou"
+          }
+        },
+        "lei-issuer": {
+          "links": {
+            "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/lei-issuer"
+          }
+        },
+        "field-modifications": {
+          "links": {
+            "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/field-modifications"
+          }
+        },
+        "direct-parent": {
+          "links": {
+            "reporting-exception": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/direct-parent-reporting-exception"
+          }
+        },
+        "ultimate-parent": {
+          "links": {
+            "reporting-exception": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/ultimate-parent-reporting-exception"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95"
+      }
+    }
+  ]
+}
+
+📊 DETAILED RECORD ANALYSIS:
+====================================================================================================
+
+🏢 BASIC RECORD INFO:
+Type: lei-records
+ID (LEI): 894500Q32QG6KKGMMI95
+
+📋 ATTRIBUTES SECTION (Complete Object):
+────────────────────────────────────────────────────────────────────────────────
+{
+  "lei": "894500Q32QG6KKGMMI95",
+  "entity": {
+    "legalName": {
+      "name": "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED",
+      "language": "en"
+    },
+    "otherNames": [],
+    "transliteratedOtherNames": [],
+    "legalAddress": {
+      "language": "en",
+      "addressLines": [
+        "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Coimbatore",
+      "region": "IN-TN",
+      "country": "IN",
+      "postalCode": "641010"
+    },
+    "headquartersAddress": {
+      "language": "en",
+      "addressLines": [
+        "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Coimbatore",
+      "region": "IN-TN",
+      "country": "IN",
+      "postalCode": "641010"
+    },
+    "registeredAt": {
+      "id": "RA000394",
+      "other": null
+    },
+    "registeredAs": "U01112TZ2022PTC039493",
+    "jurisdiction": "IN",
+    "category": "GENERAL",
+    "legalForm": {
+      "id": "YSP9",
+      "other": null
+    },
+    "associatedEntity": {
+      "lei": null,
+      "name": null
+    },
+    "status": "ACTIVE",
+    "expiration": {
+      "date": null,
+      "reason": null
+    },
+    "successorEntity": {
+      "lei": null,
+      "name": null
+    },
+    "successorEntities": [],
+    "creationDate": "2022-07-18T21:00:00Z",
+    "subCategory": null,
+    "otherAddresses": [],
+    "eventGroups": []
+  },
+  "registration": {
+    "initialRegistrationDate": "2025-05-22T12:25:39Z",
+    "lastUpdateDate": "2025-05-22T12:25:40Z",
+    "status": "ISSUED",
+    "nextRenewalDate": "2026-05-22T12:25:40Z",
+    "managingLou": "529900F6BNUR3RJ2WH29",
+    "corroborationLevel": "FULLY_CORROBORATED",
+    "validatedAt": {
+      "id": "RA000394",
+      "other": null
+    },
+    "validatedAs": "U01112TZ2022PTC039493",
+    "otherValidationAuthorities": []
+  },
+  "bic": null,
+  "mic": null,
+  "ocid": "in/U01112TZ2022PTC039493",
+  "qcc": "QINDAD21MX",
+  "spglobal": [
+    "1944713700"
+  ],
+  "conformityFlag": "CONFORMING"
+}
+
+🔗 RELATIONSHIPS SECTION (Complete Object):
+────────────────────────────────────────────────────────────────────────────────
+{
+  "managing-lou": {
+    "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/managing-lou"
+    }
+  },
+  "lei-issuer": {
+    "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/lei-issuer"
+    }
+  },
+  "field-modifications": {
+    "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/field-modifications"
+    }
+  },
+  "direct-parent": {
+    "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/direct-parent-reporting-exception"
+    }
+  },
+  "ultimate-parent": {
+    "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/ultimate-parent-reporting-exception"
+    }
+  }
+}
+
+🌐 LINKS SECTION (Complete Object):
+────────────────────────────────────────────────────────────────────────────────
+{
+  "self": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95"
+}
+
+🎯 ZK CIRCUIT OPTIMIZATION ANALYSIS:
+====================================================================================================
+🔬 ANALYZING DATA STRUCTURE FOR ZK OPTIMIZATION...
+
+📊 ATTRIBUTES STRUCTURE ANALYSIS:
+  ✅ LEI: 894500Q32QG6KKGMMI95
+
+🏢 ENTITY DATA STRUCTURE:
+  ✅ Legal Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+  ✅ Status: ACTIVE
+  ✅ Jurisdiction: IN
+
+  📍 LEGAL ADDRESS DATA:
+{
+    "language": "en",
+    "addressLines": [
+        "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)"
+    ],
+    "addressNumber": null,
+    "addressNumberWithinBuilding": null,
+    "mailRouting": null,
+    "city": "Coimbatore",
+    "region": "IN-TN",
+    "country": "IN",
+    "postalCode": "641010"
+}
+
+  🏢 HEADQUARTERS ADDRESS DATA:
+{
+    "language": "en",
+    "addressLines": [
+        "Door No. 3/5-G, Sri Balaji Nagar, Theethipalayam, Perur (PO)"
+    ],
+    "addressNumber": null,
+    "addressNumberWithinBuilding": null,
+    "mailRouting": null,
+    "city": "Coimbatore",
+    "region": "IN-TN",
+    "country": "IN",
+    "postalCode": "641010"
+}
+  ✅ Legal Form: YSP9
+  ✅ Category: GENERAL
+
+📝 REGISTRATION DATA STRUCTURE:
+{
+  "initialRegistrationDate": "2025-05-22T12:25:39Z",
+  "lastUpdateDate": "2025-05-22T12:25:40Z",
+  "status": "ISSUED",
+  "nextRenewalDate": "2026-05-22T12:25:40Z",
+  "managingLou": "529900F6BNUR3RJ2WH29",
+  "corroborationLevel": "FULLY_CORROBORATED",
+  "validatedAt": {
+    "id": "RA000394",
+    "other": null
+  },
+  "validatedAs": "U01112TZ2022PTC039493",
+  "otherValidationAuthorities": []
+}
+
+🔗 RELATIONSHIPS STRUCTURE ANALYSIS:
+{
+  "managing-lou": {
+    "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/managing-lou"
+    }
+  },
+  "lei-issuer": {
+    "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/lei-issuer"
+    }
+  },
+  "field-modifications": {
+    "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/field-modifications"
+    }
+  },
+  "direct-parent": {
+    "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/direct-parent-reporting-exception"
+    }
+  },
+  "ultimate-parent": {
+    "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/894500Q32QG6KKGMMI95/ultimate-parent-reporting-exception"
+    }
+  }
+}
+  📊 Relationship type: managing-lou
+  📊 Relationship type: lei-issuer
+  📊 Relationship type: field-modifications
+  📊 Relationship type: direct-parent
+  📊 Relationship type: ultimate-parent
+
+✅ COMPLIANCE STATUS:
+──────────────────────────────────────────────────
+Company Status: ACTIVE
+Is company "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" GLEIF compliant? true
+✅ STAGE 1 SUCCESS: Name resolved to LEI
+   LEI: 894500Q32QG6KKGMMI95
+   Legal Name: SREE PALANI ANDAVAR AGROS PRIVATE LIMITED
+   Status: ACTIVE
+✅ STAGE 1 SUCCESS: "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED" → LEI: 894500Q32QG6KKGMMI95
+
+🔍 Analyzing compliance for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+📊 Compliance Score: 100%
+✅ Is Compliant: true
+
+🌳 Creating Merkle tree for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+🌳 Creating comprehensive GLEIF Merkle tree...
+📋 Processing live GLEIF API structure...
+  Set field legalName (0): "SREE PALANI ANDAVAR AGROS PRIVATE LIMITED"
+  Set field lei (1): "894500Q32QG6KKGMMI95"
+  Set field entityStatus (2): "ACTIVE"
+  Set field legalForm (3): "YSP9"
+  Set field jurisdiction (4): "IN"
+  Set field legalAddress (5): "Door No. 3/5-G, Sri Balaji Nagar, Theethipalaya..."
+  Set field legalCity (6): "Coimbatore"
+  Set field legalCountry (7): "IN"
+  Set field registrationAuthority (8): "RA000394"
+  Set field entityCategory (9): "GENERAL"
+  Set field businessRegisterEntityId (10): "U01112TZ2022PTC039493"
+  Set field leiStatus (11): "ISSUED"
+  Set field initialRegistrationDate (12): "2025-05-22T12:25:39Z"
+  Set field lastUpdateDate (13): "2025-05-22T12:25:40Z"
+  Set field nextRenewalDate (14): "2026-05-22T12:25:40Z"
+  Set field registration_status (15): "ISSUED"
+  Set field bic_codes (17): ""
+  Set field mic_codes (18): ""
+  Set field conformityFlag (16): "CONFORMING"
+  Set field managingLou (19): "529900F6BNUR3RJ2WH29"
+✅ Created Merkle tree with 20 fields
+🌳 Merkle root: 2821140740269392744656673383969177646982981823396297238562886898521796453095
+✅ Merkle tree created with 20 fields
+
+🔐 Preparing ZK proof data for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+🔐 Preparing ZK proof data...
+✅ Optimized GLEIF compliance data created successfully
+✅ All MerkleWitness8 instances created
+
+🔏 Generating oracle signature...
+✅ Oracle signature generated
+
+🔍 Smart Contract State BEFORE Verification:
+🔍 Fetching zkApp account with retry logic for DEVNET...
+   Attempt 1/5 - Fetching account from DEVNET...
+   ✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql
+✅ zkApp account successfully fetched on attempt 1
+🔍 Account Balance: 0 nanomina (0.0 MINA)
+✅ Account Status: ACTIVATED zkApp
+🔍 App State: 1, 1, 4, 1775569962791, 18585769403887661112139001265642601364772079640186434389836434754290679316137, 1, 0, 0
+✅ zkApp account state fetched from DEVNET
+  Total Companies: 1
+  Compliant Companies: 1
+  Global Compliance Score: 100%
+  Total Verifications: 4
+  Companies Root Hash: 18585769403887661112139001265642601364772079640186434389836434754290679316137
+  Registry Version: 1
+
+🔍 COMPLIANCE FIELD ANALYSIS (Pre-Verification):
+  🏢 Entity Status: "ACTIVE" → ✅ ACTIVE (Pass)
+  📋 Registration Status: "ISSUED" → ✅ ISSUED (Pass)
+  🔍 Conformity Flag: "CONFORMING" → ✅ ACCEPTABLE (Pass)
+  📅 Date Validation: Last Update "2025-05-22T12:25:40Z", Next Renewal "2026-05-22T12:25:40Z" → ✅ VALID DATES (Pass)
+  🆔 LEI Validation: "894500Q32QG6KKGMMI95" → ✅ VALID LEI (Pass)
+  🏆 Overall Compliance Analysis: ✅ ALL RULES PASSED → ZK Proof Shows: ✅ COMPLIANT
+  📊 Business Rules: 5/5 passed
+  📈 Compliance Percentage: 100%
+  ⏳ Chain Status: NOT YET VERIFIED - Awaiting smart contract transaction...
+
+⚡ Generating ZK proof for SREE PALANI ANDAVAR AGROS PRIVATE LIMITED...
+✅ ZK proof generated successfully
+
+⚡ Executing smart contract verification transaction...
+    🔍 createCompanyRecord: Validating input parameters...
+    ✅ createCompanyRecord: All input parameters validated
+    🔄 createCompanyRecord: Creating hashes...
+      ✅ leiHash created: 11774143480628946722670531424492432108582595845649964878193601907403647619868
+      ✅ legalNameHash created: 28135603761120405675969627330635515657827936336222765211271798090268970172410
+      ✅ jurisdictionHash created: 25734595269784541921320321151743321556608067930700967990743678795271096494008
+    🔄 createCompanyRecord: Creating compliance score...
+      ✅ complianceScore created: 100
+    🔄 createCompanyRecord: Creating verification counts...
+      ✅ totalVerifications created: 1
+      ✅ passedVerifications created: 1
+      ✅ failedVerifications created: 0
+      ✅ consecutiveFailures created: 0
+    🔄 createCompanyRecord: Creating timestamp fields...
+      ✅ lastPassTime created: 1775572127211
+      ✅ lastFailTime created: 1775572127211
+    🔄 createCompanyRecord: Creating GLEIFCompanyRecord with all 13 fields...
+    ✅ createCompanyRecord: GLEIFCompanyRecord created successfully with all 13 fields
+🔧 Creating MerkleMapWitness for company verification...
+🔧 Creating temporary MerkleTree for proper witness generation...
+✅ CompanyMerkleWitness created successfully using real tree witness
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 10876757313536212035934261261931409054135597715736139308879784298993435173162
+🔍 Current Map Root: 18585769403887661112139001265642601364772079640186434389836434754290679316137
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 10876757313536212035934261261931409054135597715736139308879784298993435173162
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 5
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 10876757313536212035934261261931409054135597715736139308879784298993435173162
+🔍 Current Map Root: 18585769403887661112139001265642601364772079640186434389836434754290679316137
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 10876757313536212035934261261931409054135597715736139308879784298993435173162
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 5
+⚡ Generating transaction proof...
+🔍 SMART CONTRACT DEBUG: Starting company existence check
+🔍 Company Key: 10876757313536212035934261261931409054135597715736139308879784298993435173162
+🔍 Current Map Root: 18585769403887661112139001265642601364772079640186434389836434754290679316137
+🔍 Witness Root: 22731122946631793544306773678309960639073656601863129978322145324846701682624
+🔍 Witness Key: 10876757313536212035934261261931409054135597715736139308879784298993435173162
+🔍 Has No Companies: false
+🔍 Company Exists: true
+🔍 Is New Company: false
+🔍 Current Total Companies: 1
+🔍 Is Compliant: true
+🔍 NEW Total Companies: 1
+🔍 NEW Compliant Count: 1
+🔍 NEW Total Verifications: 5
+✅ Transaction proof generated successfully
+📤 Sending transaction to DEVNET...
+✅ Smart contract transaction submitted successfully
+✅ Transaction confirmed on-chain
+
+🔍 Contract state AFTER verification:
+🔍 Fetching zkApp account with retry logic for DEVNET...
+   Attempt 1/5 - Fetching account from DEVNET...
+   ✅ Network set to: https://api.minascan.io/node/devnet/v1/graphql
+✅ zkApp account successfully fetched on attempt 1
+🔍 Account Balance: 0 nanomina (0.0 MINA)
+✅ Account Status: ACTIVATED zkApp
+🔍 App State: 1, 1, 5, 1775572127211, 10338810469234205843822609863876941192786049482834288282182008147155203389903, 1, 0, 0
+✅ zkApp account state fetched from DEVNET
+  Total Companies: 1
+  Compliant Companies: 1
+  Global Compliance Score: 100%
+  Total Verifications: 5
+  Companies Root Hash: 10338810469234205843822609863876941192786049482834288282182008147155203389903
+  Registry Version: 1
+
+📈 STATE CHANGES:
+  📊 Total Companies: 1 → 1
+  ✅ Compliant Companies: 1 → 1
+  📈 Global Compliance Score: 100% → 100%
+  🔢 Total Verifications: 4 → 5
+  🌳 Companies Root Hash: 18585769403887661112139001265642601364772079640186434389836434754290679316137 → 10338810469234205843822609863876941192786049482834288282182008147155203389903
+  📝 Registry Version: 1 → 1
+
+🔍 COMPLIANCE FIELD ANALYSIS (Post-Verification):
+  🏢 Entity Status: "ACTIVE" → ✅ ACTIVE (Pass)
+  📋 Registration Status: "ISSUED" → ✅ ISSUED (Pass)
+  🔍 Conformity Flag: "CONFORMING" → ✅ ACCEPTABLE (Pass)
+  📅 Date Validation: Last Update "2025-05-22T12:25:40Z", Next Renewal "2026-05-22T12:25:40Z" → ✅ VALID DATES (Pass)
+  🆔 LEI Validation: "894500Q32QG6KKGMMI95" → ✅ VALID LEI (Pass)
+  🏆 Overall Compliance Analysis: ✅ ALL RULES PASSED → ZK Proof Shows: ✅ COMPLIANT
+  📊 Business Rules: 5/5 passed
+  📈 Compliance Percentage: 100%
+  ✅ Chain Status: VERIFIED AND STORED ON BLOCKCHAIN
+
+================================================================================
+🎉 GLEIF Multi-Company Verification Completed!
+================================================================================
+
+✅ ENHANCED GLEIF TEST COMPLETED SUCCESSFULLY!
+🔗 Check: https://minascan.io/devnet/
+
+🎉 VERIFICATION COMPLETED SUCCESSFULLY!
+
+✅ VERIFICATION COMPLETED - See detailed results above
+
+📋 Next Steps:
+  1. ✅ Companies verified and recorded on blockchain
+  2. 🌐 Check contract state on MinaScan or MinaExplorer
+  3. 🔄 Run additional verifications as needed
+
+=== STDERR ===
+=== END ===
